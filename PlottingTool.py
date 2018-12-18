@@ -1,4 +1,3 @@
-
 def plotLines2D(plot = 'line', txtFiles = (), X = None, Y = None, skipHeader = 0, xCol = 0, yCol = 1, xLabel = '$x$', yLabel = '$y$', lineLabels = 'Line',
            figDir = 'Results', xLim = None, yLim = None, invertY = False, noLegend = False, fontSize = 14,
            transparentBG = True, showGrid = False, show = True, **kwargs):
