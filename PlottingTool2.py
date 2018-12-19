@@ -50,8 +50,8 @@ class BaseFigure:
             fig_height = MAX_HEIGHT_INCHES
 
         params = {
-            # 'backend':             'ps',
-            # 'text.latex.preamble': ["\usepackage{gensymb}"],
+            'backend':             'ps',
+            'text.latex.preamble': [r"\usepackage{gensymb,amsmath}"],
             'axes.labelsize':      fontSize,  # fontsize for x and y labels (was 10)
             'axes.titlesize':      fontSize + 2.,
             'font.size':           fontSize,  # was 10
