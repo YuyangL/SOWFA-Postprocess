@@ -5,7 +5,8 @@ import numpy as np
 from warnings import warn
 
 class BaseFigure:
-    def __init__(self, name = 'UntitledFigure', fontSize = 14, xLabel = '$x$', yLabel = '$y$', figDir = './', show = True, saveFig = True, equalAxis = False, useTex = True, linewidth = 1, xLim = (None,), yLim = (None,)):
+    def __init__(self, listX, listY, name = 'UntitledFigure', fontSize = 14, xLabel = '$x$', yLabel = '$y$', figDir = './', show = True, saveFig = True, equalAxis = False, useTex = True, linewidth = 1, xLim = (None,), yLim = (None,)):
+        self.listX, self.listY = listX, listY
         self.name, self.figDir, self.saveFig, self.show = name, figDir, saveFig, show
         self.xLabel, self.yLabel, self.equalAxis = xLabel, yLabel, equalAxis
         self.xLim, self.yLim = xLim, yLim
@@ -66,7 +67,7 @@ class BaseFigure:
 
 class Plot2D(BaseFigure):
     def __init__(self, listX, listY, alpha = 1, name = 'UntitledFigure', fontSize = 14, xLabel = '$x$', yLabel = '$y$', figDir = './', show = True, saveFig = True, equalAxis = False, useTex = True, linewidth = 1, xLim = (None,), yLim = (None,)):
-        super().__init__(name, fontSize, xLabel, yLabel, figDir, show, saveFig, equalAxis, useTex, linewidth, xLim, yLim)
+        super().__init__(listX, listY, name, fontSize, xLabel, yLabel, figDir, show, saveFig, equalAxis, useTex, linewidth, xLim, yLim)
         self.listX, self.listY = listX, listY
         self.lines, self.markers = ("-", "--", "-.", ":")*5, ('o', 'v', '^', '<', '>', 's', '8', 'p')*3
         self.alpha = alpha
