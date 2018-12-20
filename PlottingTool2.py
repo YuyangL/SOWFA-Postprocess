@@ -6,17 +6,36 @@ import numpy as np
 from warnings import warn
 
 class BaseFigure:
-    def __init__(self, listX, listY, name = 'UntitledFigure', fontSize = 14, xLabel = '$x$', yLabel = '$y$', figDir = './', show = True, saveFig = True, equalAxis = False, xLim = (None,), yLim = (None,)):
+    def __init__(self, listX, listY, name = 'UntitledFigure', fontSize = 10, xLabel = '$x$', yLabel = '$y$', figDir = './', show = True, save = True, equalAxis = False, xLim = (None,), yLim = (None,), figWidth = 'half', subplots = (1, 1)):
         self.listX, self.listY = listX, listY
-        self.name, self.figDir, self.saveFig, self.show = name, figDir, saveFig, show
+        self.name, self.figDir, self.save, self.show = name, figDir, save, show
         self.xLabel, self.yLabel, self.equalAxis = xLabel, yLabel, equalAxis
         self.xLim, self.yLim = xLim, yLim
-
-        self.latexify(fontSize = fontSize)
+        self.colors, self.gray = self.colors()
+        self.subplots, self.figWidth, self.fontSize = subplots, figWidth, fontSize
 
 
     @staticmethod
-    def latexify(fig_width = None, fig_height = None, columns = 1, row = 2, linewidth = 1, fontSize = 12):
+    def colors(which = 'tableau10'):
+        # These are the "Tableau 20" colors as RGB.
+        tableau20 = [(31, 119, 180), (174, 199, 232), (255, 127, 14), (255, 187, 120),
+                     (44, 160, 44), (152, 223, 138), (214, 39, 40), (255, 152, 150),
+                     (148, 103, 189), (197, 176, 213), (140, 86, 75), (196, 156, 148),
+                     (227, 119, 194), (247, 182, 210), (127, 127, 127), (199, 199, 199),
+                     (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229)]
+        tableau10 = [(31, 119, 180), (255, 127, 14), (44, 160, 44), (214, 39, 40), (148, 103, 189), (140, 86, 75), (227, 119, 194), (127, 127, 127), (188, 189, 34), (23, 190, 207)]
+        # Scale the RGB values to the [0, 1] range, which is the format matplotlib accepts.
+        tableau = tableau20 if which is 'tableau20' else tableau10
+        for i in range(len(tableau)):
+            r, g, b = tableau[i]
+            tableau[i] = (r/255., g/255., b/255.)
+
+        tableauGray = (89/255., 89/255., 89/255.)
+        return tableau, tableauGray
+
+
+    @staticmethod
+    def latexify(fig_width = None, fig_height = None, figWidth = 'halfpage', linewidth = 1, fontSize = 10, subplots = (1, 1)):
         """Set up matplotlib's RC params for LaTeX plotting.
         Call this before plotting a figure.
 
@@ -24,63 +43,55 @@ class BaseFigure:
         ----------
         fig_width : float, optional, inches
         fig_height : float,  optional, inches
-        columns : {1, 2}
         """
-
         # code adapted from http://www.scipy.org/Cookbook/Matplotlib/LaTeX_Examples
 
         # Width and max height in inches for IEEE journals taken from
         # computer.org/cms/Computer.org/Journal%20templates/transactions_art_guide.pdf
-
-        assert (columns in [1, 2])
-
         if fig_width is None:
-            fig_width = 3.39 if columns == 1 else 6.9  # width in inches
+            fig_width = 3.39 if (figWidth is 'half') else 6.9  # inches
 
         if fig_height is None:
             golden_mean = (np.sqrt(5) - 1.0)/2.0  # Aesthetic ratio
             fig_height = fig_width*golden_mean  # height in inches
-            if row == 2:
-                fig_height *= 2
+            fig_height *= 1.25*(subplots[0] - 1) if subplots[0] >1 else 1
 
-        MAX_HEIGHT_INCHES = 8.0 if row == 1 else 8.
+        MAX_HEIGHT_INCHES = 8.0
         if fig_height > MAX_HEIGHT_INCHES:
-            print("WARNING: fig_height too large:" + fig_height +
-                  "so will reduce to" + MAX_HEIGHT_INCHES + "inches.")
+            warn("\nfig_height too large:" + str(fig_height) +
+                  ". Will reduce to " + str(MAX_HEIGHT_INCHES) + " inches", stacklevel = 2)
             fig_height = MAX_HEIGHT_INCHES
 
-        params = {
+        tableauGray = (89/255., 89/255., 89/255.)
+        mpl.rcParams.update({
             'backend':             'ps',
             'text.latex.preamble': [r"\usepackage{gensymb,amsmath}"],
             'axes.labelsize':      fontSize,  # fontsize for x and y labels (was 10)
             'axes.titlesize':      fontSize + 2.,
             'font.size':           fontSize,  # was 10
-            'legend.fontsize':     fontSize,  # was 10
+            'legend.fontsize':     fontSize - 2,  # was 10
             'xtick.labelsize':     fontSize - 2.,
             'ytick.labelsize':     fontSize - 2.,
+            'xtick.color':         tableauGray,
+            'ytick.color':         tableauGray,
+            'xtick.direction':     'in',
+            'ytick.direction':     'in',
             'text.usetex':         True,
             'figure.figsize':      (fig_width, fig_height),
             'font.family':         'serif',
-            "legend.framealpha":   0.75,
-            'lines.linewidth':     linewidth
-            }
+            "legend.framealpha":   0.5,
+            'legend.edgecolor':    'none',
+            'lines.linewidth':     linewidth,
+            "axes.spines.top":     False,
+            "axes.spines.right" :  False,
+            'axes.edgecolor':      tableauGray
+            })
 
-        mpl.rcParams.update(params)
 
-    def initializeFigure(self, nrow = 1, ncol = 1):
-        self.fig, self.axes = plt.subplots(nrow, ncol, num = self.name)
-
-        # val = 122
-        # self.fig = plt.figure(self.name)
-        # self.axes = AxesGrid(self.fig, 122,
-        #                      nrows_ncols = (2, 1),
-        #                      share_all = True,
-        #                      cbar_location = 'right',
-        #                      cbar_mode = 'single')
-
-        if not isinstance(self.axes, np.ndarray):
-            self.axes = (self.axes,)
-
+    def initializeFigure(self):
+        self.latexify(fontSize = self.fontSize, figWidth = self.figWidth, subplots = self.subplots)
+        self.fig, self.axes = plt.subplots(self.subplots[0], self.subplots[1], num = self.name)
+        self.axes = (self.axes,) if not isinstance(self.axes, np.ndarray) else self.axes
         print('\n' + self.name + ' initialized')
 
 
@@ -90,16 +101,14 @@ class BaseFigure:
             self.listX, self.listY = (self.listX,), (self.listY,)
 
 
-    def finalizeFigure(self, xyScale = ('linear', 'linear'), tightLayout = True, setXYlabel = (True, True)):
+    def finalizeFigure(self, xyScale = ('linear', 'linear'), tightLayout = True, setXYlabel = (True, True), grid = True):
         if len(self.listX) > 1:
-            if len(self.listX) > 3:
-                nCol = 2
-            else:
-                nCol = 1
-            plt.legend(loc = 'best', shadow = True, fancybox = False, ncol = nCol)
-            plt.grid(which = 'both', alpha = 0.5)
+            nCol = 2 if len(self.listX) > 3 else 1
+            self.axes[0].legend(loc = 'best', shadow = False, fancybox = False, ncol = nCol)
 
-        # for ax in self.axes:
+        if grid:
+            self.axes[0].grid(which = 'both', alpha = 0.25)
+
         if setXYlabel[0]:
             self.axes[0].set_xlabel(self.xLabel)
 
@@ -115,13 +124,12 @@ class BaseFigure:
         if self.yLim[0] is not None:
             self.axes[0].set_ylim(self.yLim)
 
-            self.axes[0].set_xscale(xyScale[0]), self.axes[0].set_yscale(xyScale[1])
-
+        self.axes[0].set_xscale(xyScale[0]), self.axes[0].set_yscale(xyScale[1])
         if tightLayout:
             plt.tight_layout()
 
         print('\n' + self.name + ' finalized')
-        if self.saveFig:
+        if self.save:
             plt.savefig(self.figDir + '/' + self.name + '.png', transparent = True, bbox_inches = 'tight', dpi = 1000)
             print('\n' + self.name + '.png saved in ' + self.figDir)
 
@@ -130,12 +138,11 @@ class BaseFigure:
 
 
 class Plot2D(BaseFigure):
-    def __init__(self, listX, listY, z2D = (None,), type = 'infer', alpha = 1, name = 'UntitledFigure', fontSize = 14, xLabel = '$x$', yLabel = '$y$', zLabel = '$z$', figDir = './', show = True, saveFig = True, equalAxis = False, xLim = (None,), yLim = (None,), cmap = 'plasma'):
+    def __init__(self, listX, listY, z2D = (None,), type = 'infer', alpha = 0.75, zLabel = '$z$', cmap = 'plasma', **kwargs):
         self.z2D = z2D
         if type is 'infer':
             if z2D[0] is not None:
                 self.type = 'contourf'
-                self.contractSubplots = True
             else:
                 self.type = 'line'
 
@@ -148,27 +155,25 @@ class Plot2D(BaseFigure):
         self.alpha, self.cmap = alpha, cmap
         self.zLabel = zLabel
 
-        super().__init__(listX, listY, name, fontSize, xLabel, yLabel, figDir, show, saveFig, equalAxis, xLim, yLim)
+        super().__init__(listX, listY, **kwargs)
 
 
     def plotFigure(self, plotsLabel = (None,), contourLvl = 10):
         super().plotFigure()
+
         if self.type in ('contour', 'contourf'):
             if len(np.array(self.listX[0]).shape) == 1:
                 warn('\nX and Y are 1D, contour/contourf requires mesh grid. Converting X and Y to mesh grid automatically...\n', stacklevel = 2)
                 # Convert tuple to list
                 self.listX, self.listY = list(self.listX), list(self.listY)
                 self.listX[0], self.listY[0] = np.meshgrid(self.listX[0], self.listY[0], sparse = False)
-
-        if plotsLabel[0] is None:
-            self.plotsLabel = (type,)*len(self.listX)
-
+        self.plotsLabel = (self.type,)*len(self.listX) if plotsLabel[0] is None else self.plotsLabel
         self.plots = [None]*len(self.listX)
         for i in range(len(self.listX)):
             if self.type is 'line':
-                self.plots[i] = self.axes[0].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = self.plotsLabel[i] + str(i + 1), marker = self.markers[i], alpha = self.alpha)
+                self.plots[i] = self.axes[0].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = self.plotsLabel[i] + str(i + 1), color = self.colors[i], alpha = self.alpha)
             elif self.type is 'scatter':
-                self.plots[i] = self.axes[0].scatter(self.listX[i], self.listY[i], lw = 0, label = self.plotsLabel[i] + str(i + 1), alpha = self.alpha)
+                self.plots[i] = self.axes[0].scatter(self.listX[i], self.listY[i], lw = 0, label = self.plotsLabel[i] + str(i + 1), alpha = self.alpha, color = self.colors[i], marker = self.markers[i])
             elif self.type is 'contourf':
                 self.plots[i] = self.axes[0].contourf(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both')
             elif self.type is 'contour':
@@ -178,18 +183,18 @@ class Plot2D(BaseFigure):
                 return
 
 
-    def finalizeFigure(self, xyScale = ('linear', 'linear'), tightLayout = True, cbarOrientate = 'horizontal', setXYlabel = (True, True)):
+    def finalizeFigure(self, cbarOrientate = 'horizontal', **kwargs):
         if self.type in ('contourf', 'contour') and len(self.axes) == 1:
             cb = plt.colorbar(orientation = cbarOrientate)
             cb.set_label(self.zLabel)
             cb.outline.set_visible(False)
 
-        super().finalizeFigure(xyScale, tightLayout, setXYlabel)
+        super().finalizeFigure(**kwargs)
 
 
 class Plot2D_InsetZoom(Plot2D):
-    def __init__(self, listX, listY, zoomBox, z2D = (None,), type = 'infer', alpha = 1, name = 'UntitledFigure', fontSize = 10, xLabel = '$x$', yLabel = '$y$', zLabel = '$z$', figDir = './', show = True, saveFig = True, equalAxis = False, xLim = (None,), yLim = (None,), cmap = 'plasma'):
-        super().__init__(listX, listY, z2D, type, alpha, name, fontSize, xLabel, yLabel, zLabel, figDir, show, saveFig, equalAxis, xLim, yLim, cmap)
+    def __init__(self, listX, listY, zoomBox, subplots = (2, 1), **kwargs):
+        super().__init__(listX, listY, figWidth = 'full', subplots = subplots, **kwargs)
         self.zoomBox = zoomBox
 
 
@@ -217,61 +222,52 @@ class Plot2D_InsetZoom(Plot2D):
     def plotFigure(self, plotsLabel = (None,), contourLvl = 10):
         super().plotFigure(plotsLabel, contourLvl)
         for i in range(len(self.listX)):
-            if type is 'line':
-                self.axes[1].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = self.plotsLabel[i] + str(i + 1), marker = self.markers[i], alpha = self.alpha)
+            if self.type is 'line':
+                self.axes[1].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = self.plotsLabel[i] + str(i + 1), alpha = self.alpha, color = self.colors[i])
             elif self.type is 'scatter':
-                self.axes[1].scatter(self.listX[i], self.listY[i], lw = 0, label = self.plotsLabel[i] + str(i + 1), alpha = self.alpha)
+                self.axes[1].scatter(self.listX[i], self.listY[i], lw = 0, label = self.plotsLabel[i] + str(i + 1), alpha = self.alpha, marker = self.markers[i])
             elif self.type is 'contourf':
                 self.axes[1].contourf(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both')
             elif self.type is 'contour':
                 self.axes[1].contour(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both')
 
 
-    def finalizeFigure(self, xyScale = ('linear', 'linear'), tightLayout = False, cbarOrientate = 'vertical', setXYlabel = (False, True)):
+    def finalizeFigure(self, cbarOrientate = 'vertical', setXYlabel = (False, True), xyScale = ('linear', 'linear'), **kwargs):
         self.axes[1].set_xlim(self.zoomBox[0], self.zoomBox[1]), self.axes[1].set_ylim(self.zoomBox[2], self.zoomBox[3])
         self.axes[1].set_xlabel(self.xLabel), self.axes[1].set_ylabel(self.yLabel)
         if self.equalAxis:
             self.axes[1].set_aspect('equal', 'box')
 
         self.axes[1].set_xscale(xyScale[0]), self.axes[1].set_yscale(xyScale[1])
-        self.mark_inset(self.axes[0], self.axes[1], loc1a = 1, loc1b = 4, loc2a = 2, loc2b = 3, fc = "none", ec = "gray", ls = ':')
+        self.mark_inset(self.axes[0], self.axes[1], loc1a = 1, loc1b = 4, loc2a = 2, loc2b = 3, fc = "none", ec = self.gray, ls = ':')
         if self.type in ('contour', 'contourf'):
-            self.axes[0].spines['top'].set_visible(False), self.axes[0].spines['right'].set_visible(False)
-            self.axes[0].spines['bottom'].set_visible(False), self.axes[0].spines['left'].set_visible(False)
+            for ax in self.axes:
+                ax.tick_params(axis = 'both', direction = 'out')
 
-        self.axes[1].spines['bottom'].set_color('gray'), self.axes[1].spines['top'].set_color('gray')
-        self.axes[1].spines['right'].set_color('gray'), self.axes[1].spines['left'].set_color('gray')
-        self.axes[1].spines['bottom'].set_linestyle(':'), self.axes[1].spines['top'].set_linestyle(':')
-        self.axes[1].spines['right'].set_linestyle(':'), self.axes[1].spines['left'].set_linestyle(':')
+        else:
+            self.axes[1].grid(which = 'both', alpha = 0.25)
+            if len(self.listX) > 1:
+                nCol = 2 if len(self.listX) > 3 else 1
+                self.axes[1].legend(loc = 'best', shadow = False, fancybox = False, ncol = nCol)
+
+        for spine in ('top', 'bottom', 'left', 'right'):
+            if self.type in ('contour', 'contourf'):
+                self.axes[0].spines[spine].set_visible(False)
+            self.axes[1].spines[spine].set_visible(True)
+            self.axes[1].spines[spine].set_linestyle(':')
+
         plt.draw()
 
-        # saveFigState, showState = self.saveFig, self.show
-        # self.saveFig, self.show = False, False
-        # super().finalizeFigure(xyScale, tightLayout, cbarOrientate = 'vertical')
-
-        # plt.tight_layout()
-
+        # Single colorbar
         if self.type in ('contour', 'contourf'):
-            # self.fig.subplots_adjust(right = 0.85)
-            self.fig.subplots_adjust(bottom = 0.1, top = 0.9, left = 0.1, right = 0.8, wspace = 0.2, hspace = 0.2)
-            cbar_ax = self.fig.add_axes((0.85, 0.1, 0.02, 0.79))
+            self.fig.subplots_adjust(bottom = 0.1, top = 0.9, left = 0.1, right = 0.8)  # , wspace = 0.02, hspace = 0.2)
+            cbar_ax = self.fig.add_axes((0.83, 0.1, 0.02, 0.8))
             cb = plt.colorbar(self.plots[0], cax = cbar_ax, orientation = 'vertical')
-            # divider = make_axes_locatable(self.fig.gca())
-            # cax = divider.append_axes("right", "5%", pad = "3%")
-            # cb = plt.colorbar(self.plots[0], cax = cax, orientation = 'vertical')
-
             cb.set_label(self.zLabel)
-            cb.outline.set_visible(False)
+            cb.ax.tick_params(axis = 'y', direction = 'out')
 
-            # plt.tight_layout()
-        super().finalizeFigure(xyScale, tightLayout, cbarOrientate, setXYlabel)
+        super().finalizeFigure(tightLayout = False, cbarOrientate = cbarOrientate, setXYlabel = setXYlabel, xyScale = xyScale, grid = False, **kwargs)
 
-        # self.saveFig, self.show = saveFigState, showState
-        # if self.saveFig:
-        #     plt.savefig(self.figDir + '/' + self.name + '.png', transparent = True, bbox_inches = 'tight', dpi = 1000)
-        #
-        # if self.show:
-        #     plt.show()
 
 
 
@@ -284,13 +280,17 @@ class Plot2D_InsetZoom(Plot2D):
 
 if __name__ == '__main__':
     x = np.linspace(0, 100, 100)
-    y = np.linspace(0, 60, 100)
+    y = np.linspace(0, 33, 100)
+    y2 = np.linspace(10, 80, 100)
 
     z2D = np.linspace(1, 20, x.size*y.size).reshape((y.size, x.size))
 
-    myplot = Plot2D_InsetZoom(x, y, z2D = z2D, zoomBox = (10, 40, 20, 40), saveFig = True, equalAxis = True, figDir = 'R:/')
+    # myplot = Plot2D_InsetZoom((x, x), (y, y2), z2D = (None,), zoomBox = (10, 60, 20, 40), save = True, equalAxis = True, figDir = 'R:/', name = 'newFig')
 
-    myplot.initializeFigure(nrow = 2)
+    myplot = Plot2D_InsetZoom(x, y, z2D = z2D, zoomBox = (10, 70, 10, 30), save = True, equalAxis = True,
+                              figDir = 'R:/', name = 'newFig2')
+
+    myplot.initializeFigure()
 
     myplot.plotFigure()
 
