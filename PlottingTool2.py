@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from mpl_toolkits.axes_grid1.inset_locator import TransformedBbox, BboxPatch, BboxConnector
+from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.axes_grid1 import make_axes_locatable, AxesGrid
 import numpy as np
 from warnings import warn
@@ -74,8 +75,8 @@ class BaseFigure:
             'ytick.labelsize':     fontSize - 2.,
             'xtick.color':         tableauGray,
             'ytick.color':         tableauGray,
-            'xtick.direction':     'in',
-            'ytick.direction':     'in',
+            'xtick.direction':     'out',
+            'ytick.direction':     'out',
             'text.usetex':         True,
             'figure.figsize':      (fig_width, fig_height),
             'font.family':         'serif',
@@ -99,6 +100,16 @@ class BaseFigure:
         print('\nPlotting ' + self.name + '...')
         if isinstance(self.listX, np.ndarray):
             self.listX, self.listY = (self.listX,), (self.listY,)
+
+
+    def ensureMeshGrid(self):
+        if len(np.array(self.listX[0]).shape) == 1:
+            warn('\nX and Y are 1D, contour/contourf requires mesh grid. Converting X and Y to mesh grid '
+                    'automatically...\n',
+                    stacklevel = 2)
+            # Convert tuple to list
+            self.listX, self.listY = list(self.listX), list(self.listY)
+            self.listX[0], self.listY[0] = np.meshgrid(self.listX[0], self.listY[0], sparse = False)
 
 
     def finalizeFigure(self, xyScale = ('linear', 'linear'), tightLayout = True, setXYlabel = (True, True), grid = True):
@@ -162,11 +173,8 @@ class Plot2D(BaseFigure):
         super().plotFigure()
 
         if self.type in ('contour', 'contourf'):
-            if len(np.array(self.listX[0]).shape) == 1:
-                warn('\nX and Y are 1D, contour/contourf requires mesh grid. Converting X and Y to mesh grid automatically...\n', stacklevel = 2)
-                # Convert tuple to list
-                self.listX, self.listY = list(self.listX), list(self.listY)
-                self.listX[0], self.listY[0] = np.meshgrid(self.listX[0], self.listY[0], sparse = False)
+            self.ensureMeshGrid()
+
         self.plotsLabel = (self.type,)*len(self.listX) if plotsLabel[0] is None else self.plotsLabel
         self.plots = [None]*len(self.listX)
         for i in range(len(self.listX)):
@@ -257,7 +265,6 @@ class Plot2D_InsetZoom(Plot2D):
             self.axes[1].spines[spine].set_linestyle(':')
 
         plt.draw()
-
         # Single colorbar
         if self.type in ('contour', 'contourf'):
             self.fig.subplots_adjust(bottom = 0.1, top = 0.9, left = 0.1, right = 0.8)  # , wspace = 0.02, hspace = 0.2)
@@ -267,6 +274,90 @@ class Plot2D_InsetZoom(Plot2D):
             cb.ax.tick_params(axis = 'y', direction = 'out')
 
         super().finalizeFigure(tightLayout = False, cbarOrientate = cbarOrientate, setXYlabel = setXYlabel, xyScale = xyScale, grid = False, **kwargs)
+
+
+class PlotSlices3D(BaseFigure):
+    def __init__(self, x2D, y2D, listSlices2D, sliceOffsets, zDir = 'z', zLabel = '$z$', contourLvl = 10, alpha = 1, viewAngles = (20, -120), zLim = (None,), cmap = 'plasma', cmapLabel = '$U$', **kwargs):
+        super(PlotSlices3D, self).__init__(listX = (x2D,), listY = (y2D,), **kwargs)
+
+        self.listSlices2D, self.sliceOffsets, self.zDir = iter(listSlices2D), iter(sliceOffsets), zDir
+        self.zMin, self.zMax = (min(sliceOffsets), max(sliceOffsets)) if zLim[0] is None else (zLim[0], zLim[1])
+
+        self.contourLvl, self.alpha, self.zLabel = contourLvl, alpha, zLabel
+        self.cmap, self.cmapLabel = cmap, cmapLabel
+        self.viewAngles = viewAngles
+        # Multiplier to stretch the 'z' axis
+        # When 1 slice, no stretch
+        # When 3 slices, 1.3 in z, and 0.65 in other directions
+        # self.figZ = 0.15*len(listSlices2D) + 0.85
+        # self.figXY = -0.175*len(listSlices2D) + 1.175
+        self.figZ = 1.
+        self.figXY = 1
+        self.cbarOrientate = 'vertical' if zDir is 'z' else 'horizontal'
+
+
+    def initializeFigure(self):
+        figSize = (2.5, 1) if self.zDir is 'z' else (1, 2.5)
+        self.latexify(fontSize = self.fontSize, figWidth = self.figWidth, subplots = figSize)
+
+        self.axes = (plt.figure(self.name).gca(projection = '3d'),)
+        # self.axes[0].get_projection()
+        if self.zDir is 'y':
+            self.axes[0].get_proj = lambda: np.dot(Axes3D.get_proj(self.axes[0]), np.diag([self.figXY, self.figZ, self.figXY, 1]))
+        elif self.zDir is 'x':
+            self.axes[0].get_proj = lambda: np.dot(Axes3D.get_proj(self.axes[0]), np.diag([self.figZ, self.figXY, self.figXY, 1]))
+        else:
+            self.axes[0].get_proj = lambda: np.dot(Axes3D.get_proj(self.axes[0]), np.diag([self.figXY, self.figXY, self.figZ, 1]))
+
+
+    def plotFigure(self):
+        super(PlotSlices3D, self).plotFigure()
+
+        self.ensureMeshGrid()
+        # cmap = mpl.cm.get_cmap(self.cmap, 100)
+        # bounds = np.arange(60)
+        # vals = bounds[:-1]
+        # norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+
+        for slice in self.listSlices2D:
+            # self.plot = self.axes[0].contourf(self.listX[0], self.listY[0], slice, self.contourLvl, zdir = self.zDir, offset = next(self.sliceOffsets), alpha = self.alpha, cmap = self.cmap, norm = norm)
+            self.plot = self.axes[0].contourf(self.listX[0], self.listY[0], slice, self.contourLvl, zdir = self.zDir,
+                                              offset = next(self.sliceOffsets), alpha = self.alpha, cmap = self.cmap,
+                                              levels = np.linspace(0, 80, 100))
+
+
+    @staticmethod
+    def format_3d_ax(ax):
+        ax.w_xaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+        ax.w_yaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+        ax.w_zaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+        ax.w_xaxis._axinfo['grid'].update({'linewidth': 0.25, 'color': 'gray'})
+        ax.w_yaxis._axinfo['grid'].update({'linewidth': 0.25, 'color': 'gray'})
+        ax.w_zaxis._axinfo['grid'].update({'linewidth': 0.25, 'color': 'gray'})
+
+
+    def finalizeFigure(self, **kwargs):
+        self.axes[0].set_zlabel(self.zLabel)
+        self.axes[0].set_zlim(self.zMin, self.zMax)
+
+        # bounds = np.arange(60)
+        # vals = bounds[:-1]
+        # cb = plt.colorbar(self.plot, orientation = self.cbarOrientate, extend = 'both', boundaries = bounds, values = vals, cmap = self.cmap)
+        # create an axes on the right side of ax. The width of cax will be 5%
+        # of ax and the padding between cax and ax will be fixed at 0.05 inch.
+        # divider = make_axes_locatable(self.axes[0])
+        # cax = divider.append_axes("right", size = "5%", pad = 0.05)
+        cb = plt.colorbar(self.plot, fraction=0.046, pad=0.04,orientation = self.cbarOrientate, extend = 'both')
+        cb.set_label(self.cmapLabel)
+        # Turn off background on all three panes
+        self.format_3d_ax(self.axes[0])
+        # self.axes[0].dist = 15
+        # self.axes[0].w_xaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+        # self.axes[0].w_yaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+        # self.axes[0].w_zaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+        self.axes[0].view_init(self.viewAngles[0], self.viewAngles[1])
+
+        super().finalizeFigure(grid = False, tightLayout = True, **kwargs)
 
 
 
@@ -280,15 +371,19 @@ class Plot2D_InsetZoom(Plot2D):
 
 if __name__ == '__main__':
     x = np.linspace(0, 100, 100)
-    y = np.linspace(0, 33, 100)
+    y = np.linspace(0, 100, 100)
     y2 = np.linspace(10, 80, 100)
 
-    z2D = np.linspace(1, 20, x.size*y.size).reshape((y.size, x.size))
+    z2D = np.linspace(1, 10, x.size*y.size).reshape((y.size, x.size))
+    z2D2 = np.linspace(10, 30, x.size*y.size).reshape((y.size, x.size))
+    z2D3 = np.linspace(30, 60, x.size*y.size).reshape((y.size, x.size))
 
     # myplot = Plot2D_InsetZoom((x, x), (y, y2), z2D = (None,), zoomBox = (10, 60, 20, 40), save = True, equalAxis = True, figDir = 'R:/', name = 'newFig')
 
-    myplot = Plot2D_InsetZoom(x, y, z2D = z2D, zoomBox = (10, 70, 10, 30), save = True, equalAxis = True,
-                              figDir = 'R:/', name = 'newFig2')
+    # myplot = Plot2D_InsetZoom(x, y, z2D = z2D, zoomBox = (10, 70, 10, 30), save = True, equalAxis = True,
+    #                           figDir = 'R:/', name = 'newFig2')
+
+    myplot = PlotSlices3D(x, y, [z2D, z2D2, z2D3], sliceOffsets = [0, 20, 50], name = '3d2', figDir = 'R:/')
 
     myplot.initializeFigure()
 
