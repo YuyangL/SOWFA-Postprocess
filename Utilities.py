@@ -165,7 +165,7 @@ def convertAngleToNormalVector(cClockAngleXY, clockAngleZ, unit = 'deg'):
 
 
 
-            
+
     
 
 
