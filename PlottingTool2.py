@@ -284,7 +284,7 @@ class Plot2D_InsetZoom(Plot2D):
 
 
 class PlotSlices3D(BaseFigure):
-    def __init__(self, contourX2D, contourY2D, listSlices2D, sliceOffsets, zDir = 'z', zLabel = '$z$', contourLvl = 10, alpha = 1, viewAngles = ('auto',), zLim = (None,), cmap = 'plasma', cmapLabel = '$U$', grid = True, gradientBg = False, **kwargs):
+    def __init__(self, contourX2D, contourY2D, listSlices2D, sliceOffsets, zDir = 'z', zLabel = '$z$', contourLvl = 10, alpha = 1, viewAngles = ('auto',), zLim = (None,), cmap = 'plasma', cmapLabel = '$U$', grid = True, gradientBg = True, **kwargs):
         super(PlotSlices3D, self).__init__(listX = (contourX2D,), listY = (contourY2D,), **kwargs)
 
         self.listSlices2D = iter((listSlices2D,)) if isinstance(listSlices2D, np.ndarray) else iter(listSlices2D)
@@ -292,6 +292,16 @@ class PlotSlices3D(BaseFigure):
         self.xLim = (min(sliceOffsets), max(sliceOffsets)) if (self.xLim[0] is None) and (zDir is 'x') else self.xLim
         self.yLim = (min(sliceOffsets), max(sliceOffsets)) if (self.yLim[0] is None) and (zDir is 'y') else self.yLim
         self.zLim = (min(sliceOffsets), max(sliceOffsets)) if (zLim[0] is None) and (zDir is 'z') else zLim
+        # If axis limits are still not set, infer
+        if self.xLim[0] is None:
+            self.xLim = (np.min(contourX2D), np.max(contourX2D))
+
+        if self.yLim[0] is None:
+            self.yLim = (np.min(contourY2D), np.max(contourY2D))
+
+        if self.zLim[0] is None:
+            self.zLim = (np.min(listSlices2D), np.max(listSlices2D))
+
         self.sliceMin, self.sliceMax = np.min(listSlices2D), np.max(listSlices2D)
         self.contourLvl, self.alpha, self.zLabel = contourLvl, alpha, zLabel
         self.cmap, self.cmapLabel = cmap, cmapLabel
@@ -382,14 +392,15 @@ class PlotSlices3D(BaseFigure):
             ar = abs((self.zLim[1] - self.zLim[0])/(self.yLim[1] - self.yLim[0]))
         else:
             ar = abs((self.zLim[1] - self.zLim[0])/(self.xLim[1] - self.xLim[0]))
+
         try:
-            self.axes[0].pbaspect = (0.8, 0.8*ar, 1.25) if self.zDir is 'z' else (1, 1, ar)
+            self.axes[0].pbaspect = (1, ar, 1) if self.zDir is 'z' else (1, 1, ar)
         except AttributeError:
             warn('\nTo set custom aspect ratio of the 3D plot, you need modification of the source code axes3d.py. The aspect ratio might be incorrect for ' + self.name + '\n', stacklevel = 2)
             pass
 
         # # Strictly equal axis of all three axis
-        # self.set_axes_equal(self.axes[0])
+        # _, _, _, _, _, _ = self.get3D_AxesLimits(self.axes[0])
         # 3D grid
         self.axes[0].grid(self.grid)
         self.axes[0].view_init(self.viewAngles[0], self.viewAngles[1])
@@ -400,13 +411,13 @@ class PlotSlices3D(BaseFigure):
 
 
     @staticmethod
-    def set_axes_equal(ax):
+    def get3D_AxesLimits(ax, setAxesEqual = True):
         '''Make axes of 3D plot have equal scale so that spheres appear as spheres,
         cubes as cubes, etc..  This is one possible solution to Matplotlib's
         ax.set_aspect('equal') and ax.axis('equal') not working for 3D.
 
         Input
-          ax: a matplotlib axis, e.g., as output from plt.gca().
+          ax: a Matplotlib axis, e.g., as output from plt.gca().
         '''
         x_limits = ax.get_xlim3d()
         y_limits = ax.get_ylim3d()
@@ -419,10 +430,13 @@ class PlotSlices3D(BaseFigure):
         z_middle = np.mean(z_limits)
         # The plot bounding box is a sphere in the sense of the infinity norm,
         # hence I call half the max range the plot radius.
-        plot_radius = 0.5*max([x_range, y_range, z_range])
-        ax.set_xlim3d([x_middle - plot_radius, x_middle + plot_radius])
-        ax.set_ylim3d([y_middle - plot_radius, y_middle + plot_radius])
-        ax.set_zlim3d([0, z_middle + plot_radius])
+        if setAxesEqual:
+            plot_radius = 0.5*max([x_range, y_range, z_range])
+            ax.set_xlim3d([x_middle - plot_radius, x_middle + plot_radius])
+            ax.set_ylim3d([y_middle - plot_radius, y_middle + plot_radius])
+            ax.set_zlim3d([0, z_middle + plot_radius])
+
+        return x_range, y_range, z_range, x_limits, y_limits, z_limits
 
 
 
@@ -444,7 +458,7 @@ if __name__ == '__main__':
     #                           figDir = 'R:/', name = 'newFig2')
 
     # myplot = PlotSlices3D(x, y, [z2D, z2D2, z2D3], sliceOffsets = [0, 20, 50], name = '3d2', figDir = 'R:/', xLim = (0, 150), zDir = 'x')
-    myplot = PlotSlices3D(x, y, [z2D, z2D2, z2D3], sliceOffsets = [20000, 20500, 21000], name = '3d', figDir = 'R:/', zDir = 'x', xLabel = '$x$', yLabel = '$y$', zLabel = r'$z$ [m]', zLim = (0, 100), yLim = (0, 300), gradientBg = True)
+    myplot = PlotSlices3D(x, y, [z2D, z2D2, z2D3], sliceOffsets = [20000, 20500, 21000], name = '3d', figDir = 'R:/', zDir = 'z', xLabel = '$x$', yLabel = '$y$', zLabel = r'$z$ [m]', xLim = (0, 300), yLim = (0, 300), gradientBg = True)
 
     myplot.initializeFigure()
 
