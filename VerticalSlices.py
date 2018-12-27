@@ -140,7 +140,7 @@ from scipy import interpolate
 colorDim = UmagSliceMesh
 colorMin, colorMax = colorDim.min(), colorDim.max()
 norm = mpl.colors.Normalize(colorMin, colorMax)
-cmap = plt.cm.ScalarMappable(norm = norm)
+cmap = plt.cm.ScalarMappable(norm = norm, cmap = 'plasma')
 cmap.set_array([])
 fColors = cmap.to_rgba(colorDim)
 
