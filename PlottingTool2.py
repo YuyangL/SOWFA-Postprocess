@@ -9,7 +9,7 @@ from warnings import warn
 
 class BaseFigure:
     def __init__(self, listX, listY, name = 'UntitledFigure', fontSize = 10, xLabel = '$x$', yLabel = '$y$', figDir = './', show = True, save = True, equalAxis = False, xLim = (None,), yLim = (None,), figWidth = 'half', subplots = (1, 1)):
-        self.listX, self.listY = listX, listY
+        (self.listX, self.listY) = ((listX,), (listY,)) if isinstance(listX, np.ndarray) else (listX, listY)
         self.name, self.figDir, self.save, self.show = name, figDir, save, show
         self.xLabel, self.yLabel, self.equalAxis = xLabel, yLabel, equalAxis
         self.xLim, self.yLim = xLim, yLim
@@ -105,8 +105,6 @@ class BaseFigure:
 
     def plotFigure(self):
         print('\nPlotting ' + self.name + '...')
-        if isinstance(self.listX, np.ndarray):
-            self.listX, self.listY = (self.listX,), (self.listY,)
 
 
     def ensureMeshGrid(self):
@@ -159,11 +157,7 @@ class Plot2D(BaseFigure):
     def __init__(self, listX, listY, z2D = (None,), type = 'infer', alpha = 0.75, zLabel = '$z$', cmap = 'plasma', **kwargs):
         self.z2D = z2D
         if type is 'infer':
-            if z2D[0] is not None:
-                self.type = 'contourf'
-            else:
-                self.type = 'line'
-
+            self.type = 'contourf' if z2D[0] is not None else 'line'
         else:
             self.type = type
             # Don't know how to use it...
@@ -283,102 +277,38 @@ class Plot2D_InsetZoom(Plot2D):
         super().finalizeFigure(tightLayout = False, cbarOrientate = cbarOrientate, setXYlabel = setXYlabel, xyScale = xyScale, grid = False, **kwargs)
 
 
-class PlotSlices3D(BaseFigure):
-    def __init__(self, contourX2D, contourY2D, listSlices2D, sliceOffsets, zDir = 'z', zLabel = '$z$', contourLvl = 10, alpha = 1, viewAngles = ('auto',), zLim = (None,), cmap = 'plasma', cmapLabel = '$U$', grid = True, gradientBg = True, **kwargs):
-        super(PlotSlices3D, self).__init__(listX = (contourX2D,), listY = (contourY2D,), **kwargs)
+class BaseFigure3D(BaseFigure):
+    def __init__(self, listX2D, listY2D, zLabel = '$z$', alpha = 1, viewAngles = (15, -115), zLim = (None,), cmap = 'plasma', cmapLabel = '$U$', grid = True, cbarOrientate = 'horizontal', **kwargs):
+        super(BaseFigure3D, self).__init__(listX = listX2D, listY = listY2D, **kwargs)
 
-        self.listSlices2D = iter((listSlices2D,)) if isinstance(listSlices2D, np.ndarray) else iter(listSlices2D)
-        self.sliceOffsets, self.zDir = iter(sliceOffsets), zDir
-        self.xLim = (min(sliceOffsets), max(sliceOffsets)) if (self.xLim[0] is None) and (zDir is 'x') else self.xLim
-        self.yLim = (min(sliceOffsets), max(sliceOffsets)) if (self.yLim[0] is None) and (zDir is 'y') else self.yLim
-        self.zLim = (min(sliceOffsets), max(sliceOffsets)) if (zLim[0] is None) and (zDir is 'z') else zLim
-        # If axis limits are still not set, infer
-        if self.xLim[0] is None:
-            self.xLim = (np.min(contourX2D), np.max(contourX2D))
-
-        if self.yLim[0] is None:
-            self.yLim = (np.min(contourY2D), np.max(contourY2D))
-
-        if self.zLim[0] is None:
-            self.zLim = (np.min(listSlices2D), np.max(listSlices2D))
-
-        self.sliceMin, self.sliceMax = np.min(listSlices2D), np.max(listSlices2D)
-        self.contourLvl, self.alpha, self.zLabel = contourLvl, alpha, zLabel
-        self.cmap, self.cmapLabel = cmap, cmapLabel
-        self.grid, self.gradientBg = grid, gradientBg
-        # Good initial view angle
-        if viewAngles[0] is 'auto':
-            self.viewAngles = (20, -115) if zDir is 'z' else (15, -60)
-        else:
-            self.viewAngles = viewAngles
-
-        self.cbarOrientate = 'vertical' if zDir is 'z' else 'horizontal'
+        self.zLabel, self.zLim = zLabel, zLim
+        self.cmapLabel, self.cmap = cmapLabel, cmap
+        self.alpha, self.grid, self.viewAngles = alpha, grid, viewAngles
+        self.plot, self.cbarOrientate = None, cbarOrientate
 
 
-    def initializeFigure(self):
-        # If zDir is 'z', then the figure height is twice width, else, figure width is twice height
-        figSize = (2.75, 1) if self.zDir is 'z' else (1, 2)
+    def initializeFigure(self, figSize = (1, 1)):
         self.latexify(fontSize = self.fontSize, figWidth = self.figWidth, subplots = figSize)
 
         self.axes = (plt.figure(self.name).gca(projection = '3d'),)
 
 
     def plotFigure(self):
-        super(PlotSlices3D, self).plotFigure()
+        super(BaseFigure3D, self).plotFigure()
 
         self.ensureMeshGrid()
 
-        # Currently, gradient background feature is only available for zDir = 'x'
-        if self.gradientBg:
-            if self.zDir is 'x':
-                x2Dbg, y2Dbg = np.meshgrid(np.linspace(self.xLim[0], self.xLim[1], 100), np.linspace(self.yLim[0], self.yLim[1], 3))
-                z2Dbg, _ = np.meshgrid(np.linspace(self.xLim[0], self.xLim[1], 100), np.linspace(self.zLim[0], self.zLim[1], 3))
-                self.axes[0].contourf(x2Dbg, y2Dbg, z2Dbg, 500, zdir = 'z', offset = 0, cmap = 'gray', alpha = 0.5, antialiased = True)
-                # # Uncomment below to enable gradient background of all three planes
-                # self.axes[0].contourf(x2Dbg, z2Dbg, y2Dbg, 500, zdir = 'y', offset = 300, cmap = 'gray', alpha = 0.5, antialiased = True)
-                # Y3, Z3 = np.meshgrid(np.linspace(self.yLim[0], self.yLim[1], 3),
-                #                      np.linspace(self.zLim[0], self.zLim[1], 3))
-                # X3 = np.ones(Y3.shape)*self.xLim[0]
-                # self.axes[0].plot_surface(X3, Y3, Z3, color = 'gray', alpha = 0.5)
-            else:
-                warn('\nGradient background only supports zDir = "x"!\n', stacklevel = 2)
 
-        # Actual slice plots
-        for slice in self.listSlices2D:
-            if self.zDir is 'x':
-                X, Y, Z = slice, self.listX[0], self.listY[0]
-            elif self.zDir is 'y':
-                X, Y, Z = self.listX[0], slice, self.listY[0]
-            else:
-                X, Y, Z = self.listX[0], self.listY[0], slice
-
-            # levels should make sure all slices are in same cmap range
-            self.plot = self.axes[0].contourf(X, Y, Z, self.contourLvl, zdir = self.zDir,
-                                              offset = next(self.sliceOffsets), alpha = self.alpha, cmap = self.cmap,
-                                              levels = np.linspace(self.sliceMin, self.sliceMax, 100), antialiased = True)
-
-
-    @staticmethod
-    def format_3d_ax(ax):
-        ax.w_xaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
-        ax.w_yaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
-        ax.w_zaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
-        ax.w_xaxis._axinfo['grid'].update({'linewidth': 0.25, 'color': 'gray'})
-        ax.w_yaxis._axinfo['grid'].update({'linewidth': 0.25, 'color': 'gray'})
-        ax.w_zaxis._axinfo['grid'].update({'linewidth': 0.25, 'color': 'gray'})
-
-
-    def finalizeFigure(self, **kwargs):
+    def finalizeFigure(self, fraction = 0.06, pad = 0.08, pbaspect = (1, 1, 1), **kwargs):
         self.axes[0].set_zlabel(self.zLabel)
         if self.zLim[0] is not None:
             self.axes[0].set_zlim(self.zLim)
 
-        # Custom color bar location in the figure
-        (fraction, pad) = (0.046, 0.04) if self.zDir is 'z' else (0.06, 0.08)
         cb = plt.colorbar(self.plot, fraction = fraction, pad = pad, orientation = self.cbarOrientate, extend = 'both')
         cb.set_label(self.cmapLabel)
         # Turn off background on all three panes
-        self.format_3d_ax(self.axes[0])
+        self.format3D_Axes(self.axes[0])
+
         # [REQUIRES SOURCE CODE MODIFICATION] Equal axis
         # Edit the get_proj function inside site-packages\mpl_toolkits\mplot3d\axes3d.py:
         # try: self.localPbAspect=self.pbaspect
@@ -386,15 +316,8 @@ class PlotSlices3D(BaseFigure):
         # xmin, xmax = np.divide(self.get_xlim3d(), self.pbaspect[0])
         # ymin, ymax = np.divide(self.get_ylim3d(), self.pbaspect[1])
         # zmin, zmax = np.divide(self.get_zlim3d(), self.pbaspect[2])
-        if self.zDir is 'z':
-            ar = abs((self.yLim[1] - self.yLim[0])/(self.xLim[1] - self.xLim[0]))
-        elif self.zDir is 'x':
-            ar = abs((self.zLim[1] - self.zLim[0])/(self.yLim[1] - self.yLim[0]))
-        else:
-            ar = abs((self.zLim[1] - self.zLim[0])/(self.xLim[1] - self.xLim[0]))
-
         try:
-            self.axes[0].pbaspect = (1, ar, 1) if self.zDir is 'z' else (1, 1, ar)
+            self.axes[0].pbaspect = pbaspect  # (1, ar, 1) if zDir is 'z' else (1, 1, ar)
         except AttributeError:
             warn('\nTo set custom aspect ratio of the 3D plot, you need modification of the source code axes3d.py. The aspect ratio might be incorrect for ' + self.name + '\n', stacklevel = 2)
             pass
@@ -408,6 +331,16 @@ class PlotSlices3D(BaseFigure):
         # self.axes[0].dist = 11
 
         super().finalizeFigure(grid = False, tightLayout = True, **kwargs)
+
+
+    @staticmethod
+    def format3D_Axes(ax):
+        ax.w_xaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+        ax.w_yaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+        ax.w_zaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+        ax.w_xaxis._axinfo['grid'].update({'linewidth': 0.25, 'color': 'gray'})
+        ax.w_yaxis._axinfo['grid'].update({'linewidth': 0.25, 'color': 'gray'})
+        ax.w_zaxis._axinfo['grid'].update({'linewidth': 0.25, 'color': 'gray'})
 
 
     @staticmethod
@@ -439,6 +372,131 @@ class PlotSlices3D(BaseFigure):
         return x_range, y_range, z_range, x_limits, y_limits, z_limits
 
 
+class PlotContourSlices3D(BaseFigure3D):
+    def __init__(self, contourX2D, contourY2D, listSlices2D, sliceOffsets, zDir = 'z', contourLvl = 10, gradientBg = True, **kwargs):
+        super(PlotContourSlices3D, self).__init__(listX2D = (contourX2D,), listY2D = (contourY2D,), **kwargs)
+
+        self.listSlices2D = iter((listSlices2D,)) if isinstance(listSlices2D, np.ndarray) else iter(listSlices2D)
+        self.sliceOffsets, self.zDir = iter(sliceOffsets), zDir
+        self.xLim = (min(sliceOffsets), max(sliceOffsets)) if (self.xLim[0] is None) and (zDir is 'x') else self.xLim
+        self.yLim = (min(sliceOffsets), max(sliceOffsets)) if (self.yLim[0] is None) and (zDir is 'y') else self.yLim
+        self.zLim = (min(sliceOffsets), max(sliceOffsets)) if (self.zLim[0] is None) and (zDir is 'z') else self.zLim
+        # If axis limits are still not set, infer
+        if self.xLim[0] is None:
+            self.xLim = (np.min(contourX2D), np.max(contourX2D))
+
+        if self.yLim[0] is None:
+            self.yLim = (np.min(contourY2D), np.max(contourY2D))
+
+        if self.zLim[0] is None:
+            self.zLim = (np.min(listSlices2D), np.max(listSlices2D))
+
+        self.sliceMin, self.sliceMax = np.min(listSlices2D), np.max(listSlices2D)
+        self.contourLvl, self.gradientBg = contourLvl, gradientBg
+        # Good initial view angle
+        self.viewAngles = (20, -115) if zDir is 'z' else (15, -60)
+        self.cbarOrientate = 'vertical' if zDir is 'z' else 'horizontal'
+
+
+    def initializeFigure(self, **kwargs):
+        # If zDir is 'z', then the figure height is twice width, else, figure width is twice height
+        figSize = (2.75, 1) if self.zDir is 'z' else (1, 2)
+
+        super().initializeFigure(figSize = figSize)
+
+
+    def plotFigure(self):
+        super(PlotContourSlices3D, self).plotFigure()
+
+        # Currently, gradient background feature is only available for zDir = 'x'
+        if self.gradientBg:
+            if self.zDir is 'x':
+                x2Dbg, y2Dbg = np.meshgrid(np.linspace(self.xLim[0], self.xLim[1], 100), np.linspace(self.yLim[0], self.yLim[1], 3))
+                z2Dbg, _ = np.meshgrid(np.linspace(self.xLim[0], self.xLim[1], 100), np.linspace(self.zLim[0], self.zLim[1], 3))
+                self.axes[0].contourf(x2Dbg, y2Dbg, z2Dbg, 500, zdir = 'z', offset = 0, cmap = 'gray', alpha = 0.5, antialiased = True)
+                # # Uncomment below to enable gradient background of all three planes
+                # self.axes[0].contourf(x2Dbg, z2Dbg, y2Dbg, 500, zdir = 'y', offset = 300, cmap = 'gray', alpha = 0.5, antialiased = True)
+                # Y3, Z3 = np.meshgrid(np.linspace(self.yLim[0], self.yLim[1], 3),
+                #                      np.linspace(self.zLim[0], self.zLim[1], 3))
+                # X3 = np.ones(Y3.shape)*self.xLim[0]
+                # self.axes[0].plot_surface(X3, Y3, Z3, color = 'gray', alpha = 0.5)
+            else:
+                warn('\nGradient background only supports zDir = "x"!\n', stacklevel = 2)
+
+        # Actual slice plots
+        for slice in self.listSlices2D:
+            if self.zDir is 'x':
+                X, Y, Z = slice, self.listX[0], self.listY[0]
+            elif self.zDir is 'y':
+                X, Y, Z = self.listX[0], slice, self.listY[0]
+            else:
+                X, Y, Z = self.listX[0], self.listY[0], slice
+
+            # "levels" makes sure all slices are in same cmap range
+            self.plot = self.axes[0].contourf(X, Y, Z, self.contourLvl, zdir = self.zDir,
+                                              offset = next(self.sliceOffsets), alpha = self.alpha, cmap = self.cmap,
+                                              levels = np.linspace(self.sliceMin, self.sliceMax, 100), antialiased = True)
+
+
+    def finalizeFigure(self, **kwargs):
+        # Custom color bar location in the figure
+        (fraction, pad) = (0.046, 0.04) if self.zDir is 'z' else (0.06, 0.08)
+        if self.zDir is 'z':
+            ar = abs((self.yLim[1] - self.yLim[0])/(self.xLim[1] - self.xLim[0]))
+            pbaspect = (1, ar, 1)
+        elif self.zDir is 'x':
+            ar = abs((self.zLim[1] - self.zLim[0])/(self.yLim[1] - self.yLim[0]))
+            pbaspect = (1, 1, ar)
+        else:
+            ar = abs((self.zLim[1] - self.zLim[0])/(self.xLim[1] - self.xLim[0]))
+            pbaspect = (1, 1, ar)
+
+        super(PlotContourSlices3D, self).finalizeFigure(fraction = fraction, pad = pad, pbaspect = pbaspect, **kwargs)
+
+
+class PlotSurfaceSlices3D(BaseFigure3D):
+    def __init__(self, listX2D, listY2D, listZ2D, listSlices2D, **kwargs):
+        super(PlotSurfaceSlices3D, self).__init__(listX2D = listX2D, listY2D = listY2D, figWidth = 'full', **kwargs)
+
+        self.xLim = (np.min(listX2D), np.max(listX2D)) if self.xLim[0] is None else self.xLim
+        self.yLim = (np.min(listY2D), np.max(listY2D)) if self.yLim[0] is None else self.yLim
+        self.zLim = (np.min(listZ2D), np.max(listZ2D)) if self.zLim[0] is None else self.zLim
+        self.listX2D, self.listY2D = iter(self.listX), iter(self.listY)
+        self.listZ2D = iter((listZ2D,)) if isinstance(listZ2D, np.ndarray) else iter(listZ2D)
+        self.listSlices2D = iter((listSlices2D,)) if isinstance(listSlices2D, np.ndarray) else iter(listSlices2D)
+        self.cmapLim = (np.min(listSlices2D), np.max(listSlices2D))
+        self.cmapNorm = mpl.colors.Normalize(self.cmapLim[0], self.cmapLim[1])
+        self.cmapVals = plt.cm.ScalarMappable(norm = self.cmapNorm, cmap = self.cmap)
+        self.cmapVals.set_array([])
+        # For colorbar mappable
+        self.plot = self.cmapVals
+
+
+    def plotFigure(self):
+        for slice in self.listSlices2D:
+            print('\nPlotting ' + self.name + '...')
+            fColors = self.cmapVals.to_rgba(slice)
+            self.axes[0].plot_surface(next(self.listX2D), next(self.listY2D), next(self.listZ2D), cstride = 1, rstride = 1, facecolors = fColors, vmin = self.cmapLim[0], vmax = self.cmapLim[1], shade = False)
+
+
+    def finalizeFigure(self, **kwargs):
+        arZX = abs((self.zLim[1] - self.zLim[0])/(self.xLim[1] - self.xLim[0]))
+        arYX = abs((self.yLim[1] - self.yLim[0])/(self.xLim[1] - self.xLim[0]))
+        pbaspect = (1., arYX, arZX*2)
+        # pbaspect = (1, 1, 1)
+        print(pbaspect)
+
+        super(PlotSurfaceSlices3D, self).finalizeFigure(pbaspect = pbaspect, **kwargs)
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -458,7 +516,7 @@ if __name__ == '__main__':
     #                           figDir = 'R:/', name = 'newFig2')
 
     # myplot = PlotSlices3D(x, y, [z2D, z2D2, z2D3], sliceOffsets = [0, 20, 50], name = '3d2', figDir = 'R:/', xLim = (0, 150), zDir = 'x')
-    myplot = PlotSlices3D(x, y, [z2D, z2D2, z2D3], sliceOffsets = [20000, 20500, 21000], name = '3d', figDir = 'R:/', zDir = 'z', xLabel = '$x$', yLabel = '$y$', zLabel = r'$z$ [m]', xLim = (0, 300), yLim = (0, 300), gradientBg = True)
+    myplot = PlotContourSlices3D(x, y, [z2D, z2D2, z2D3], sliceOffsets = [20000, 20500, 21000], name = '3d', figDir = 'R:/', zDir = 'x', xLabel = '$x$', yLabel = '$y$', zLabel = r'$z$ [m]', zLim = (0, 100), yLim = (0, 300), gradientBg = True)
 
     myplot.initializeFigure()
 

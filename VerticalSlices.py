@@ -23,7 +23,8 @@ from math import sqrt
 
 
 # './ABL_N_H/Slices/20000.9038025/U_alongWind_Slice.raw'
-data = np.genfromtxt('./ALM_N_H/Slices/20500.9078025/U_alongWind_Slice.raw', skip_header = 2)
+# 'I:/SOWFA Data/ALM_N_H/Slices/20500.9078025/U_alongWind_Slice.raw'
+data = np.genfromtxt('I:/SOWFA Data/ABL_N_H/Slices/20000.9038025/U_alongWind_Slice.raw', skip_header = 2)
 
 x = data[:, 0]
 y = data[:, 1]
@@ -38,8 +39,6 @@ for i, val in enumerate(x[1:]):
         break
 
     valOld = val
-
-meshSizeXY = 364
 
 X, Y, Z = x.reshape((-1, meshSizeXY)), y.reshape((-1, meshSizeXY)), z.reshape((-1, meshSizeXY))
 
@@ -112,57 +111,66 @@ uMesh, vMesh, wMesh = u.reshape((-1, meshSizeXY)), v.reshape((-1, meshSizeXY)), 
 
 
 
+from PlottingTool2 import PlotSurfaceSlices3D
+myplot = PlotSurfaceSlices3D(X, Y, Z, UmagSliceMesh, name = 'surf', figDir = 'R:/', xLim = (0, 3000), yLim = (0, 3000), zLim = (0, 1000), viewAngles = (20, -100))
 
+myplot.initializeFigure()
 
+myplot.plotFigure()
 
-
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from scipy.interpolate import griddata
-from scipy import interpolate
-
-
-# plt.loglog(kr, E)
+myplot.finalizeFigure()
 
 
 
 
 
-# Refinement
-# gridX, gridY, gridZ = np.mgrid[X.min():X.max():200j, Y.min():Y.max():200j, Z.min():Z.max():150j]
-# Uinterp = griddata(ccSlice, UmagSlice, (gridX, gridY, gridZ))
-
-# gridX, gridZ = np.mgrid[X.min():X.max():200j, Z.min():Z.max():150j]
-# tck = interpolate.bisplrep(X, Z, UmagSliceMesh, s=0)
-# Uinterp = interpolate.bisplev(gridX[:, 0], gridZ[0, :], tck)
-
-colorDim = UmagSliceMesh
-colorMin, colorMax = colorDim.min(), colorDim.max()
-norm = mpl.colors.Normalize(colorMin, colorMax)
-cmap = plt.cm.ScalarMappable(norm = norm, cmap = 'plasma')
-cmap.set_array([])
-fColors = cmap.to_rgba(colorDim)
-
-
-fig = plt.figure()
-ax = fig.gca(projection = '3d')
-ax.get_proj = lambda: np.dot(Axes3D.get_proj(ax), np.diag([1.2, 1.2, 0.6, 1]))
-# cstride/rstride refers to use value of every n cols/rows for facecolors
-plot = ax.plot_surface(X, Y, Z, cstride = 1, rstride = 1, facecolors = fColors, vmin = colorMin, vmax = colorMax,
-                       shade = False)
-plt.colorbar(cmap, extend = 'both')
-
-
-ax.set_xlim(0, 3000)
-ax.set_ylim(0, 3000)
-ax.set_zlim(0, 1000)
-ax.set_xlabel('x')
-ax.set_ylabel('y')
-ax.set_zlabel('z')
-ax.view_init(20, -100)
-plt.tight_layout()
-plt.show()
+# import matplotlib as mpl
+# import matplotlib.pyplot as plt
+# from mpl_toolkits.mplot3d import Axes3D
+# from scipy.interpolate import griddata
+# from scipy import interpolate
 #
-# # from PlottingTool import plotSlices3D
-# # plotSlices3D([UmagSliceMesh], X, Z, [0])
+#
+# # plt.loglog(kr, E)
+#
+#
+#
+#
+#
+# # Refinement
+# # gridX, gridY, gridZ = np.mgrid[X.min():X.max():200j, Y.min():Y.max():200j, Z.min():Z.max():150j]
+# # Uinterp = griddata(ccSlice, UmagSlice, (gridX, gridY, gridZ))
+#
+# # gridX, gridZ = np.mgrid[X.min():X.max():200j, Z.min():Z.max():150j]
+# # tck = interpolate.bisplrep(X, Z, UmagSliceMesh, s=0)
+# # Uinterp = interpolate.bisplev(gridX[:, 0], gridZ[0, :], tck)
+#
+# colorDim = UmagSliceMesh
+# colorMin, colorMax = colorDim.min(), colorDim.max()
+# norm = mpl.colors.Normalize(colorMin, colorMax)
+# cmap = plt.cm.ScalarMappable(norm = norm, cmap = 'plasma')
+# cmap.set_array([])
+# fColors = cmap.to_rgba(colorDim)
+#
+#
+# fig = plt.figure()
+# ax = fig.gca(projection = '3d')
+# ax.get_proj = lambda: np.dot(Axes3D.get_proj(ax), np.diag([1.2, 1.2, 0.6, 1]))
+# # cstride/rstride refers to use value of every n cols/rows for facecolors
+# plot = ax.plot_surface(X, Y, Z, cstride = 1, rstride = 1, facecolors = fColors, vmin = colorMin, vmax = colorMax,
+#                        shade = False)
+# plt.colorbar(cmap, extend = 'both')
+#
+#
+# ax.set_xlim(0, 3000)
+# ax.set_ylim(0, 3000)
+# ax.set_zlim(0, 1000)
+# ax.set_xlabel('x')
+# ax.set_ylabel('y')
+# ax.set_zlabel('z')
+# ax.view_init(20, -100)
+# plt.tight_layout()
+# plt.show()
+# #
+# # # from PlottingTool import plotSlices3D
+# # # plotSlices3D([UmagSliceMesh], X, Z, [0])
