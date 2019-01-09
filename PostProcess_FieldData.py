@@ -279,9 +279,8 @@ class FieldData(object):
         print('\nFinished planer fluctuation fields calculation')
         return fieldHorRes3D, fieldZres3D, fieldHorMean, fieldZmean
             
-        
-        
-            
+
+
 
 
         

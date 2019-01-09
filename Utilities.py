@@ -44,7 +44,9 @@ def convertDataTo2D(list):
         return array
 
 
-def takeClosest(myList, myNumber):
+# from numba import jit
+# @jit(parallel = True)
+def takeClosest(myList, myNumber, verbose = True):
     """
     Assumes myList is sorted.
 
@@ -60,18 +62,32 @@ def takeClosest(myList, myNumber):
     pos = bisect_left(myList, myNumber)
     if pos == 0:
         diff = myList[0] - myNumber
+        if verbose:
+            print(f'\n{myNumber} exceeds minimum value of myList')
+
         return myList[0], pos, diff
+
     if pos == len(myList):
         diff = myNumber - myList[-1]
+        if verbose:
+            print(f'\n{myNumber} exceeds maximum value of myList')
+
         return myList[-1], len(myList) - 1, diff
 
     before = myList[pos - 1]
     after = myList[pos]
     if after - myNumber < myNumber - before:
         diff = after - myNumber
+        if verbose:
+            print('\nReturning closest value in myList, index, and difference')
+
         return after, pos, diff
+
     else:
         diff = myNumber - before
+        if verbose:
+            print('\nReturning closest value in myList, index, and difference')
+
         return before, pos - 1, diff
 
 
@@ -164,10 +180,21 @@ def convertAngleToNormalVector(cClockAngleXY, clockAngleZ, unit = 'deg'):
     return (xNorm, yNorm, zNorm)
 
 
-
+def timer(func):
+    import functools, time
+    """Print the runtime of the decorated function"""
+    @functools.wraps(func)
+    def wrapper_timer(*args, **kwargs):
+        start_time = time.perf_counter()    # 1
+        value = func(*args, **kwargs)
+        end_time = time.perf_counter()      # 2
+        run_time = end_time - start_time    # 3
+        print(f"\nFinished {func.__name__!r} in {run_time:.4f} secs")
+        return value
+    return wrapper_timer
 
     
-
+# def interpolateField2D(X, Y, Xtar, Ytar):
 
 
 

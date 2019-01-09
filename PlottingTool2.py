@@ -184,7 +184,7 @@ class Plot2D(BaseFigure):
             elif self.type is 'scatter':
                 self.plots[i] = self.axes[0].scatter(self.listX[i], self.listY[i], lw = 0, label = self.plotsLabel[i] + str(i + 1), alpha = self.alpha, color = self.colors[i], marker = self.markers[i])
             elif self.type is 'contourf':
-                self.plots[i] = self.axes[0].contourf(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both', antialiased = True)
+                self.plots[i] = self.axes[0].contourf(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both', antialiased = False)
             elif self.type is 'contour':
                 self.plots[i] = self.axes[0].contour(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both')
             else:
@@ -304,7 +304,7 @@ class BaseFigure3D(BaseFigure):
         if self.zLim[0] is not None:
             self.axes[0].set_zlim(self.zLim)
 
-        cb = plt.colorbar(self.plot, fraction = fraction, pad = pad, orientation = self.cbarOrientate, extend = 'both')
+        cb = plt.colorbar(self.plot, fraction = fraction, pad = pad, orientation = self.cbarOrientate, extend = 'both', aspect = 25, shrink = 0.75)
         cb.set_label(self.cmapLabel)
         # Turn off background on all three panes
         self.format3D_Axes(self.axes[0])
@@ -435,7 +435,7 @@ class PlotContourSlices3D(BaseFigure3D):
             # "levels" makes sure all slices are in same cmap range
             self.plot = self.axes[0].contourf(X, Y, Z, self.contourLvl, zdir = self.zDir,
                                               offset = next(self.sliceOffsets), alpha = self.alpha, cmap = self.cmap,
-                                              levels = np.linspace(self.sliceMin, self.sliceMax, 100), antialiased = True)
+                                              levels = np.linspace(self.sliceMin, self.sliceMax, 100), antialiased = False)
 
 
     def finalizeFigure(self, **kwargs):
@@ -482,9 +482,8 @@ class PlotSurfaceSlices3D(BaseFigure3D):
     def finalizeFigure(self, **kwargs):
         arZX = abs((self.zLim[1] - self.zLim[0])/(self.xLim[1] - self.xLim[0]))
         arYX = abs((self.yLim[1] - self.yLim[0])/(self.xLim[1] - self.xLim[0]))
+        # Axes aspect ratio doesn't really work properly
         pbaspect = (1., arYX, arZX*2)
-        # pbaspect = (1, 1, 1)
-        print(pbaspect)
 
         super(PlotSurfaceSlices3D, self).finalizeFigure(pbaspect = pbaspect, **kwargs)
 
@@ -516,7 +515,7 @@ if __name__ == '__main__':
     #                           figDir = 'R:/', name = 'newFig2')
 
     # myplot = PlotSlices3D(x, y, [z2D, z2D2, z2D3], sliceOffsets = [0, 20, 50], name = '3d2', figDir = 'R:/', xLim = (0, 150), zDir = 'x')
-    myplot = PlotContourSlices3D(x, y, [z2D, z2D2, z2D3], sliceOffsets = [20000, 20500, 21000], name = '3d', figDir = 'R:/', zDir = 'x', xLabel = '$x$', yLabel = '$y$', zLabel = r'$z$ [m]', zLim = (0, 100), yLim = (0, 300), gradientBg = True)
+    myplot = PlotContourSlices3D(x, y, [z2D, z2D2, z2D3], sliceOffsets = [20000, 20500, 21000], name = '3d2', figDir = 'R:/', zDir = 'x', xLabel = '$x$', yLabel = '$y$', zLabel = r'$z$ [m]', zLim = (0, 100), yLim = (0, 300), gradientBg = True)
 
     myplot.initializeFigure()
 
