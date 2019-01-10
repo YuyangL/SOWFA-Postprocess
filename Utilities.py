@@ -1,3 +1,6 @@
+from numba import njit, jit
+import numpy as np
+
 def configurePlotSettings(lineCnt = 2, useTex = True, style = 'default', fontSize = 16, cmap = 'viridis', linewidth =
 1):
     import matplotlib.pyplot as plt
@@ -44,51 +47,22 @@ def convertDataTo2D(list):
         return array
 
 
-# from numba import jit
-# @jit(parallel = True)
-def takeClosest(myList, myNumber, verbose = True):
+# Apply Numba.njit speed up just for this numpy method. Can't think of better way to do it
+# @timer
+@njit
+def takeClosest(array, val):
     """
-    Assumes myList is sorted.
-
-    If two numbers are equally close, return the smallest number.
-
-    Returns closest value in myList, its index, difference
+    :param array: flattened ordered array
+    :param val: value to compare, can be a list of values
+    :return idx: index(s) where to plug in val
+    :return np.array(list)[idx]: value(s) in list closest to val
     """
-    from bisect import bisect_left
-    # if myNumber > myList[-1] or myNumber < myList[0]:
-    #     return False, False, False
+    idx = np.searchsorted(array, val)
+    # No idea why np.array() doesn't work...
+    # list = np.array(list)
+    # closest = list[idx]
+    return idx, array[idx]
 
-    # bisect_left returns insertion point pos that partitions myList such that whatever < myNumber is left to pos
-    pos = bisect_left(myList, myNumber)
-    if pos == 0:
-        diff = myList[0] - myNumber
-        if verbose:
-            print(f'\n{myNumber} exceeds minimum value of myList')
-
-        return myList[0], pos, diff
-
-    if pos == len(myList):
-        diff = myNumber - myList[-1]
-        if verbose:
-            print(f'\n{myNumber} exceeds maximum value of myList')
-
-        return myList[-1], len(myList) - 1, diff
-
-    before = myList[pos - 1]
-    after = myList[pos]
-    if after - myNumber < myNumber - before:
-        diff = after - myNumber
-        if verbose:
-            print('\nReturning closest value in myList, index, and difference')
-
-        return after, pos, diff
-
-    else:
-        diff = myNumber - before
-        if verbose:
-            print('\nReturning closest value in myList, index, and difference')
-
-        return before, pos - 1, diff
 
 
 def readData(dataNames, fileDir = './', delimiter = ',', skipRow = 0, skipCol = 0):
@@ -192,6 +166,8 @@ def timer(func):
         print(f"\nFinished {func.__name__!r} in {run_time:.4f} secs")
         return value
     return wrapper_timer
+
+
 
     
 # def interpolateField2D(X, Y, Xtar, Ytar):

@@ -117,7 +117,7 @@ class BaseFigure:
             self.listX[0], self.listY[0] = np.meshgrid(self.listX[0], self.listY[0], sparse = False)
 
 
-    def finalizeFigure(self, xyScale = ('linear', 'linear'), tightLayout = True, setXYlabel = (True, True), grid = True):
+    def finalizeFigure(self, xyScale = ('linear', 'linear'), tightLayout = True, setXYlabel = (True, True), grid = True, transparentBg = True):
         if len(self.listX) > 1:
             nCol = 2 if len(self.listX) > 3 else 1
             self.axes[0].legend(loc = 'best', shadow = False, fancybox = False, ncol = nCol)
@@ -146,7 +146,7 @@ class BaseFigure:
 
         print('\n' + self.name + ' finalized')
         if self.save:
-            plt.savefig(self.figDir + '/' + self.name + '.png', transparent = True, bbox_inches = 'tight', dpi = 1000)
+            plt.savefig(self.figDir + '/' + self.name + '.png', transparent = transparentBg, bbox_inches = 'tight', dpi = 1000)
             print('\n' + self.name + '.png saved in ' + self.figDir)
 
         if self.show:
@@ -176,13 +176,13 @@ class Plot2D(BaseFigure):
         if self.type in ('contour', 'contourf'):
             self.ensureMeshGrid()
 
-        self.plotsLabel = (self.type,)*len(self.listX) if plotsLabel[0] is None else self.plotsLabel
+        self.plotsLabel = np.arange(1, len(self.listX) + 1) if plotsLabel[0] is None else plotsLabel
         self.plots = [None]*len(self.listX)
         for i in range(len(self.listX)):
             if self.type is 'line':
-                self.plots[i] = self.axes[0].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = self.plotsLabel[i] + str(i + 1), color = self.colors[i], alpha = self.alpha)
+                self.plots[i] = self.axes[0].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = str(self.plotsLabel[i]), color = self.colors[i], alpha = self.alpha)
             elif self.type is 'scatter':
-                self.plots[i] = self.axes[0].scatter(self.listX[i], self.listY[i], lw = 0, label = self.plotsLabel[i] + str(i + 1), alpha = self.alpha, color = self.colors[i], marker = self.markers[i])
+                self.plots[i] = self.axes[0].scatter(self.listX[i], self.listY[i], lw = 0, label = str(self.plotsLabel[i]), alpha = self.alpha, color = self.colors[i], marker = self.markers[i])
             elif self.type is 'contourf':
                 self.plots[i] = self.axes[0].contourf(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both', antialiased = False)
             elif self.type is 'contour':
@@ -232,9 +232,9 @@ class Plot2D_InsetZoom(Plot2D):
         super().plotFigure(plotsLabel, contourLvl)
         for i in range(len(self.listX)):
             if self.type is 'line':
-                self.axes[1].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = self.plotsLabel[i] + str(i + 1), alpha = self.alpha, color = self.colors[i])
+                self.axes[1].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = str(self.plotsLabel[i]), alpha = self.alpha, color = self.colors[i])
             elif self.type is 'scatter':
-                self.axes[1].scatter(self.listX[i], self.listY[i], lw = 0, label = self.plotsLabel[i] + str(i + 1), alpha = self.alpha, marker = self.markers[i])
+                self.axes[1].scatter(self.listX[i], self.listY[i], lw = 0, label = str(self.plotsLabel[i]), alpha = self.alpha, marker = self.markers[i])
             elif self.type is 'contourf':
                 self.axes[1].contourf(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both')
             elif self.type is 'contour':
