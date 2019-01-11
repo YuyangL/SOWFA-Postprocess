@@ -70,7 +70,7 @@ class BaseFigure:
         if fig_height is None:
             golden_mean = (np.sqrt(5) - 1.0)/2.0  # Aesthetic ratio
             # In case subplots option is not applicable e.g. normal Plot2D and you still want elongated height
-            fig_height = fig_width*golden_mean*figHeightMultiplier # height in inches
+            fig_height = fig_width*golden_mean*figHeightMultiplier  # height in inches
             fig_height *= (0.25 + (subplots[0] - 1)) if subplots[0] > 1 else 1
 
         MAX_HEIGHT_INCHES = 8.0
@@ -78,6 +78,8 @@ class BaseFigure:
             warn("\nfig_height too large:" + str(fig_height) +
                   ". Will reduce to " + str(MAX_HEIGHT_INCHES) + " inches", stacklevel = 2)
             fig_height = MAX_HEIGHT_INCHES
+
+        print(fig_width, fig_height)
 
         tableauGray = (89/255., 89/255., 89/255.)
         mpl.rcParams.update({
@@ -163,6 +165,10 @@ class BaseFigure:
 
         if self.show:
             plt.show()
+        # Close current figure window
+        # so that the next figure will be based on a new figure window even if the same name
+        else:
+            plt.close()
 
 
 class Plot2D(BaseFigure):

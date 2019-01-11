@@ -320,6 +320,8 @@ class TurbineOutputs(BaseProperties):
 
 
 if __name__ is '__main__':
+    from PlottingTool import Plot2D
+
     caseName = 'ALM_N_H_ParTurb'
     fileNames = 'Cd'
     startTime1 = 20000
@@ -352,7 +354,6 @@ if __name__ is '__main__':
               turb.propertyData[fileNames + '_Turb1_Bld1_mean'][::frameSkip],
               turb.propertyData[fileNames + '_Turb1_Bld2_mean'][::frameSkip])
 
-    from PlottingTool import Plot2D
     figDir = '/media/yluan/Toshiba External Drive/' + caseName + '/turbineOutput/Result'
 
     # Custom colors
