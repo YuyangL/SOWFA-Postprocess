@@ -1,5 +1,6 @@
 from numba import njit, jit
 import numpy as np
+import functools, time
 
 def configurePlotSettings(lineCnt = 2, useTex = True, style = 'default', fontSize = 16, cmap = 'viridis', linewidth =
 1):
@@ -155,7 +156,6 @@ def convertAngleToNormalVector(cClockAngleXY, clockAngleZ, unit = 'deg'):
 
 
 def timer(func):
-    import functools, time
     """Print the runtime of the decorated function"""
     @functools.wraps(func)
     def wrapper_timer(*args, **kwargs):

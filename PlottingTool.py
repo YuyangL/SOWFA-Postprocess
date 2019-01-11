@@ -1,560 +1,511 @@
-def plotLines2D(plot = 'line', txtFiles = (), X = None, Y = None, skipHeader = 0, xCol = 0, yCol = 1, xLabel = '$x$', yLabel = '$y$', lineLabels = 'Line',
-           figDir = 'Results', xLim = None, yLim = None, invertY = False, noLegend = False, fontSize = 14,
-           transparentBG = True, showGrid = False, show = True, **kwargs):
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from Utilities import configurePlotSettings, convertDataTo2D
-    from warnings import warn
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+from mpl_toolkits.axes_grid1.inset_locator import TransformedBbox, BboxPatch, BboxConnector
+from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.axes_grid1 import make_axes_locatable, AxesGrid
+from mpl_toolkits.mplot3d import proj3d
+import numpy as np
+from warnings import warn
 
-    extraX_Keys = ('X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10')
-    # A list of keys for extra lines to plot, max is 9 extra lines
-    extraY_Keys = ('Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7', 'Y8', 'Y9', 'Y10')
+class BaseFigure:
+    def __init__(self, listX, listY, name = 'UntitledFigure', fontSize = 10, xLabel = '$x$', yLabel = '$y$', figDir = './', show = True, save = True, equalAxis = False, xLim = (None,), yLim = (None,), figWidth = 'half', figHeightMultiplier = 1., subplots = (1, 1), colors = ('tableau10',)):
+        (self.listX, self.listY) = ((listX,), (listY,)) if isinstance(listX, np.ndarray) else (listX, listY)
+        self.name, self.figDir, self.save, self.show = name, figDir, save, show
+        if not self.show:
+            plt.ioff()
+        else:
+            plt.ion()
 
-    # If X and Y are both provided, then skip reading the data file
-    if isinstance(X, (list, tuple, np.ndarray)) and isinstance(Y, (list, tuple, np.ndarray)):
-        # Make sure X and Y are 2D array
-        X = convertDataTo2D(X)
-        Y = convertDataTo2D(Y)
+        self.xLabel, self.yLabel, self.equalAxis = xLabel, yLabel, equalAxis
+        self.xLim, self.yLim = xLim, yLim
+        (self.colors, self.gray) = self.setColors(which = colors[0]) if colors[0] in ('tableau10', 'tableau20') else (colors, (89/255., 89/255., 89/255.))
 
-        # If X and Y have the same size
-        if X.shape == Y.shape:
+        self.subplots, self.figWidth, self.figHeightMultiplier, self.fontSize = subplots, figWidth, figHeightMultiplier, fontSize
 
-            # If I provide a file/fig name
-            if 'fileName' in kwargs:
-                fileName = kwargs['fileName']
+
+    @staticmethod
+    def setColors(which = 'qualitative'):
+        # These are the "Tableau 20" colors as RGB.
+        tableau20 = [(31, 119, 180), (174, 199, 232), (255, 127, 14), (255, 187, 120),
+                     (44, 160, 44), (152, 223, 138), (214, 39, 40), (255, 152, 150),
+                     (148, 103, 189), (197, 176, 213), (140, 86, 75), (196, 156, 148),
+                     (227, 119, 194), (247, 182, 210), (127, 127, 127), (199, 199, 199),
+                     (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229)]
+        tableau10 = [(31, 119, 180), (255, 127, 14), (44, 160, 44), (23, 190, 207), (214, 39, 40), (188, 189, 34), (148, 103, 189), (140, 86, 75), (227, 119, 194), (127, 127, 127)]
+        # Orange, blue, magenta, cyan, red, teal, grey
+        qualitative = [(238, 119, 51), (0, 119, 187), (238, 51, 119), (51, 187, 238), (204, 51, 117), (0, 153, 136), (187, 187, 187)]
+        colorsDict = {'tableau20': tableau20,
+                      'tableau10': tableau10,
+                      'qualitative': qualitative}
+        # Scale the RGB values to the [0, 1] range, which is the format matplotlib accepts.
+        colors = colorsDict[which]
+        for i in range(len(colors)):
+            r, g, b = colors[i]
+            colors[i] = (r/255., g/255., b/255.)
+
+        tableauGray = (89/255., 89/255., 89/255.)
+        return colors, tableauGray
+
+
+    @staticmethod
+    def latexify(fig_width = None, fig_height = None, figWidth = 'half', linewidth = 1, fontSize = 10, subplots = (1, 1), figHeightMultiplier = 1.):
+        """Set up matplotlib's RC params for LaTeX plotting.
+        Call this before plotting a figure.
+
+        Parameters
+        ----------
+        fig_width : float, optional, inches
+        fig_height : float,  optional, inches
+        """
+        # code adapted from http://www.scipy.org/Cookbook/Matplotlib/LaTeX_Examples
+
+        # Width and max height in inches for IEEE journals taken from
+        # computer.org/cms/Computer.org/Journal%20templates/transactions_art_guide.pdf
+        if fig_width is None:
+            if subplots[1] == 1:
+                fig_width = 3.39 if figWidth is 'half' else 6.9  # inches
             else:
-                fileName = 'UntitledData'
+                fig_width = 6.9  # inches
 
-            # txtFiles now is a list of size 1 in order for the plot loop to work later
-            txtFiles = [fileName]
+        if fig_height is None:
+            golden_mean = (np.sqrt(5) - 1.0)/2.0  # Aesthetic ratio
+            # In case subplots option is not applicable e.g. normal Plot2D and you still want elongated height
+            fig_height = fig_width*golden_mean*figHeightMultiplier # height in inches
+            fig_height *= (0.25 + (subplots[0] - 1)) if subplots[0] > 1 else 1
 
-            # Loop through extra Y if provided as kwarg
-            for extraY_Key in extraY_Keys:
-                if extraY_Key in kwargs:
-                    # Append extra keys to txtFiles for the plot loop later
-                    txtFiles.append(extraY_Key)
-                    extraY = kwargs[extraY_Key]
-                    extraY = convertDataTo2D(extraY)
-                    # Concatenate along columns
-                    Y = np.concatenate((Y, extraY), axis = 1)
-                # Else, early stop
-                else:
-                    break
+        MAX_HEIGHT_INCHES = 8.0
+        if fig_height > MAX_HEIGHT_INCHES:
+            warn("\nfig_height too large:" + str(fig_height) +
+                  ". Will reduce to " + str(MAX_HEIGHT_INCHES) + " inches", stacklevel = 2)
+            fig_height = MAX_HEIGHT_INCHES
 
-            for extraX_Key in extraX_Keys:
-                if extraX_Key in kwargs:
-                    extraX = kwargs[extraX_Key]
-                    extraX = convertDataTo2D(extraX)
-                    # Concatenate along columns
-                    X = np.concatenate((X, extraX), axis = 1)
-                # Else, early stop
-                else:
-                    Xtmp = X
-                    for _ in range(Y.shape[1]):
-                        Xtmp = np.concatenate((Xtmp, X), axis = 1)
-                    X = Xtmp
-                    break
-
-            if 'useTex' in kwargs and isinstance(kwargs['useTex'], bool):
-                lines, markers, colors = configurePlotSettings(lineCnt = len(txtFiles), useTex = kwargs['useTex'],
-                                                           fontSize =
-                fontSize)
-            else:
-                lines, markers, colors = configurePlotSettings(lineCnt = len(txtFiles), fontSize = fontSize)
-        else:
-            # Else early stop
-            warn('\nError: [X] is provided but [X] and [Y] do not have the same size! Program aborted!\n', stacklevel
-            = 2)
-            return
-    elif isinstance(txtFiles, (list, tuple)):
-        lines, markers, colors = configurePlotSettings(len(txtFiles), fontSize = fontSize)
-    elif isinstance(txtFiles, str):
-        txtFiles = [txtFiles]
-        lines, markers, colors = configurePlotSettings(fontSize = fontSize)
-    else:
-        warn('\nError: Invalid [txtFiles] or Invalid [X] and [Y]! Program aborted!\n', stacklevel = 2)
-        return
-
-    # Initialize figure
-    fig = plt.figure()
-    # Figure title
-    fig.canvas.set_window_title(str(txtFiles))
-
-    # Go through txtFiles list that was just created earlier and plot in this loop
-    for idx, txtFile in enumerate(txtFiles):
-        print('Plotting {0}...'.format(txtFile))
-        # If X is None, then it means X and Y must have been in the txtFile provided
-        if X is None:
-            data = np.genfromtxt(txtFile + '.txt', skip_header = skipHeader)
-            X = data[:, xCol]
-            Y = data[:, yCol]
-
-        # If the provided lineLabel is a list of labels and matches the number of lines to be plotted
-        if isinstance(lineLabels, (list, tuple)) and len(lineLabels) == len(txtFiles):
-            lineLabel = lineLabels[idx]
-        # Else, lineLabel is probably just a prefix
-        else:
-            lineLabel = lineLabels + ' ' + str(idx)
-
-        if plot == 'scatter':
-            plt.scatter(X[:, idx], Y[:, idx], lw = 0, label = lineLabel, alpha = 0.5, marker = markers[idx],
-                        color = colors[
-                idx])
-        else:
-            if plot != 'line':
-                warn('\nInvalid [plot] choice! Using default [line] plot...\n', stacklevel = 2)
-            plt.plot(X[:, idx], Y[:, idx], ls = lines[idx], label = lineLabel, alpha = 0.75, color = colors[idx],
-                     marker = 'o')
-
-    plt.xlabel(xLabel)
-    plt.ylabel(yLabel)
-    if isinstance(xLim, (tuple, list)):
-        plt.xlim(xLim)
-    if isinstance(yLim, (tuple, list)):
-        plt.ylim(yLim)
-
-    # Reverse the y-axis for e.g. Cp if invertY is True
-    if invertY:
-        plt.gca().invert_yaxis()
-
-    # If I specifically say noLegend is True, or if there's only one line, then don't show legend
-    if noLegend or len(txtFiles) == 1:
-        pass
-    # Else, detect if multiple lines are provided, show legend
-    elif len(txtFiles) > 1:
-        if len(txtFiles) > 3:
-            nCol = 2
-        else:
-            nCol = 1
-        plt.legend(loc = 'best', shadow = True, fancybox = False, ncol = nCol)
-
-    if showGrid:
-        plt.grid(which = 'both')
-    plt.tight_layout()
-    plt.savefig(figDir + '/' + str(txtFiles) + '.pdf', transparent = transparentBG, format = 'pdf')
-
-    if show:
-        plt.show()
+        tableauGray = (89/255., 89/255., 89/255.)
+        mpl.rcParams.update({
+            'backend':             'ps',
+            'text.latex.preamble': [r"\usepackage{gensymb,amsmath}"],
+            'axes.labelsize':      fontSize,  # fontsize for x and y labels (was 10)
+            'axes.titlesize':      fontSize + 2.,
+            'font.size':           fontSize,  # was 10
+            'legend.fontsize':     fontSize - 2,  # was 10
+            'xtick.labelsize':     fontSize - 2.,
+            'ytick.labelsize':     fontSize - 2.,
+            'xtick.color':         tableauGray,
+            'ytick.color':         tableauGray,
+            'xtick.direction':     'out',
+            'ytick.direction':     'out',
+            'text.usetex':         True,
+            'figure.figsize':      (fig_width, fig_height),
+            'font.family':         'serif',
+            "legend.framealpha":   0.5,
+            'legend.edgecolor':    'none',
+            'lines.linewidth':     linewidth,
+            "axes.spines.top":     False,
+            "axes.spines.right":   False,
+            'axes.edgecolor':      tableauGray,
+            'lines.antialiased':   True,
+            'patch.antialiased':   True,
+            'text.antialiased':    True})
 
 
-def plot2D(listX, listY, type = 'line', z2D = (None,), name = 'Untitled2D_Plot', fontSize = 14, plotLabels = (None,), alpha = 1., contourLvl = 10, cmap = 'plasma', xLabel = '$x$', yLabel = '$y$', zLabel = '$z$', figDir = './', show = True, xLim = (None,), yLim = (None,), xyScale = ('linear', 'linear'), saveFig = True, equalAxis = False):
-    import matplotlib.pyplot as plt
-    from Utilities import configurePlotSettings
-    import numpy as np
-    from warnings import warn
+    def initializeFigure(self):
+        self.latexify(fontSize = self.fontSize, figWidth = self.figWidth, subplots = self.subplots, figHeightMultiplier = self.figHeightMultiplier)
 
-    if isinstance(listX, np.ndarray):
-        listX, listY = (listX,), (listY,)
-
-    # if len(listX) != len(listY):
-    #     warn('\nThe number of provided x array does not match that of y. Not plotting!\n', stacklevel = 2)
-    #     return
-
-    if plotLabels[0] is None:
-        plotLabels = (type,)*len(listX)
-
-    lines, markers, colors = configurePlotSettings(lineCnt = len(listX), fontSize = fontSize)
-
-    # plt.figure(name)
-    fig, ax = plt.subplots(1, 1, num = name)
-    if (z2D[0] is not None):
-        x, y = np.array(listX[0]), np.array(listY[0])
-        if len(np.array(x).shape) == 1:
-            warn(
-                '\nX and Y are 1D, contour/contourf requires mesh grid. Converting X and Y to mesh grid automatically...\n',
-                stacklevel = 2)
-            x2D, y2D = np.meshgrid(x, y, sparse = True)
-        else:
-            x2D, y2D = x, y
-
-        if type is 'contour':
-            plt.contour(x2D, y2D, z2D, levels = contourLvl, cmap = cmap, extend = 'both')
-        else:
-            plt.contourf(x2D, y2D, z2D, levels = contourLvl, cmap = cmap, extend = 'both')
-            
-    else:
-        for i in range(len(listX)):
-            x, y = listX[i], listY[i]
-            if type is 'scatter':
-                plt.scatter(x, y, lw = 0, label = plotLabels[i], alpha = alpha, color = colors[i])
-            else:
-                plt.plot(x, y, ls = lines[i], label = plotLabels[i], color = colors[i], marker = markers[i], alpha = alpha)
-
-    plt.xlabel(xLabel), plt.ylabel(yLabel)
-
-    if equalAxis:
-        ax.set_aspect('equal', 'box')
-
-    if xLim[0] is not None:
-        plt.xlim(xLim)
-
-    if yLim[0] is not None:
-        plt.ylim(yLim)
-
-    plt.xscale(xyScale[0]), plt.yscale(xyScale[1])
-
-    if len(listX) > 1:
-        if len(listX) > 3:
-            nCol = 2
-        else:
-            nCol = 1
-        plt.legend(loc = 'best', shadow = True, fancybox = False, ncol = nCol)
-
-    if z2D[0] is None:
-        plt.grid(which = 'both', alpha = 0.5)
-    else:
-        cb = plt.colorbar(orientation = 'horizontal')
-        cb.set_label(zLabel)
-        cb.outline.set_visible(False)
-
-    plt.box(False)
-
-    # fig.canvas.draw()
-    # labels = [item.get_text() for item in ax.get_xticklabels()]
-    # labels[1] = 'Testing'
-    # ax.set_xticklabels(labels)
-    # plt.annotate('ajsfbs', (1850, 0))
-
-    # ax.spines['top'].set_visible(False)
-    # ax.spines['right'].set_visible(False)
-    # ax.spines['bottom'].set_visible(False)
-    # ax.spines['left'].set_visible(False)
-
-    plt.tight_layout()
-    if saveFig:
-        plt.savefig(figDir + '/' + name + '.png', transparent = True, bbox_inches = 'tight', dpi = 1000)
-
-    if show:
-        plt.show()
+        self.fig, self.axes = plt.subplots(self.subplots[0], self.subplots[1], num = self.name)
+        self.axes = (self.axes,) if not isinstance(self.axes, np.ndarray) else self.axes
+        print('\nFigure ' + self.name + ' initialized')
 
 
-def mark_inset(parent_axes, inset_axes, loc1a=1, loc1b=1, loc2a=2, loc2b=2, **kwargs):
-    # Draw a bbox of the region of the inset axes in the parent axes and
-    # connecting lines between the bbox and the inset axes area
-    # loc1, loc2 : {1, 2, 3, 4}
-    from mpl_toolkits.axes_grid1.inset_locator import TransformedBbox, BboxPatch, BboxConnector
-    rect = TransformedBbox(inset_axes.viewLim, parent_axes.transData)
-
-    pp = BboxPatch(rect, fill=False, **kwargs)
-    parent_axes.add_patch(pp)
-
-    p1 = BboxConnector(inset_axes.bbox, rect, loc1=loc1a, loc2=loc1b, **kwargs)
-    inset_axes.add_patch(p1)
-    p1.set_clip_on(False)
-    p2 = BboxConnector(inset_axes.bbox, rect, loc1=loc2a, loc2=loc2b, **kwargs)
-    inset_axes.add_patch(p2)
-    p2.set_clip_on(False)
-
-    return pp, p1, p2
+    def plotFigure(self):
+        print('\nPlotting ' + self.name + '...')
 
 
-def plot2DWithInsetZoom(listX, listY, zoomBox, type = 'line', z2D = (None,), name = 'Untitled2D_Plot', fontSize = 10, plotLabels = (None,),
-           alpha = 1., contourLvl = 10, cmap = 'plasma', xLabel = '$x$', yLabel = '$y$', zLabel = '$z$', figDir = './',
-           show = True, xLim = (None,), yLim = (None,), xyScale = ('linear', 'linear'), saveFig = True,
-           equalAxis = False):
-    import matplotlib.pyplot as plt
-    from Utilities import configurePlotSettings
-    import numpy as np
-    from warnings import warn
-
-    if isinstance(listX, np.ndarray):
-        listX, listY = (listX,), (listY,)
-
-    if len(listX) != len(listY):
-        warn('\nThe number of provided x array does not match that of y. Not plotting!\n', stacklevel = 2)
-        return
-
-    if plotLabels[0] is None:
-        plotLabels = (type,)*len(listX)
-
-    lines, markers, colors = configurePlotSettings(lineCnt = len(listX), fontSize = fontSize)
-
-    fig, ax = plt.subplots(nrows = 2, num = name, gridspec_kw = {'wspace':0, 'hspace':0})
-    if (z2D[0] is not None):
-        x, y = np.array(listX[0]), np.array(listY[0])
-        if len(np.array(x).shape) == 1:
-            warn(
-                    '\nX and Y are 1D, contour/contourf requires mesh grid. Converting X and Y to mesh grid '
+    def ensureMeshGrid(self):
+        if len(np.array(self.listX[0]).shape) == 1:
+            warn('\nX and Y are 1D, contour/contourf requires mesh grid. Converting X and Y to mesh grid '
                     'automatically...\n',
                     stacklevel = 2)
-            x2D, y2D = np.meshgrid(x, y, sparse = True)
-        else:
-            x2D, y2D = x, y
+            # Convert tuple to list
+            self.listX, self.listY = list(self.listX), list(self.listY)
+            self.listX[0], self.listY[0] = np.meshgrid(self.listX[0], self.listY[0], sparse = False)
 
-        if type is 'contour':
-            plot1 = ax[0].contour(x2D, y2D, z2D, levels = contourLvl, cmap = cmap, extend = 'both')
-            plot2 = ax[1].contour(x2D, y2D, z2D, levels = contourLvl, cmap = cmap, extend = 'both')
-        else:
-            plot1 = ax[0].contourf(x2D, y2D, z2D, levels = contourLvl, cmap = cmap, extend = 'both')
-            plot2 = ax[1].contourf(x2D, y2D, z2D, levels = contourLvl, cmap = cmap, extend = 'both')
 
-    else:
-        for i in range(len(listX)):
-            x, y = listX[i], listY[i]
-            if type is 'scatter':
-                plot1 = ax[0].scatter(x, y, lw = 0, label = plotLabels[i], alpha = alpha, color = colors[i])
-                plot2 = ax[1].scatter(x, y, lw = 0, label = plotLabels[i], alpha = alpha, color = colors[i])
+    def finalizeFigure(self, xyScale = ('linear', 'linear'), tightLayout = True, setXYlabel = (True, True), grid = True, transparentBg = True):
+        if len(self.listX) > 1:
+            nCol = 2 if len(self.listX) > 3 else 1
+            self.axes[0].legend(loc = 'best', shadow = False, fancybox = False, ncol = nCol)
+
+        if grid:
+            self.axes[0].grid(which = 'both', alpha = 0.25)
+
+        if setXYlabel[0]:
+            self.axes[0].set_xlabel(self.xLabel)
+
+        if setXYlabel[1]:
+            self.axes[0].set_ylabel(self.yLabel)
+
+        if self.equalAxis:
+            self.axes[0].set_aspect('equal', 'box')
+
+        if self.xLim[0] is not None:
+            self.axes[0].set_xlim(self.xLim)
+
+        if self.yLim[0] is not None:
+            self.axes[0].set_ylim(self.yLim)
+
+        self.axes[0].set_xscale(xyScale[0]), self.axes[0].set_yscale(xyScale[1])
+        if tightLayout:
+            plt.tight_layout()
+
+        print('\nFigure ' + self.name + ' finalized')
+        if self.save:
+            plt.savefig(self.figDir + '/' + self.name + '.png', transparent = transparentBg, bbox_inches = 'tight', dpi = 1000)
+            print('\nFigure ' + self.name + '.png saved in ' + self.figDir)
+
+        if self.show:
+            plt.show()
+
+
+class Plot2D(BaseFigure):
+    def __init__(self, listX, listY, z2D = (None,), type = 'infer', alpha = 0.75, zLabel = '$z$', cmap = 'plasma', gradientBg = False, gradientBgRange = (None, None), gradientBgDir = 'x', **kwargs):
+        self.z2D = z2D
+        if type is 'infer':
+            self.type = 'contourf' if z2D[0] is not None else 'line'
+        else:
+            self.type = type
+            # Don't know how to use it...
+            assert type in ('scatter', 'contour')
+
+        self.lines, self.markers = ("-", "--", "-.", ":")*5, ('o', 'v', '^', '<', '>', 's', '8', 'p')*3
+        self.alpha, self.cmap = alpha, cmap
+        self.zLabel = zLabel
+        self.gradientBg, self.gradientBgRange, self.gradientBgDir = gradientBg, gradientBgRange, gradientBgDir
+
+        super().__init__(listX, listY, **kwargs)
+
+
+    def plotFigure(self, plotsLabel = (None,), contourLvl = 10):
+        # Gradient background, only for line and scatter plots
+        if self.gradientBg and self.type in ('line', 'scatter'):
+            x2D, y2D = np.meshgrid(np.linspace(self.xLim[0], self.xLim[1], 3), np.linspace(self.yLim[0], self.yLim[1], 3))
+            z2D = (np.meshgrid(np.linspace(self.xLim[0], self.xLim[1], 3), np.arange(3)))[0] if self.gradientBgDir is 'x' else (np.meshgrid(np.arange(3), np.linspace(self.yLim[0], self.yLim[1], 3)))[1]
+            self.axes[0].contourf(x2D, y2D, z2D, 500, cmap = 'gray', alpha = 0.33, vmin = self.gradientBgRange[0], vmax = self.gradientBgRange[1])
+
+        super().plotFigure()
+
+        if self.type in ('contour', 'contourf'):
+            self.ensureMeshGrid()
+
+        self.plotsLabel = np.arange(1, len(self.listX) + 1) if plotsLabel[0] is None else plotsLabel
+        self.plots = [None]*len(self.listX)
+        for i in range(len(self.listX)):
+            if self.type is 'line':
+                self.plots[i] = self.axes[0].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = str(self.plotsLabel[i]), color = self.colors[i], alpha = self.alpha)
+            elif self.type is 'scatter':
+                self.plots[i] = self.axes[0].scatter(self.listX[i], self.listY[i], lw = 0, label = str(self.plotsLabel[i]), alpha = self.alpha, color = self.colors[i], marker = self.markers[i])
+            elif self.type is 'contourf':
+                self.plots[i] = self.axes[0].contourf(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both', antialiased = False)
+            elif self.type is 'contour':
+                self.plots[i] = self.axes[0].contour(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both')
             else:
-                plot1 = ax[0].plot(x, y, ls = lines[i], label = plotLabels[i], color = colors[i], marker = markers[i],
-                         alpha = alpha)
-                plot2 = ax[1].scatter(x, y, lw = 0, label = plotLabels[i], alpha = alpha, color = colors[i])
+                warn("\nUnrecognized plot type! type must be one of ('infer', 'line', 'scatter', 'contourf', 'contour').\n", stacklevel = 2)
+                return
 
-    ax[1].set_xlim((zoomBox[0], zoomBox[1]))
-    ax[1].set_ylim((zoomBox[2], zoomBox[3]))
 
-    ax[1].set_xlabel(xLabel), ax[0].set_ylabel(yLabel), ax[1].set_ylabel(yLabel)
+    def finalizeFigure(self, cbarOrientate = 'horizontal', **kwargs):
+        if self.type in ('contourf', 'contour') and len(self.axes) == 1:
+            cb = plt.colorbar(orientation = cbarOrientate)
+            cb.set_label(self.zLabel)
+            cb.outline.set_visible(False)
 
-    if equalAxis:
-        ax[0].set_aspect('equal', 'box')
-        ax[1].set_aspect('equal', 'box')
+        super().finalizeFigure(**kwargs)
 
-    if xLim[0] is not None:
-        ax[0].set_xlim(xLim)
 
-    if yLim[0] is not None:
-        ax[0].set_ylim(yLim)
+class Plot2D_InsetZoom(Plot2D):
+    def __init__(self, listX, listY, zoomBox, subplots = (2, 1), **kwargs):
+        super().__init__(listX, listY, figWidth = 'full', subplots = subplots, **kwargs)
 
-    plt.xscale(xyScale[0]), plt.yscale(xyScale[1])
+        self.zoomBox = zoomBox
 
-    if len(listX) > 1:
-        if len(listX) > 3:
-            nCol = 2
+
+    @staticmethod
+    def mark_inset(parent_axes, inset_axes, loc1a = 1, loc1b = 1, loc2a = 2, loc2b = 2, **kwargs):
+        # Draw a bbox of the region of the inset axes in the parent axes and
+        # connecting lines between the bbox and the inset axes area
+        # loc1, loc2 : {1, 2, 3, 4}
+        rect = TransformedBbox(inset_axes.viewLim, parent_axes.transData)
+
+        pp = BboxPatch(rect, fill = False, **kwargs)
+        parent_axes.add_patch(pp)
+
+        p1 = BboxConnector(inset_axes.bbox, rect, loc1 = loc1a, loc2 = loc1b, **kwargs)
+        inset_axes.add_patch(p1)
+        p1.set_clip_on(False)
+        p2 = BboxConnector(inset_axes.bbox, rect, loc1 = loc2a, loc2 = loc2b, **kwargs)
+        inset_axes.add_patch(p2)
+        p2.set_clip_on(False)
+
+        print('\nInset created')
+        return pp, p1, p2
+
+
+    def plotFigure(self, plotsLabel = (None,), contourLvl = 10):
+        super().plotFigure(plotsLabel, contourLvl)
+        for i in range(len(self.listX)):
+            if self.type is 'line':
+                self.axes[1].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = str(self.plotsLabel[i]), alpha = self.alpha, color = self.colors[i])
+            elif self.type is 'scatter':
+                self.axes[1].scatter(self.listX[i], self.listY[i], lw = 0, label = str(self.plotsLabel[i]), alpha = self.alpha, marker = self.markers[i])
+            elif self.type is 'contourf':
+                self.axes[1].contourf(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both')
+            elif self.type is 'contour':
+                self.axes[1].contour(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both')
+
+
+    def finalizeFigure(self, cbarOrientate = 'vertical', setXYlabel = (False, True), xyScale = ('linear', 'linear'), **kwargs):
+        self.axes[1].set_xlim(self.zoomBox[0], self.zoomBox[1]), self.axes[1].set_ylim(self.zoomBox[2], self.zoomBox[3])
+        self.axes[1].set_xlabel(self.xLabel), self.axes[1].set_ylabel(self.yLabel)
+        if self.equalAxis:
+            self.axes[1].set_aspect('equal', 'box')
+
+        self.axes[1].set_xscale(xyScale[0]), self.axes[1].set_yscale(xyScale[1])
+        self.mark_inset(self.axes[0], self.axes[1], loc1a = 1, loc1b = 4, loc2a = 2, loc2b = 3, fc = "none", ec = self.gray, ls = ':')
+        if self.type in ('contour', 'contourf'):
+            for ax in self.axes:
+                ax.tick_params(axis = 'both', direction = 'out')
+
         else:
-            nCol = 1
-        plt.legend(loc = 'best', shadow = True, fancybox = False, ncol = nCol)
+            self.axes[1].grid(which = 'both', alpha = 0.25)
+            if len(self.listX) > 1:
+                nCol = 2 if len(self.listX) > 3 else 1
+                self.axes[1].legend(loc = 'best', shadow = False, fancybox = False, ncol = nCol)
 
-    mark_inset(ax[0], ax[1], loc1a = 1, loc1b = 4, loc2a = 2, loc2b = 3, fc = "none", ec = "gray", ls = ':')
+        for spine in ('top', 'bottom', 'left', 'right'):
+            if self.type in ('contour', 'contourf'):
+                self.axes[0].spines[spine].set_visible(False)
+            self.axes[1].spines[spine].set_visible(True)
+            self.axes[1].spines[spine].set_linestyle(':')
 
-    # fig.canvas.draw()
-    # labels = [item.get_text() for item in ax.get_xticklabels()]
-    # labels[1] = 'Testing'
-    # ax.set_xticklabels(labels)
-    # plt.annotate('ajsfbs', (1850, 0))
+        # plt.draw()
+        # Single colorbar
+        if self.type in ('contour', 'contourf'):
+            self.fig.subplots_adjust(bottom = 0.1, top = 0.9, left = 0.1, right = 0.8)  # , wspace = 0.02, hspace = 0.2)
+            cbar_ax = self.fig.add_axes((0.83, 0.1, 0.02, 0.8))
+            cb = plt.colorbar(self.plots[0], cax = cbar_ax, orientation = 'vertical')
+            cb.set_label(self.zLabel)
+            cb.ax.tick_params(axis = 'y', direction = 'out')
 
-    ax[0].spines['top'].set_visible(False), ax[0].spines['right'].set_visible(False)
-    ax[0].spines['bottom'].set_visible(False), ax[0].spines['left'].set_visible(False)
-    ax[1].spines['bottom'].set_color('gray'), ax[1].spines['top'].set_color('gray')
-    ax[1].spines['right'].set_color('gray'), ax[1].spines['left'].set_color('gray')
-    ax[1].spines['bottom'].set_linestyle(':'), ax[1].spines['top'].set_linestyle(':')
-    ax[1].spines['right'].set_linestyle(':'), ax[1].spines['left'].set_linestyle(':')
-
-    plt.draw()
-
-    plt.tight_layout()
-
-    if z2D[0] is None:
-        plt.grid(which = 'both', alpha = 0.5)
-    else:
-        fig.subplots_adjust(right = 0.8)
-        cbar_ax = fig.add_axes([0.85, 0.15, 0.02, 0.7])
-        cb = plt.colorbar(plot1, cax = cbar_ax, orientation = 'vertical')
-        # cb = plt.colorbar(plot1, orientation = 'vertical')
-        cb.set_label(zLabel)
-        cb.outline.set_visible(False)
-
-    if saveFig:
-        plt.savefig(figDir + '/' + name + '.png', transparent = True, bbox_inches = 'tight', dpi = 1000)
-
-    if show:
-        plt.show()
+        super().finalizeFigure(tightLayout = False, cbarOrientate = cbarOrientate, setXYlabel = setXYlabel, xyScale = xyScale, grid = False, **kwargs)
 
 
-def plotSlices3D(listSlices2D, x2D, y2D, sliceOffsets, zDir = 'z', name = 'UntitledSlices3D', figDir = './', alpha = 1, nContour = 20,
-                 fontSize = 14, viewAngles = (35, -120), show = True, saveFig = True):
-    from mpl_toolkits.mplot3d import Axes3D
-    import matplotlib.pyplot as plt
-    from warnings import warn
-    import numpy as np
-    from Utilities import configurePlotSettings
+class BaseFigure3D(BaseFigure):
+    def __init__(self, listX2D, listY2D, zLabel = '$z$', alpha = 1, viewAngles = (15, -115), zLim = (None,), cmap = 'plasma', cmapLabel = '$U$', grid = True, cbarOrientate = 'horizontal', **kwargs):
+        super(BaseFigure3D, self).__init__(listX = listX2D, listY = listY2D, **kwargs)
 
-    _, _, _ = configurePlotSettings(fontSize = fontSize)
-
-    sliceOffsetsIter = iter(sliceOffsets)
-    # # Numpy array treatment
-    # for i in range(len(listSlices2D)):
-    #     listSlices2D[i] = np.array(listSlices2D[i])
+        self.zLabel, self.zLim = zLabel, zLim
+        self.cmapLabel, self.cmap = cmapLabel, cmap
+        self.alpha, self.grid, self.viewAngles = alpha, grid, viewAngles
+        self.plot, self.cbarOrientate = None, cbarOrientate
 
 
-    ax = plt.figure(name).gca(projection = '3d')
-    # Multiplier to stretch the 'z' axis
-    # When 1 slice, no stretch
-    # When 3 slices, 1.3 in z, and 0.65 in other directions
-    figZ = 0.15*len(listSlices2D) + 0.85
-    figXY = -0.175*len(listSlices2D) + 1.175
-    if zDir is 'y':
-        ax.get_proj = lambda: np.dot(Axes3D.get_proj(ax), np.diag([figXY, figZ, figXY, 1]))
-    elif zDir is 'x':
-        ax.get_proj = lambda: np.dot(Axes3D.get_proj(ax), np.diag([figZ, figXY, figXY, 1]))
-    else:
-        ax.get_proj = lambda: np.dot(Axes3D.get_proj(ax), np.diag([figXY, figXY, figZ, 1]))
+    def initializeFigure(self, figSize = (1, 1)):
+        self.latexify(fontSize = self.fontSize, figWidth = self.figWidth, subplots = figSize)
+
+        self.axes = (plt.figure(self.name).gca(projection = '3d'),)
 
 
-    for slice in listSlices2D:
-        plot = ax.contourf(x2D, y2D, slice, nContour, zdir = zDir, offset = next(sliceOffsetsIter), alpha = alpha)
+    def plotFigure(self):
+        super(BaseFigure3D, self).plotFigure()
 
-    ax.set_zlim(min(sliceOffsets), max(sliceOffsets))
-    ax.set_xticks(np.arange(int(x2D.min()), int(x2D.max()) + 1, int(x2D.max())/3))
-    ax.set_yticks(np.arange(int(y2D.min()), int(y2D.max()) + 1, int(y2D.max())/3))
-    ax.view_init(viewAngles[0], viewAngles[1])
-    cbaxes = ax.add_axes([0.8, 0.1, 0.02, 0.8])
-    cb = plt.colorbar(plot, cax = cbaxes, drawedges = False, extend = 'both')
-    # Remove colorbar outline
-    cb.outline.set_linewidth(0)
-    # Turn off background on all three panes
-    ax.w_xaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
-    ax.w_yaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
-    ax.w_zaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
-    plt.tight_layout()
-    if saveFig:
-        plt.savefig(figDir + '/' + name + '.png', dpi = 1000, transparent = True, bbox_inches = 'tight')
-
-    if show:
-        plt.show()
+        self.ensureMeshGrid()
 
 
-def setAxesEqual3D(ax):
-    '''Make axes of 3D plot have equal scale so that spheres appear as spheres,
-    cubes as cubes, etc..  This is one possible solution to Matplotlib's
-    ax.set_aspect('equal') and ax.axis('equal') not working for 3D.
+    def finalizeFigure(self, fraction = 0.06, pad = 0.08, pbaspect = (1, 1, 1), **kwargs):
+        self.axes[0].set_zlabel(self.zLabel)
+        if self.zLim[0] is not None:
+            self.axes[0].set_zlim(self.zLim)
 
-    Input
-      ax: a matplotlib axis, e.g., as output from plt.gca().
-    '''
-    import numpy as np
+        cb = plt.colorbar(self.plot, fraction = fraction, pad = pad, orientation = self.cbarOrientate, extend = 'both', aspect = 25, shrink = 0.75)
+        cb.set_label(self.cmapLabel)
+        # Turn off background on all three panes
+        self.format3D_Axes(self.axes[0])
 
-    x_limits = ax.get_xlim3d()
-    y_limits = ax.get_ylim3d()
-    z_limits = ax.get_zlim3d()
+        # [REQUIRES SOURCE CODE MODIFICATION] Equal axis
+        # Edit the get_proj function inside site-packages\mpl_toolkits\mplot3d\axes3d.py:
+        # try: self.localPbAspect=self.pbaspect
+        # except AttributeError: self.localPbAspect=[1,1,1]
+        # xmin, xmax = np.divide(self.get_xlim3d(), self.pbaspect[0])
+        # ymin, ymax = np.divide(self.get_ylim3d(), self.pbaspect[1])
+        # zmin, zmax = np.divide(self.get_zlim3d(), self.pbaspect[2])
+        try:
+            self.axes[0].pbaspect = pbaspect  # (1, ar, 1) if zDir is 'z' else (1, 1, ar)
+        except AttributeError:
+            warn('\nTo set custom aspect ratio of the 3D plot, you need modification of the source code axes3d.py. The aspect ratio might be incorrect for ' + self.name + '\n', stacklevel = 2)
+            pass
 
-    x_range = abs(x_limits[1] - x_limits[0])
-    x_middle = np.mean(x_limits)
-    y_range = abs(y_limits[1] - y_limits[0])
-    y_middle = np.mean(y_limits)
-    z_range = abs(z_limits[1] - z_limits[0])
-    z_middle = np.mean(z_limits)
+        # # Strictly equal axis of all three axis
+        # _, _, _, _, _, _ = self.get3D_AxesLimits(self.axes[0])
+        # 3D grid
+        self.axes[0].grid(self.grid)
+        self.axes[0].view_init(self.viewAngles[0], self.viewAngles[1])
+        # # View distance
+        # self.axes[0].dist = 11
 
-    # The plot bounding box is a sphere in the sense of the infinity
-    # norm, hence I call half the max range the plot radius.
-    plot_radius = 0.5*max([x_range, y_range, z_range])
-
-    ax.set_xlim3d([x_middle - plot_radius, x_middle + plot_radius])
-    ax.set_ylim3d([y_middle - plot_radius, y_middle + plot_radius])
-    ax.set_zlim3d([z_middle - plot_radius, z_middle + plot_radius])
-
-
-def plotIsosurfaces3D(x3D, y3D, z3D, surface3Dlist, contourList, slice3Dlist = (None,), boundSurface = (None,),
-customColors = (None,), figDir = './', name = 'UntitledIsosurface', sliceOriantations = (None,), sliceOffsets = (None,), boundSlice = (None,), sliceValRange = (None,)):
-    from mayavi import mlab
-    from mayavi.modules.contour_grid_plane import ContourGridPlane
-    from mayavi.modules.outline import Outline
-    from mayavi.api import Engine
-    import numpy as np
-    from warnings import warn
-
-    x3D, y3D, z3D = np.array(x3D), np.array(y3D), np.array(z3D)
-
-    engine = Engine()
-    engine.start()
-    # if len(engine.scenes) == 0:
-    #     engine.new_scene()
-
-    if customColors[0] is not None:
-        customColors = iter(customColors)
-    else:
-        customColors = iter(('inferno', 'viridis', 'coolwarm', 'Reds', 'Blues')*2)
-
-    contourList = iter(contourList)
-    if sliceOriantations[0] is not None:
-        sliceOriantations = iter(sliceOriantations)
-    else:
-        sliceOriantations = iter(('z_axes',)*len(slice3Dlist))
-
-    if boundSurface[0] is None:
-        boundSurface = (x3D.min(), x3D.max(), y3D.min(), y3D.max(), z3D.min(), z3D.max())
-
-    if boundSlice[0] is None:
-        boundSlice = (x3D.min(), x3D.max(), y3D.min(), y3D.max(), z3D.min(), z3D.max())
-
-    if sliceOffsets[0] is None:
-        sliceOffsets = iter((0,)*len(slice3Dlist))
-    else:
-        sliceOffsets = iter(sliceOffsets)
-
-    if sliceValRange[0] is None:
-        sliceValRange = iter((None, None)*len(slice3Dlist))
-    else:
-        sliceValRange = iter(sliceValRange)
+        super().finalizeFigure(grid = False, tightLayout = True, **kwargs)
 
 
-    mlab.figure(name, engine = engine, size = (1200, 900), bgcolor = (1, 1, 1), fgcolor = (0.5, 0.5, 0.5))
+    @staticmethod
+    def format3D_Axes(ax):
+        ax.w_xaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+        ax.w_yaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+        ax.w_zaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+        ax.w_xaxis._axinfo['grid'].update({'linewidth': 0.25, 'color': 'gray'})
+        ax.w_yaxis._axinfo['grid'].update({'linewidth': 0.25, 'color': 'gray'})
+        ax.w_zaxis._axinfo['grid'].update({'linewidth': 0.25, 'color': 'gray'})
 
-    for surface3D in surface3Dlist:
-        color = next(customColors)
-        # If a colormap given
-        if isinstance(color, str):
-            mlab.contour3d(x3D, y3D, z3D, surface3D, contours = next(contourList), colormap = color,
-                           extent = boundSurface)
-        # If only one color of (0-1, 0-1, 0-1) given
+
+    @staticmethod
+    def get3D_AxesLimits(ax, setAxesEqual = True):
+        '''Make axes of 3D plot have equal scale so that spheres appear as spheres,
+        cubes as cubes, etc..  This is one possible solution to Matplotlib's
+        ax.set_aspect('equal') and ax.axis('equal') not working for 3D.
+
+        Input
+          ax: a Matplotlib axis, e.g., as output from plt.gca().
+        '''
+        x_limits = ax.get_xlim3d()
+        y_limits = ax.get_ylim3d()
+        z_limits = ax.get_zlim3d()
+        x_range = abs(x_limits[1] - x_limits[0])
+        x_middle = np.mean(x_limits)
+        y_range = abs(y_limits[1] - y_limits[0])
+        y_middle = np.mean(y_limits)
+        z_range = abs(z_limits[1] - z_limits[0])
+        z_middle = np.mean(z_limits)
+        # The plot bounding box is a sphere in the sense of the infinity norm,
+        # hence I call half the max range the plot radius.
+        if setAxesEqual:
+            plot_radius = 0.5*max([x_range, y_range, z_range])
+            ax.set_xlim3d([x_middle - plot_radius, x_middle + plot_radius])
+            ax.set_ylim3d([y_middle - plot_radius, y_middle + plot_radius])
+            ax.set_zlim3d([0, z_middle + plot_radius])
+
+        return x_range, y_range, z_range, x_limits, y_limits, z_limits
+
+
+class PlotContourSlices3D(BaseFigure3D):
+    def __init__(self, contourX2D, contourY2D, listSlices2D, sliceOffsets, zDir = 'z', contourLvl = 10, gradientBg = True, **kwargs):
+        super(PlotContourSlices3D, self).__init__(listX2D = (contourX2D,), listY2D = (contourY2D,), **kwargs)
+
+        self.listSlices2D = iter((listSlices2D,)) if isinstance(listSlices2D, np.ndarray) else iter(listSlices2D)
+        self.sliceOffsets, self.zDir = iter(sliceOffsets), zDir
+        self.xLim = (min(sliceOffsets), max(sliceOffsets)) if (self.xLim[0] is None) and (zDir is 'x') else self.xLim
+        self.yLim = (min(sliceOffsets), max(sliceOffsets)) if (self.yLim[0] is None) and (zDir is 'y') else self.yLim
+        self.zLim = (min(sliceOffsets), max(sliceOffsets)) if (self.zLim[0] is None) and (zDir is 'z') else self.zLim
+        # If axis limits are still not set, infer
+        if self.xLim[0] is None:
+            self.xLim = (np.min(contourX2D), np.max(contourX2D))
+
+        if self.yLim[0] is None:
+            self.yLim = (np.min(contourY2D), np.max(contourY2D))
+
+        if self.zLim[0] is None:
+            self.zLim = (np.min(listSlices2D), np.max(listSlices2D))
+
+        self.sliceMin, self.sliceMax = np.min(listSlices2D), np.max(listSlices2D)
+        self.contourLvl, self.gradientBg = contourLvl, gradientBg
+        # Good initial view angle
+        self.viewAngles = (20, -115) if zDir is 'z' else (15, -60)
+        self.cbarOrientate = 'vertical' if zDir is 'z' else 'horizontal'
+
+
+    def initializeFigure(self, **kwargs):
+        # If zDir is 'z', then the figure height is twice width, else, figure width is twice height
+        figSize = (2.75, 1) if self.zDir is 'z' else (1, 2)
+
+        super().initializeFigure(figSize = figSize)
+
+
+    def plotFigure(self):
+        super(PlotContourSlices3D, self).plotFigure()
+
+        # Currently, gradient background feature is only available for zDir = 'x'
+        if self.gradientBg:
+            if self.zDir is 'x':
+                x2Dbg, y2Dbg = np.meshgrid(np.linspace(self.xLim[0], self.xLim[1], 3), np.linspace(self.yLim[0], self.yLim[1], 3))
+                z2Dbg, _ = np.meshgrid(np.linspace(self.xLim[0], self.xLim[1], 3), np.linspace(self.zLim[0], self.zLim[1], 3))
+                self.axes[0].contourf(x2Dbg, y2Dbg, z2Dbg, 500, zdir = 'z', offset = 0, cmap = 'gray', alpha = 0.5, antialiased = True)
+                # # Uncomment below to enable gradient background of all three planes
+                # self.axes[0].contourf(x2Dbg, z2Dbg, y2Dbg, 500, zdir = 'y', offset = 300, cmap = 'gray', alpha = 0.5, antialiased = True)
+                # Y3, Z3 = np.meshgrid(np.linspace(self.yLim[0], self.yLim[1], 3),
+                #                      np.linspace(self.zLim[0], self.zLim[1], 3))
+                # X3 = np.ones(Y3.shape)*self.xLim[0]
+                # self.axes[0].plot_surface(X3, Y3, Z3, color = 'gray', alpha = 0.5)
+            else:
+                warn('\nGradient background only supports zDir = "x"!\n', stacklevel = 2)
+
+        # Actual slice plots
+        for slice in self.listSlices2D:
+            if self.zDir is 'x':
+                X, Y, Z = slice, self.listX[0], self.listY[0]
+            elif self.zDir is 'y':
+                X, Y, Z = self.listX[0], slice, self.listY[0]
+            else:
+                X, Y, Z = self.listX[0], self.listY[0], slice
+
+            # "levels" makes sure all slices are in same cmap range
+            self.plot = self.axes[0].contourf(X, Y, Z, self.contourLvl, zdir = self.zDir,
+                                              offset = next(self.sliceOffsets), alpha = self.alpha, cmap = self.cmap,
+                                              levels = np.linspace(self.sliceMin, self.sliceMax, 100), antialiased = False)
+
+
+    def finalizeFigure(self, **kwargs):
+        # Custom color bar location in the figure
+        (fraction, pad) = (0.046, 0.04) if self.zDir is 'z' else (0.06, 0.08)
+        if self.zDir is 'z':
+            ar = abs((self.yLim[1] - self.yLim[0])/(self.xLim[1] - self.xLim[0]))
+            pbaspect = (1, ar, 1)
+        elif self.zDir is 'x':
+            ar = abs((self.zLim[1] - self.zLim[0])/(self.yLim[1] - self.yLim[0]))
+            pbaspect = (1, 1, ar)
         else:
-            mlab.contour3d(x3D, y3D, z3D, surface3D, contours = next(contourList), color = color,
-                           extent = boundSurface)
+            ar = abs((self.zLim[1] - self.zLim[0])/(self.xLim[1] - self.xLim[0]))
+            pbaspect = (1, 1, ar)
 
-        # cgp = ContourGridPlane()
-        # engine.add_module(cgp)
-        # cgp.grid_plane.axis = 'y'
-        # cgp.grid_plane.position = x3D.shape[1] - 1
-        # cgp.contour.number_of_contours = 20
-        # # contour_grid_plane2.actor.mapper.scalar_range = array([298., 302.])
-        # # contour_grid_plane2.actor.mapper.progress = 1.0
-        # # contour_grid_plane2.actor.mapper.scalar_mode = 'use_cell_data'
-        # cgp.contour.filled_contours = True
-        # cgp.actor.property.lighting = False
+        super(PlotContourSlices3D, self).finalizeFigure(fraction = fraction, pad = pad, pbaspect = pbaspect, **kwargs)
 
-    for slice3D in slice3Dlist:
-        sliceOriantation = next(sliceOriantations)
-        sliceOffset = next(sliceOffsets)
-        if sliceOriantation == 'z_axes':
-            origin = np.array([boundSlice[0], boundSlice[2], sliceOffset])
-            point1 = np.array([boundSlice[1], boundSlice[2], sliceOffset])
-            point2 = np.array([boundSlice[0], boundSlice[3], sliceOffset])
-        elif sliceOriantation == 'x_axes':
-            origin = np.array([sliceOffset, boundSlice[2], boundSlice[4]])
-            point1 = np.array([sliceOffset, boundSlice[3], boundSlice[4]])
-            point2 = np.array([sliceOffset, boundSlice[2], boundSlice[5]])
-        else:
-            origin = np.array([boundSlice[0], sliceOffset, boundSlice[4]])
-            point1 = np.array([boundSlice[1], sliceOffset, boundSlice[4]])
-            point2 = np.array([boundSlice[0], sliceOffset, boundSlice[5]])
 
-        image_plane_widget = mlab.volume_slice(x3D, y3D, z3D, slice3D, plane_orientation = sliceOriantation, colormap = next(customColors), vmin = next(sliceValRange), vmax = next(sliceValRange))
-        image_plane_widget.ipw.reslice_interpolate = 'cubic'
-        image_plane_widget.ipw.origin = origin
-        image_plane_widget.ipw.point1 = point1
-        image_plane_widget.ipw.point2 = point2
-        # image_plane_widget.ipw.slice_index = 2
-        image_plane_widget.ipw.slice_position = sliceOffset
+class PlotSurfaceSlices3D(BaseFigure3D):
+    def __init__(self, listX2D, listY2D, listZ2D, listSlices2D, **kwargs):
+        super(PlotSurfaceSlices3D, self).__init__(listX2D = listX2D, listY2D = listY2D, figWidth = 'full', **kwargs)
 
-    # Contour grid plane at last y if the last slice is in xy plane
-    if sliceOriantation == 'z_axes':
-        cgp2 = ContourGridPlane()
-        engine.add_module(cgp2)
-        cgp2.grid_plane.axis = 'y'
-        cgp2.grid_plane.position = x3D.shape[1] - 1
-        cgp2.contour.number_of_contours = 20
-        cgp2.contour.filled_contours = True
-        cgp2.actor.property.lighting = False
+        self.xLim = (np.min(listX2D), np.max(listX2D)) if self.xLim[0] is None else self.xLim
+        self.yLim = (np.min(listY2D), np.max(listY2D)) if self.yLim[0] is None else self.yLim
+        self.zLim = (np.min(listZ2D), np.max(listZ2D)) if self.zLim[0] is None else self.zLim
+        self.listX2D, self.listY2D = iter(self.listX), iter(self.listY)
+        self.listZ2D = iter((listZ2D,)) if isinstance(listZ2D, np.ndarray) else iter(listZ2D)
+        self.listSlices2D = iter((listSlices2D,)) if isinstance(listSlices2D, np.ndarray) else iter(listSlices2D)
+        self.cmapLim = (np.min(listSlices2D), np.max(listSlices2D))
+        self.cmapNorm = mpl.colors.Normalize(self.cmapLim[0], self.cmapLim[1])
+        self.cmapVals = plt.cm.ScalarMappable(norm = self.cmapNorm, cmap = self.cmap)
+        self.cmapVals.set_array([])
+        # For colorbar mappable
+        self.plot = self.cmapVals
 
-    outline = Outline()
-    engine.add_module(outline)
-    outline.actor.property.color = (0.2, 0.2, 0.2)
-    outline.bounds = np.array(boundSurface)
-    outline.manual_bounds = True
 
-    mlab.view(azimuth = 270, elevation = 45)
-    mlab.move(-500, 0, 0)
-    mlab.savefig(figDir + '/' + name + '.png', magnification = 3)
-    print('\nFigure ' + name + ' saved at ' + figDir)
-    mlab.show()
+    def plotFigure(self):
+        for slice in self.listSlices2D:
+            print('\nPlotting ' + self.name + '...')
+            fColors = self.cmapVals.to_rgba(slice)
+            self.axes[0].plot_surface(next(self.listX2D), next(self.listY2D), next(self.listZ2D), cstride = 1, rstride = 1, facecolors = fColors, vmin = self.cmapLim[0], vmax = self.cmapLim[1], shade = False)
+
+
+    def finalizeFigure(self, **kwargs):
+        arZX = abs((self.zLim[1] - self.zLim[0])/(self.xLim[1] - self.xLim[0]))
+        arYX = abs((self.yLim[1] - self.yLim[0])/(self.xLim[1] - self.xLim[0]))
+        # Axes aspect ratio doesn't really work properly
+        pbaspect = (1., arYX, arZX*2)
+
+        super(PlotSurfaceSlices3D, self).finalizeFigure(pbaspect = pbaspect, **kwargs)
 
 
 
@@ -562,5 +513,34 @@ customColors = (None,), figDir = './', name = 'UntitledIsosurface', sliceOrianta
 
 
 
+
+
+
+
+
+
+
+if __name__ == '__main__':
+    x = np.linspace(0, 300, 100)
+    y = np.linspace(0, 100, 100)
+    y2 = np.linspace(10, 80, 100)
+
+    z2D = np.linspace(1, 10, x.size*y.size).reshape((y.size, x.size))
+    z2D2 = np.linspace(10, 30, x.size*y.size).reshape((y.size, x.size))
+    z2D3 = np.linspace(30, 60, x.size*y.size).reshape((y.size, x.size))
+
+    # myplot = Plot2D_InsetZoom((x, x), (y, y2), z2D = (None,), zoomBox = (10, 60, 20, 40), save = True, equalAxis = True, figDir = 'R:/', name = 'newFig')
+
+    # myplot = Plot2D_InsetZoom(x, y, z2D = z2D, zoomBox = (10, 70, 10, 30), save = True, equalAxis = True,
+    #                           figDir = 'R:/', name = 'newFig2')
+
+    # myplot = PlotSlices3D(x, y, [z2D, z2D2, z2D3], sliceOffsets = [0, 20, 50], name = '3d2', figDir = 'R:/', xLim = (0, 150), zDir = 'x')
+    myplot = PlotContourSlices3D(x, y, [z2D, z2D2, z2D3], sliceOffsets = [20000, 20500, 21000], name = '3d2', figDir = 'R:/', zDir = 'x', xLabel = '$x$', yLabel = '$y$', zLabel = r'$z$ [m]', zLim = (0, 100), yLim = (0, 300), gradientBg = True)
+
+    myplot.initializeFigure()
+
+    myplot.plotFigure()
+
+    myplot.finalizeFigure()
 
 

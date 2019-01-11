@@ -111,7 +111,7 @@ uMesh, vMesh, wMesh = u.reshape((-1, meshSizeXY)), v.reshape((-1, meshSizeXY)), 
 
 
 
-from PlottingTool2 import PlotSurfaceSlices3D
+from PlottingTool import PlotSurfaceSlices3D
 myplot = PlotSurfaceSlices3D(X, Y, Z, UmagSliceMesh, name = 'surf', figDir = 'R:/', xLim = (0, 3000), yLim = (0, 3000), zLim = (0, 1000), viewAngles = (20, -100))
 
 myplot.initializeFigure()

@@ -74,7 +74,7 @@ UhorRes3D, wRes3D, _, _= fields.getPlanerFluctuations(Uhor3D, w3D)
 
 
 
-from PlottingTool import plotIsosurfaces3D
+from PlottingTool_Old import plotIsosurfaces3D
 plotIsosurfaces3D(ccx3D, ccy3D, ccz3D, [UhorRes3D, wRes3D], contourList = [[-1.25], [1.]], slice3Dlist = [T3D],
                   boundSurface = (0, 3000, 0, 3000, 0, 500), boundSlice = (0, 3000, 0, 3000, 0, 1000),
                   customColors = [(60/255., 200/255., 255/255.), (244/255., 66/255., 66/255.), 'gist_gray'],

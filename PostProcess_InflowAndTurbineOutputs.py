@@ -6,10 +6,10 @@ from numba import njit, jit
 from collections.abc import Iterator
 
 class BaseProperties:
-    def __init__(self, caseName, caseDir = './', startTime = 0, stopTime = 22000, filePre = '', fileSub = '', ensembleFolderName = 'Ensemble', timeCol = 2, resultFolder = 'Result', **kwargs):
+    def __init__(self, caseName, caseDir = './', filePre = '', fileSub = '', ensembleFolderName = 'Ensemble', timeCol = 2, resultFolder = 'Result', **kwargs):
         self.caseName, self.caseDir = caseName, caseDir
         self.caseFullPath = caseDir + '/' + caseName + '/'
-        self.startTime, self.stopTime = startTime, stopTime
+        # self.startTime, self.stopTime = startTime, stopTime
         self.filePre, self.fileSub = filePre, fileSub
         # Check if result folder is made
         try:
@@ -23,7 +23,7 @@ class BaseProperties:
 
         self.timesAll = self.readTime(**kwargs)
 
-        self.timesSelected, self.startTimeReal, self.stopTimeReal, self.iStart, self.iStop = self.getTimesAndIndices()
+        # self.timesSelected, self.startTimeReal, self.stopTimeReal, self.iStart, self.iStop = self.getTimesAndIndices()
 
         self.propertyData, self.fileNames = {}, []
 
@@ -118,9 +118,9 @@ class BaseProperties:
 
     # @timer
     @jit
-    def getTimesAndIndices(self):
+    def getTimesAndIndices(self, startTime = 20000, stopTime = 22000):
         # Bisection left to find actual starting and ending time and their indices
-        (iStart, iStop), _ = takeClosest(self.timesAll, (self.startTime, self.stopTime))
+        (iStart, iStop), _ = takeClosest(self.timesAll, (startTime, stopTime))
         # If stopTime larger than any time, iStop = len(timesAll)
         iStop = min(iStop, len(self.timesAll) - 1)
         startTimeReal, stopTimeReal = self.timesAll[iStart], self.timesAll[iStop]
@@ -147,9 +147,11 @@ class BaseProperties:
 
     @timer
     @jit
-    def calculatePropertyMean(self, axis = 1):
+    def calculatePropertyMean(self, axis = 1, startTime = 0, stopTime = 22000):
+        self.timesSelected, _, _, iStart, iStop = self.getTimesAndIndices(startTime = startTime, stopTime = stopTime)
+
         for fileName in self.fileNames:
-            self.propertyData[fileName + '_mean'] = np.mean(self.propertyData[fileName][self.iStart:self.iStop], axis = axis)
+            self.propertyData[fileName + '_mean'] = np.mean(self.propertyData[fileName][iStart:iStop], axis = axis)
 
 
 
@@ -320,35 +322,80 @@ class TurbineOutputs(BaseProperties):
 if __name__ is '__main__':
     caseName = 'ALM_N_H_ParTurb'
     fileNames = 'Cd'
-    startTime = 20000
-    stopTime = 20500
-    turb = TurbineOutputs(caseName = caseName, caseDir = '/media/yluan/Toshiba External Drive', startTime = startTime, stopTime = stopTime)
+    startTime1 = 20000
+    stopTime1 = 22000
+    frameSkip = 182#28
+
+    turb = TurbineOutputs(caseName = caseName, caseDir = '/media/yluan/Toshiba External Drive')
 
     turb.readPropertyData(fileNames = fileNames)
 
-    turb.calculatePropertyMean()
+    turb.calculatePropertyMean(startTime = startTime1, stopTime = stopTime1)
 
-    from PlottingTool2 import Plot2D
+    listX1 = (turb.timesSelected[::frameSkip],)*3
+    listY1 = (turb.propertyData[fileNames + '_Turb0_Bld0_mean'][::frameSkip],
+             turb.propertyData[fileNames + '_Turb0_Bld1_mean'][::frameSkip],
+             turb.propertyData[fileNames + '_Turb0_Bld2_mean'][::frameSkip])
+    listY2 = (turb.propertyData[fileNames + '_Turb1_Bld0_mean'][::frameSkip],
+              turb.propertyData[fileNames + '_Turb1_Bld1_mean'][::frameSkip],
+              turb.propertyData[fileNames + '_Turb1_Bld2_mean'][::frameSkip])
+
+    startTime2 = 21000
+    stopTime2 = 22000
+    turb.calculatePropertyMean(startTime = startTime2, stopTime = stopTime2)
+
+    listX2 = (turb.timesSelected[::frameSkip],)*3
+    listY3 = (turb.propertyData[fileNames + '_Turb0_Bld0_mean'][::frameSkip],
+              turb.propertyData[fileNames + '_Turb0_Bld1_mean'][::frameSkip],
+              turb.propertyData[fileNames + '_Turb0_Bld2_mean'][::frameSkip])
+    listY4 = (turb.propertyData[fileNames + '_Turb1_Bld0_mean'][::frameSkip],
+              turb.propertyData[fileNames + '_Turb1_Bld1_mean'][::frameSkip],
+              turb.propertyData[fileNames + '_Turb1_Bld2_mean'][::frameSkip])
+
+    from PlottingTool import Plot2D
     figDir = '/media/yluan/Toshiba External Drive/' + caseName + '/turbineOutput/Result'
 
-    listX = (turb.timesSelected,)*3
-    listY = (turb.propertyData[fileNames + '_Turb0_Bld0_mean'],
-             turb.propertyData[fileNames + '_Turb0_Bld1_mean'],
-             turb.propertyData[fileNames + '_Turb0_Bld2_mean'])
-    listY2 = (turb.propertyData[fileNames + '_Turb1_Bld0_mean'],
-              turb.propertyData[fileNames + '_Turb1_Bld1_mean'],
-              turb.propertyData[fileNames + '_Turb1_Bld2_mean'])
+    # Custom colors
+    colors, _ = Plot2D.setColors()
 
-    plotsLabel = ('Blade 0', 'Blade 1', 'Blade 2')
+    plotsLabel = ('Blade 1', 'Blade 2', 'Blade 3')
     transparentBg = False
-    xLim = (startTime, stopTime)
+    xLim1 = (startTime1, stopTime1)
+    yLim = (min(np.min(listY1), np.min(listY2), np.min(listY3), np.min(listY4)), max(np.max(listY1), np.max(listY2), np.max(listY3), np.max(listY4)))
 
-    clPlot = Plot2D(listX, listY, save = True, name = 'Turb0_' + fileNames, xLabel = 'Time [s]', yLabel = r'$C_d$ [-]', figDir = figDir, xLim = xLim)
+    show = False
+
+    clPlot = Plot2D(listY1, listX1, save = True, name = 'Turb0_' + fileNames  + '1', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]', figDir = figDir, xLim = yLim, yLim = xLim1, figWidth = 'half', figHeightMultiplier = 2., show = show, colors = colors[:3][:], gradientBg = True, gradientBgRange = (startTime1, 21800), gradientBgDir = 'y')
     clPlot.initializeFigure()
+
     clPlot.plotFigure(plotsLabel = plotsLabel)
+
     clPlot.finalizeFigure(transparentBg = transparentBg)
 
-    clPlot2 = Plot2D(listX, listY2, save = True, name = 'Turb1_' + fileNames, xLabel = 'Time [s]', yLabel = r'$C_d$ [-]', figDir = figDir, xLim = xLim)
-    clPlot2.initializeFigure()
-    clPlot2.plotFigure(plotsLabel = plotsLabel)
-    clPlot2.finalizeFigure(transparentBg = transparentBg)
+    # clPlot2 = Plot2D(listX1, listY2, save = True, name = 'Turb1_' + fileNames  + '1', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]', figDir = figDir, xLim = xLim1, yLim = yLim, figWidth = 'full', show = show, colors = colors[3:6][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
+    # clPlot2.initializeFigure()
+    # clPlot2.plotFigure(plotsLabel = plotsLabel)
+    # clPlot2.finalizeFigure(transparentBg = transparentBg)
+    #
+    #
+    #
+    #
+    #
+    #
+    # xLim2 = (startTime2, stopTime2)
+    #
+    # show = True
+    #
+    # clPlot = Plot2D(listX2, listY3, save = True, name = 'Turb0_' + fileNames + '2', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]',
+    #                 figDir = figDir, xLim = xLim2, yLim = yLim, figWidth = 'full', show = show, colors = colors[:3][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
+    # clPlot.initializeFigure()
+    #
+    # clPlot.plotFigure(plotsLabel = plotsLabel)
+    #
+    # clPlot.finalizeFigure(transparentBg = transparentBg)
+    #
+    # clPlot2 = Plot2D(listX2, listY4, save = True, name = 'Turb1_' + fileNames + '2', xLabel = 'Time [s]',
+    #                  yLabel = r'$C_d$ [-]', figDir = figDir, xLim = xLim2, yLim = yLim, figWidth = 'full', show = show, colors = colors[3:6][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
+    # clPlot2.initializeFigure()
+    # clPlot2.plotFigure(plotsLabel = plotsLabel)
+    # clPlot2.finalizeFigure(transparentBg = transparentBg)

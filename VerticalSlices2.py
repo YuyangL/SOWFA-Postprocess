@@ -26,7 +26,7 @@ Uinterp = griddata(pointsXZ, UmagSlice.ravel(), (grid_x, grid_z), method = 'cubi
 
 
 
-from PlottingTool2 import Plot2D_InsetZoom, PlotSurfaceSlices3D
+from PlottingTool import Plot2D_InsetZoom, PlotSurfaceSlices3D
 
 # myplot = Plot2D_InsetZoom(grid_x, grid_z, zoomBox = (1000, 2500, 0, 500), z2D = Uinterp, equalAxis = True, name = caseName + '_slice', figDir = 'R:/')
 #

@@ -67,7 +67,7 @@ x, y = np.arange(5, 2996, 10), np.arange(5, 2996, 10)
 xv, yv = np.meshgrid(x, y)
 
 
-from PlottingTool import plot2D
+from PlottingTool_Old import plot2D
 plot2D([xv], [yv], z2D = UhubMagMesh, contourLvl = 20, zLabel = '$U$ [m/s]')
 
 

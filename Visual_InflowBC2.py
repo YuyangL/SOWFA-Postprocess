@@ -1,8 +1,8 @@
 # import matplotlib.pyplot as plt
 import numpy as np
 # from warnings import warn
-from PlottingTool import Plot2D
-from InflowProfiles import InflowProfiles
+from PlottingTool_Old import Plot2D
+from PostProcess_InflowAndTurbineOutputs import InflowProfiles
 from Utilities import readData
 
 zHub = 90
