@@ -6,7 +6,7 @@ from numba import njit, jit
 from collections.abc import Iterator
 
 class BaseProperties:
-    def __init__(self, caseName, caseDir = './', filePre = '', fileSub = '', ensembleFolderName = 'Ensemble', timeCol = 2, resultFolder = 'Result', **kwargs):
+    def __init__(self, caseName, caseDir = './', filePre = '', fileSub = '', ensembleFolderName = 'Ensemble', resultFolder = 'Result', timeCols = 'infer', timeKw = 'ime', forceRemerge = False, **kwargs):
         self.caseName, self.caseDir = caseName, caseDir
         self.caseFullPath = caseDir + '/' + caseName + '/'
         # self.startTime, self.stopTime = startTime, stopTime
@@ -19,11 +19,13 @@ class BaseProperties:
 
         self.ensembleFolderPath = self.caseFullPath + ensembleFolderName + '/'
 
-        self.mergeTimeDirectories(timeCol = timeCol, **kwargs)
+        self.timeCols = (timeCols,) if isinstance(timeCols, int) else timeCols
+
+        self.mergeTimeDirectories(timeKw = timeKw, forceRemerge = forceRemerge)
 
         self.timesAll = self.readTime(**kwargs)
 
-        # self.timesSelected, self.startTimeReal, self.stopTimeReal, self.iStart, self.iStop = self.getTimesAndIndices()
+        self.timesSelected, self.startTimeReal, self.stopTimeReal, self.iStart, self.iStop = self.getTimesAndIndices()
 
         self.propertyData, self.fileNames = {}, []
 
@@ -36,14 +38,16 @@ class BaseProperties:
         inputTuple = os.listdir(self.ensembleFolderPath) if inputTuple[0] in ('*', 'all') else inputTuple
         return inputTuple
 
-
+    @jit
     def readTime(self, noRepeat = True):
-        # In case of inflow profile
-        try:
-            timesAll = np.genfromtxt(self.ensembleFolderPath + self.filePre + 'U_mean' + self.fileSub)[:, 0]
-        # In case of turbineOutput
-        except IOError:
-            timesAll = np.genfromtxt(self.ensembleFolderPath + self.filePre + 'Cl' + self.fileSub)[:, 2]
+        fileNames = os.listdir(self.ensembleFolderPath)
+        timesAll = np.genfromtxt(self.ensembleFolderPath + '/' + fileNames[0])[:, self.timeCols[0]]
+        # # In case of inflow profile
+        # try:
+        #     timesAll = np.genfromtxt(self.ensembleFolderPath + self.filePre + 'U_mean' + self.fileSub)[:, self.timeCols]
+        # # In case of turbineOutput
+        # except IOError:
+        #     timesAll = np.genfromtxt(self.ensembleFolderPath + self.filePre + 'Cl' + self.fileSub)[:, self.timeCols]
 
         if noRepeat:
             timesAll = np.unique(timesAll)
@@ -52,7 +56,7 @@ class BaseProperties:
 
 
     # @timer
-    def mergeTimeDirectories(self, trimOverlapTime = True, timeCol = 2):
+    def mergeTimeDirectories(self, trimOverlapTime = True, timeKw = 'Time', forceRemerge = False):
         # [DEPRECATED]
         # @jit
         # def takeClosestIdx(lists, vals):
@@ -69,7 +73,7 @@ class BaseProperties:
             os.mkdir(self.ensembleFolderPath)
         except OSError:
             # If folder not empty, abort
-            if os.listdir(self.ensembleFolderPath):
+            if os.listdir(self.ensembleFolderPath) and not forceRemerge:
                 print(f'\n{self.ensembleFolderPath} files already exist')
                 return
 
@@ -81,25 +85,52 @@ class BaseProperties:
         for fileName in fileNames:
             fileEnsembles[fileName] = open(self.ensembleFolderPath + fileName, "w")
 
+        # self.timeCols = (self.timeCols,) if isinstance(self.timeCols, int) else self.timeCols
+
+        if self.timeCols is 'infer':
+            self.timeCols = []
+            for fileName in fileNames:
+                with open(self.caseFullPath + timeDirs[0] + '/' + fileName, 'r') as file:
+                    header = (file.readline()).split()
+                    self.timeCols.append(header.index(list(filter(lambda kw: timeKw in kw, header))[0]))
+        else:
+            self.timeCols = self.timeCols*len(fileNames)
+            
+
         # Go through time folders and append files to ensemble
         # Excluding Ensemble folder
         for i in range(len(timeDirs)):
             # If trim overlapped time and not in last time directory
             if trimOverlapTime and i < len(timeDirs) - 1:
-                try:
-                    times = np.genfromtxt(self.caseFullPath + timeDirs[i] + '/' + fileNames[0])[:, timeCol]
-                # In case the last line wasn't written properly,
-                # which means the simulation was probably aborted, discard the last line
-                except ValueError:
-                    times = np.genfromtxt(self.caseFullPath + timeDirs[i] + '/' + fileNames[0], skip_footer = 1)[:, timeCol]
+                knownTimeCols, times, iTrim = {}, {}, {}
+                # Go through all time columns of each file in order
+                for j in range(len(self.timeCols)):
+                    # Retrieve list of time and trim index information for jth file in ith time directory
+                    # After each retrieval, add this time column to known time column dictionary as key
+                    # and corresponding file name as value
+                    if str(self.timeCols[j]) not in knownTimeCols.keys():
+                        try:
+                            times[fileNames[j]] = np.genfromtxt(self.caseFullPath + timeDirs[i] + '/' + fileNames[j])[:, self.timeCols[j]]
+                        # In case the last line wasn't written properly,
+                        # which means the simulation was probably aborted, discard the last line
+                        except ValueError:
+                            times[fileNames[j]] = np.genfromtxt(self.caseFullPath + timeDirs[i] + '/' + fileNames[j], skip_footer = 1)[:, self.timeCols[j]]
 
-                # Index at which trim should start for this file
-                iTrim, _ = takeClosest(times, np.float_(timeDirs[i + 1]))
+                        # Index at which trim should start for this file
+                        iTrim[fileNames[j]], _ = takeClosest(times[fileNames[j]], np.float_(timeDirs[i + 1]))
+                        # Add this time column to known time column list
+                        knownTimeCols[str(self.timeCols[j])] = fileNames[j]
+
+                    # If current time column already exists in remembered dictionary,
+                    # then skip it and retrieve the file name the last time it had this number of time column
+                    else:
+                        times[fileNames[j]] = times[knownTimeCols[str(self.timeCols[j])]]
+                        iTrim[fileNames[j]] = iTrim[knownTimeCols[str(self.timeCols[j])]]
 
             # Go through each file in this time directory
             for fileName in fileNames:
                 # If trim overlapped time and not last time directory and trim is indeed needed
-                if trimOverlapTime and i < len(timeDirs) - 1 and iTrim < (len(times) - 1):
+                if trimOverlapTime and i < len(timeDirs) - 1 and iTrim[fileName] < (len(times[fileName]) - 1):
                     with open(self.caseFullPath + timeDirs[i] + '/' + fileName, 'r') as file:
                         # Filter out empty lines before iTrim indices can be mapped
                         lines = list(filter(None, (line.rstrip() for line in file)))
@@ -107,7 +138,11 @@ class BaseProperties:
                     print(f'\nTrimming overlapped time and adding {fileName} from {timeDirs[i]} to Ensemble...')
                     # Writelines support writing a 1D list, since lines is 2D,
                     # join each row with "\n"
-                    fileEnsembles[fileName].writelines("\n".join(lines[:iTrim + 1]))
+                    # (except for 1st row that is hstack after the last line of original fileEnsembles)
+                    # Note: the header of 2nd file onward will still be written in ensemble,
+                    # just that when reading file into array using numpy, the headers should automatically be ignored
+                    # since it starts with "#"
+                    fileEnsembles[fileName].writelines("\n".join(lines[:iTrim[fileName] + 1]))
                 # Otherwise, append this file directly to Ensemble
                 else:
                     print(f'\nAdding {fileName} from {timeDirs[i]} to Ensemble...')
@@ -118,14 +153,14 @@ class BaseProperties:
 
     # @timer
     @jit
-    def getTimesAndIndices(self, startTime = 20000, stopTime = 22000):
+    def getTimesAndIndices(self, startTime = 20000, stopTime = 22001):
         # Bisection left to find actual starting and ending time and their indices
         (iStart, iStop), _ = takeClosest(self.timesAll, (startTime, stopTime))
         # If stopTime larger than any time, iStop = len(timesAll)
         iStop = min(iStop, len(self.timesAll) - 1)
         startTimeReal, stopTimeReal = self.timesAll[iStart], self.timesAll[iStop]
 
-        timesSelected = self.timesAll[iStart:iStop]
+        timesSelected = self.timesAll[iStart:(iStop + 1)]
 
         print('\nTime and index information extracted for ' + str(startTimeReal) + ' s and ' + str(stopTimeReal) + ' s')
         return timesSelected, startTimeReal, stopTimeReal, iStart, iStop
@@ -133,13 +168,15 @@ class BaseProperties:
 
     # @timer
     @jit
-    def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 4, verbose = True):
+    def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 0, verbose = True):
         self.fileNames = self.ensureTupleInput(fileNames)
+        skipRow = iter((skipRow,)*len(self.fileNames)) if isinstance(skipRow, int) else iter(skipRow)
+        skipCol = iter((skipCol,)*len(self.fileNames)) if isinstance(skipCol, int) else iter(skipCol)
 
         for fileName in self.fileNames:
             # Data dictionary of specified property(s) of all times
             self.propertyData[fileName] = \
-                np.genfromtxt(self.ensembleFolderPath + self.filePre + fileName + self.fileSub)[skipRow:, skipCol:]
+                np.genfromtxt(self.ensembleFolderPath + self.filePre + fileName + self.fileSub)[next(skipRow):, next(skipCol):]
 
         if verbose:
             print('\n' + str(self.fileNames) + ' read')
@@ -147,12 +184,31 @@ class BaseProperties:
 
     @timer
     @jit
-    def calculatePropertyMean(self, axis = 1, startTime = 0, stopTime = 22000):
+    def calculatePropertyMean(self, axis = 1, startTime = 0, stopTime = 22001):
         self.timesSelected, _, _, iStart, iStop = self.getTimesAndIndices(startTime = startTime, stopTime = stopTime)
+        if axis is 'row':
+            axis = 0
+        elif axis is 'col':
+            axis = 1
 
         for fileName in self.fileNames:
             self.propertyData[fileName + '_mean'] = np.mean(self.propertyData[fileName][iStart:iStop], axis = axis)
 
+
+    def trimInvalidCharacters(self, fileNames, invalidChars):
+        fileNames = self.ensureTupleInput(fileNames)
+
+        invalidChars = (invalidChars,) if isinstance(invalidChars, str) else invalidChars
+
+        for fileName in fileNames:
+            with open(self.ensembleFolderPath + fileName, 'r') as f:
+                lst = [line.rstrip('\n \t') for line in f]
+
+            for invalidChar in invalidChars:
+                lst = [string.replace(invalidChar, '') for string in lst]
+
+            with open(self.ensembleFolderPath + fileName, "w") as f:
+                f.writelines('\n'.join(lst))
 
 
 class InflowProfiles(object):
@@ -264,7 +320,8 @@ class InflowProfiles(object):
 
 
 class TurbineOutputs(BaseProperties):
-    def __init__(self, caseName, **kwargs):
+    def __init__(self, caseName, globalQuantities = ('powerRotor', 'rotSpeed', 'thrust', 'torqueRotor', 'torqueGen', 'azimuth', 'nacYaw', 'pitch'), **kwargs):
+        self.globalQuantities = globalQuantities
         super(TurbineOutputs, self).__init__(caseName + '/turbineOutput', **kwargs)
 
         self.nTurb, self.nBlade = 0, 0
@@ -272,20 +329,38 @@ class TurbineOutputs(BaseProperties):
 
     @timer
     @jit
-    def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 4, verbose = True):
+    def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 'infer', verbose = True, turbInfo = ('infer',)):
+        fileNames = self.ensureTupleInput(fileNames)
+        globalQuantities = (
+        'powerRotor', 'rotSpeed', 'thrust', 'torqueRotor', 'torqueGen', 'azimuth', 'nacYaw', 'pitch', 'powerGenerator')
+        if skipCol is 'infer':
+            skipCol = []
+            for file in fileNames:
+                if file in globalQuantities:
+                    skipCol.append(3)
+                else:
+                    skipCol.append(4)
+
         super(TurbineOutputs, self).readPropertyData(fileNames = fileNames, skipRow = skipRow, skipCol = skipCol, verbose = False)
 
-        turbInfo = np.genfromtxt(self.ensembleFolderPath + self.filePre + self.fileNames[0] + self.fileSub)[skipRow:, :2]
+        if turbInfo[0] is 'infer':
+            turbInfo = np.genfromtxt(self.ensembleFolderPath + self.filePre + 'Cl' + self.fileSub)[skipRow:, :2]
+
         # Number of turbines and blades
-        self.nTurb, self.nBlade = int(np.max(turbInfo[:, 0]) + 1), int(np.max(turbInfo[:, 1]) + 1)
+        (self.nTurb, self.nBlade) = (int(np.max(turbInfo[:, 0]) + 1), int(np.max(turbInfo[:, 1]) + 1))
 
         fileNamesOld, self.fileNames = self.fileNames, list(self.fileNames)
         for fileName in fileNamesOld:
-            # self.fileNamesDetail.append(fileName)
             for i in range(self.nTurb):
-                for j in range(self.nBlade):
-                    newFileName = fileName + '_Turb' + str(i) + '_Bld' + str(j)
-                    self.propertyData[newFileName] = self.propertyData[fileName][(i*self.nBlade + j)::(self.nTurb*self.nBlade), :]
+                if fileName not in globalQuantities:
+                    for j in range(self.nBlade):
+                        newFileName = fileName + '_Turb' + str(i) + '_Bld' + str(j)
+                        self.propertyData[newFileName] = self.propertyData[fileName][(i*self.nBlade + j)::(self.nTurb*self.nBlade), :]
+                        self.fileNames.append(newFileName)
+
+                else:
+                    newFileName = fileName + '_Turb' + str(i)
+                    self.propertyData[newFileName] = self.propertyData[fileName][i::self.nTurb]
                     self.fileNames.append(newFileName)
 
         if verbose:

@@ -79,8 +79,6 @@ class BaseFigure:
                   ". Will reduce to " + str(MAX_HEIGHT_INCHES) + " inches", stacklevel = 2)
             fig_height = MAX_HEIGHT_INCHES
 
-        print(fig_width, fig_height)
-
         tableauGray = (89/255., 89/255., 89/255.)
         mpl.rcParams.update({
             'backend':             'ps',
