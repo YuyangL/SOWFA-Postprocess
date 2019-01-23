@@ -129,7 +129,7 @@ class BaseFigure:
             self.listX[0], self.listY[0] = np.meshgrid(self.listX[0], self.listY[0], sparse = False)
 
 
-    def finalizeFigure(self, xyScale = ('linear', 'linear'), tightLayout = True, setXYlabel = (True, True), grid = True, transparentBg = True):
+    def finalizeFigure(self, xyScale = ('linear', 'linear'), tightLayout = True, setXYlabel = (True, True), grid = True, transparentBg = False):
         if len(self.listX) > 1:
             nCol = 2 if len(self.listX) > 3 else 1
             self.axes[0].legend(loc = 'best', shadow = False, fancybox = False, ncol = nCol)
@@ -500,6 +500,7 @@ class PlotSurfaceSlices3D(BaseFigure3D):
         for slice in self.listSlices2D:
             print('\nPlotting ' + self.name + '...')
             fColors = self.cmapVals.to_rgba(slice)
+            print('\nfColors ready')
             self.axes[0].plot_surface(next(self.listX2D), next(self.listY2D), next(self.listZ2D), cstride = 1, rstride = 1, facecolors = fColors, vmin = self.cmapLim[0], vmax = self.cmapLim[1], shade = False)
 
 
