@@ -24,7 +24,7 @@ from math import sqrt
 
 # './ABL_N_H/Slices/20000.9038025/U_alongWind_Slice.raw'
 # 'I:/SOWFA Data/ALM_N_H/Slices/20500.9078025/U_alongWind_Slice.raw'
-data = np.genfromtxt('I:/SOWFA Data/ABL_N_H/Slices/20000.9038025/U_alongWind_Slice.raw', skip_header = 2)
+data = np.genfromtxt('/media/yluan/Toshiba External Drive/ALM_N_H/Slices/22000.0558025/U_hubHeight_Slice.raw', skip_header = 2)
 
 x = data[:, 0]
 y = data[:, 1]
@@ -112,7 +112,7 @@ uMesh, vMesh, wMesh = u.reshape((-1, meshSizeXY)), v.reshape((-1, meshSizeXY)), 
 
 
 from PlottingTool import PlotSurfaceSlices3D
-myplot = PlotSurfaceSlices3D(X, Y, Z, UmagSliceMesh, name = 'surf', figDir = 'R:/', xLim = (0, 3000), yLim = (0, 3000), zLim = (0, 1000), viewAngles = (20, -100))
+myplot = PlotSurfaceSlices3D(X, Y, Z, UmagSliceMesh, name = 'surf', figDir = './', xLim = (0, 3000), yLim = (0, 3000), zLim = (0, 1000), viewAngles = (20, -100))
 
 myplot.initializeFigure()
 

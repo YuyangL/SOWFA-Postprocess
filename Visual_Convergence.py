@@ -6,17 +6,15 @@ from PlottingTool import Plot2D
 User Inputs
 """
 caseDir = '/media/yluan/Toshiba External Drive/'
-caseName = 'ALM_N_H'
-# caseName = 'ALM_N_H_ParTurb'
+# caseName = 'ALM_N_H'
+caseName = 'ALM_N_H_ParTurb'
 caseName += '/Probes'
-fileNames = 'UAvg'  # ('uuPrime2', 'UAvg', 'Rmean')
+fileNames = 'uuPrime2'  # ('uuPrime2', 'UAvg', 'Rmean')
 nProbe = 4
 # Which column is time
 timeCol = 0
 # Characters to remove before reading data into numpy arrays
 invalidChars = ('(', ')')
-# 3 components, either xx, yy, zz, or x, y, z
-nComponent = 3
 times = (20500, 22000)
 
 """
@@ -84,10 +82,25 @@ if 'uuPrime2' in fileNames:
     yLabel = r'$R_{11}$ [m$^2$/s$^2$]'
     decomposeDataAndPlot(step = step, subscript = '11', startCol = startCol, fileName = fileName)
 
+    # Decompose and plot xy component
+    yLabel = r'$R_{12}$ [m$^2$/s$^2$]'
+    startCol = 1
+    decomposeDataAndPlot(step = step, subscript = '12', startCol = startCol, fileName = fileName)
+
+    # Decompose and plot xz component
+    yLabel = r'$R_{13}$ [m$^2$/s$^2$]'
+    startCol = 2
+    decomposeDataAndPlot(step = step, subscript = '13', startCol = startCol, fileName = fileName)
+
     # Decompose and plot yy component
     startCol = 3
     yLabel = r'$R_{22}$ [m$^2$/s$^2$]'
     decomposeDataAndPlot(step = step, subscript = '22', startCol = startCol, fileName = fileName)
+
+    # Decompose and plot yz component
+    yLabel = r'$R_{23}$ [m$^2$/s$^2$]'
+    startCol = 4
+    decomposeDataAndPlot(step = step, subscript = '23', startCol = startCol, fileName = fileName)
 
     # Decompose and plot yy component
     startCol = 5

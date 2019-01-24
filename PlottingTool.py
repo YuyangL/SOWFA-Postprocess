@@ -217,11 +217,12 @@ class Plot2D(BaseFigure):
 
     def finalizeFigure(self, cbarOrientate = 'horizontal', **kwargs):
         if self.type in ('contourf', 'contour') and len(self.axes) == 1:
-            cb = plt.colorbar(orientation = cbarOrientate)
+            cb = plt.colorbar(self.plots[0], ax = self.axes[0], orientation = cbarOrientate)
             cb.set_label(self.zLabel)
-            cb.outline.set_visible(False)
+            super().finalizeFigure(grid = False, **kwargs)
+        else:
+            super().finalizeFigure(**kwargs)
 
-        super().finalizeFigure(**kwargs)
 
 
 class Plot2D_InsetZoom(Plot2D):
