@@ -86,9 +86,9 @@ class BaseFigure:
             'axes.labelsize':      fontSize,  # fontsize for x and y labels (was 10)
             'axes.titlesize':      fontSize + 2.,
             'font.size':           fontSize,  # was 10
-            'legend.fontsize':     fontSize - 2,  # was 10
-            'xtick.labelsize':     fontSize - 2.,
-            'ytick.labelsize':     fontSize - 2.,
+            'legend.fontsize':     fontSize - 3.,  # was 10
+            'xtick.labelsize':     fontSize - 3.,
+            'ytick.labelsize':     fontSize - 3.,
             'xtick.color':         tableauGray,
             'ytick.color':         tableauGray,
             'xtick.direction':     'out',
@@ -99,6 +99,7 @@ class BaseFigure:
             "legend.framealpha":   0.5,
             'legend.edgecolor':    'none',
             'lines.linewidth':     linewidth,
+            # 'lines.markersize':    2,
             "axes.spines.top":     False,
             "axes.spines.right":   False,
             'axes.edgecolor':      tableauGray,
@@ -129,10 +130,10 @@ class BaseFigure:
             self.listX[0], self.listY[0] = np.meshgrid(self.listX[0], self.listY[0], sparse = False)
 
 
-    def finalizeFigure(self, xyScale = ('linear', 'linear'), tightLayout = True, setXYlabel = (True, True), grid = True, transparentBg = False):
+    def finalizeFigure(self, xyScale = (None,), tightLayout = True, setXYlabel = (True, True), grid = True, transparentBg = False, legLoc = 'best'):
         if len(self.listX) > 1:
             nCol = 2 if len(self.listX) > 3 else 1
-            self.axes[0].legend(loc = 'best', shadow = False, fancybox = False, ncol = nCol)
+            self.axes[0].legend(loc = legLoc, shadow = False, fancybox = False, ncol = nCol)
 
         if grid:
             self.axes[0].grid(which = 'both', alpha = 0.25)
@@ -152,13 +153,17 @@ class BaseFigure:
         if self.yLim[0] is not None:
             self.axes[0].set_ylim(self.yLim)
 
-        self.axes[0].set_xscale(xyScale[0]), self.axes[0].set_yscale(xyScale[1])
+        if xyScale[0] is not None:
+            self.axes[0].set_xscale(xyScale[0]), self.axes[0].set_yscale(xyScale[1])
+
         if tightLayout:
             plt.tight_layout()
 
         print('\nFigure ' + self.name + ' finalized')
         if self.save:
-            plt.savefig(self.figDir + '/' + self.name + '.png', transparent = transparentBg, bbox_inches = 'tight', dpi = 1000)
+            # plt.savefig(self.figDir + '/' + self.name + '.png', transparent = transparentBg, bbox_inches = 'tight', dpi = 1000)
+            plt.savefig(self.figDir + '/' + self.name + '.png', transparent = transparentBg,
+                        dpi = 1000)
             print('\nFigure ' + self.name + '.png saved in ' + self.figDir)
 
         if self.show:
@@ -315,7 +320,8 @@ class BaseFigure3D(BaseFigure):
     def initializeFigure(self, figSize = (1, 1)):
         self.latexify(fontSize = self.fontSize, figWidth = self.figWidth, subplots = figSize)
 
-        self.axes = (plt.figure(self.name).gca(projection = '3d'),)
+        self.fig = plt.figure(self.name)
+        self.axes = (self.fig.gca(projection = '3d'),)
 
 
     def plotFigure(self):
@@ -324,13 +330,17 @@ class BaseFigure3D(BaseFigure):
         self.ensureMeshGrid()
 
 
-    def finalizeFigure(self, fraction = 0.06, pad = 0.08, pbaspect = (1, 1, 1), **kwargs):
+    def finalizeFigure(self, fraction = 0.06, pad = 0.08, showCbar = True, reduceNtick = True, **kwargs):
         self.axes[0].set_zlabel(self.zLabel)
         if self.zLim[0] is not None:
             self.axes[0].set_zlim(self.zLim)
 
-        cb = plt.colorbar(self.plot, fraction = fraction, pad = pad, orientation = self.cbarOrientate, extend = 'both', aspect = 25, shrink = 0.75)
-        cb.set_label(self.cmapLabel)
+        if showCbar:
+            # cbaxes = self.fig.add_axes([0.1, 0.1, 0.03, 0.8])
+            # cb = plt.colorbar(self.plot, cax = cbaxes)
+            cb = plt.colorbar(self.plot, fraction = fraction, pad = pad, orientation = self.cbarOrientate, extend = 'both', aspect = 25, shrink = 0.75)
+            cb.set_label(self.cmapLabel)
+
         # Turn off background on all three panes
         self.format3D_Axes(self.axes[0])
 
@@ -341,11 +351,24 @@ class BaseFigure3D(BaseFigure):
         # xmin, xmax = np.divide(self.get_xlim3d(), self.pbaspect[0])
         # ymin, ymax = np.divide(self.get_ylim3d(), self.pbaspect[1])
         # zmin, zmax = np.divide(self.get_zlim3d(), self.pbaspect[2])
-        try:
-            self.axes[0].pbaspect = pbaspect  # (1, ar, 1) if zDir is 'z' else (1, 1, ar)
-        except AttributeError:
-            warn('\nTo set custom aspect ratio of the 3D plot, you need modification of the source code axes3d.py. The aspect ratio might be incorrect for ' + self.name + '\n', stacklevel = 2)
-            pass
+        xLim = self.axes[0].get_xlim() if self.xLim[0] is None else self.xLim
+        yLim = self.axes[0].get_ylim() if self.yLim[0] is None else self.yLim
+        zLim = self.axes[0].get_zlim() if self.zLim[0] is None else self.zLim
+        if self.equalAxis:
+            try:
+                arZX = abs((zLim[1] - zLim[0])/(xLim[1] - xLim[0]))
+                arYX = abs((yLim[1] - yLim[0])/(xLim[1] - xLim[0]))
+                # Axes aspect ratio doesn't really work properly
+                pbaspect = (1., arYX, arZX*2)
+                self.axes[0].pbaspect = pbaspect  # (1, ar, 1) if zDir is 'z' else (1, 1, ar)
+            except AttributeError:
+                warn('\nTo set custom aspect ratio of the 3D plot, you need modification of the source code axes3d.py. The aspect ratio might be incorrect for ' + self.name + '\n', stacklevel = 2)
+                pass
+
+        if reduceNtick:
+            self.axes[0].set_xticks(np.linspace(xLim[0], xLim[1], 3))
+            self.axes[0].set_yticks(np.linspace(yLim[0], yLim[1], 3))
+            self.axes[0].set_zticks(np.linspace(zLim[0], zLim[1], 3))
 
         # # Strictly equal axis of all three axis
         # _, _, _, _, _, _ = self.get3D_AxesLimits(self.axes[0])
@@ -355,7 +378,7 @@ class BaseFigure3D(BaseFigure):
         # # View distance
         # self.axes[0].dist = 11
 
-        super().finalizeFigure(grid = False, tightLayout = True, **kwargs)
+        super().finalizeFigure(grid = False, **kwargs)
 
 
     @staticmethod
@@ -466,30 +489,32 @@ class PlotContourSlices3D(BaseFigure3D):
     def finalizeFigure(self, **kwargs):
         # Custom color bar location in the figure
         (fraction, pad) = (0.046, 0.04) if self.zDir is 'z' else (0.06, 0.08)
-        if self.zDir is 'z':
-            ar = abs((self.yLim[1] - self.yLim[0])/(self.xLim[1] - self.xLim[0]))
-            pbaspect = (1, ar, 1)
-        elif self.zDir is 'x':
-            ar = abs((self.zLim[1] - self.zLim[0])/(self.yLim[1] - self.yLim[0]))
-            pbaspect = (1, 1, ar)
-        else:
-            ar = abs((self.zLim[1] - self.zLim[0])/(self.xLim[1] - self.xLim[0]))
-            pbaspect = (1, 1, ar)
+        # if self.zDir is 'z':
+        #     ar = abs((self.yLim[1] - self.yLim[0])/(self.xLim[1] - self.xLim[0]))
+        #     pbaspect = (1, ar, 1)
+        # elif self.zDir is 'x':
+        #     ar = abs((self.zLim[1] - self.zLim[0])/(self.yLim[1] - self.yLim[0]))
+        #     pbaspect = (1, 1, ar)
+        # else:
+        #     ar = abs((self.zLim[1] - self.zLim[0])/(self.xLim[1] - self.xLim[0]))
+        #     pbaspect = (1, 1, ar)
 
-        super(PlotContourSlices3D, self).finalizeFigure(fraction = fraction, pad = pad, pbaspect = pbaspect, **kwargs)
+        super(PlotContourSlices3D, self).finalizeFigure(fraction = fraction, pad = pad, **kwargs)
 
 
 class PlotSurfaceSlices3D(BaseFigure3D):
     def __init__(self, listX2D, listY2D, listZ2D, listSlices2D, **kwargs):
-        super(PlotSurfaceSlices3D, self).__init__(listX2D = listX2D, listY2D = listY2D, figWidth = 'full', **kwargs)
+        super(PlotSurfaceSlices3D, self).__init__(listX2D = listX2D, listY2D = listY2D, **kwargs)
 
         self.xLim = (np.min(listX2D), np.max(listX2D)) if self.xLim[0] is None else self.xLim
         self.yLim = (np.min(listY2D), np.max(listY2D)) if self.yLim[0] is None else self.yLim
         self.zLim = (np.min(listZ2D), np.max(listZ2D)) if self.zLim[0] is None else self.zLim
         self.listX2D, self.listY2D = iter(self.listX), iter(self.listY)
         self.listZ2D = iter((listZ2D,)) if isinstance(listZ2D, np.ndarray) else iter(listZ2D)
-        self.listSlices2D = iter((listSlices2D,)) if isinstance(listSlices2D, np.ndarray) else iter(listSlices2D)
         self.cmapLim = (np.min(listSlices2D), np.max(listSlices2D))
+        print(self.cmapLim)
+        self.listSlices2D = iter((listSlices2D,)) if isinstance(listSlices2D, np.ndarray) else iter(listSlices2D)
+
         self.cmapNorm = mpl.colors.Normalize(self.cmapLim[0], self.cmapLim[1])
         self.cmapVals = plt.cm.ScalarMappable(norm = self.cmapNorm, cmap = self.cmap)
         self.cmapVals.set_array([])
@@ -505,13 +530,13 @@ class PlotSurfaceSlices3D(BaseFigure3D):
             self.axes[0].plot_surface(next(self.listX2D), next(self.listY2D), next(self.listZ2D), cstride = 1, rstride = 1, facecolors = fColors, vmin = self.cmapLim[0], vmax = self.cmapLim[1], shade = False)
 
 
-    def finalizeFigure(self, **kwargs):
-        arZX = abs((self.zLim[1] - self.zLim[0])/(self.xLim[1] - self.xLim[0]))
-        arYX = abs((self.yLim[1] - self.yLim[0])/(self.xLim[1] - self.xLim[0]))
-        # Axes aspect ratio doesn't really work properly
-        pbaspect = (1., arYX, arZX*2)
-
-        super(PlotSurfaceSlices3D, self).finalizeFigure(pbaspect = pbaspect, **kwargs)
+    # def finalizeFigure(self, **kwargs):
+    #     arZX = abs((self.zLim[1] - self.zLim[0])/(self.xLim[1] - self.xLim[0]))
+    #     arYX = abs((self.yLim[1] - self.yLim[0])/(self.xLim[1] - self.xLim[0]))
+    #     # Axes aspect ratio doesn't really work properly
+    #     pbaspect = (1., arYX, arZX*2)
+    #
+    #     super(PlotSurfaceSlices3D, self).finalizeFigure(pbaspect = pbaspect, **kwargs)
 
 
 
