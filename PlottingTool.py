@@ -8,7 +8,7 @@ import numpy as np
 from warnings import warn
 
 class BaseFigure:
-    def __init__(self, listX, listY, name = 'UntitledFigure', fontSize = 10, xLabel = '$x$', yLabel = '$y$', figDir = './', show = True, save = True, equalAxis = False, xLim = (None,), yLim = (None,), figWidth = 'half', figHeightMultiplier = 1., subplots = (1, 1), colors = ('tableau10',)):
+    def __init__(self, listX, listY, name = 'UntitledFigure', fontSize = 8, xLabel = '$x$', yLabel = '$y$', figDir = './', show = True, save = True, equalAxis = False, xLim = (None,), yLim = (None,), figWidth = 'half', figHeightMultiplier = 1., subplots = (1, 1), colors = ('tableau10',)):
         (self.listX, self.listY) = ((listX,), (listY,)) if isinstance(listX, np.ndarray) else (listX, listY)
         self.name, self.figDir, self.save, self.show = name, figDir, save, show
         if not self.show:
@@ -48,7 +48,7 @@ class BaseFigure:
 
 
     @staticmethod
-    def latexify(fig_width = None, fig_height = None, figWidth = 'half', linewidth = 1, fontSize = 10, subplots = (1, 1), figHeightMultiplier = 1.):
+    def latexify(fig_width = None, fig_height = None, figWidth = 'half', linewidth = 1, fontSize = 8, subplots = (1, 1), figHeightMultiplier = 1.):
         """Set up matplotlib's RC params for LaTeX plotting.
         Call this before plotting a figure.
 
@@ -86,9 +86,9 @@ class BaseFigure:
             'axes.labelsize':      fontSize,  # fontsize for x and y labels (was 10)
             'axes.titlesize':      fontSize + 2.,
             'font.size':           fontSize,  # was 10
-            'legend.fontsize':     fontSize - 3.,  # was 10
-            'xtick.labelsize':     fontSize - 3.,
-            'ytick.labelsize':     fontSize - 3.,
+            'legend.fontsize':     fontSize - 2.,  # was 10
+            'xtick.labelsize':     fontSize - 2.,
+            'ytick.labelsize':     fontSize - 2.,
             'xtick.color':         tableauGray,
             'ytick.color':         tableauGray,
             'xtick.direction':     'out',
@@ -145,7 +145,11 @@ class BaseFigure:
             self.axes[0].set_ylabel(self.yLabel)
 
         if self.equalAxis:
-            self.axes[0].set_aspect('equal', 'box')
+            # Only execute 2D equal axis if the figure is acutally 2D
+            try:
+                self.viewAngles
+            except AttributeError:
+                self.axes[0].set_aspect('equal', 'box')
 
         if self.xLim[0] is not None:
             self.axes[0].set_xlim(self.xLim)
@@ -378,7 +382,7 @@ class BaseFigure3D(BaseFigure):
         # # View distance
         # self.axes[0].dist = 11
 
-        super().finalizeFigure(grid = False, **kwargs)
+        super().finalizeFigure(grid = False, tightLayout = False, **kwargs)
 
 
     @staticmethod
@@ -511,8 +515,8 @@ class PlotSurfaceSlices3D(BaseFigure3D):
         self.zLim = (np.min(listZ2D), np.max(listZ2D)) if self.zLim[0] is None else self.zLim
         self.listX2D, self.listY2D = iter(self.listX), iter(self.listY)
         self.listZ2D = iter((listZ2D,)) if isinstance(listZ2D, np.ndarray) else iter(listZ2D)
-        self.cmapLim = (np.min(listSlices2D), np.max(listSlices2D))
-        print(self.cmapLim)
+        # Find minimum and maximum of the slices values for color, ignore NaN
+        self.cmapLim = (np.nanmin(listSlices2D), np.nanmax(listSlices2D))
         self.listSlices2D = iter((listSlices2D,)) if isinstance(listSlices2D, np.ndarray) else iter(listSlices2D)
 
         self.cmapNorm = mpl.colors.Normalize(self.cmapLim[0], self.cmapLim[1])

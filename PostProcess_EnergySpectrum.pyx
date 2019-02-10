@@ -3,16 +3,21 @@ import os
 import numpy as np
 cimport numpy as np
 #from cpython cimport bool
+cimport cython
 
 #DTYPE = np.int
 #ctypedef np.int_t DTYPE_t
 
 # cpdef is a hybrid Python-C function
 # Only use cdef (fastest) for functions if you don't intend to call it outside Cython
+# Don't check for array bounds
+@cython.boundscheck(False)
 cpdef tuple readSliceRawData(str field, str case = 'ABL_N_H/Slices', str caseDir = './', time = None, int skipHeader = 2):
     cdef str timePath, fieldFullPath
-    cdef np.ndarray data, x, y, z, u, v, w, scalarField
-    cdef np.ndarray x2D, y2D, z2D, u2D, v2D, w2D, scalarField2D
+    # If ndim is not provided, 1D is assumed
+    cdef np.ndarray[np.float_t] x, y, z
+    cdef np.ndarray u, v, w,
+    cdef np.ndarray[np.float_t, ndim = 2] data, scalarField, x2D, y2D, z2D, u2D, v2D, w2D, scalarField2D
     cdef double valOld, val
     cdef int i, nPtX
 
@@ -45,7 +50,7 @@ cpdef tuple readSliceRawData(str field, str case = 'ABL_N_H/Slices', str caseDir
 
     if data.shape[1] == 6:
         u, v, w = data[:, 3], data[:, 4], data[:, 5]
-        scalarField = np.zeros((data.shape[0], 1), dtype = np.double)
+        scalarField = np.zeros((data.shape[0], 1))
         for i, row in enumerate(data):
             scalarField[i] = np.sqrt(row[3]**2 + row[4]**2 + row[5]**2)
 
@@ -60,10 +65,13 @@ cpdef tuple readSliceRawData(str field, str case = 'ABL_N_H/Slices', str caseDir
     return x2D, y2D, z2D, scalarField2D, u2D, v2D, w2D
 
 
-cpdef tuple getSliceEnergySpectrum(np.ndarray u2D, np.ndarray v2D, np.ndarray w2D, tuple cellSizes, str type = 'decomposed'):
-    cdef np.ndarray uRes2D, vRes2D, wRes2D, uResFft, vResFft, wResFft, freqX, freqY
-    cdef np.ndarray Kr, KrSorted, sortIdx
-    cdef np.ndarray Eii, Eii_r, EiiSorted, E33, E33_r, E33Sorted
+cpdef tuple getSliceEnergySpectrum(np.ndarray[np.float_t, ndim = 2] u2D, np.ndarray[np.float_t, ndim = 2] v2D, np.ndarray[np.float_t, ndim = 2] w2D, tuple cellSizes, str type = 'decomposed'):
+    cdef np.ndarray[np.float_t, ndim = 2] uRes2D, vRes2D, wRes2D
+    cdef np.ndarray[np.float_t, ndim = 2] uResFft, vResFft, wResFft
+    cdef np.ndarray[np.float_t] freqX, freqY
+    cdef np.ndarray[np.float_t, ndim = 2] Kr, KrSorted
+    cdef np.ndarray[np.int] sortIdx
+    cdef np.ndarray[np.float_t, ndim = 2] Eii, Eii_r, EiiSorted, E33, E33_r, E33Sorted
     cdef int nX, nY, i_r, i, j, skip
     cdef double Eii_repeated, E33_repeated, match
 #    cdef bool anyMatch
@@ -100,12 +108,12 @@ cpdef tuple getSliceEnergySpectrum(np.ndarray u2D, np.ndarray v2D, np.ndarray w2
     else:
         Eii = 0.5*abs(uResFft*np.conj(uResFft) + vResFft*np.conj(vResFft) + wResFft*np.conj(wResFft))
         # Dummy array for vertical E
-        E33 = np.zeros((wResFft.shape[0], wResFft.shape[1]), dtype = np.double)
+        E33 = np.zeros((wResFft.shape[0], wResFft.shape[1]))
 
     # Convert (Kx, Ky) to Kr for 1D energy spectrum result/plot
     # First, get all Kr[i_r] = sqrt(Kx^2 + Ky^2) and its corresponding Eii(Kr)
-    Kr = np.zeros((len(freqX)*len(freqY), 1), dtype = np.double)
-    Eii_r, E33_r = np.zeros((len(freqX)*len(freqY), 1), dtype = np.double), np.zeros((len(freqX)*len(freqY), 1), dtype = np.double)
+    Kr = np.zeros((len(freqX)*len(freqY), 1))
+    Eii_r, E33_r = np.zeros((len(freqX)*len(freqY), 1)), np.zeros((len(freqX)*len(freqY), 1))
     i_r = 0
     for iX in range(len(freqX)):
         for iY in range(len(freqY)):
