@@ -6,7 +6,7 @@ from numba import njit, jit
 from collections.abc import Iterator
 
 class BaseProperties:
-    def __init__(self, caseName, caseDir = './', filePre = '', fileSub = '', ensembleFolderName = 'Ensemble', resultFolder = 'Result', timeCols = 'infer', timeKw = 'ime', forceRemerge = False, **kwargs):
+    def __init__(self, caseName, caseDir = '.', filePre = '', fileSub = '', ensembleFolderName = 'Ensemble', resultFolder = 'Result', timeCols = 'infer', timeKw = 'ime', forceRemerge = False, **kwargs):
         self.caseName, self.caseDir = caseName, caseDir
         self.caseFullPath = caseDir + '/' + caseName + '/'
         # self.startTime, self.stopTime = startTime, stopTime
@@ -38,6 +38,7 @@ class BaseProperties:
         inputTuple = os.listdir(self.ensembleFolderPath) if inputTuple[0] in ('*', 'all') else inputTuple
         return inputTuple
 
+
     @jit
     def readTime(self, noRepeat = True):
         fileNames = os.listdir(self.ensembleFolderPath)
@@ -56,7 +57,7 @@ class BaseProperties:
 
 
     # @timer
-    def mergeTimeDirectories(self, trimOverlapTime = True, timeKw = 'Time', forceRemerge = False):
+    def mergeTimeDirectories(self, trimOverlapTime = True, timeKw = 'ime', forceRemerge = False):
         # [DEPRECATED]
         # @jit
         # def takeClosestIdx(lists, vals):
@@ -94,7 +95,7 @@ class BaseProperties:
                     header = (file.readline()).split()
                     self.timeCols.append(header.index(list(filter(lambda kw: timeKw in kw, header))[0]))
         else:
-            self.timeCols = self.timeCols*len(fileNames)
+            self.timeCols *= len(fileNames)
             
 
         # Go through time folders and append files to ensemble
@@ -152,7 +153,7 @@ class BaseProperties:
 
 
     # @timer
-    @jit
+    @jit(parallel = True, fastmath = True)
     def getTimesAndIndices(self, startTime = 20000, stopTime = 22001):
         # Bisection left to find actual starting and ending time and their indices
         (iStart, iStop), _ = takeClosest(self.timesAll, (startTime, stopTime))
@@ -167,7 +168,7 @@ class BaseProperties:
 
 
     # @timer
-    @jit
+    @jit(parallel = True, fastmath = True)
     def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 0, verbose = True):
         self.fileNames = self.ensureTupleInput(fileNames)
         skipRow = iter((skipRow,)*len(self.fileNames)) if isinstance(skipRow, int) else iter(skipRow)
@@ -183,7 +184,7 @@ class BaseProperties:
 
 
     @timer
-    @jit
+    @jit(parallel = True, fastmath = True)
     def calculatePropertyMean(self, axis = 1, startTime = 0, stopTime = 22001):
         self.timesSelected, _, _, iStart, iStop = self.getTimesAndIndices(startTime = startTime, stopTime = stopTime)
         if axis is 'row':
@@ -209,6 +210,13 @@ class BaseProperties:
 
             with open(self.ensembleFolderPath + fileName, "w") as f:
                 f.writelines('\n'.join(lst))
+
+
+class InflowProperties(BaseProperties):
+    def __init__(self, caseName, startTime = 0, stopTime = 1, fileNameH = 'hLevelsCell', **kwargs):
+        self.startTime, self.stopTime = startTime, stopTime
+        self.fileNameH = fileNameH
+        super(InflowProperties, self).__init__(caseName = caseName + '/Inflows', timeCols = 0, **kwargs)
 
 
 class InflowProfiles(object):
@@ -318,7 +326,6 @@ class InflowProfiles(object):
               + str(self.stopTimeReal) + ' s')
 
 
-
 class TurbineOutputs(BaseProperties):
     def __init__(self, caseName, globalQuantities = ('powerRotor', 'rotSpeed', 'thrust', 'torqueRotor', 'torqueGen', 'azimuth', 'nacYaw', 'pitch'), **kwargs):
         self.globalQuantities = globalQuantities
@@ -328,7 +335,7 @@ class TurbineOutputs(BaseProperties):
 
 
     @timer
-    @jit
+    @jit(parallel = True, fastmath = True)
     def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 'infer', verbose = True, turbInfo = ('infer',)):
         fileNames = self.ensureTupleInput(fileNames)
         globalQuantities = (

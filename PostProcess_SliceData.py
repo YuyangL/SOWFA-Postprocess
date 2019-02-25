@@ -11,7 +11,7 @@ class SliceProperties:
         self.resultPath = self.caseFullPath + resultFolder + '/'
         # Try to make the result folder under caseSubfolder
         try:
-            os.mkdir(self.resultPath)
+            os.makedirs(self.resultPath)
         except OSError:
             pass
 

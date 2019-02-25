@@ -3,33 +3,50 @@ import numpy as np
 from warnings import warn
 import Ofpp as of
 import random
+from numba import njit, jit, prange
+from Utilities import timer
+from matplotlib import path
+from scipy.interpolate import griddata, Rbf
 
-class FieldData(object):
-    def __init__(self, fields = 'all', times = 'all', caseName = 'ABL_N_H/Field', caseDir = './', fileNamePre = '', fileNameSub
-    = '', cellCenters = ('ccx', 'ccy', 'ccz'), cellSizeMin = None, meshSize = None):
+class FieldData:
+    def __init__(self, fields = 'all', times = 'all', caseName = 'ABL_N_H', caseDir = './', fileNamePre = '', fileNameSub
+    = '', cellCenters = ('ccx', 'ccy', 'ccz'), resultFolder = 'Result'):
         self.fields, self.times = fields, times
-        self.caseFullPath = caseDir + '/' + caseName + '/'
+        self.caseFullPath = caseDir + '/' + caseName + '/Fields/'
         self.fileNamePre, self.fileNameSub = fileNamePre, fileNameSub
         self.cellCenters = cellCenters
+        self.caseTimeFullPaths, self.resultPath = {}, {}
+        # If times in list/tuple or all times requested
+        if isinstance(times, (list, tuple)) or times in ('all', 'All'):
+            # If all times, try remove the result folder from found directories
+            if times in ('all', 'All'):
+                self.times = os.listdir(self.caseFullPath)
+                try:
+                    self.times.remove(resultFolder)
+                except OSError:
+                    pass
 
-        self.caseTimeFullPaths = {}
-        # If times in list/tuple, then get the average
-        if isinstance(times, (list, tuple)):
+            # Go through all provided times
             for time in times:
                 self.caseTimeFullPaths[str(time)] = self.caseFullPath + str(time) + '/'
-        elif times in ('all', 'All'):
-            self.times = os.listdir(self.caseFullPath)
-            try:
-                self.times.remove('Result')
-            except:
-                pass
+                # In the result directory, there are time directories
+                self.resultPath[str(time)] = caseDir + '/' + caseName + '/Fields/' + resultFolder + '/' + str(time) + '/'
+                # Try to make the result directories, if not existent already
+                try:
+                    os.makedirs(self.resultPath[str(time)])
+                except OSError:
+                    pass
 
-            for time in self.times:
-                self.caseTimeFullPaths[str(time)] = self.caseFullPath + str(time) + '/'
+        # Else if only one time provided
         else:
             self.caseTimeFullPaths[str(times)] = self.caseFullPath + str(times) + '/'
             # Make sure times is in list(str)
             self.times = [str(times)]
+            self.resultPath[str(times)] = caseDir + '/' + caseName + '/Fields/' + resultFolder + '/' + str(times) + '/'
+            try:
+                os.makedirs(self.resultPath[str(times)])
+            except OSError:
+                pass
 
         # If fields is 'all'/'All'
         # Get a random time directory in order to collect fields
@@ -37,7 +54,14 @@ class FieldData(object):
         if fields in ('all', 'All'):
             self.fields = os.listdir(self.caseTimeFullPathsRand)
             # Remove cellCenter fields from this list
-            self.fields = [val for i, val in enumerate(self.fields) if val not in cellCenters]
+            self.fields = [val for _, val in enumerate(self.fields) if val not in cellCenters]
+            # Try removing uniform folder is it exists
+            try:
+                self.fields.remove('uniform')
+            except OSError:
+                pass
+
+        # Else if provided fields not in a list/tuple
         # Convert str to list
         elif not isinstance(fields, (list, tuple)):
             self.fields = [fields]
@@ -45,6 +69,7 @@ class FieldData(object):
         print('\nFieldData object initialized')
 
 
+    # [DEPRECATED]
     def createSliceData(self, fieldData, baseCoordinate = (0, 0, 90), normalVector = (0, 0, 1)):
         from Utilities import takeClosest
         # Only support horizontal or vertical slices
@@ -112,7 +137,6 @@ class FieldData(object):
                 iCells = np.hstack((iCells, iCellsNext))
                 iPlane += 1
 
-
         fieldDataSlice = np.take(fieldData, indices = iCells, axis = 0)
         ccSlice = np.take(cc, indices = iCells, axis = 0)
 
@@ -123,15 +147,26 @@ class FieldData(object):
         return fieldDataSlice, ccSlice, sliceDim
 
 
+    @timer
+    @jit(parallel = True)
     def readFieldData(self, time = None):
         fieldData = {}
         for field in self.fields:
-            if time is None:
-                fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[self.times[0]] + field)
-            else:
-                fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[str(time)] + field)
+            # if time is None:
+            #     fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[self.times[0]] + field)
+            # else:
+            #     fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[str(time)] + field)
 
-            print('\nField(s) data read')
+            # Read the data of field in the 1st time directory
+            fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[self.times[0]] + field)
+            # If multiple times requested, read data and stack them in 3rd D
+            if len(self.times) > 1:
+                for i in prange(1, len(self.times)):
+                    print(i)
+                    fieldData_i = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + field)
+                    fieldData[field] = np.dstack((fieldData[field], fieldData_i))
+
+        print('\n' + str(self.fields) + ' data read, if multiple times requested, data of different times are stacked in 3D')
         return fieldData
 
 
@@ -144,6 +179,210 @@ class FieldData(object):
 
         print('\nCell center coordinates read')
         return ccx, ccy, ccz, cc.T
+
+
+    @staticmethod
+    @timer
+    @njit(parallel = True)
+    def confineFieldDomain(x, y, z, vals, bndX = (None, None), bndY = (None, None), bndZ = (None, None), planarRot = 0):
+        # assert isinstance(bndX, (list, tuple))
+        # assert isinstance(bndY, (list, tuple))
+        # assert isinstance(bndZ, (list, tuple))
+        # Change all None to either min or max values of the domain
+        for i in prange(2):
+            # For the lower bound
+            if i == 0:
+                bndX[i] = np.min(x) if bndX[i] is None else bndX[i]
+                bndY[i] = np.min(y) if bndY[i] is None else bndY[i]
+                bndZ[i] = np.min(z) if bndZ[i] is None else bndZ[i]
+            # For the upper bound
+            else:
+                bndX[i] = np.max(x) if bndX[i] is None else bndX[i]
+                bndY[i] = np.max(y) if bndY[i] is None else bndY[i]
+                bndZ[i] = np.max(z) if bndZ[i] is None else bndZ[i]
+
+        # for xVal, yVal, zVal, val in zip(x, y, z, vals):
+        xNew, yNew, zNew, valsNew = [], [], [], []
+        for i in prange(len(x)):
+            if x[i] >= bndX[0] and x[i] <= bndX[1] \
+                and y[i] >= bndY[0] and y[i] <= bndY[1] \
+                and z[i] >= bndZ[0] and z[i] <= bndZ[1]:
+                xNew.append(x[i])
+                yNew.append(y[i])
+                zNew.append(z[i])
+                valsNew.append(vals[i])
+
+        return xNew, yNew, zNew, valsNew
+
+
+    @staticmethod
+    @timer
+    @jit(parallel = True, fastmath = True)
+    def confineFieldDomain_Rotated(x, y, z, vals, boxL, boxW, boxH, boxO = (0, 0, 0), boxRot = 0):
+        print('\nConfining field domain with rotated box...')
+        # Create the bounding box
+        box = path.Path(((boxO[0], boxO[1]),
+                         (boxL*np.cos(boxRot) + boxO[0], boxL*np.sin(boxRot) + boxO[1]),
+                         (boxL*np.cos(boxRot) + boxO[0] - boxW*np.sin(boxRot), boxL*np.sin(boxRot) + boxO[1] + boxW*np.cos(boxRot)),
+                         (boxO[0] - boxW*np.sin(boxRot), boxO[1] + boxW*np.cos(boxRot)),
+                         (boxO[0], boxO[1])))
+        # First confine within z range
+        xNew, yNew, zNew, valsNew = [], [], [], []
+        cnt, milestone = 0, 25
+        for i in prange(len(x)):
+            if z[i] < boxH + boxO[2] and z[i] > boxO[2]:
+                xNew.append(x[i])
+                yNew.append(y[i])
+                zNew.append(z[i])
+                valsNew.append(vals[i])
+
+        # Then confine within x and y range
+        xy = (np.vstack((xNew, yNew))).T
+        # Bool flags
+        flags = box.contains_points(xy)
+        xNew2, yNew2, zNew2, valsNew2 = [], [], [], []
+        for i in prange(len(flags)):
+            if flags[i]:
+                xNew2.append(xNew[i])
+                yNew2.append(yNew[i])
+                zNew2.append(zNew[i])
+                valsNew2.append(valsNew[i])
+
+            # Gauge progress
+            cnt += 1
+            progress = cnt/(len(flags) + 1)*100.
+            if progress >= milestone:
+                print(' ' + str(milestone) + '%...', end = '')
+                milestone += 25
+
+        return np.array(xNew2), np.array(yNew2), np.array(zNew2), np.array(valsNew2), box, flags
+
+
+    @staticmethod
+    @timer
+    # @jit(parallel = True, fastmath = True)
+    def interpolateFieldData(x, y, z, vals, precisionX = 1500j, precisionY = 1500j, precisionZ = 500j, interpMethod = 'linear'):
+        print('\nInterpolating field data...')
+        # Bound the coordinates to be interpolated in case data wasn't available in those borders
+        bnd = (1.000001, 0.999999)
+        knownPts = np.vstack((x, y, z)).T
+        # Interpolate x, y, z to designated precisions
+        x3D, y3D, z3D = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precisionX,
+                        y.min()*bnd[0]:y.max()*bnd[1]:precisionY,
+                        z.min()*bnd[0]:z.max()*bnd[1]:precisionZ]
+        requestPts = np.vstack((x3D.ravel(), y3D.ravel(), z3D.ravel())).T
+        dim = vals.shape
+        orders, milestone, cnt = [], 2, 0
+        # If vals is 2D
+        if len(dim) == 2:
+            # Initialize nRow x nCol x nComponent array valsND by interpolating 1st component of the values, x, or xx,
+            # as others come later in the loop below
+            valsND = griddata(knownPts, vals[:, 0].ravel(), requestPts, method = interpMethod)
+            print('good')
+            # Then go through the rest components and stack them in 4D
+            for i in prange(1, vals.shape[1]):
+                print(i)
+                # Add i to a list in case prange is not ordered
+                orders.append[i]
+                # For one component
+                valsND_i = griddata(knownPts, vals[:, i].ravel(), requestPts, method = interpMethod)
+                # Then stack them as the 4th D
+                valsND = np.dstack((valsND, valsND_i))
+                # Gauge progress
+                cnt += 1
+                progress = cnt/(vals.shape[1] + 1)*100.
+                if progress >= milestone:
+                    print(' ' + str(milestone) + '%...', end = '')
+                    milestone += 2
+        # If vals is 3D or more
+        else:
+            print('good')
+            # If the vals is 4D or above, reduce it to 3D
+            if len(dim) > 3:
+                print('better')
+                vals = np.reshape(vals, (vals.shape[0], vals.shape[1], -1))
+                print(vals.shape)
+
+            # Initialize nRow x nCol x nComponent array valsND by interpolating 1st component of the values, x, or xx,
+            # as others come later in the loop below
+            valsND = griddata(knownPts, vals[:, :, 0].ravel(), requestPts, method = interpMethod)
+            # Then go through the rest components and stack them in 4D
+            for i in prange(1, vals.shape[2]):
+                print(i)
+                # Add i to a list in case prange is not ordered
+                orders.append[i]
+                # For one component
+                valsND_i = griddata(knownPts, vals[:, :, i].ravel(), requestPts, method = interpMethod)
+                # Then stack them as the 4th D
+                valsND = np.dstack((valsND, valsND_i))
+                # Gauge progress
+                cnt += 1
+                progress = cnt/(vals.shape[2] + 1)*100.
+                if progress >= milestone:
+                    print(' ' + str(milestone) + '%...', end = '')
+                    milestone += 2
+
+        print(orders)
+        # valsND = valsND[:, :, :, np.array(orders)]
+        # If vals was 4D, then valsND should be 5D
+        if len(dim) == 4:
+            valsND = np.reshape(valsND, (valsND.shape[0], valsND.shape[1], dim[2], dim[3]))
+
+        return x3D, y3D, z3D, valsND
+
+
+    @staticmethod
+    @timer
+    @jit(parallel = True, fastmath = True)
+    def interpolateFieldData_RBF(x, y, z, vals, precisionX = 1500j, precisionY = 1500j, precisionZ = 500j,
+                             function = 'linear'):
+        print('\nInterpolating field data...')
+        # Bound the coordinates to be interpolated in case data wasn't available in those borders
+        bnd = (1.000001, 0.999999)
+        # knownPts = np.vstack((x, y, z)).T
+        # Interpolate x, y, z to designated precisions
+        x3D, y3D, z3D = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precisionX,
+                        y.min()*bnd[0]:y.max()*bnd[1]:precisionY,
+                        z.min()*bnd[0]:z.max()*bnd[1]:precisionZ]
+        # requestPts = np.vstack((x3D.ravel(), y3D.ravel(), z3D.ravel())).T
+        dim = vals.shape
+        orders, milestone, cnt = [], 2, 0
+        if len(dim) == 2:
+            rbf = Rbf(x, y, z, vals[:, 0], function = function)
+            valsND = rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())
+            for i in prange(1, dim[1]):
+                print(i)
+                rbf = Rbf(x, y, z, vals[:, i], function = function)
+                valsND = np.vstack((valsND, rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())))
+                # Gauge progress
+                cnt += 1
+                progress = cnt/(vals.shape[2] + 1)*100.
+                if progress >= milestone:
+                    print(' ' + str(milestone) + '%...', end = '')
+                    milestone += 2
+        else:
+            # If the vals is 4D or above, reduce it to 3D
+            if len(dim) > 3:
+                vals = np.reshape(vals, (vals.shape[0], vals.shape[1], -1))
+
+            rbf = Rbf(x, y, z, vals[:, :, 0], function = function)
+            valsND = rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())
+            for i in prange(1, dim[1]):
+                print(i)
+                rbf = Rbf(x, y, z, vals[:, :, i], function = function)
+                valsND = np.vstack((valsND, rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())))
+                # Gauge progress
+                cnt += 1
+                progress = cnt/(vals.shape[2] + 1)*100.
+                if progress >= milestone:
+                    print(' ' + str(milestone) + '%...', end = '')
+                    milestone += 2
+
+        return x3D, y3D, z3D, valsND
+
+
+
+
 
 
     def getMeshInfo(self, ccx, ccy, ccz):
