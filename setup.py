@@ -5,7 +5,7 @@ import numpy
 
 ext_modules=[ Extension("PostProcess_AnisotropyTensor",
                         ["PostProcess_AnisotropyTensor.pyx"],
-                        extra_compile_args = ["-ffast-math"])]
+                        extra_compile_args = ["-ffast-math", "-O3"])]
 
 setup(
       name = "PostProcess_AnisotropyTensor",

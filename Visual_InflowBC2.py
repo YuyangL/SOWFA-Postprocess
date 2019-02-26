@@ -6,8 +6,16 @@ from PostProcess_InflowAndTurbineOutputs import InflowProfiles, InflowProperties
 from Utilities import readData
 
 caseDir, caseName = 'J:', 'ABL_N_L2'
+fileNames = 'U_mean'
+startTime, stopTime = 14000, 18000
 
-ABL_N_L = InflowProperties(caseName = caseName, caseDir = caseDir, forceRemerge = True)
+inflow = InflowProperties(caseName = caseName, caseDir = caseDir, forceRemerge = False)
+
+inflow.readPropertyData(fileNames = fileNames)
+
+inflow.calculatePropertyMean(startTime = startTime, stopTime = stopTime)
+
+
 
 
 

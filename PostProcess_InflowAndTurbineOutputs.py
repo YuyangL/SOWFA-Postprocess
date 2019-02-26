@@ -18,15 +18,10 @@ class BaseProperties:
             pass
 
         self.ensembleFolderPath = self.caseFullPath + ensembleFolderName + '/'
-
         self.timeCols = (timeCols,) if isinstance(timeCols, int) else timeCols
-
-        self.mergeTimeDirectories(timeKw = timeKw, forceRemerge = forceRemerge)
-
+        self.mergeTimeDirectories(timeKw = timeKw, forceRemerge = forceRemerge, **kwargs)
         self.timesAll = self.readTime(**kwargs)
-
-        self.timesSelected, self.startTimeReal, self.stopTimeReal, self.iStart, self.iStop = self.getTimesAndIndices()
-
+        # self.timesSelected, self.startTimeReal, self.stopTimeReal, self.iStart, self.iStop = self.selectTimes(startTime = startTime, stopTime = stopTime)
         self.propertyData, self.fileNames = {}, []
 
         print(f'\n{caseName} initialized')
@@ -39,10 +34,13 @@ class BaseProperties:
         return inputTuple
 
 
-    @jit
-    def readTime(self, noRepeat = True):
+    def readTime(self, noRepeat = True, **kwargs):
         fileNames = os.listdir(self.ensembleFolderPath)
-        timesAll = np.genfromtxt(self.ensembleFolderPath + '/' + fileNames[0])[:, self.timeCols[0]]
+        # In case of file e.g. hLevelsCell that doesn't incl. times
+        try:
+            timesAll = np.genfromtxt(self.ensembleFolderPath + '/' + fileNames[0])[:, self.timeCols[0]]
+        except IndexError:
+            timesAll = np.genfromtxt(self.ensembleFolderPath + '/' + fileNames[1])[:, self.timeCols[0]]
         # # In case of inflow profile
         # try:
         #     timesAll = np.genfromtxt(self.ensembleFolderPath + self.filePre + 'U_mean' + self.fileSub)[:, self.timeCols]
@@ -56,8 +54,7 @@ class BaseProperties:
         return timesAll
 
 
-    # @timer
-    def mergeTimeDirectories(self, trimOverlapTime = True, timeKw = 'ime', forceRemerge = False):
+    def mergeTimeDirectories(self, trimOverlapTime = True, timeKw = 'ime', forceRemerge = False, excludeFile = None):
         # [DEPRECATED]
         # @jit
         # def takeClosestIdx(lists, vals):
@@ -80,7 +77,19 @@ class BaseProperties:
 
         # Available time directories (excluding Ensemble and Result) and file names
         timeDirs = os.listdir(self.caseFullPath)[:-2]
+        # Sort the time directories
+        timeDirs.sort(key = int)
         fileNames = os.listdir(self.caseFullPath + timeDirs[0])
+        # In case excludeFile is provided, remove it from fileNames
+        if excludeFile is not None:
+            excludeFile = (excludeFile,) if isinstance(excludeFile, str) else excludeFile
+            for name in excludeFile:
+                try:
+                    fileNames.remove(name)
+                except ValueError:
+                    warn('\n' + self.caseName + ' does not have ' + name + ' to exclude!', stacklevel = 2)
+                    pass
+
         # Initialize ensemble files
         fileEnsembles = {}
         for fileName in fileNames:
@@ -96,7 +105,6 @@ class BaseProperties:
                     self.timeCols.append(header.index(list(filter(lambda kw: timeKw in kw, header))[0]))
         else:
             self.timeCols *= len(fileNames)
-            
 
         # Go through time folders and append files to ensemble
         # Excluding Ensemble folder
@@ -111,6 +119,11 @@ class BaseProperties:
                     # and corresponding file name as value
                     if str(self.timeCols[j]) not in knownTimeCols.keys():
                         try:
+                            # print(times)
+                            # print(timeDirs)
+                            # print(fileNames)
+                            # print(self.timeCols)
+                            # print(i, j)
                             times[fileNames[j]] = np.genfromtxt(self.caseFullPath + timeDirs[i] + '/' + fileNames[j])[:, self.timeCols[j]]
                         # In case the last line wasn't written properly,
                         # which means the simulation was probably aborted, discard the last line
@@ -118,7 +131,7 @@ class BaseProperties:
                             times[fileNames[j]] = np.genfromtxt(self.caseFullPath + timeDirs[i] + '/' + fileNames[j], skip_footer = 1)[:, self.timeCols[j]]
 
                         # Index at which trim should start for this file
-                        iTrim[fileNames[j]], _ = takeClosest(times[fileNames[j]], np.float_(timeDirs[i + 1]))
+                        iTrim[fileNames[j]] = np.searchsorted(times[fileNames[j]], np.float_(timeDirs[i + 1]))
                         # Add this time column to known time column list
                         knownTimeCols[str(self.timeCols[j])] = fileNames[j]
 
@@ -131,45 +144,51 @@ class BaseProperties:
             # Go through each file in this time directory
             for fileName in fileNames:
                 # If trim overlapped time and not last time directory and trim is indeed needed
+                # print(i, len(timeDirs) - 1)
+                # print(iTrim[fileName], len(times[fileName]) - 1)
                 if trimOverlapTime and i < len(timeDirs) - 1 and iTrim[fileName] < (len(times[fileName]) - 1):
                     with open(self.caseFullPath + timeDirs[i] + '/' + fileName, 'r') as file:
                         # Filter out empty lines before iTrim indices can be mapped
                         lines = list(filter(None, (line.rstrip() for line in file)))
 
+                    # for line in lines:
+                    #     lines = filter(None, )
+
                     print(f'\nTrimming overlapped time and adding {fileName} from {timeDirs[i]} to Ensemble...')
                     # Writelines support writing a 1D list, since lines is 2D,
                     # join each row with "\n"
-                    # (except for 1st row that is hstack after the last line of original fileEnsembles)
                     # Note: the header of 2nd file onward will still be written in ensemble,
                     # just that when reading file into array using numpy, the headers should automatically be ignored
                     # since it starts with "#"
+                    # Write the 1st line as empty new line so that the 1st line of lines is not on the same line as last line of fileEnsembles
+                    fileEnsembles[fileName].writelines("\n")
                     fileEnsembles[fileName].writelines("\n".join(lines[:iTrim[fileName] + 1]))
                 # Otherwise, append this file directly to Ensemble
                 else:
                     print(f'\nAdding {fileName} from {timeDirs[i]} to Ensemble...')
+                    # Again, write the 1st line as empty new line to avoid 1st line of next file being on the same line of old file
+                    fileEnsembles[fileName].writelines("\n")
                     fileEnsembles[fileName].write(open(self.caseFullPath + timeDirs[i] + '/' + fileName).read())
 
         print("\nMerged time directories for " + str(self.caseName) + " files are stored at:\n " + str(self.ensembleFolderPath))
 
 
-    # @timer
-    @jit(parallel = True, fastmath = True)
-    def getTimesAndIndices(self, startTime = 20000, stopTime = 22001):
+    def selectTimes(self, startTime = None, stopTime = None, **kwargs):
+        startTime = self.timesAll[0] if startTime is None else startTime
+        stopTime = self.timesAll[1] if stopTime is None else stopTime
         # Bisection left to find actual starting and ending time and their indices
-        (iStart, iStop), _ = takeClosest(self.timesAll, (startTime, stopTime))
+        (iStart, iStop) = np.searchsorted(self.timesAll, (startTime, stopTime))
         # If stopTime larger than any time, iStop = len(timesAll)
         iStop = min(iStop, len(self.timesAll) - 1)
         startTimeReal, stopTimeReal = self.timesAll[iStart], self.timesAll[iStop]
 
         timesSelected = self.timesAll[iStart:(iStop + 1)]
 
-        print('\nTime and index information extracted for ' + str(startTimeReal) + ' s and ' + str(stopTimeReal) + ' s')
+        # print('\nTime and index information extracted for ' + str(startTimeReal) + ' s - ' + str(stopTimeReal) + ' s')
         return timesSelected, startTimeReal, stopTimeReal, iStart, iStop
 
 
-    # @timer
-    @jit(parallel = True, fastmath = True)
-    def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 0, verbose = True):
+    def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 0):
         self.fileNames = self.ensureTupleInput(fileNames)
         skipRow = iter((skipRow,)*len(self.fileNames)) if isinstance(skipRow, int) else iter(skipRow)
         skipCol = iter((skipCol,)*len(self.fileNames)) if isinstance(skipCol, int) else iter(skipCol)
@@ -179,14 +198,11 @@ class BaseProperties:
             self.propertyData[fileName] = \
                 np.genfromtxt(self.ensembleFolderPath + self.filePre + fileName + self.fileSub)[next(skipRow):, next(skipCol):]
 
-        if verbose:
-            print('\n' + str(self.fileNames) + ' read')
+        print('\n' + str(self.fileNames) + ' read')
 
 
-    @timer
-    @jit(parallel = True, fastmath = True)
-    def calculatePropertyMean(self, axis = 1, startTime = 0, stopTime = 22001):
-        self.timesSelected, _, _, iStart, iStop = self.getTimesAndIndices(startTime = startTime, stopTime = stopTime)
+    def calculatePropertyMean(self, axis = 1, startTime = None, stopTime = None):
+        self.timesSelected, _, _, iStart, iStop = self.selectTimes(startTime = startTime, stopTime = stopTime)
         if axis is 'row':
             axis = 0
         elif axis is 'col':
@@ -194,6 +210,8 @@ class BaseProperties:
 
         for fileName in self.fileNames:
             self.propertyData[fileName + '_mean'] = np.mean(self.propertyData[fileName][iStart:iStop], axis = axis)
+
+        print(f'\nTemporal average calculated for {self.fileNames} from {self.timesSelected[0]} s - {self.timesSelected[-1]} s')
 
 
     def trimInvalidCharacters(self, fileNames, invalidChars):
@@ -213,10 +231,9 @@ class BaseProperties:
 
 
 class InflowProperties(BaseProperties):
-    def __init__(self, caseName, startTime = 0, stopTime = 1, fileNameH = 'hLevelsCell', **kwargs):
-        self.startTime, self.stopTime = startTime, stopTime
+    def __init__(self, caseName, fileNameH = 'hLevelsCell', **kwargs):
         self.fileNameH = fileNameH
-        super(InflowProperties, self).__init__(caseName = caseName + '/Inflows', timeCols = 0, **kwargs)
+        super(InflowProperties, self).__init__(caseName = caseName + '/Inflows', timeCols = 0, excludeFile = fileNameH, **kwargs)
 
 
 class InflowProfiles(object):
@@ -241,7 +258,7 @@ class InflowProfiles(object):
         self.ensembleFolderPath = self.caseFullPath + ensembleFolderName + '/'
         self.z = np.genfromtxt(self.caseFullPath + self.timeDirs[0] + '/' + self.filePre + fileNameH + self.fileSub)
 
-        self.startTimeReal, self.stopTimeReal, self.iStart, self.iStop = self.getTimesAndIndices()
+        self.startTimeReal, self.stopTimeReal, self.iStart, self.iStop = self.selectTimes()
 
         self.propertyData, self.propertyDataStartStop, self.propertyDataMean, self.propertyMeanSpecificZ = {}, {}, {}, {}
 
@@ -265,7 +282,7 @@ class InflowProfiles(object):
                 self.ensembleFolderPath))
 
 
-    def getTimesAndIndices(self):
+    def selectTimes(self):
         dataUall = np.genfromtxt(self.ensembleFolderPath + self.filePre + 'U_mean' + self.fileSub)
 
         timesAll = dataUall[:, 0]
@@ -292,7 +309,7 @@ class InflowProfiles(object):
         :return:
         """
         # if 'iStart' and 'iStop' and 'startTimeReal' and 'stopTimeReal' not in kwargs:
-        #     startTimeReal, stopTimeReal, iStart, iStop = getTimesAndIndices(self, ensembleFolderPath)
+        #     startTimeReal, stopTimeReal, iStart, iStop = selectTimes(self, ensembleFolderPath)
         # else:
         #     iStart, iStop = kwargs['iStart'], kwargs['iStop']
         #     startTimeReal, stopTimeReal = kwargs['startTimeReal'], kwargs['stopTimeReal']

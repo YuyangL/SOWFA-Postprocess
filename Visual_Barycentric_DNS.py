@@ -36,7 +36,7 @@ t1 = t.time()
 ticToc = t1 - t0
 
 # Eigenvector manipulation, flip it by -1
-eigVecs4D *= -1.
+# eigVecs4D *= -1.
 
 
 """
@@ -49,9 +49,10 @@ engine.start()
 
 mlab.figure(caseName + '_quivers', engine = engine, size = (1000, 800), bgcolor = (1, 1, 1), fgcolor = (0.5, 0.5, 0.5))
 quiver = mlab.quiver3d(ccx, ccy, ccz, eigVecs4D[:, :, 0, 0].ravel(), eigVecs4D[:, :, 0, 1].ravel(), eigVecs4D[:, :, 0, 2].ravel(), scalars = eigVals3D[:, :, 0].ravel(), colormap = 'plasma', mask_points = 5, scale_mode = 'scalar')
+quiver.glyph.glyph_source.glyph_source.glyph_type = 'dash'
 mlab.outline()
 quiver.glyph.color_mode = 'color_by_scalar'
-mlab.savefig(resultDir + caseName + '_quiver.png')
+# mlab.savefig(resultDir + caseName + '_quiver.png')
 mlab.show()
 
 
