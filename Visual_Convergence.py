@@ -1,5 +1,5 @@
 import numpy as np
-from PostProcess_InflowAndTurbineOutputs import BaseProperties
+from PostProcess_PrecursorAndTurbineOutputs import BaseProperties
 from PlottingTool import Plot2D
 
 """

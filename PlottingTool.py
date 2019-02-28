@@ -120,7 +120,7 @@ class BaseFigure:
         print('\nPlotting ' + self.name + '...')
 
 
-    def ensureMeshGrid(self):
+    def _ensureMeshGrid(self):
         if len(np.array(self.listX[0]).shape) == 1:
             warn('\nX and Y are 1D, contour/contourf requires mesh grid. Converting X and Y to mesh grid '
                     'automatically...\n',
@@ -181,46 +181,44 @@ class BaseFigure:
 class Plot2D(BaseFigure):
     def __init__(self, listX, listY, z2D = (None,), type = 'infer', alpha = 0.75, zLabel = '$z$', cmap = 'plasma', gradientBg = False, gradientBgRange = (None, None), gradientBgDir = 'x', **kwargs):
         self.z2D = z2D
-        if type is 'infer':
-            self.type = 'contourf' if z2D[0] is not None else 'line'
-        else:
-            self.type = type
-            # Don't know how to use it...
-            assert type in ('scatter', 'contour')
-
-        self.lines, self.markers = ("-", "--", "-.", ":")*5, ('o', 'v', '^', '<', '>', 's', '8', 'p')*3
+        self.lines, self.markers = ("-", "--", "-.", ":")*5, ('o', 'D', 'v', '^', '<', '>', 's', '8', 'p')*3
         self.alpha, self.cmap = alpha, cmap
         self.zLabel = zLabel
         self.gradientBg, self.gradientBgRange, self.gradientBgDir = gradientBg, gradientBgRange, gradientBgDir
 
         super().__init__(listX, listY, **kwargs)
 
+        # If multiple data provided, make sure type is a tuple of the same length
+        if type is 'infer':
+            self.type = ('contourf',)*len(listX) if z2D[0] is not None else ('line',)*len(listX)
+        else:
+            self.type = (type,)*len(listX) if isinstance(type, str) else type
+
 
     def plotFigure(self, plotsLabel = (None,), contourLvl = 10):
         # Gradient background, only for line and scatter plots
-        if self.gradientBg and self.type in ('line', 'scatter'):
+        if self.gradientBg and self.type[0] in ('line', 'scatter'):
             x2D, y2D = np.meshgrid(np.linspace(self.xLim[0], self.xLim[1], 3), np.linspace(self.yLim[0], self.yLim[1], 3))
             z2D = (np.meshgrid(np.linspace(self.xLim[0], self.xLim[1], 3), np.arange(3)))[0] if self.gradientBgDir is 'x' else (np.meshgrid(np.arange(3), np.linspace(self.yLim[0], self.yLim[1], 3)))[1]
             self.axes[0].contourf(x2D, y2D, z2D, 500, cmap = 'gray', alpha = 0.33, vmin = self.gradientBgRange[0], vmax = self.gradientBgRange[1])
 
         super().plotFigure()
 
-        if self.type in ('contour', 'contourf'):
-            self.ensureMeshGrid()
-
         self.plotsLabel = np.arange(1, len(self.listX) + 1) if plotsLabel[0] is None else plotsLabel
         self.plots = [None]*len(self.listX)
-        for i in range(len(self.listX)):
-            if self.type is 'line':
+        for i in range(len(self.listX)):                
+            if self.type[i] is 'line':
                 self.plots[i] = self.axes[0].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = str(self.plotsLabel[i]), color = self.colors[i], alpha = self.alpha)
-            elif self.type is 'scatter':
+            elif self.type[i] is 'scatter':
                 self.plots[i] = self.axes[0].scatter(self.listX[i], self.listY[i], lw = 0, label = str(self.plotsLabel[i]), alpha = self.alpha, color = self.colors[i], marker = self.markers[i])
-            elif self.type is 'contourf':
+            elif self.type[i] is 'contourf':
+                self._ensureMeshGrid()
                 self.plots[i] = self.axes[0].contourf(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both', antialiased = False)
-            elif self.type is 'contour':
+            elif self.type[i] is 'contour':
+                self._ensureMeshGrid()
                 self.plots[i] = self.axes[0].contour(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both')
             else:
-                warn("\nUnrecognized plot type! type must be one of ('infer', 'line', 'scatter', 'contourf', 'contour').\n", stacklevel = 2)
+                warn("\nUnrecognized plot type! type must be one/list of ('infer', 'line', 'scatter', 'contourf', 'contour').\n", stacklevel = 2)
                 return
 
 
@@ -331,7 +329,7 @@ class BaseFigure3D(BaseFigure):
     def plotFigure(self):
         super(BaseFigure3D, self).plotFigure()
 
-        self.ensureMeshGrid()
+        self._ensureMeshGrid()
 
 
     def finalizeFigure(self, fraction = 0.06, pad = 0.08, showCbar = True, reduceNtick = True, **kwargs):

@@ -3,13 +3,21 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 import numpy
 
-ext_modules=[ Extension("PostProcess_AnisotropyTensor",
-                        ["PostProcess_AnisotropyTensor.pyx"],
-                        extra_compile_args = ["-ffast-math", "-O3"])]
+system = 'windows'  # 'windows', 'unix'
+fileName = 'PostProcess_EnergySpectrum'
+# fileName = 'PostProcess_AnisotropyTensor'
 
-setup(
-      name = "PostProcess_AnisotropyTensor",
-      cmdclass = {"build_ext": build_ext},
+if system is 'unix':
+    ext_modules = [Extension(fileName,
+                            [fileName + '.pyx'],
+                            libraries=["m"],  # Unix-like specific
+                            extra_compile_args = ['-ffast-math', '-O3'])]
+else:
+    ext_modules = [Extension(fileName,
+                             [fileName + '.pyx'])]
+
+setup(name = fileName,
+      cmdclass = {'build_ext': build_ext},
       ext_modules = ext_modules,
       include_dirs = [numpy.get_include()])
 
