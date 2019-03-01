@@ -99,7 +99,7 @@ class BaseFigure:
             "legend.framealpha":   0.5,
             'legend.edgecolor':    'none',
             'lines.linewidth':     linewidth,
-            # 'lines.markersize':    2,
+            'lines.markersize':    2,
             "axes.spines.top":     False,
             "axes.spines.right":   False,
             'axes.edgecolor':      tableauGray,
@@ -136,7 +136,7 @@ class BaseFigure:
             self.axes[0].legend(loc = legLoc, shadow = False, fancybox = False, ncol = nCol)
 
         if grid:
-            self.axes[0].grid(which = 'both', alpha = 0.25)
+            self.axes[0].grid(which = 'major', alpha = 0.25)
 
         if setXYlabel[0]:
             self.axes[0].set_xlabel(self.xLabel)

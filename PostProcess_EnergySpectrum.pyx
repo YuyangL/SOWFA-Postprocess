@@ -34,15 +34,12 @@ cpdef tuple readSliceRawData(str sliceName, str case = 'ABL_N_H', str caseDir = 
 
     # If time is 'auto', pick the 1st from the available times
     time = os.listdir(caseFullPath)[0] if time is 'auto' else time
-
     # Full path to the slice
     sliceFullPath = caseFullPath + time + '/' + sliceName
     # Read slice data, headers with # are auto trimmed
     data = np.genfromtxt(sliceFullPath)
-
     # 1D array
     x, y, z = data[:, 0], data[:, 1], data[:, 2]
-
     # Mesh size in x
     # Since the slice is sorted from low to high x, count the number of x
     valOld = x[0]
@@ -55,14 +52,12 @@ cpdef tuple readSliceRawData(str sliceName, str case = 'ABL_N_H', str caseDir = 
 
     nPtY = x.shape[0]/nPtX
     x2D, y2D, z2D = x.reshape((nPtY, nPtX)), y.reshape((nPtY, nPtX)), z.reshape((nPtY, nPtX))
-
 #    if data.shape[1] == 6:
     u, v, w = data[:, 3], data[:, 4], data[:, 5]
     scalarField = np.empty(data.shape[0])
     # Go through every row and calculate resultant value
     for i, row in enumerate(data):
         scalarField[i] = np.sqrt(row[3]**2 + row[4]**2 + row[5]**2)
-
 #    else:
 #        u, v, w = np.zeros((data.shape[1], 1), dtype = np.double), np.zeros((data.shape[1], 1), dtype = np.double), np.zeros((data.shape[1], 1), dtype = np.double)
 #        scalarField = data[:, 3]
@@ -73,7 +68,7 @@ cpdef tuple readSliceRawData(str sliceName, str case = 'ABL_N_H', str caseDir = 
     print('\nSlice raw data read')
     return x2D, y2D, z2D, scalarField2D, u2D, v2D, w2D
 
-
+# [DEPRECATED] Refer to Visual_EnergySpectrum.getPlanarEnergySpectrum()
 @cython.boundscheck(False)
 @cython.wraparound(False)
 @cython.cdivision(True)
@@ -94,23 +89,18 @@ cpdef tuple getSliceEnergySpectrum(np.ndarray[np.float_t, ndim = 2] u2D, np.ndar
     uRes2D, vRes2D, wRes2D = u2D - u2D.mean(), v2D - v2D.mean(), w2D - w2D.mean()
 #    # Normalized
 #    uRes2D, vRes2D, wRes2D = (u2D - u2D.mean())/u2D.mean(), (v2D - v2D.mean())/v2D.mean(), (w2D - w2D.mean())/w2D.mean()
-
     # Perform 2D FFT
     uResFft = np.fft.fft2(uRes2D, axes = (0, 1))
     vResFft = np.fft.fft2(vRes2D, axes = (0, 1))
     wResFft = np.fft.fft2(wRes2D, axes = (0, 1))
     # Shift FFT results so that 0-frequency component is in the center of the spectrum
     uResFft, vResFft, wResFft = np.fft.fftshift(uResFft), np.fft.fftshift(vResFft), np.fft.fftshift(wResFft)
-
-
-
     nX, nY = uRes2D.shape[1], uRes2D.shape[0]
     # Frequencies are number of rows/columns with a unit of cellSize meters
     # Note these are wavelength vector (Kx, Ky)
     freqX, freqY = np.fft.fftfreq(nX, d = cellSizes[0]), np.fft.fftfreq(nY, d = cellSizes[1])
     # Also shift corresponding frequencies
     freqX, freqY = np.fft.fftshift(freqX), np.fft.fftshift(freqY)
-
     # Calculate energy density Eii(Kx, Ky) (per d(Kx, Ky))
     # If 'decomposed' type, calculate E of horizontal velocity and vertical separately
     if type == 'decomposed':
@@ -128,7 +118,6 @@ cpdef tuple getSliceEnergySpectrum(np.ndarray[np.float_t, ndim = 2] u2D, np.ndar
         Eij, E33 = np.zeros((wResFft.shape[0], wResFft.shape[1])), np.zeros((wResFft.shape[0], wResFft.shape[1]))
 
     # No Eij yet
-
     # Convert (Kx, Ky) to Kr for 1D energy spectrum result/plot
     # First, get all Kr[i_r] = sqrt(Kx^2 + Ky^2) and its corresponding Eii(Kr)
     Kr = np.empty(len(freqX)*len(freqY))
@@ -144,7 +133,6 @@ cpdef tuple getSliceEnergySpectrum(np.ndarray[np.float_t, ndim = 2] u2D, np.ndar
     KrSorted = np.sort(Kr)
     sortIdx = np.argsort(Kr)
     EiiSorted, E33Sorted = Eii_r[sortIdx], E33_r[sortIdx]
-
     # Lastly, find all Eii, Eij, E33 of equal Kr and line-integrate over co-centric Kr (would have been sphere for slice not slice)
     E, Evert, KrFinal = [], [], []
     i = 0

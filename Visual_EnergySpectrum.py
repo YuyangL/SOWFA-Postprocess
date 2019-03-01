@@ -1,31 +1,306 @@
-# from PostProcess_FieldData import FieldData
 import numpy as np
 import os
-import matplotlib.pyplot as plt
+from PlottingTool import Plot2D
 import PostProcess_EnergySpectrum
 import time
 from Utilities import timer
-from numba import jit, njit, prange
+from numba import jit, prange
 import pickle
+from Utilities import readData
 
 """
 User Inputs
 """
-caseDir, case = 'J:', 'ABL_N_L2'
+caseDir, case = 'J:', 'ABL_N_L'
+# If slice time is 'auto', use the 1st time directory in slice folder
+sliceTime = 'auto'  # 'auto', '<time>'
 sliceFolder, resultFolder = 'Slices', 'Result'
 sliceName = 'U_hubHeight_Slice.raw'
+refDataFolder, refDataFormat = 'Churchfield', '.csv'
+# Cell size in x, y, and z directions
+cellSizes = (10., 10., 10.)
+# Whether to normalize E(Kr), if so, normalize every E(Kr) by (Kr*Lt*nPt_r)
+# Default is True, as done by Churchfield
+normalize = True
+# Molecular viscosity for the Kolmogorov -5/3 model
+nu = 1e-5  # [m^2/s]
+# Large eddy length scale, for Kolmogorov -5/3 model
+Lt = 3000.  # [CAUTION]
+# Kr manipulation
+# Whether to multiply Kr by krFactor
+# This only shifts the x-axis of the energy spectrum
+krFactor = 10.  # [CAUTION]
+
+
+"""
+Plot Settings
+"""
+# Number of bins
+nBin = 1000
+show, save = False, True
+xLim, yLim = (1e-3, 1), (1e-6, 1)
+# Alpha of fill-in of SFS region
+fillAlpha = 0.25
 
 
 """
 Process User Inputs
 """
 caseFullPath = caseDir + '/' + case + '/' + sliceFolder + '/'
-resultPath = caseFullPath + resultFolder + '/'
+# If slice time is 'auto', select the 1st time directory
+sliceTime = os.listdir(caseFullPath)[0] if sliceTime == 'auto' else sliceTime
+resultPath = caseFullPath + resultFolder + '/' + sliceTime + '/'
+# Try to make the result directory
+try:
+    os.makedirs(resultPath)
+except OSError:
+    pass
+
+if case == 'ABL_N_H':
+    label, E12refName, E33refName = 'ABL-N-H', 'E12_N_H', 'E33_N_H'
+elif case in ('ABL_N_L', 'ABL_N_L2'):
+    label, E12refName, E33refName = 'ABL-N-L', 'E12_N_L', 'E33_N_L'
+else:
+    label, E12refName, E33refName = 'ABL', 'E12_N_H', 'E33_N_H'
+
+E12refName += refDataFormat
+E33refName += refDataFormat
+refDataDir = caseDir + '/' + refDataFolder
+# Read reference data, 1st column is x, 2nd column is y
+E12ref, E33ref = readData(E12refName, fileDir = refDataDir), readData(E33refName, fileDir = refDataDir)
+# In case data is not sorted from low x to high x
+E12ref, E33ref = E12ref[E12ref[:, 0].argsort()], E33ref[E33ref[:, 0].argsort()]
 
 
 """
 Calculate Energy Spectrum
 """
+@timer
+# jit gives unknown error
+# @jit(parallel = True, fastmath = True)
+def getPlanarEnergySpectrum(u2D, v2D, w2D, cellSizes):
+    # Velocity fluctuations
+    # The mean here is spatial average in slice plane
+    # The Taylor hypothesis states that for fully developed turbulence,
+    # the spatial average and the time average are equivalent
+    uRes2D, vRes2D, wRes2D = u2D - u2D.mean(), v2D - v2D.mean(), w2D - w2D.mean()
+    # Before calculating (cross-)correlation, add arrays to 2 tuples
+    U1Res2D = (uRes2D, uRes2D, uRes2D, vRes2D, vRes2D, wRes2D)
+    U2Res2D = (uRes2D, vRes2D, wRes2D, vRes2D, wRes2D, wRes2D)
+    # Number of samples in x and y
+    nPtX, nPtY = uRes2D.shape[0], uRes2D.shape[0]
+    # Take the lower bound integer of half of nPt, applies to both even and odd nPtX/nPtY
+    nPtKx, nPtKy = nPtX//2, nPtY//2
+    # 1 point (cross-)correlation of velocity fluctuations in spatial domain
+    Rij = np.empty((nPtY, nPtX, 6))
+    # 2D DFT of Rij will be half of Rij sizes since the other half are just conjugates that's not interesting, given that Rij(x, y) are all real
+    RijFft = np.empty((nPtKy, nPtKx, 6), dtype = np.complex128)
+    # The 6 components are 11, 12, 13,
+    # 22, 23,
+    # 33,
+    for i in prange(6):
+        # Perform the 1-point (cross-)correlation
+        Rij[:, :, i] = np.multiply(U1Res2D[i], U2Res2D[i])
+        # Take only the 1st half in each direction as the 2nd half is not interesting
+        # RijFft[0, 0] is the sum of Rij by definition
+        RijFft[:, :, i] = (np.fft.fft2(Rij[:, :, i], axes = (0, 1)))[:nPtKy, :nPtKx]
+
+    # Trace of 1-point correlations, equivalent to 2TKE
+    Rii = Rij[:, :, 0] + Rij[:, :, 3] + Rij[:, :, 5]
+    # 2D DFT of Rii
+    RiiFft = np.fft.fft2(Rii, axes = (0, 1))[:nPtKy, :nPtKx]
+    # RiiFft[0, 0] is the sum of Rii by definition, which is 2TKE
+    TKE = np.abs(0.5*RiiFft[0, 0])
+    # Corresponding frequency in x and y directions, expressed in cycles/m
+    # Number of columns are number of x
+    # d is sample spacing, which should be equidistant,
+    # in this case, cell size in x and y respectively
+    # Again, only take the first half, the positive frequencies
+    Kx, Ky = np.fft.fftfreq(nPtX, d = cellSizes[0])[:nPtKx], np.fft.fftfreq(nPtY, d = cellSizes[1])[:nPtKy]
+    # Resultant K after combining Kx and Ky
+    Kr, iKxy = np.empty(nPtKx*nPtKy), []
+    cnt = 0
+    # Go through each Kx, then Ky
+    for i in prange(len(Kx)):
+        for j in range(len(Ky)):
+            # Take the resultant
+            Kr[cnt] = np.sqrt(Kx[i]**2 + Ky[j]**2)
+            # To access i/j, use iKxy[row][col] format since iKxy is a 2D list instead of 2D np.ndarray
+            iKxy.append((i, j))
+            cnt += 1
+
+    iKxy = np.array(iKxy)
+    # Get the indices to sort Kr from low to high
+    iKr_sorted = np.argsort(Kr, axis = 0)
+    # Sort Kr, reorder Kx, Ky indices according to sorted Kr
+    Kr_sorted, iKxy_sorted = Kr[iKr_sorted], iKxy[iKr_sorted]
+    print('\nMerging x and y components into r...')
+    # Sum of any RFft that has equal Kr
+    # For each Kr_sorted[i]
+    RijFft_r, RiiFft_r = [], []
+    i = 0
+    # Go through every Kr_sorted[i]
+    while i <= len(iKr_sorted) - 1:
+        # Store current RFft value
+        # iKxy_sorted[:, 1] is y
+        RijFft_r_i, RiiFft_r_i = RijFft[iKxy_sorted[i, 1], iKxy_sorted[i, 0]], RiiFft[iKxy_sorted[i, 1], iKxy_sorted[i, 0]]
+        match = 0
+        # Go through every Kr_sorted[j, j > i]
+        for j in range(i + 1, len(iKr_sorted)):
+            # If Kr_sorted[j] = Kr_sorted[i], add up RFft
+            if Kr_sorted[j] == Kr_sorted[i]:
+                match += 1
+                # Recall Kx/Ky is the same order of RFft's column/row
+                RijFft_r_i += RijFft[iKxy_sorted[j, 1], iKxy_sorted[j, 0]]
+                RiiFft_r_i += RiiFft[iKxy_sorted[j, 1], iKxy_sorted[j, 0]]
+            # Since Kr_sorted is sorted from low to high, if there's no match, then Kr[i] is unique, proceed to Kr[i + 1]
+            else:
+                break
+
+        # Add summed RFft to list
+        RijFft_r.append(RijFft_r_i)
+        RiiFft_r.append(RiiFft_r_i)
+        # Jump i in case of matches
+        i += match + 1
+
+    # Get the unique Kr_sorted
+    Kr_sorted = np.unique(Kr_sorted)
+    Eij, Eii = np.array(RijFft_r), np.array(RiiFft_r)
+
+    return RiiFft, Eii, RijFft, Eij, Kx, Ky, Kr_sorted, TKE
+
+
+t0 = time.time()
+# Read 2D mesh and velocity
+x2D, y2D, z2D, U2D, u2D, v2D, w2D = PostProcess_EnergySpectrum.readSliceRawData(sliceName = sliceName, case = case, caseDir = caseDir, time = sliceTime)
+# [DEPRECATED]
+# E, Evert, Kr = PostProcess_EnergySpectrum.getSliceEnergySpectrum(u2D, v2D, w2D, cellSizes = np.array([10., 10.]))
+t1 = time.time()
+print(f'\nFinished readSliceRawData in {t1 - t0} s')
+
+# Calculate 1-point (cross-)correlation and energy spectrum density and corresponding wavenumber
+# [DEPRECATED]
+# uResFft, vResFft, wResFft, freqX, freqY = getSliceEnergySpectrum(u2D, v2D, w2D, cellSizes = [10., 10.])
+RiiFft, Eii, RijFft, Eij, Kx, Ky, Kr, TKE = getPlanarEnergySpectrum(u2D, v2D, w2D, cellSizes = cellSizes)
+
+# Convert complex value to real and normalize it if enabled
+# norm = len(Eii) if normalize else 1
+# norm = u2D.shape[0]*u2D.shape[1] if normalize else 1
+norm = Kr*Lt*len(Eii) if normalize else 1
+# Convert complex number to real
+Eii, Eij = np.abs(Eii), np.abs(Eij)
+# Eii, Eij, TKE = np.abs(Eii)/norm, np.abs(Eij)/norm, TKE/norm
+# Normalize Eij and Eii sequentially, thus 7 iterations
+# Order: 11, 12, 13,
+# 22, 23,
+# 33,
+# ii
+for i in prange(7):
+    if i == 6:
+        Eii = np.divide(Eii, norm)
+    else:
+        Eij[:, i] = np.divide(Eij[:, i], norm)
+
+
+"""
+Prepare the Kolmogorov -5/3 Model
+"""
+# Kolmogorov dimensional analysis: Lt ~ TKE^(3/2)/epsilon
+# Lt is characteristic length scale of large eddies
+# # epsilon is dissipation rate
+# # epsilon = Lt/(TKE**(3/2.))
+# epsilon = 0.
+# for i in prange(1, len(Kr)):
+#     # Scale Eii back and normalize it in the end
+#     # epsilon += 2*nu*Kr[i]**2*Eii[i]*norm*(Kr[i] - Kr[i - 1])
+#     epsilon += 2*nu*(Kr[i]/krFactor)**2*Eii[i]*norm[i]*(Kr[i] - Kr[i - 1])/krFactor
+
+# Kolmogorov -5/3 model
+# # E(Kr) = c_k*epsilon^(2/3)*Kr^(-5/3)
+# # c_k = 1.5 generally
+# E_Kolmo = 1.5*epsilon**(2/3.)*(Kr/krFactor)**(-5/3)/norm
+# E_Kolmo = 1.5*epsilon**(2/3.)*(Kr)**(-5/3)/norm
+# E_Kolmo = np.divide(1.5*epsilon**(2/3.)*(Kr/krFactor)**(-5/3), norm)
+E_Kolmo = 1.5*(Lt*Kr)**(-5/3)
+
+
+"""
+Binning Operation
+"""
+# Kr manipulation
+Kr *= krFactor
+# Mean cell size, used for the fill-in plot of the SFS region
+cellSize = np.mean(cellSizes)
+# Target Kr after binning
+Kr_binned = np.logspace(-3, 0, nBin)
+# Kr_binned = np.linspace(Kr.min(), Kr.max(), 1000)
+# Indices of which bin each Kr would fall in
+iBin = np.digitize(Kr, Kr_binned)
+# Get all unique iBin values
+iBin_uniq = np.unique(iBin)
+# Go through every index of targeted bins
+for i in prange(nBin):
+    # If such index not found in iBin, it means the bins in that region is too refined for binning old values
+    # E.g. Kr = [1, 2, 3],
+    # Kr_binned = [1, 1.5, 2, 2.5, 3],
+    # no Kr to put in Kr_binned of 1.5 or 2.5
+    # Make those over-flown Kr bin NaN
+    if i not in iBin_uniq:
+        Kr_binned[i] = np.nan
+
+# Then remove those NaN entries
+Kr_binned = Kr_binned[~np.isnan(Kr_binned)]
+# Refresh the bin indices that each Kr should fall in
+iBin = np.digitize(Kr, Kr_binned)
+# Then, for all E that fall in a bin, get the average
+# Go through every Eij column, 6 in total, lastly, do it for Eii too
+Eij_binned_0 = np.array([np.mean(Eij[iBin == i, 0]) for i in range(len(Kr_binned))])
+Eij_binned = np.empty((Eij_binned_0.shape[0], 6))
+Eij_binned[:, 0] = Eij_binned_0
+for j in prange(1, 7):
+    # For Eij
+    if j != 6:
+        Eij_binned[:, j] = np.array([np.mean(Eij[iBin == i, j]) for i in range(len(Kr_binned))])
+    # For Eii
+    else:
+        Eii_binned = np.array([np.mean(Eii[iBin == i]) for i in range(len(Kr_binned))])
+
+
+"""
+Plot the Energy Spectrums of Eii, E12, E33
+"""
+# E to be plotted into a tuple
+E = (Eii_binned, Eij_binned[:, 1], Eij_binned[:, -1])
+# Figure order is Eii, E12, E33
+figNames = (case + '_Eii', case + '_E12', case + '_E33')
+yLabels = (r'$E_{ii}(K_r)$ [m$^3$/s$^2$]', r'$E_{12}(K_r)$ [m$^3$/s$^2$]', r'$E_{33}(K_r)$ [m$^3$/s$^2$]')
+# Go through Eii, E12, E33 and plot each of them
+for i in prange(3):
+    # If plotting E12
+    if i == 1:
+        xList, yList = (Kr_binned, E12ref[:, 0], Kr), (E[i], E12ref[:, 1], E_Kolmo)
+        plotsLabel = (label, 'Churchfield et al.', 'Kolmogorov model')
+    # Else if plotting E33
+    elif i == 2:
+        xList, yList = (Kr_binned, E33ref[:, 0], Kr), (E[i], E33ref[:, 1], E_Kolmo)
+        plotsLabel = (label, 'Churchfield et al.', 'Kolmogorov model')
+    # Else if plotting Eii, no reference data available
+    else:
+        xList, yList = (Kr_binned, Kr), (E[i], E_Kolmo)
+        plotsLabel = (label, 'Kolmogorov model')
+
+    # Initialize figure
+    plot = Plot2D(xList, yList, xLabel = r'$K_r$ [1/m]', yLabel = yLabels[i], name = figNames[i], save = save, show = show, xLim = xLim, yLim = yLim, figDir = resultPath)
+    plot.initializeFigure()
+    plot.plotFigure(plotsLabel = plotsLabel)
+    plot.axes[0].fill_between((1/cellSize, xLim[1]), yLim[0], yLim[1], alpha = fillAlpha, facecolor =
+    plot.gray, zorder = -1)
+    plot.finalizeFigure(xyScale = ('log', 'log'))
+
+
+
+
+# [DEPRECATED]
 @timer
 @jit(parallel = True, fastmath = True)
 def getSliceEnergySpectrum(u2D, v2D, w2D, cellSizes, type = 'decomposed'):
@@ -56,9 +331,6 @@ def getSliceEnergySpectrum(u2D, v2D, w2D, cellSizes, type = 'decomposed'):
     freqX, freqY = np.fft.fftshift(freqX), np.fft.fftshift(freqY)
 
     # return uResFft, vResFft, wResFft, freqX, freqY
-
-
-
 
     # Calculate energy density Eii(Kx, Ky) (per d(Kx, Ky))
     # If 'decomposed' type, calculate E of horizontal velocity and vertical separately
@@ -127,173 +399,42 @@ def getSliceEnergySpectrum(u2D, v2D, w2D, cellSizes, type = 'decomposed'):
     return np.array(E), np.array(Evert), np.array(KrFinal)
 
 
-@timer
-# @jit(parallel = True, fastmath = True)
-def getPlanarEnergySpectrum2(u2D, v2D, w2D, cellSizes, type = 'decomposed'):
-    # Velocity fluctuations
-    # The mean here is spatial average in slice plane
-    # The Taylor hypothesis states that for fully developed turbulence,
-    # the spatial average and the time average are equivalent
-    uRes2D, vRes2D, wRes2D = u2D - u2D.mean(), v2D - v2D.mean(), w2D - w2D.mean()
-
-    print(uRes2D.mean(), vRes2D.mean(), wRes2D.mean())
-
-    #    # Normalized
-    #    uRes2D, vRes2D, wRes2D = (u2D - u2D.mean())/u2D.mean(), (v2D - v2D.mean())/v2D.mean(), (w2D - w2D.mean(
-    #    ))/w2D.mean()
-
-    # # Calculate one-point (cross-)correlations
-    # R11, R12, R13 = np.multiply(uRes2D, uRes2D), np.multiply(uRes2D, vRes2D), np.multiply(uRes2D, wRes2D)
-    # R22, R23 = np.multiply(vRes2D, vRes2D), np.multiply(vRes2D, wRes2D)
-    # R33 = np.multiply(wRes2D, wRes2D)
-    # # The one-point correlation trace, equivalent to 2TKE(x, y)
-    # Rii = R11 + R22 + R33
-
-    # # Discrete Fourier transform of one-point (cross-)correlations
-    # # The order in each direction is
-    # R11Fft, R12Fft, R13Fft = np.fft.fft2(R11, axes = (0, 1)), np.fft.fft2(R12, axes = (0, 1)), np.fft.fft2(R13, axes = (0, 1))
-    # R22Fft, R23Fft = np.fft.fft2(R22, axes = (0, 1)), np.fft.fft2(R23, axes = (0, 1))
-    # R33Fft = np.fft.fft2(R33, axes = (0, 1))
-    # RiiFft = np.fft.fft2(Rii, axes = (0, 1))
-
-    U1Res2D = (uRes2D, uRes2D, uRes2D, vRes2D, vRes2D, wRes2D)
-    U2Res2D = (uRes2D, vRes2D, wRes2D, vRes2D, wRes2D, wRes2D)
-    nPtX, nPtY = uRes2D.shape[0], uRes2D.shape[0]
-    # Take the lower bound integer of half of nPt, applies to both even and odd nPtX/nPtY
-    nPtKx, nPtKy = nPtX//2, nPtY//2
-    Rij = np.empty((nPtY, nPtX, 6))
-    # DFT of Rij will be half of Rij sizes since the other half are just conjugates that's not interesting, given that Rij(x, y) are all real
-    RijFft = np.empty((nPtKy, nPtKx, 6), dtype = np.complex128)
-    # Rij = np.multiply(uRes2D, uRes2D)
-    # RijFft = np.fft.fft2(np.multiply(uRes2D, uRes2D), axes = (0, 1))
-    for i in prange(6):
-        Rij[:, :, i] = np.multiply(U1Res2D[i], U2Res2D[i])
-        # Take only the 1st half in each direction as the 2nd half is not interesting
-        # RijFft[0, 0] is the sum of Rij by definition
-        RijFft[:, :, i] = (np.fft.fft2(Rij[:, :, i], axes = (0, 1)))[:nPtKy, :nPtKx]
-
-    Rii = Rij[:, :, 0] + Rij[:, :, 3] + Rij[:, :, 5]
-    RiiFft = np.fft.fft2(Rii, axes = (0, 1))[:nPtKy, :nPtKx]
-    # RiiFft[0, 0] is the sum of Rii by definition, which is 2TKE
-    TKE = np.abs(0.5*RiiFft[0, 0])
-
-    # Corresponding frequency in x and y directions, expressed in cycles/m
-    # Number of columns are number of x
-    # d is sample spacing, which should be equidistant,
-    # in this case, cell size in x and y respectively
-    # Again, only take the first half, the positive frequencies
-    Kx, Ky = np.fft.fftfreq(nPtX, d = cellSizes[0])[:nPtKx], np.fft.fftfreq(nPtY, d = cellSizes[1])[:nPtKy]
-
-    Kr, iKxy = np.empty(nPtKx*nPtKy), []
-    cnt = 0
-    for i in prange(len(Kx)):
-        for j in range(len(Ky)):
-            Kr[cnt] = np.sqrt(Kx[i]**2 + Ky[j]**2)
-            # To access i/j, use iKxy[][] format
-            iKxy.append((i, j))
-            cnt += 1
-
-    iKxy = np.array(iKxy)
-    iKr_sorted = np.argsort(Kr, axis = 0)
-    Kr_sorted, iKxy_sorted = Kr[iKr_sorted], iKxy[iKr_sorted]
-
-    print('\nMerging x and y components into r...')
-    # Sum of any RFft that has equal Kr
-    # For each Kr_sorted[i]
-    RijFft_r, RiiFft_r = [], []
-    i = 0
-    while i <= len(iKr_sorted) - 1:
-        # Store current RFft value
-        # iKxy_sorted[:, 1] is y
-        RijFft_r_i, RiiFft_r_i = RijFft[iKxy_sorted[i, 1], iKxy_sorted[i, 0]], RiiFft[iKxy_sorted[i, 1], iKxy_sorted[i, 0]]
-        match = 0
-        # Go through every Kr_sorted[j, j > i]
-        for j in range(i + 1, len(iKr_sorted)):
-            # If Kr_sorted[j] = Kr_sorted[i], add up RFft
-            if Kr_sorted[j] == Kr_sorted[i]:
-                match += 1
-                # Recall Kx/Ky is the same order of RFft's column/row
-                RijFft_r_i += RijFft[iKxy_sorted[j, 1], iKxy_sorted[j, 0]]
-                RiiFft_r_i += RiiFft[iKxy_sorted[j, 1], iKxy_sorted[j, 0]]
-            # Since Kr_sorted is sorted from low to high, if there's no match, then Kr[i] is unique, proceed to Kr[i + 1]
-            else:
-                break
-
-        RijFft_r.append(RijFft_r_i)
-        RiiFft_r.append(RiiFft_r_i)
-        i += match + 1
-
-    # Get the unique Kr_sorted
-    Kr_sorted = np.unique(Kr_sorted)
-    Eij, Eii = np.array(RijFft_r), np.array(RiiFft_r)
-
-    return RiiFft, Eii, RijFft, Eij, Kx, Ky, Kr_sorted, TKE
+# plt.figure('Eii')
+# plt.ylabel("Eii")
+# plt.xlabel("Frequency 10Kr [cycle/m?]")
+# # plt.bar(f[:N//2], np.abs(uResFft)[:N//2]*1./N, width = 1.5)  # 1 / N is a normalization factor
+# # Kr manipulation here!
+# plt.loglog(Kr, np.abs(Eii)/len(Eii))
+# plt.loglog(Kr, E_Kolmo)
+# plt.xlim(1e-3, 1)
+# plt.ylim(1e-6, 1)
+# plt.show()
+#
+# plt.figure('E12')
+# plt.ylabel("E12")
+# plt.xlabel("Frequency 10Kr [cycle/m?]")
+# # plt.bar(f[:N//2], np.abs(uResFft)[:N//2]*1./N, width = 1.5)  # 1 / N is a normalization factor
+# # E12 is second column of Eij
+# # Kr manipulation here!
+# plt.loglog(Kr, np.abs(Eij[:, 1])/len(Eij))
+# plt.loglog(Kr, E_Kolmo)
+# plt.xlim(1e-3, 1)
+# plt.ylim(1e-6, 1)
+# plt.show()
+#
+# plt.figure('E33')
+# plt.ylabel("E33")
+# plt.xlabel("Frequency 10Kr [cycle/m?]")
+# # plt.bar(f[:N//2], np.abs(uResFft)[:N//2]*1./N, width = 1.5)  # 1 / N is a normalization factor
+# # E33 is last column of Eij
+# # Kr manipulation here!
+# plt.loglog(Kr, np.abs(Eij[:, -1])/len(Eij))
+# plt.loglog(Kr, E_Kolmo)
+# plt.xlim(1e-3, 1)
+# plt.ylim(1e-6, 1)
+# plt.show()
 
 
-
-t0 = time.time()
-x2D, y2D, z2D, U2D, u2D, v2D, w2D = PostProcess_EnergySpectrum.readSliceRawData(sliceName = sliceName, case = case, caseDir = caseDir)
-
-# E, Evert, Kr = PostProcess_EnergySpectrum.getSliceEnergySpectrum(u2D, v2D, w2D, cellSizes = np.array([10., 10.]))
-
-t1 = time.time()
-ticToc = t1 - t0
-
-# uResFft, vResFft, wResFft, freqX, freqY = getSliceEnergySpectrum(u2D, v2D, w2D, cellSizes = [10., 10.])
-
-RiiFft, Eii, RijFft, Eij, Kx, Ky, Kr, TKE = getPlanarEnergySpectrum2(u2D, v2D, w2D, [10., 10.])
-
-# Kr manipulation
-Kr *= 10  # [CAUTION]
-
-sampInterval, N = 10., 301
-f = np.linspace(0, 1/(2*sampInterval), 301//2)
-
-# Kolmogorov dimensional analysis: Lt ~ TKE^(3/2)/epsilon
-# Lt is characteristic length scale of large eddies
-# epsilon is dissipation rate
-Lt = 300.
-epsilon = Lt/(TKE**(3/2.))
-# Kolmogorov -5/3 model
-# E(Kr) = c_k*epsilon^(2/3)*Kr^(-5/3)
-# c_k = 1.5 generally
-E_Kolmo = 1.5*epsilon**(2/3.)*Kr**(-5/3)
-
-
-plt.figure('Eii')
-plt.ylabel("Eii")
-plt.xlabel("Frequency 10Kr [cycle/m?]")
-# plt.bar(f[:N//2], np.abs(uResFft)[:N//2]*1./N, width = 1.5)  # 1 / N is a normalization factor
-# Kr manipulation here!
-plt.loglog(Kr, np.abs(Eii)/len(Eii))
-plt.loglog(Kr, E_Kolmo)
-plt.xlim(1e-3, 1)
-plt.ylim(1e-6, 1)
-plt.show()
-
-plt.figure('E12')
-plt.ylabel("E12")
-plt.xlabel("Frequency 10Kr [cycle/m?]")
-# plt.bar(f[:N//2], np.abs(uResFft)[:N//2]*1./N, width = 1.5)  # 1 / N is a normalization factor
-# E12 is second column of Eij
-# Kr manipulation here!
-plt.loglog(Kr, np.abs(Eij[:, 1])/len(Eij))
-plt.loglog(Kr, E_Kolmo)
-plt.xlim(1e-3, 1)
-plt.ylim(1e-6, 1)
-plt.show()
-
-plt.figure('E33')
-plt.ylabel("E33")
-plt.xlabel("Frequency 10Kr [cycle/m?]")
-# plt.bar(f[:N//2], np.abs(uResFft)[:N//2]*1./N, width = 1.5)  # 1 / N is a normalization factor
-# E33 is last column of Eij
-# Kr manipulation here!
-plt.loglog(Kr, np.abs(Eij[:, -1])/len(Eij))
-plt.loglog(Kr, E_Kolmo)
-plt.xlim(1e-3, 1)
-plt.ylim(1e-6, 1)
-plt.show()
 
 # E, Evert, Kr = getSliceEnergySpectrum(u2D, v2D, w2D, cellSizes = [10., 10.])
 #

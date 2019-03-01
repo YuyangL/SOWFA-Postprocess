@@ -22,6 +22,7 @@ zi, invW = 750., 100.
 calc_zi = False
 # Force to remerge all time directories to Ensemble folder?
 forceRemerge = False  # [CAUTION]
+refDataFolder, refDataFormat = 'Churchfield', '.csv'
 # Unused
 startTime2, stopTime2 = 3000, 6000
 
@@ -49,7 +50,7 @@ elif profile == 'TI':
 # q3_mean and Tw_mean are for zi calculation, don't add again for the 'heatFlux' profile
 fileNames += ['q3_mean', 'Tw_mean'] if calc_zi and profile != 'heatFlux' else []
 # Reference data directory for U from Churchfield et al. 2012
-refDataDir = caseDir + 'Churchfield/'
+refDataDir = caseDir + '/' + refDataFolder + '/'
 if caseName in ('ABL_N_L', 'ABL_N_L2'):
     refDataName, caseName2 = 'InflowU_N_L', 'ABL-N-L'
 elif caseName == 'ABL_N_H':
@@ -61,7 +62,7 @@ elif caseName == 'ABL_Uns_H':
 else:
     refDataName, caseName2 = '', r'N-Low $I$-225^{\circ}-11 m/s'
 
-refDataName += '.csv'
+refDataName += refDataFormat
 
 
 """
