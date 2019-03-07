@@ -32,7 +32,7 @@ class SliceProperties:
 
 
     @timer
-    @jit
+    @jit(parallel = True, fastmath = True)
     def readSlices(self, propertyName = 'U', sliceNames = ('alongWind',), sliceNamesSub = '_Slice', skipCol = 3, skipRow = 0, fileExt = '.raw'):
         # First 3 columns are x, y, z, thus skipCol = 3
         # skipRow unnecessary since np.genfromtxt trim any header with # at front
@@ -40,21 +40,19 @@ class SliceProperties:
         # Combine propertyName with sliceNames and Subscript to form the full file names
         # Don't know why I had to copy it...
         # self.fileNames = list(sliceNames).copy()
-        for i, name in enumerate(self.sliceNames):
-            self.sliceNames[i] = propertyName + '_' + name
-            # self.fileNames[i] = self.sliceNames + fileExt
-            # self.fileNames[i] = sliceNames[i]
+        for i in prange(len(self.sliceNames)):
+            self.sliceNames[i] = propertyName + '_' + self.sliceNames[i]
 
         self.slicesVal, self.slicesOrientate, self.slicesCoor = {}, {}, {}
         # Go through all specified slices
         # and append coordinates,, slice type (vertical or horizontal), and slice values each to dictionaries
         # Keys are slice names
-        for sliceName in self.sliceNames:
-            vals = np.genfromtxt(self.caseFullPath + sliceName + sliceNamesSub + fileExt)
+        for i in prange(len(self.sliceNames)):
+            vals = np.genfromtxt(self.caseFullPath + self.sliceNames[i] + sliceNamesSub + fileExt)
             # If max(z) - min(z) < 1 then it's assumed horizontal
             # partition('.') removes anything after '.'
             # fileName.partition('.')[0]
-            self.slicesOrientate[sliceName] = 'vertical' if (vals[skipRow:, 2]).max() - (
+            self.slicesOrientate[self.sliceNames[i]] = 'vertical' if (vals[skipRow:, 2]).max() - (
                 vals[skipRow:, 2]).min() > 1. else 'horizontal'
             # # If interpolation enabled
             # if interpMethod not in ('none', 'None'):
@@ -65,9 +63,9 @@ class SliceProperties:
             #
             # else:
             # X, Y, Z coordinate dictionary without interpolation
-            self.slicesCoor[sliceName] = vals[skipRow:, :skipCol]
+            self.slicesCoor[self.sliceNames[i]] = vals[skipRow:, :skipCol]
             # Vals dictionary without interpolation
-            self.slicesVal[sliceName] = vals[skipRow:, skipCol:]
+            self.slicesVal[self.sliceNames[i]] = vals[skipRow:, skipCol:]
 
         print('\n' + str(self.sliceNames) + ' read')
         # return slicesCoor, slicesOrientate, slicesVal
@@ -75,7 +73,7 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    @jit(parallel = True)
+    @jit(parallel = True, fastmath = True)
     def interpolateDecomposedSliceData_Fast(x, y, z, vals, sliceOrientate = 'vertical', xOrientate = 0, precisionX = 1500j, precisionY = 1500j,
                           precisionZ = 500j, interpMethod = 'cubic'):
         # Bound the coordinates to be interpolated in case data wasn't available in those borders
@@ -129,9 +127,10 @@ class SliceProperties:
         return x2D, y2D, z2D, vals3D
 
 
+    # [DEPRECATED]
     @staticmethod
     @timer
-    @jit
+    @jit(parallel = True, fastmath = True)
     def interpolateDecomposedSliceData(x, y, z, vals, sliceOrientate = 'vertical', xOrientate = 0, precisionX = 1500j, precisionY = 1500j,
                           precisionZ = 500j, interpMethod = 'cubic'):
         # Bound the coordinates to be interpolated in case data wasn't available in those borders
@@ -176,7 +175,7 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    @njit(parallel = True)
+    @njit(parallel = True, fastmath = True)
     def processAnisotropyTensor_Fast(vals3D):
         # TKE in the interpolated mesh
         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
@@ -223,7 +222,7 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    @njit(parallel = True)
+    @njit(parallel = True, fastmath = True)
     def processAnisotropyTensor_Uninterpolated(vals2D):
         # TKE
         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
@@ -274,7 +273,7 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    @jit
+    @jit(parallel = True, fastmath = True)
     def processAnisotropyTensor(valsDecomp):
         # TKE in the interpolated mesh
         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'

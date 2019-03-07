@@ -1,21 +1,21 @@
 import numpy as np
 from PostProcess_PrecursorAndTurbineOutputs import BaseProperties
 from PlottingTool import Plot2D
+from numba import prange
 
 """
 User Inputs
 """
-caseDir = '/media/yluan/Toshiba External Drive/'
+caseDir = 'J:'
 # caseName = 'ALM_N_H'
-caseName = 'ALM_N_H_ParTurb'
-caseName += '/Probes'
-fileNames = 'uuPrime2'  # ('uuPrime2', 'UAvg', 'Rmean')
-nProbe = 4
+caseName = 'ALM_N_H_OneTurb'
+# caseName += '/Probes'
+fileNames = 'UAvg'  # ('uuPrime2', 'UAvg', 'Rmean')
 # Which column is time
-timeCol = 0
+timeCol = 0  # 'infer'
 # Characters to remove before reading data into numpy arrays
 invalidChars = ('(', ')')
-times = (20500, 22000)
+times = (20500, 23000)
 
 """
 Plot Settings
@@ -23,18 +23,31 @@ Plot Settings
 saveFig = True
 xLabel = 'Time [s]'
 # yLabel = r'$R_{11}$'
-lineLabels = ('Turb0 + $1D$', 'Turb0 + $3D$',
-              'Turb1 + $1D$', 'Turb1 + $3D$')
 xLim = times
 figWidth = 'half'
 show = False
-gradientBg, gradientBgRange = True, (20000, 21600)
+gradientBg, gradientBgRange = True, (times[0], times[1])
+
+
+"""
+Process User Inputs
+"""
+if caseName == 'ALM_N_H_OneTurb':
+    nProbe = 8
+else:
+    nProbe = 4
+
+if caseName == 'ALM_N_H_ParTurb':
+    lineLabels = ('Turb0 + $1D$', 'Turb0 + $3D$',
+                  'Turb1 + $1D$', 'Turb1 + $3D$')
+elif caseName == 'ALM_N_H_OneTurb':
+    lineLabels = (r'Hub $-3D$', r'Hub $-1D$', r'Hub $+1D$', r'Hub $+2D$', r'Hub $+4D$', r'Apex $-1D$', r'Apex $+2D$', r'Apex $+4D$')
 
 
 """
 Merge Time Directories and Read Properties
 """
-probe = BaseProperties(caseName = caseName, caseDir = caseDir, timeCols = timeCol, forceRemerge = False)
+probe = BaseProperties(caseName = caseName + '/Probes', caseDir = caseDir, timeCols = timeCol, forceRemerge = False)
 
 # From now on all files are read through Ensemble regardless
 # Trim invalid '(' and ')' characters
@@ -59,20 +72,35 @@ def decomposeDataAndPlot(step, subscript, startCol, fileName):
         propertyDecomp['probe' + str(i)] = probe.propertyData[fileName][:, startCol + step*i]
         listY.append(propertyDecomp['probe' + str(i)])
 
-    yLim = (np.min(listY), np.max(listY))
+    # listY = np.array(listY)
+    if caseName == 'ALM_N_H_OneTurb':
+        listY2 = [listY[3], listY[5], listY[7]]
+        del listY[7]
+        del listY[5]
+        del listY[3]
+        listY += listY2
 
-    plot = Plot2D(listX, listY, save = saveFig, name = fileName + '_' + subscript + '_Convergence', xLabel = xLabel,
-                  yLabel = yLabel,
-                  figDir = figDir, xLim = xLim, yLim = yLim, figWidth = figWidth, show = show, gradientBg = gradientBg)
+    nPlot = 2 if caseName == 'ALM_N_H_OneTurb' else 1
+    nProbePlot = (0, 5, nProbe) if caseName == 'ALM_N_H_OneTurb' else (0, nProbe)
+    for i in prange(nPlot):
+        yLim = (np.min(listY) - np.abs(np.min(listY)*0.05),
+                np.max(listY) + np.abs(np.max(listY)*0.05))
+        plot = Plot2D(listX[nProbePlot[i]:nProbePlot[i + 1]], listY[nProbePlot[i]:nProbePlot[i + 1]], save = saveFig, name = fileName + '_' + subscript + '_Convergence_' + str(i), xLabel = xLabel,
+                      yLabel = yLabel,
+                      figDir = figDir, xLim = xLim, yLim = yLim, figWidth = figWidth, show = show, gradientBg = gradientBg)
 
-    plot.initializeFigure()
-    plot.plotFigure(plotsLabel = lineLabels)
-    plot.finalizeFigure(transparentBg = False)
+        plot.initializeFigure()
+        plot.plotFigure(plotsLabel = lineLabels[nProbePlot[i]:nProbePlot[i + 1]])
+        plot.finalizeFigure()
 
 
 figDir = probe.caseFullPath + 'Result'
-listX = [probe.timesSelected]*nProbe
+# listX = [probe.timesSelected]*nProbe
+listX = (probe.timesAll,)*nProbe
 if 'uuPrime2' in fileNames:
+    """
+    Reynolds Stress Plots
+    """
     fileName = 'uuPrime2'
     # Pick up columns every 6 steps due to symmetric tensor saved in the order of
     # (xx, xy, xz, yy, yz, zz)
@@ -108,8 +136,10 @@ if 'uuPrime2' in fileNames:
     decomposeDataAndPlot(step = step, subscript = '33', startCol = startCol, fileName = fileName)
 
 
-
 if 'UAvg' in fileNames:
+    """
+    UAvg Plots
+    """
     fileName = 'UAvg'
     step, startCol = 3, 0
 
@@ -129,6 +159,9 @@ if 'UAvg' in fileNames:
 
 
 if 'Rmean' in fileNames:
+    """
+    SFS Deviatoric Stress Plots
+    """
     fileName = 'Rmean'
     # Pick up columns every 6 steps due to symmetric tensor saved in the order of
     # (xx, xy, xz, yy, yz, zz)

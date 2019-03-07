@@ -12,8 +12,9 @@ from PlottingTool import Plot2D, Plot2D_InsetZoom, PlotSurfaceSlices3D, PlotCont
 User Inputs
 """
 caseDir = 'J:'  # '/media/yluan/Toshiba External Drive/'
-caseName = 'ALM_N_H'  # 'ALM_N_H_ParTurb'
-time = 22000.0558025  # 22000.0918025 20000.9038025
+caseDir = '/media/yluan/Toshiba External Drive/'
+caseName = 'ALM_N_H_OneTurb'  # 'ALM_N_H_ParTurb'
+time = 23275.1388025  # 22000.0918025 20000.9038025
 # sliceNames = ['alongWind', 'groundHeight', 'hubHeight', 'oneDaboveHubHeight', 'oneDdownstreamTurbineOne', 'oneDdownstreamTurbineTwo', 'rotorPlaneOne', 'rotorPlaneTwo', 'sixDdownstreamTurbineTwo', 'threeDdownstreamTurbineOne', 'threeDdownstreamTurbineTwo', 'twoDupstreamTurbineOne']
 # For Upwind and Downwind turbines
 # sliceNames = ['oneDdownstreamTurbineOne', 'oneDdownstreamTurbineTwo', 'rotorPlaneOne', 'rotorPlaneTwo', 'sixDdownstreamTurbineTwo', 'threeDdownstreamTurbineOne', 'threeDdownstreamTurbineTwo', 'twoDupstreamTurbineOne']
@@ -23,11 +24,11 @@ time = 22000.0558025  # 22000.0918025 20000.9038025
 # sliceNames = ['rotorPlane','sixDdownstreamTurbines']
 sliceNames = ['alongWind']
 # Only for PlotContourSlices3D
-sliceOffsets = (5, 90, 216)
-propertyName = 'U'
+sliceOffsets = (5, 90, 153)
+propertyName = 'uuPrime2'
 fileExt = '.raw'
-precisionX, precisionY, precisionZ = 1500j, 1500j, 500j
-interpMethod = 'cubic'
+precisionX, precisionY, precisionZ = 1000j, 1000j, 333j
+interpMethod = 'nearest'
 
 
 """
@@ -35,13 +36,17 @@ Plot Settings
 """
 figWidth = 'full'
 # View angle best (15, -40) for vertical slices in rotor plane
-viewAngle, equalAxis = (15, -40), True
+viewAngle, equalAxis = (15, -45), True
 xLim, yLim, zLim = (0, 3000), (0, 3000), (0, 1000)
 show, save = False, True
 xLabel, yLabel, zLabel = r'$x$ [m]', r'$y$ [m]', r'$z$ [m]'
 # valLabels = (r'$b_{11}$ [-]', r'$b_{12}$ [-]', r'$b_{13}$ [-]', r'$b_{22}$ [-]', r'$b_{23}$ [-]', r'$b_{33}$ [-]')
 # valLabels = (r'$\langle u\rangle$ [m/s]', r'$\langle v\rangle$ [m/s]', r'$\langle w\rangle$ [m/s]')
-valLabels = (r'$U$ [m/s]', r'$U$ [m/s]', r'$U$ [m/s]')
+if propertyName == 'U':
+    valLabels = (r'$U$ [m/s]', r'$U$ [m/s]', r'$U$ [m/s]')
+elif propertyName == 'uuPrime2':
+    valLabels = (r'$b_{11}$ [-]', r'$b_{12}$ [-]', r'$b_{13}$ [-]', r'$b_{22}$ [-]', r'$b_{23}$ [-]', r'$b_{33}$ [-]', r'$k_{\rm{resolved}}$ [m$^2$/s$^2$]')
+
 
 
 """
@@ -127,7 +132,7 @@ def calculateAnisotropicTensor(valsDecomp):
     for key, val in valsDecomp.items():
         valsDecomp[key] = val/(2.*k) - 1/3. if key in ('0', '3', '5') else val/(2.*k)
 
-    return valsDecomp
+    return valsDecomp, k
 
 
 @timer
@@ -151,18 +156,19 @@ for sliceName in sliceNames:
     # For anisotropic stress tensor bij
     # bij = Rij/(2k) - 1/3*deltaij
     # where Rij is uuPrime2, k = 1/2trace(Rij), deltaij is Kronecker delta
-    if propertyName is 'uuPrime2':
-        valsDecomp = calculateAnisotropicTensor(valsDecomp)
-    elif propertyName is 'U':
+    if propertyName == 'uuPrime2':
+        valsDecomp, k = calculateAnisotropicTensor(valsDecomp)
+        valsDecomp['kResolved'] = k
+    elif propertyName == 'U':
         valsDecomp = mergeHorizontalComponent(valsDecomp)
 
 
     """
     2D Contourf Plots 
     """
-    # xLim, yLim, zLim = (x2D.min(), x2D.max()), (y2D.min(), y2D.max()), (z2D.min(), z2D.max())
-    # plotsLabel = iter(valLabels)
-    # for key, val in valsDecomp.items():
+    xLim, yLim, zLim = (x2D.min(), x2D.max()), (y2D.min(), y2D.max()), (z2D.min(), z2D.max())
+    plotsLabel = iter(valLabels)
+    for key, val in valsDecomp.items():
         # if slicesDir[sliceName] is 'vertical':
         #     slicePlot = Plot2D(x2D, z2D, z2D = val, equalAxis = True,
         #                                  name = sliceName + '_' + key, figDir = figDir, xLim = xLim, yLim = zLim,
@@ -170,20 +176,28 @@ for sliceName in sliceNames:
         #                                  zLabel = next(plotsLabel))
         #
         # else:
-            # slicePlot = Plot2D(x2D, y2D, z2D = val, equalAxis = True,
-            #                    name = sliceName + '_' + key, figDir = figDir, xLim = xLim, yLim = yLim,
-            #                    show = show, xLabel = xLabel, yLabel = yLabel, save = save,
-            #                    zLabel = next(plotsLabel))
+        #     slicePlot = Plot2D(x2D, y2D, z2D = val, equalAxis = True,
+        #                        name = sliceName + '_' + key, figDir = figDir, xLim = xLim, yLim = yLim,
+        #                        show = show, xLabel = xLabel, yLabel = yLabel, save = save,
+        #                        zLabel = next(plotsLabel))
         # slicePlot = Plot2D_InsetZoom(x2D, z2D, zoomBox = (1000, 2500, 0, 500), z2D = val, equalAxis = True, name = sliceName + '_' + key, figDir = figDir, xLim = xLim, yLim = zLim, show = show, xLabel = xLabel, yLabel = zLabel, save = save, zLabel = next(plotsLabel))
-        # slicePlot = PlotSurfaceSlices3D(x2D, y2D, z2D, val, name = sliceName + '_' + key + '_3d', figDir = figDir, xLim = xLim, yLim = yLim, zLim = zLim, show = show, xLabel = xLabel, yLabel = yLabel, zLabel = zLabel, save = save, cmapLabel = next(plotsLabel))
+        # plotType = 'contour2D'
 
-        # slicePlot.initializeFigure()
-        # slicePlot.plotFigure(contourLvl = 100)
-        # # slicePlot.plotFigure()
-        # slicePlot.finalizeFigure(transparentBg = transparentBg, cbarOrientate = 'vertical')
+        slicePlot = PlotSurfaceSlices3D(x2D, y2D, z2D, val, name = sliceName + '_' + key + '_3d', figDir = figDir, xLim = xLim, yLim = yLim, zLim = zLim, show = show, xLabel = xLabel, yLabel = yLabel, zLabel = zLabel, save = save, cmapLabel = next(plotsLabel), viewAngles = viewAngle, figWidth = figWidth)
+        plotType = 'surface3D'
 
-    horSliceLst.append(valsDecomp['hor'])
-    zSliceLst.append(valsDecomp['2'])
+        slicePlot.initializeFigure()
+        if plotType == 'contour2D':
+            slicePlot.plotFigure(contourLvl = 100)
+        else:
+            slicePlot.plotFigure()
+
+        slicePlot.finalizeFigure()
+
+    if propertyName == 'U':
+        horSliceLst.append(valsDecomp['hor'])
+        zSliceLst.append(valsDecomp['2'])
+
     listX2D.append(x2D)
     listY2D.append(y2D)
     listZ2D.append(z2D)
@@ -192,15 +206,15 @@ for sliceName in sliceNames:
 """
 Multiple Slices of Horizontal Component 3D Plot
 """
-if slicesDir[sliceName] is 'horizontal':
-    slicePlot = PlotContourSlices3D(x2D, y2D, horSliceLst, sliceOffsets = sliceOffsets, contourLvl = 100, zLim = (0, 216), gradientBg = False, name = str(sliceNames) + '_hor', figDir = figDir, show = show, xLabel = xLabel, yLabel = yLabel, zLabel = zLabel, cmapLabel = r'$U_{\rm{hor}}$ [m/s]', save = save, cbarOrientate = 'vertical')
-else:
-    slicePlot = PlotSurfaceSlices3D(listX2D, listY2D, listZ2D, horSliceLst, name = str(sliceNames) + '_hor', figDir = figDir, show = show, xLabel = xLabel,
-                                    yLabel = yLabel, zLabel = zLabel, save = save, cmapLabel = r'$U_{\rm{hor}}$ [m/s]', viewAngles = viewAngle, figWidth = figWidth, xLim = xLim, yLim = yLim, zLim = zLim, equalAxis = equalAxis)
-
-slicePlot.initializeFigure()
-slicePlot.plotFigure()
-slicePlot.finalizeFigure()
+# if slicesDir[sliceName] is 'horizontal':
+#     slicePlot = PlotContourSlices3D(x2D, y2D, horSliceLst, sliceOffsets = sliceOffsets, contourLvl = 100, zLim = (0, 216), gradientBg = False, name = str(sliceNames) + '_hor', figDir = figDir, show = show, xLabel = xLabel, yLabel = yLabel, zLabel = zLabel, cmapLabel = r'$U_{\rm{hor}}$ [m/s]', save = save, cbarOrientate = 'vertical')
+# else:
+#     slicePlot = PlotSurfaceSlices3D(listX2D, listY2D, listZ2D, horSliceLst, name = str(sliceNames) + '_hor', figDir = figDir, show = show, xLabel = xLabel,
+#                                     yLabel = yLabel, zLabel = zLabel, save = save, cmapLabel = r'$U_{\rm{hor}}$ [m/s]', viewAngles = viewAngle, figWidth = figWidth, xLim = xLim, yLim = yLim, zLim = zLim, equalAxis = equalAxis)
+#
+# slicePlot.initializeFigure()
+# slicePlot.plotFigure()
+# slicePlot.finalizeFigure()
 
 
 """

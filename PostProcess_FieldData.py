@@ -23,11 +23,11 @@ class FieldData:
                 self.times = os.listdir(self.caseFullPath)
                 try:
                     self.times.remove(resultFolder)
-                except OSError:
+                except ValueError:
                     pass
 
             # Go through all provided times
-            for time in times:
+            for time in self.times:
                 self.caseTimeFullPaths[str(time)] = self.caseFullPath + str(time) + '/'
                 # In the result directory, there are time directories
                 self.resultPath[str(time)] = caseDir + '/' + caseName + '/Fields/' + resultFolder + '/' + str(time) + '/'
@@ -171,11 +171,14 @@ class FieldData:
 
 
     def readCellCenterCoordinates(self):
-        # cellCenters has to be in the order of x, y, z
-        ccx = of.parse_internal_field(self.caseTimeFullPathsRand + self.cellCenters[0])
-        ccy = of.parse_internal_field(self.caseTimeFullPathsRand + self.cellCenters[1])
-        ccz = of.parse_internal_field(self.caseTimeFullPathsRand + self.cellCenters[2])
-        cc = np.vstack((ccx, ccy, ccz))
+        try:
+            # cellCenters has to be in the order of x, y, z
+            ccx = of.parse_internal_field(self.caseTimeFullPaths[self.times[-1]] + self.cellCenters[0])
+            ccy = of.parse_internal_field(self.caseTimeFullPaths[self.times[-1]] + self.cellCenters[1])
+            ccz = of.parse_internal_field(self.caseTimeFullPaths[self.times[-1]] + self.cellCenters[2])
+            cc = np.vstack((ccx, ccy, ccz))
+        except:
+            warn('\nCell centers have to be stored in the latest time directory', stacklevel = 2)
 
         print('\nCell center coordinates read')
         return ccx, ccy, ccz, cc.T
@@ -270,11 +273,16 @@ class FieldData:
         x3D, y3D, z3D = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precisionX,
                         y.min()*bnd[0]:y.max()*bnd[1]:precisionY,
                         z.min()*bnd[0]:z.max()*bnd[1]:precisionZ]
-        requestPts = np.vstack((x3D.ravel(), y3D.ravel(), z3D.ravel())).T
+        # requestPts = np.vstack((x3D.ravel(), y3D.ravel(), z3D.ravel())).T
+        requestPts = (x3D.ravel(), y3D.ravel(), z3D.ravel())
         dim = vals.shape
         orders, milestone, cnt = [], 2, 0
+        # If vals is 1D, i.e. scalar field
+        if len(dim) == 1:
+            print('\nInterpolating scalar field...')
+            valsND = griddata(knownPts, vals, requestPts, method = interpMethod)
         # If vals is 2D
-        if len(dim) == 2:
+        elif len(dim) == 2:
             # Initialize nRow x nCol x nComponent array valsND by interpolating 1st component of the values, x, or xx,
             # as others come later in the loop below
             valsND = griddata(knownPts, vals[:, 0].ravel(), requestPts, method = interpMethod)
@@ -294,6 +302,9 @@ class FieldData:
                 if progress >= milestone:
                     print(' ' + str(milestone) + '%...', end = '')
                     milestone += 2
+
+            print(orders)
+            valsND = valsND[:, :, :, np.array(orders)]
         # If vals is 3D or more
         else:
             print('good')
@@ -322,8 +333,9 @@ class FieldData:
                     print(' ' + str(milestone) + '%...', end = '')
                     milestone += 2
 
-        print(orders)
-        # valsND = valsND[:, :, :, np.array(orders)]
+            print(orders)
+            valsND = valsND[:, :, :, np.array(orders)]
+
         # If vals was 4D, then valsND should be 5D
         if len(dim) == 4:
             valsND = np.reshape(valsND, (valsND.shape[0], valsND.shape[1], dim[2], dim[3]))
@@ -347,11 +359,15 @@ class FieldData:
         # requestPts = np.vstack((x3D.ravel(), y3D.ravel(), z3D.ravel())).T
         dim = vals.shape
         orders, milestone, cnt = [], 2, 0
-        if len(dim) == 2:
+        if len(dim) == 1:
+            rbf = Rbf(x, y, z, vals, function = function)
+            valsND = rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())
+        elif len(dim) == 2:
             rbf = Rbf(x, y, z, vals[:, 0], function = function)
             valsND = rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())
             for i in prange(1, dim[1]):
                 print(i)
+                orders.append(i)
                 rbf = Rbf(x, y, z, vals[:, i], function = function)
                 valsND = np.vstack((valsND, rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())))
                 # Gauge progress
@@ -360,6 +376,9 @@ class FieldData:
                 if progress >= milestone:
                     print(' ' + str(milestone) + '%...', end = '')
                     milestone += 2
+
+            print(orders)
+            valsND = valsND[:, :, :, np.array(orders)]
         else:
             # If the vals is 4D or above, reduce it to 3D
             if len(dim) > 3:
@@ -369,6 +388,7 @@ class FieldData:
             valsND = rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())
             for i in prange(1, dim[1]):
                 print(i)
+                orders.append(i)
                 rbf = Rbf(x, y, z, vals[:, :, i], function = function)
                 valsND = np.vstack((valsND, rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())))
                 # Gauge progress
@@ -377,6 +397,9 @@ class FieldData:
                 if progress >= milestone:
                     print(' ' + str(milestone) + '%...', end = '')
                     milestone += 2
+
+            print(orders)
+            valsND = valsND[:, :, :, np.array(orders)]
 
         return x3D, y3D, z3D, valsND
 
