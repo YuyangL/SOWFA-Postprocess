@@ -118,11 +118,11 @@ def getArrayStepping(arr, section = (0, 1e9), which = 'min'):
             diff = diffNew
         elif which is 'max' and diffNew > diff:
             diff = diffNew
-            
+
         i += 1
-        
+
     return diffNew
-            
+
 
 def convertAngleToNormalVector(cClockAngleXY, clockAngleZ, unit = 'deg'):
     # clockAngleZ is the clockwise angle from z axis when viewing from either xz plane or yz plane
@@ -163,13 +163,14 @@ def timer(func):
         value = func(*args, **kwargs)
         end_time = time.perf_counter()      # 2
         run_time = end_time - start_time    # 3
-        print(f"\nFinished {func.__name__!r} in {run_time:.4f} secs")
+#        print(f"\nFinished {func.__name__!r} in {run_time:.4f} secs")
+        print('\nFinished {!r} in {:.4f} s'.format(func.__name__, run_time))
         return value
     return wrapper_timer
 
 
 
-    
+
 # def interpolateField2D(X, Y, Xtar, Ytar):
 
 
