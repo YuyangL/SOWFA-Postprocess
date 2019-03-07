@@ -13,6 +13,7 @@ User Inputs
 """
 caseDir, case = 'J:', 'ABL_N_H'
 # caseDir = '/media/yluan/Toshiba External Drive/'
+caseDir = '/media/yluan/1'
 # If slice time is 'auto', use the 1st time directory in slice folder
 sliceTime = 'auto'  # 'auto', '<time>'
 # Whether to merge Kx and Ky into Kr
@@ -324,7 +325,8 @@ x2D, y2D, z2D, U2D, u2D, v2D, w2D = PostProcess_EnergySpectrum.readStructuredSli
 # [DEPRECATED]
 # E, Evert, Kr = PostProcess_EnergySpectrum.getSliceEnergySpectrum(u2D, v2D, w2D, cellSizes = np.array([10., 10.]))
 t1 = time.time()
-print(f'\nFinished readSliceRawData in {t1 - t0} s')
+#print(f'\nFinished readSliceRawData in {t1 - t0} s')
+print('\nFinished readSliceRawData in {:.4f} s'.format(t1 - t0))
 
 # Calculate 2-point (cross-)correlation and energy spectrum density and corresponding wave number
 # [DEPRECATED]
