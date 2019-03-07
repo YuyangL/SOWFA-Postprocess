@@ -11,10 +11,10 @@ from Utilities import readData
 """
 User Inputs
 """
-caseDir, case = 'J:', 'Doekemeijer'
+caseDir, case = 'J:', 'ABL_N_H'
 # caseDir = '/media/yluan/Toshiba External Drive/'
 # If slice time is 'auto', use the 1st time directory in slice folder
-sliceTime = '20000'  # 'auto', '<time>'
+sliceTime = 'auto'  # 'auto', '<time>'
 # Whether to merge Kx and Ky into Kr
 mergeXY = False
 sliceFolder, resultFolder = 'Slices', 'Result'
@@ -57,12 +57,6 @@ caseFullPath = caseDir + '/' + case + '/' + sliceFolder + '/'
 # If slice time is 'auto', select the 1st time directory
 sliceTime = os.listdir(caseFullPath)[0] if sliceTime == 'auto' else sliceTime
 resultPath = caseFullPath + resultFolder + '/' + sliceTime + '/'
-# Try to make the result directory
-try:
-    os.makedirs(resultPath)
-except OSError:
-    pass
-
 if case == 'ABL_N_H':
     label, E12refName, E33refName = 'ABL-N-H', 'E12_N_H', 'E33_N_H'
 elif case in ('ABL_N_L', 'ABL_N_L2'):
@@ -294,8 +288,8 @@ def getPlanarEnergySpectrum2(u2D, v2D, w2D, cellSizes, fftNorm = None, mergeXY =
     else:
         Kr_sorted = np.empty_like(Kx)
         # Decompose the DFT 2D arrays
-        Eij_x, Eij_y = np.empty((nPtKx, 6)), np.empty((nPtKy, 6))
-        Eii_x, Eii_y = np.empty(nPtKx), np.empty(nPtKy)
+        Eij_x, Eij_y = np.empty((nPtKx, 6), dtype = np.complex128), np.empty((nPtKy, 6), dtype = np.complex128)
+        Eii_x, Eii_y = np.empty(nPtKx, dtype = np.complex128), np.empty(nPtKy, dtype = np.complex128)
         # For x components, compute the average over y, for each Kx so that only one E exists for each K
         # Then integrate Rijfft, RiiFft by circumference of equal K since RijFft ~ m^4/s^2 and target Eij ~ m^3/s^2
         # dKx, dKy = Kx[1] - Kx[0], Ky[1] - Ky[0]
@@ -312,7 +306,7 @@ def getPlanarEnergySpectrum2(u2D, v2D, w2D, cellSizes, fftNorm = None, mergeXY =
 
             Eii_y[i] = 0.5*np.mean(RiiFft[i, :])*2*np.pi*Ky[i]
 
-        Eij, Eii = (Eij_x, Eij_y), (Eii_x, Eii_y)
+        Eij, Eii = (np.abs(Eij_x), np.abs(Eij_y)), (np.abs(Eii_x), np.abs(Eii_y))
 
     # TKE = 0.5*ui^2 = integral(Eii(Kr)) over dKr
     # Do this by summing up the area between each dKr

@@ -7,7 +7,7 @@ system = 'windows'  # 'windows', 'unix'
 fileName = 'PostProcess_EnergySpectrum'
 # fileName = 'PostProcess_AnisotropyTensor'
 
-if system is 'unix':
+if system == 'unix':
     ext_modules = [Extension(fileName,
                             [fileName + '.pyx'],
                             libraries=["m"],  # Unix-like specific

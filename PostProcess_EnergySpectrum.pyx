@@ -17,7 +17,7 @@ from libc.math cimport sqrt
 @cython.boundscheck(False)
 # Deactivate negative indexing
 @cython.wraparound(False)
-cpdef tuple readStructuredSliceData(str sliceName, str case = 'ABL_N_H', str caseDir = '.', str time = 'auto', str resultFolder = 'Result'):
+cpdef tuple readStructuredSliceData(str sliceName, str case = 'ABL_N_H', str caseDir = '.', str time = 'auto', str resultFolder = 'Result', str sliceFolder = 'Slices'):
     cdef str sliceFullPath
     cdef np.ndarray[np.float_t] row, scalarField
     # The following need numpy reshape method, thus not memoryview
@@ -25,12 +25,12 @@ cpdef tuple readStructuredSliceData(str sliceName, str case = 'ABL_N_H', str cas
     cdef np.ndarray[np.float_t, ndim = 2] data, x2D, y2D, z2D, u2D, v2D, w2D, scalarField2D
     cdef double valOld, val
     cdef int i, nPtX, nPtY
-    cdef str caseFullPath = caseDir + '/' + case + '/' + 'Slices/'
+    cdef str caseFullPath = caseDir + '/' + case + '/' + sliceFolder + '/'
     cdef str resultPath = caseFullPath + resultFolder + '/'
 
     # Try making the result folder, if it doesn't exist
     try:
-        os.makedirs(resultFolder)
+        os.makedirs(resultPath)
     except OSError:
         pass
 

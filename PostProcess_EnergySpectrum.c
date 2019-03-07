@@ -1126,7 +1126,7 @@ struct __pyx_opt_args_26PostProcess_EnergySpectrum_readStructuredSliceData;
 /* "PostProcess_EnergySpectrum.pyx":20
  * # Deactivate negative indexing
  * @cython.wraparound(False)
- * cpdef tuple readStructuredSliceData(str sliceName, str case = 'ABL_N_H', str caseDir = '.', str time = 'auto', str resultFolder = 'Result'):             # <<<<<<<<<<<<<<
+ * cpdef tuple readStructuredSliceData(str sliceName, str case = 'ABL_N_H', str caseDir = '.', str time = 'auto', str resultFolder = 'Result', str sliceFolder = 'Slices'):             # <<<<<<<<<<<<<<
  *     cdef str sliceFullPath
  *     cdef np.ndarray[np.float_t] row, scalarField
  */
@@ -1136,6 +1136,7 @@ struct __pyx_opt_args_26PostProcess_EnergySpectrum_readStructuredSliceData {
   PyObject *caseDir;
   PyObject *time;
   PyObject *resultFolder;
+  PyObject *sliceFolder;
 };
 
 /* --- Runtime support code (head) --- */
@@ -1754,7 +1755,7 @@ static const char __pyx_k_numpy[] = "numpy";
 static const char __pyx_k_print[] = "print";
 static const char __pyx_k_range[] = "range";
 static const char __pyx_k_Result[] = "Result";
-static const char __pyx_k_Slices[] = "Slices/";
+static const char __pyx_k_Slices[] = "Slices";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_ABL_N_H[] = "ABL_N_H";
 static const char __pyx_k_OSError[] = "OSError";
@@ -1767,6 +1768,7 @@ static const char __pyx_k_sliceName[] = "sliceName";
 static const char __pyx_k_ValueError[] = "ValueError";
 static const char __pyx_k_genfromtxt[] = "genfromtxt";
 static const char __pyx_k_ImportError[] = "ImportError";
+static const char __pyx_k_sliceFolder[] = "sliceFolder";
 static const char __pyx_k_RuntimeError[] = "RuntimeError";
 static const char __pyx_k_resultFolder[] = "resultFolder";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
@@ -1789,7 +1791,7 @@ static PyObject *__pyx_n_s_OSError;
 static PyObject *__pyx_n_s_Result;
 static PyObject *__pyx_n_s_RuntimeError;
 static PyObject *__pyx_kp_s_Slice_raw_data_read;
-static PyObject *__pyx_kp_s_Slices;
+static PyObject *__pyx_n_s_Slices;
 static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_kp_s__2;
 static PyObject *__pyx_n_s_auto;
@@ -1817,11 +1819,12 @@ static PyObject *__pyx_n_s_print;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_reshape;
 static PyObject *__pyx_n_s_resultFolder;
+static PyObject *__pyx_n_s_sliceFolder;
 static PyObject *__pyx_n_s_sliceName;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_time;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
-static PyObject *__pyx_pf_26PostProcess_EnergySpectrum_readStructuredSliceData(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_sliceName, PyObject *__pyx_v_case, PyObject *__pyx_v_caseDir, PyObject *__pyx_v_time, PyObject *__pyx_v_resultFolder); /* proto */
+static PyObject *__pyx_pf_26PostProcess_EnergySpectrum_readStructuredSliceData(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_sliceName, PyObject *__pyx_v_case, PyObject *__pyx_v_caseDir, PyObject *__pyx_v_time, PyObject *__pyx_v_resultFolder, PyObject *__pyx_v_sliceFolder); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static PyObject *__pyx_int_0;
@@ -1850,7 +1853,7 @@ static PyObject *__pyx_tuple__17;
 /* "PostProcess_EnergySpectrum.pyx":20
  * # Deactivate negative indexing
  * @cython.wraparound(False)
- * cpdef tuple readStructuredSliceData(str sliceName, str case = 'ABL_N_H', str caseDir = '.', str time = 'auto', str resultFolder = 'Result'):             # <<<<<<<<<<<<<<
+ * cpdef tuple readStructuredSliceData(str sliceName, str case = 'ABL_N_H', str caseDir = '.', str time = 'auto', str resultFolder = 'Result', str sliceFolder = 'Slices'):             # <<<<<<<<<<<<<<
  *     cdef str sliceFullPath
  *     cdef np.ndarray[np.float_t] row, scalarField
  */
@@ -1861,6 +1864,7 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
   PyObject *__pyx_v_caseDir = ((PyObject*)__pyx_kp_s_);
   PyObject *__pyx_v_time = ((PyObject*)__pyx_n_s_auto);
   PyObject *__pyx_v_resultFolder = ((PyObject*)__pyx_n_s_Result);
+  PyObject *__pyx_v_sliceFolder = ((PyObject*)__pyx_n_s_Slices);
   PyObject *__pyx_v_sliceFullPath = 0;
   PyArrayObject *__pyx_v_scalarField = 0;
   PyArrayObject *__pyx_v_x = 0;
@@ -1883,7 +1887,7 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
   int __pyx_v_nPtX;
   int __pyx_v_nPtY;
   PyObject *__pyx_v_caseFullPath = 0;
-  CYTHON_UNUSED PyObject *__pyx_v_resultPath = 0;
+  PyObject *__pyx_v_resultPath = 0;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_data;
   __Pyx_Buffer __pyx_pybuffer_data;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_scalarField;
@@ -1955,6 +1959,9 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
           __pyx_v_time = __pyx_optional_args->time;
           if (__pyx_optional_args->__pyx_n > 3) {
             __pyx_v_resultFolder = __pyx_optional_args->resultFolder;
+            if (__pyx_optional_args->__pyx_n > 4) {
+              __pyx_v_sliceFolder = __pyx_optional_args->sliceFolder;
+            }
           }
         }
       }
@@ -2025,7 +2032,7 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
   /* "PostProcess_EnergySpectrum.pyx":28
  *     cdef double valOld, val
  *     cdef int i, nPtX, nPtY
- *     cdef str caseFullPath = caseDir + '/' + case + '/' + 'Slices/'             # <<<<<<<<<<<<<<
+ *     cdef str caseFullPath = caseDir + '/' + case + '/' + sliceFolder + '/'             # <<<<<<<<<<<<<<
  *     cdef str resultPath = caseFullPath + resultFolder + '/'
  * 
  */
@@ -2037,32 +2044,35 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
   __pyx_t_1 = PyNumber_Add(__pyx_t_2, __pyx_kp_s__2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_kp_s_Slices); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_v_sliceFolder); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v_caseFullPath = ((PyObject*)__pyx_t_2);
-  __pyx_t_2 = 0;
+  __pyx_t_1 = PyNumber_Add(__pyx_t_2, __pyx_kp_s__2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_v_caseFullPath = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
 
   /* "PostProcess_EnergySpectrum.pyx":29
  *     cdef int i, nPtX, nPtY
- *     cdef str caseFullPath = caseDir + '/' + case + '/' + 'Slices/'
+ *     cdef str caseFullPath = caseDir + '/' + case + '/' + sliceFolder + '/'
  *     cdef str resultPath = caseFullPath + resultFolder + '/'             # <<<<<<<<<<<<<<
  * 
  *     # Try making the result folder, if it doesn't exist
  */
-  __pyx_t_2 = PyNumber_Add(__pyx_v_caseFullPath, __pyx_v_resultFolder); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 29, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = PyNumber_Add(__pyx_t_2, __pyx_kp_s__2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Add(__pyx_v_caseFullPath, __pyx_v_resultFolder); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_v_resultPath = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
+  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_kp_s__2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_resultPath = ((PyObject*)__pyx_t_2);
+  __pyx_t_2 = 0;
 
   /* "PostProcess_EnergySpectrum.pyx":32
  * 
  *     # Try making the result folder, if it doesn't exist
  *     try:             # <<<<<<<<<<<<<<
- *         os.makedirs(resultFolder)
+ *         os.makedirs(resultPath)
  *     except OSError:
  */
   {
@@ -2077,37 +2087,37 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
       /* "PostProcess_EnergySpectrum.pyx":33
  *     # Try making the result folder, if it doesn't exist
  *     try:
- *         os.makedirs(resultFolder)             # <<<<<<<<<<<<<<
+ *         os.makedirs(resultPath)             # <<<<<<<<<<<<<<
  *     except OSError:
  *         pass
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_os); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 33, __pyx_L3_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_makedirs); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 33, __pyx_L3_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_os); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L3_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_makedirs); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 33, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = NULL;
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_1 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_6);
-        if (likely(__pyx_t_2)) {
+        __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_6);
+        if (likely(__pyx_t_1)) {
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-          __Pyx_INCREF(__pyx_t_2);
+          __Pyx_INCREF(__pyx_t_1);
           __Pyx_INCREF(function);
           __Pyx_DECREF_SET(__pyx_t_6, function);
         }
       }
-      __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_2, __pyx_v_resultFolder) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_resultFolder);
-      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L3_error)
-      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_2 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_1, __pyx_v_resultPath) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_resultPath);
+      __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 33, __pyx_L3_error)
+      __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
       /* "PostProcess_EnergySpectrum.pyx":32
  * 
  *     # Try making the result folder, if it doesn't exist
  *     try:             # <<<<<<<<<<<<<<
- *         os.makedirs(resultFolder)
+ *         os.makedirs(resultPath)
  *     except OSError:
  */
     }
@@ -2122,7 +2132,7 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
 
     /* "PostProcess_EnergySpectrum.pyx":34
  *     try:
- *         os.makedirs(resultFolder)
+ *         os.makedirs(resultPath)
  *     except OSError:             # <<<<<<<<<<<<<<
  *         pass
  * 
@@ -2139,7 +2149,7 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
  * 
  *     # Try making the result folder, if it doesn't exist
  *     try:             # <<<<<<<<<<<<<<
- *         os.makedirs(resultFolder)
+ *         os.makedirs(resultPath)
  *     except OSError:
  */
     __Pyx_XGIVEREF(__pyx_t_3);
@@ -2164,23 +2174,23 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
  */
   __pyx_t_8 = (__pyx_v_time == __pyx_n_s_auto);
   if ((__pyx_t_8 != 0)) {
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_os); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_listdir); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 38, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_os); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_listdir); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 38, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = NULL;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_9))) {
-      __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_9);
-      if (likely(__pyx_t_2)) {
+      __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_9);
+      if (likely(__pyx_t_1)) {
         PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_9);
-        __Pyx_INCREF(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_1);
         __Pyx_INCREF(function);
         __Pyx_DECREF_SET(__pyx_t_9, function);
       }
     }
-    __pyx_t_6 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_9, __pyx_t_2, __pyx_v_caseFullPath) : __Pyx_PyObject_CallOneArg(__pyx_t_9, __pyx_v_caseFullPath);
-    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_6 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_9, __pyx_t_1, __pyx_v_caseFullPath) : __Pyx_PyObject_CallOneArg(__pyx_t_9, __pyx_v_caseFullPath);
+    __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 38, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
@@ -2188,14 +2198,14 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
     __Pyx_GOTREF(__pyx_t_9);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     if (!(likely(PyString_CheckExact(__pyx_t_9))||((__pyx_t_9) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_t_9)->tp_name), 0))) __PYX_ERR(0, 38, __pyx_L1_error)
-    __pyx_t_1 = __pyx_t_9;
+    __pyx_t_2 = __pyx_t_9;
     __pyx_t_9 = 0;
   } else {
     __Pyx_INCREF(__pyx_v_time);
-    __pyx_t_1 = __pyx_v_time;
+    __pyx_t_2 = __pyx_v_time;
   }
-  __Pyx_DECREF_SET(__pyx_v_time, ((PyObject*)__pyx_t_1));
-  __pyx_t_1 = 0;
+  __Pyx_DECREF_SET(__pyx_v_time, ((PyObject*)__pyx_t_2));
+  __pyx_t_2 = 0;
 
   /* "PostProcess_EnergySpectrum.pyx":40
  *     time = os.listdir(caseFullPath)[0] if time is 'auto' else time
@@ -2204,16 +2214,16 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
  *     # Read slice data, headers with # are auto trimmed
  *     data = np.genfromtxt(sliceFullPath)
  */
-  __pyx_t_1 = PyNumber_Add(__pyx_v_caseFullPath, __pyx_v_time); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_9 = PyNumber_Add(__pyx_t_1, __pyx_kp_s__2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Add(__pyx_v_caseFullPath, __pyx_v_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_9 = PyNumber_Add(__pyx_t_2, __pyx_kp_s__2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyNumber_Add(__pyx_t_9, __pyx_v_sliceName); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = PyNumber_Add(__pyx_t_9, __pyx_v_sliceName); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-  __pyx_v_sliceFullPath = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
+  __pyx_v_sliceFullPath = ((PyObject*)__pyx_t_2);
+  __pyx_t_2 = 0;
 
   /* "PostProcess_EnergySpectrum.pyx":42
  *     sliceFullPath = caseFullPath + time + '/' + sliceName
@@ -2237,13 +2247,13 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
       __Pyx_DECREF_SET(__pyx_t_6, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_9, __pyx_v_sliceFullPath) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_sliceFullPath);
+  __pyx_t_2 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_9, __pyx_v_sliceFullPath) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_sliceFullPath);
   __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 42, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 42, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 42, __pyx_L1_error)
-  __pyx_t_10 = ((PyArrayObject *)__pyx_t_1);
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 42, __pyx_L1_error)
+  __pyx_t_10 = ((PyArrayObject *)__pyx_t_2);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_data.rcbuffer->pybuffer);
@@ -2262,8 +2272,8 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
     if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 42, __pyx_L1_error)
   }
   __pyx_t_10 = 0;
-  __pyx_v_data = ((PyArrayObject *)__pyx_t_1);
-  __pyx_t_1 = 0;
+  __pyx_v_data = ((PyArrayObject *)__pyx_t_2);
+  __pyx_t_2 = 0;
 
   /* "PostProcess_EnergySpectrum.pyx":44
  *     data = np.genfromtxt(sliceFullPath)
@@ -2272,16 +2282,16 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
  *     # Mesh size in x
  *     # Since the slice is sorted from low to high x, count the number of x
  */
-  __pyx_t_1 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_data), __pyx_tuple__4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_data), __pyx_tuple__4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 44, __pyx_L1_error)
   __pyx_t_6 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_data), __pyx_tuple__5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 44, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 44, __pyx_L1_error)
   __pyx_t_9 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_data), __pyx_tuple__6); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 44, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   if (!(likely(((__pyx_t_9) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_9, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 44, __pyx_L1_error)
-  __pyx_t_11 = ((PyArrayObject *)__pyx_t_1);
+  __pyx_t_11 = ((PyArrayObject *)__pyx_t_2);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_x.rcbuffer->pybuffer);
@@ -2300,8 +2310,8 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
     if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 44, __pyx_L1_error)
   }
   __pyx_t_11 = 0;
-  __pyx_v_x = ((PyArrayObject *)__pyx_t_1);
-  __pyx_t_1 = 0;
+  __pyx_v_x = ((PyArrayObject *)__pyx_t_2);
+  __pyx_t_2 = 0;
   __pyx_t_11 = ((PyArrayObject *)__pyx_t_6);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -2494,30 +2504,30 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
  */
   __pyx_t_9 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_x), __pyx_n_s_reshape); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_16 = PyTuple_New(2); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
-  __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyTuple_SET_ITEM(__pyx_t_16, 1, __pyx_t_2);
-  __pyx_t_1 = 0;
+  PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_16, 1, __pyx_t_1);
   __pyx_t_2 = 0;
-  __pyx_t_2 = NULL;
+  __pyx_t_1 = 0;
+  __pyx_t_1 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_9))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_9);
-    if (likely(__pyx_t_2)) {
+    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_9);
+    if (likely(__pyx_t_1)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_9);
-      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_1);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_9, function);
     }
   }
-  __pyx_t_6 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_9, __pyx_t_2, __pyx_t_16) : __Pyx_PyObject_CallOneArg(__pyx_t_9, __pyx_t_16);
-  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_6 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_9, __pyx_t_1, __pyx_t_16) : __Pyx_PyObject_CallOneArg(__pyx_t_9, __pyx_t_16);
+  __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
   if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
@@ -2525,30 +2535,30 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
   if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 56, __pyx_L1_error)
   __pyx_t_16 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_y), __pyx_n_s_reshape); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_17 = PyTuple_New(2); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __Pyx_GIVEREF(__pyx_t_2);
-  PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_17, 1, __pyx_t_1);
-  __pyx_t_2 = 0;
+  PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_17, 1, __pyx_t_2);
   __pyx_t_1 = 0;
-  __pyx_t_1 = NULL;
+  __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_16))) {
-    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_16);
-    if (likely(__pyx_t_1)) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_16);
+    if (likely(__pyx_t_2)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_16);
-      __Pyx_INCREF(__pyx_t_1);
+      __Pyx_INCREF(__pyx_t_2);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_16, function);
     }
   }
-  __pyx_t_9 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_1, __pyx_t_17) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_t_17);
-  __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_9 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_2, __pyx_t_17) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_t_17);
+  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
@@ -2556,30 +2566,30 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
   if (!(likely(((__pyx_t_9) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_9, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 56, __pyx_L1_error)
   __pyx_t_17 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_z), __pyx_n_s_reshape); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
-  __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_2);
-  PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_t_2);
-  __pyx_t_1 = 0;
+  PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_t_1);
   __pyx_t_2 = 0;
-  __pyx_t_2 = NULL;
+  __pyx_t_1 = 0;
+  __pyx_t_1 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_17))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_17);
-    if (likely(__pyx_t_2)) {
+    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_17);
+    if (likely(__pyx_t_1)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
-      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_1);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_17, function);
     }
   }
-  __pyx_t_16 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_2, __pyx_t_18) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_18);
-  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_16 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_1, __pyx_t_18) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_18);
+  __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
   if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
@@ -2734,7 +2744,7 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
  *     u, v, w = data[:, 3], data[:, 4], data[:, 5]
  *     scalarField = np.empty(data.shape[0])             # <<<<<<<<<<<<<<
  *     # Go through every row and calculate resultant value
- *     for i in prange(data.shape[0], nogil = True):
+ *     # nogil doesn't support numpy
  */
   __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_np); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
@@ -2782,9 +2792,9 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
   __pyx_v_scalarField = ((PyArrayObject *)__pyx_t_6);
   __pyx_t_6 = 0;
 
-  /* "PostProcess_EnergySpectrum.pyx":61
- *     scalarField = np.empty(data.shape[0])
- *     # Go through every row and calculate resultant value
+  /* "PostProcess_EnergySpectrum.pyx":63
+ *     # nogil doesn't support numpy
+ *     # Using sqrt from clib.math instead, for 1D array
  *     for i in prange(data.shape[0], nogil = True):             # <<<<<<<<<<<<<<
  *         scalarField[i] = sqrt(data[i, 3]**2 + data[i, 4]**2 + data[i, 5]**2)
  * #    for i, row in enumerate(data):
@@ -2819,8 +2829,8 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
                         {
                             __pyx_v_i = (int)(0 + 1 * __pyx_t_21);
 
-                            /* "PostProcess_EnergySpectrum.pyx":62
- *     # Go through every row and calculate resultant value
+                            /* "PostProcess_EnergySpectrum.pyx":64
+ *     # Using sqrt from clib.math instead, for 1D array
  *     for i in prange(data.shape[0], nogil = True):
  *         scalarField[i] = sqrt(data[i, 3]**2 + data[i, 4]**2 + data[i, 5]**2)             # <<<<<<<<<<<<<<
  * #    for i, row in enumerate(data):
@@ -2847,9 +2857,9 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
         #endif
       }
 
-      /* "PostProcess_EnergySpectrum.pyx":61
- *     scalarField = np.empty(data.shape[0])
- *     # Go through every row and calculate resultant value
+      /* "PostProcess_EnergySpectrum.pyx":63
+ *     # nogil doesn't support numpy
+ *     # Using sqrt from clib.math instead, for 1D array
  *     for i in prange(data.shape[0], nogil = True):             # <<<<<<<<<<<<<<
  *         scalarField[i] = sqrt(data[i, 3]**2 + data[i, 4]**2 + data[i, 5]**2)
  * #    for i, row in enumerate(data):
@@ -2866,20 +2876,20 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
       }
   }
 
-  /* "PostProcess_EnergySpectrum.pyx":69
+  /* "PostProcess_EnergySpectrum.pyx":71
  * #        scalarField = data[:, 3]
  * 
  *     u2D, v2D, w2D = u.reshape((nPtY, nPtX)), v.reshape((nPtY, nPtX)), w.reshape((nPtY, nPtX))             # <<<<<<<<<<<<<<
  *     scalarField2D = scalarField.reshape((nPtY, nPtX))
  * 
  */
-  __pyx_t_16 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_u), __pyx_n_s_reshape); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_t_16 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_u), __pyx_n_s_reshape); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
-  __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_GIVEREF(__pyx_t_9);
   PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_t_9);
@@ -2900,22 +2910,22 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
   __pyx_t_6 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_17, __pyx_t_18) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_t_18);
   __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
   __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-  if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 69, __pyx_L1_error)
+  if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 69, __pyx_L1_error)
-  __pyx_t_18 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_v), __pyx_n_s_reshape); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 69, __pyx_L1_error)
+  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_18 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_v), __pyx_n_s_reshape); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
-  __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_17);
-  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_17);
+  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_17);
   __Pyx_GIVEREF(__pyx_t_9);
-  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_9);
+  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_9);
   __pyx_t_17 = 0;
   __pyx_t_9 = 0;
   __pyx_t_9 = NULL;
@@ -2928,44 +2938,44 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
       __Pyx_DECREF_SET(__pyx_t_18, function);
     }
   }
-  __pyx_t_16 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_18, __pyx_t_9, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_18, __pyx_t_2);
+  __pyx_t_16 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_18, __pyx_t_9, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_18, __pyx_t_1);
   __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
   __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-  if (!(likely(((__pyx_t_16) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_16, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 69, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_w), __pyx_n_s_reshape); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 69, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 69, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
+  if (!(likely(((__pyx_t_16) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_16, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_w), __pyx_n_s_reshape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_9);
+  __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_17);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_9);
-  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_9);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_9);
   __Pyx_GIVEREF(__pyx_t_17);
-  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_17);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_17);
   __pyx_t_9 = 0;
   __pyx_t_17 = 0;
   __pyx_t_17 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_2);
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
+    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_1);
     if (likely(__pyx_t_17)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
       __Pyx_INCREF(__pyx_t_17);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
+      __Pyx_DECREF_SET(__pyx_t_1, function);
     }
   }
-  __pyx_t_18 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_17, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1);
+  __pyx_t_18 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_17, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_2);
   __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 69, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_18);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(((__pyx_t_18) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_18, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 69, __pyx_L1_error)
+  if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_18);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (!(likely(((__pyx_t_18) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_18, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 71, __pyx_L1_error)
   __pyx_t_10 = ((PyArrayObject *)__pyx_t_6);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -2982,7 +2992,7 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
       __pyx_t_3 = __pyx_t_4 = __pyx_t_5 = 0;
     }
     __pyx_pybuffernd_u2D.diminfo[0].strides = __pyx_pybuffernd_u2D.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_u2D.diminfo[0].shape = __pyx_pybuffernd_u2D.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_u2D.diminfo[1].strides = __pyx_pybuffernd_u2D.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_u2D.diminfo[1].shape = __pyx_pybuffernd_u2D.rcbuffer->pybuffer.shape[1];
-    if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 69, __pyx_L1_error)
+    if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 71, __pyx_L1_error)
   }
   __pyx_t_10 = 0;
   __pyx_v_u2D = ((PyArrayObject *)__pyx_t_6);
@@ -3003,7 +3013,7 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
       __pyx_t_5 = __pyx_t_4 = __pyx_t_3 = 0;
     }
     __pyx_pybuffernd_v2D.diminfo[0].strides = __pyx_pybuffernd_v2D.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_v2D.diminfo[0].shape = __pyx_pybuffernd_v2D.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_v2D.diminfo[1].strides = __pyx_pybuffernd_v2D.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_v2D.diminfo[1].shape = __pyx_pybuffernd_v2D.rcbuffer->pybuffer.shape[1];
-    if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 69, __pyx_L1_error)
+    if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 71, __pyx_L1_error)
   }
   __pyx_t_10 = 0;
   __pyx_v_v2D = ((PyArrayObject *)__pyx_t_16);
@@ -3024,50 +3034,50 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
       __pyx_t_3 = __pyx_t_4 = __pyx_t_5 = 0;
     }
     __pyx_pybuffernd_w2D.diminfo[0].strides = __pyx_pybuffernd_w2D.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_w2D.diminfo[0].shape = __pyx_pybuffernd_w2D.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_w2D.diminfo[1].strides = __pyx_pybuffernd_w2D.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_w2D.diminfo[1].shape = __pyx_pybuffernd_w2D.rcbuffer->pybuffer.shape[1];
-    if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 69, __pyx_L1_error)
+    if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 71, __pyx_L1_error)
   }
   __pyx_t_10 = 0;
   __pyx_v_w2D = ((PyArrayObject *)__pyx_t_18);
   __pyx_t_18 = 0;
 
-  /* "PostProcess_EnergySpectrum.pyx":70
+  /* "PostProcess_EnergySpectrum.pyx":72
  * 
  *     u2D, v2D, w2D = u.reshape((nPtY, nPtX)), v.reshape((nPtY, nPtX)), w.reshape((nPtY, nPtX))
  *     scalarField2D = scalarField.reshape((nPtY, nPtX))             # <<<<<<<<<<<<<<
  * 
  *     print('\nSlice raw data read')
  */
-  __pyx_t_16 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_scalarField), __pyx_n_s_reshape); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_16 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_scalarField), __pyx_n_s_reshape); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_nPtY); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 70, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_nPtX); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 72, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_6);
-  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_6);
-  __Pyx_GIVEREF(__pyx_t_2);
-  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_6);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_1);
   __pyx_t_6 = 0;
-  __pyx_t_2 = 0;
-  __pyx_t_2 = NULL;
+  __pyx_t_1 = 0;
+  __pyx_t_1 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_16))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_16);
-    if (likely(__pyx_t_2)) {
+    __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_16);
+    if (likely(__pyx_t_1)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_16);
-      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_1);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_16, function);
     }
   }
-  __pyx_t_18 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_2, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_18 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_1, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-  if (!(likely(((__pyx_t_18) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_18, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 70, __pyx_L1_error)
+  if (!(likely(((__pyx_t_18) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_18, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 72, __pyx_L1_error)
   __pyx_t_10 = ((PyArrayObject *)__pyx_t_18);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -3084,22 +3094,22 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
       __pyx_t_5 = __pyx_t_4 = __pyx_t_3 = 0;
     }
     __pyx_pybuffernd_scalarField2D.diminfo[0].strides = __pyx_pybuffernd_scalarField2D.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_scalarField2D.diminfo[0].shape = __pyx_pybuffernd_scalarField2D.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_scalarField2D.diminfo[1].strides = __pyx_pybuffernd_scalarField2D.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_scalarField2D.diminfo[1].shape = __pyx_pybuffernd_scalarField2D.rcbuffer->pybuffer.shape[1];
-    if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 70, __pyx_L1_error)
+    if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 72, __pyx_L1_error)
   }
   __pyx_t_10 = 0;
   __pyx_v_scalarField2D = ((PyArrayObject *)__pyx_t_18);
   __pyx_t_18 = 0;
 
-  /* "PostProcess_EnergySpectrum.pyx":72
+  /* "PostProcess_EnergySpectrum.pyx":74
  *     scalarField2D = scalarField.reshape((nPtY, nPtX))
  * 
  *     print('\nSlice raw data read')             # <<<<<<<<<<<<<<
  *     return x2D, y2D, z2D, scalarField2D, u2D, v2D, w2D
  * 
  */
-  if (__Pyx_PrintOne(0, __pyx_kp_s_Slice_raw_data_read) < 0) __PYX_ERR(0, 72, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_kp_s_Slice_raw_data_read) < 0) __PYX_ERR(0, 74, __pyx_L1_error)
 
-  /* "PostProcess_EnergySpectrum.pyx":73
+  /* "PostProcess_EnergySpectrum.pyx":75
  * 
  *     print('\nSlice raw data read')
  *     return x2D, y2D, z2D, scalarField2D, u2D, v2D, w2D             # <<<<<<<<<<<<<<
@@ -3107,7 +3117,7 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_18 = PyTuple_New(7); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_t_18 = PyTuple_New(7); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_INCREF(((PyObject *)__pyx_v_x2D));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_x2D));
@@ -3137,7 +3147,7 @@ static PyObject *__pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(Py
   /* "PostProcess_EnergySpectrum.pyx":20
  * # Deactivate negative indexing
  * @cython.wraparound(False)
- * cpdef tuple readStructuredSliceData(str sliceName, str case = 'ABL_N_H', str caseDir = '.', str time = 'auto', str resultFolder = 'Result'):             # <<<<<<<<<<<<<<
+ * cpdef tuple readStructuredSliceData(str sliceName, str case = 'ABL_N_H', str caseDir = '.', str time = 'auto', str resultFolder = 'Result', str sliceFolder = 'Slices'):             # <<<<<<<<<<<<<<
  *     cdef str sliceFullPath
  *     cdef np.ndarray[np.float_t] row, scalarField
  */
@@ -3223,20 +3233,24 @@ static PyObject *__pyx_pw_26PostProcess_EnergySpectrum_1readStructuredSliceData(
   PyObject *__pyx_v_caseDir = 0;
   PyObject *__pyx_v_time = 0;
   PyObject *__pyx_v_resultFolder = 0;
+  PyObject *__pyx_v_sliceFolder = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("readStructuredSliceData (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_sliceName,&__pyx_n_s_case,&__pyx_n_s_caseDir,&__pyx_n_s_time,&__pyx_n_s_resultFolder,0};
-    PyObject* values[5] = {0,0,0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_sliceName,&__pyx_n_s_case,&__pyx_n_s_caseDir,&__pyx_n_s_time,&__pyx_n_s_resultFolder,&__pyx_n_s_sliceFolder,0};
+    PyObject* values[6] = {0,0,0,0,0,0};
     values[1] = ((PyObject*)__pyx_n_s_ABL_N_H);
     values[2] = ((PyObject*)__pyx_kp_s_);
     values[3] = ((PyObject*)__pyx_n_s_auto);
     values[4] = ((PyObject*)__pyx_n_s_Result);
+    values[5] = ((PyObject*)__pyx_n_s_Slices);
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
+        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+        CYTHON_FALLTHROUGH;
         case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
         CYTHON_FALLTHROUGH;
         case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
@@ -3279,12 +3293,20 @@ static PyObject *__pyx_pw_26PostProcess_EnergySpectrum_1readStructuredSliceData(
           PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_resultFolder);
           if (value) { values[4] = value; kw_args--; }
         }
+        CYTHON_FALLTHROUGH;
+        case  5:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_sliceFolder);
+          if (value) { values[5] = value; kw_args--; }
+        }
       }
       if (unlikely(kw_args > 0)) {
         if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "readStructuredSliceData") < 0)) __PYX_ERR(0, 20, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+        CYTHON_FALLTHROUGH;
         case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
         CYTHON_FALLTHROUGH;
         case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
@@ -3303,10 +3325,11 @@ static PyObject *__pyx_pw_26PostProcess_EnergySpectrum_1readStructuredSliceData(
     __pyx_v_caseDir = ((PyObject*)values[2]);
     __pyx_v_time = ((PyObject*)values[3]);
     __pyx_v_resultFolder = ((PyObject*)values[4]);
+    __pyx_v_sliceFolder = ((PyObject*)values[5]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("readStructuredSliceData", 0, 1, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 20, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("readStructuredSliceData", 0, 1, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 20, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("PostProcess_EnergySpectrum.readStructuredSliceData", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -3317,7 +3340,8 @@ static PyObject *__pyx_pw_26PostProcess_EnergySpectrum_1readStructuredSliceData(
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_caseDir), (&PyString_Type), 1, "caseDir", 1))) __PYX_ERR(0, 20, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_time), (&PyString_Type), 1, "time", 1))) __PYX_ERR(0, 20, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_resultFolder), (&PyString_Type), 1, "resultFolder", 1))) __PYX_ERR(0, 20, __pyx_L1_error)
-  __pyx_r = __pyx_pf_26PostProcess_EnergySpectrum_readStructuredSliceData(__pyx_self, __pyx_v_sliceName, __pyx_v_case, __pyx_v_caseDir, __pyx_v_time, __pyx_v_resultFolder);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_sliceFolder), (&PyString_Type), 1, "sliceFolder", 1))) __PYX_ERR(0, 20, __pyx_L1_error)
+  __pyx_r = __pyx_pf_26PostProcess_EnergySpectrum_readStructuredSliceData(__pyx_self, __pyx_v_sliceName, __pyx_v_case, __pyx_v_caseDir, __pyx_v_time, __pyx_v_resultFolder, __pyx_v_sliceFolder);
 
   /* function exit code */
   goto __pyx_L0;
@@ -3328,18 +3352,19 @@ static PyObject *__pyx_pw_26PostProcess_EnergySpectrum_1readStructuredSliceData(
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_26PostProcess_EnergySpectrum_readStructuredSliceData(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_sliceName, PyObject *__pyx_v_case, PyObject *__pyx_v_caseDir, PyObject *__pyx_v_time, PyObject *__pyx_v_resultFolder) {
+static PyObject *__pyx_pf_26PostProcess_EnergySpectrum_readStructuredSliceData(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_sliceName, PyObject *__pyx_v_case, PyObject *__pyx_v_caseDir, PyObject *__pyx_v_time, PyObject *__pyx_v_resultFolder, PyObject *__pyx_v_sliceFolder) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   struct __pyx_opt_args_26PostProcess_EnergySpectrum_readStructuredSliceData __pyx_t_2;
   __Pyx_RefNannySetupContext("readStructuredSliceData", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2.__pyx_n = 4;
+  __pyx_t_2.__pyx_n = 5;
   __pyx_t_2.__pyx_case = __pyx_v_case;
   __pyx_t_2.caseDir = __pyx_v_caseDir;
   __pyx_t_2.time = __pyx_v_time;
   __pyx_t_2.resultFolder = __pyx_v_resultFolder;
+  __pyx_t_2.sliceFolder = __pyx_v_sliceFolder;
   __pyx_t_1 = __pyx_f_26PostProcess_EnergySpectrum_readStructuredSliceData(__pyx_v_sliceName, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 20, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
@@ -5832,7 +5857,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_Result, __pyx_k_Result, sizeof(__pyx_k_Result), 0, 0, 1, 1},
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
   {&__pyx_kp_s_Slice_raw_data_read, __pyx_k_Slice_raw_data_read, sizeof(__pyx_k_Slice_raw_data_read), 0, 0, 1, 0},
-  {&__pyx_kp_s_Slices, __pyx_k_Slices, sizeof(__pyx_k_Slices), 0, 0, 1, 0},
+  {&__pyx_n_s_Slices, __pyx_k_Slices, sizeof(__pyx_k_Slices), 0, 0, 1, 1},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
   {&__pyx_kp_s__2, __pyx_k__2, sizeof(__pyx_k__2), 0, 0, 1, 0},
   {&__pyx_n_s_auto, __pyx_k_auto, sizeof(__pyx_k_auto), 0, 0, 1, 1},
@@ -5860,6 +5885,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_reshape, __pyx_k_reshape, sizeof(__pyx_k_reshape), 0, 0, 1, 1},
   {&__pyx_n_s_resultFolder, __pyx_k_resultFolder, sizeof(__pyx_k_resultFolder), 0, 0, 1, 1},
+  {&__pyx_n_s_sliceFolder, __pyx_k_sliceFolder, sizeof(__pyx_k_sliceFolder), 0, 0, 1, 1},
   {&__pyx_n_s_sliceName, __pyx_k_sliceName, sizeof(__pyx_k_sliceName), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_time, __pyx_k_time, sizeof(__pyx_k_time), 0, 0, 1, 1},
