@@ -10,9 +10,9 @@ from numba import prange
 User Inputs
 """
 # caseDir, caseName = 'J:', 'Doekemeijer/neutral_3kmx3kmx1km_lowTI_225deg_11mps'
-caseDir, caseName = 'J:', 'ABL_N_H_HiSpeed'
+caseDir, caseName = 'J:', 'ABL_N_H'
 # Profile of interest
-profile = 'TI'  # 'U', 'T', 'heatFlux', 'TI'
+profile = 'heatFlux'  # 'U', 'T', 'heatFlux', 'TI'
 startTime, stopTime = 18000, 22000
 # Hub height velocity, hub height, rotor D
 Uhub, zHub, D = 10., 90., 126.
@@ -77,15 +77,19 @@ bl.calculatePropertyMean(startTime = startTime, stopTime = stopTime)
 
 if calc_zi or profile == 'heatFlux':
     # Calculate zi by finding the minimum z-direction T flux
-    # According to statisticsABL.H, q3_mean correspdonds to sgsTempFluxLevelsList.z(), Tw_mean corresponds to tempFluxLevelsList.z()
+    # According to statisticsABL.H, q3_mean correspdonds to sgsTempFluxLevelsList.z() from statisticsFace.H,
+    # Tw_mean corresponds to
+    # tempFluxLevelsList.z()
     minTflux, TfluxLst = 1e20, np.empty_like(bl.hLvls)
     # Go through all height levels
     for i in prange(len(bl.hLvls)):
-        # Tflux = bl.propertyData['Tw_mean_mean'][i]
-        if i == 0 or i == len(bl.hLvls) - 1:
-            Tflux = bl.propertyData['q3_mean_mean'][i]
-        else:
-            Tflux = bl.propertyData['q3_mean_mean'][i] + 0.5*(bl.propertyData['Tw_mean_mean'][i] + bl.propertyData['Tw_mean_mean'][i - 1])
+        Tflux = bl.propertyData['q3_mean_mean'][i] + bl.propertyData['Tw_mean_mean'][i]
+        # # However, q3_mean here is from statisticsCell.H
+        # # So the following is not feasible
+        # if i == 0 or i == len(bl.hLvls) - 1:
+        #     Tflux = bl.propertyData['q3_mean_mean'][i]
+        # else:
+        #     Tflux = bl.propertyData['q3_mean_mean'][i] + 0.5*(bl.propertyData['Tw_mean_mean'][i] + bl.propertyData['Tw_mean_mean'][i - 1])
 
         # Append Tflux of each height to list for plotting the 'heatFlux' profile
         TfluxLst[i] = Tflux

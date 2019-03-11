@@ -39,7 +39,6 @@ Lt = 250.  # [CAUTION]
 krFactor = 1  # [CAUTION]
 
 
-
 """
 Plot Settings
 """
@@ -175,8 +174,9 @@ def getPlanarEnergySpectrum(u2D, v2D, w2D, cellSizes):
 
 
 @timer
-# jit() gives unknown error
-# @jit(parallel = True, fastmath = True)
+# jit(parallel = True) gives unknown error
+# prange has to be used with parallel = True
+@jit(fastmath = True)
 def getPlanarEnergySpectrum2(u2D, v2D, w2D, cellSizes, fftNorm = None, mergeXY = True):
     # Velocity fluctuations
     # The mean here is spatial average in slice plane
@@ -338,7 +338,7 @@ loop = 1 if mergeXY else 2
 # Create a copy of Eij and Eii so that the copies are not touched below
 Eij_copy, Eii_copy = Eij, Eii
 xLabels = ('$K_r$ [1/m]',) if mergeXY else ('$K_x$ [1/m]', '$K_y$ [1/m]')
-for l in prange(loop):
+for l in range(loop):
     if not mergeXY:
         Kr = Kx if l == 0 else Ky
         Eij, Eii = Eij_copy[l], Eii_copy[l]
@@ -357,7 +357,7 @@ for l in prange(loop):
     # 33,
     # ii
     if plotNorm:
-        for i in range(7):
+        for i in prange(7):
             if i == 6:
                 Eii = np.divide(Eii, norm)
             else:
@@ -402,7 +402,7 @@ for l in prange(loop):
     # Get all unique iBin values
     iBin_uniq = np.unique(iBin)
     # Go through every index of targeted bins
-    for i in range(nBin):
+    for i in prange(nBin):
         # If such index not found in iBin, it means the bins in that region is too refined for binning old values
         # E.g. Kr = [1, 2, 3],
         # Kr_binned = [1, 1.5, 2, 2.5, 3],
@@ -420,7 +420,7 @@ for l in prange(loop):
     Eij_binned_0 = np.array([np.mean(Eij[iBin == i, 0]) for i in range(len(Kr_binned))])
     Eij_binned = np.empty((Eij_binned_0.shape[0], 6))
     Eij_binned[:, 0] = Eij_binned_0
-    for j in range(1, 7):
+    for j in prange(1, 7):
         # For Eij
         if j != 6:
             Eij_binned[:, j] = np.array([np.mean(Eij[iBin == i, j]) for i in range(len(Kr_binned))])
@@ -448,7 +448,7 @@ for l in prange(loop):
         else:
             yLabels = (r'$E_{ii}(K_y)$ [m$^3$/s$^2$]', r'$E_{12}(K_y)$ [m$^3$/s$^2$]', r'$E_{33}(K_y)$ [m$^3$/s$^2$]')
     # Go through Eii, E12, E33 and plot each of them
-    for i in range(3):
+    for i in prange(3):
         # If plotting E12
         if i == 1:
             xList, yList = (Kr_binned, E12ref[:, 0], Kr), (E[i], E12ref[:, 1], E_Kolmo)

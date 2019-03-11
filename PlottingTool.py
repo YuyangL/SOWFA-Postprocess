@@ -189,7 +189,7 @@ class Plot2D(BaseFigure):
         super().__init__(listX, listY, **kwargs)
 
         # If multiple data provided, make sure type is a tuple of the same length
-        if type is 'infer':
+        if type == 'infer':
             self.type = ('contourf',)*len(listX) if z2D[0] is not None else ('line',)*len(listX)
         else:
             self.type = (type,)*len(listX) if isinstance(type, str) else type
@@ -206,15 +206,15 @@ class Plot2D(BaseFigure):
 
         self.plotsLabel = np.arange(1, len(self.listX) + 1) if plotsLabel[0] is None else plotsLabel
         self.plots = [None]*len(self.listX)
-        for i in range(len(self.listX)):                
-            if self.type[i] is 'line':
+        for i in range(len(self.listX)):
+            if self.type[i] == 'line':
                 self.plots[i] = self.axes[0].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = str(self.plotsLabel[i]), color = self.colors[i], alpha = self.alpha)
-            elif self.type[i] is 'scatter':
+            elif self.type[i] == 'scatter':
                 self.plots[i] = self.axes[0].scatter(self.listX[i], self.listY[i], lw = 0, label = str(self.plotsLabel[i]), alpha = self.alpha, color = self.colors[i], marker = self.markers[i])
-            elif self.type[i] is 'contourf':
+            elif self.type[i] == 'contourf':
                 self._ensureMeshGrid()
                 self.plots[i] = self.axes[0].contourf(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both', antialiased = False)
-            elif self.type[i] is 'contour':
+            elif self.type[i] == 'contour':
                 self._ensureMeshGrid()
                 self.plots[i] = self.axes[0].contour(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both')
             else:

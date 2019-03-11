@@ -14,6 +14,7 @@ import os
 User Inputs
 """
 caseDir = 'J:'
+caseDir = '/media/yluan/1'
 caseName = 'ALM_N_H'
 times = '22000.0918025'
 fields = 'uuPrime2'

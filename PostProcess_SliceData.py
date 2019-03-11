@@ -75,9 +75,10 @@ class SliceProperties:
     @timer
     @jit(parallel = True, fastmath = True)
     def interpolateDecomposedSliceData_Fast(x, y, z, vals, sliceOrientate = 'vertical', xOrientate = 0, precisionX = 1500j, precisionY = 1500j,
-                          precisionZ = 500j, interpMethod = 'cubic'):
+                          precisionZ = 500j, interpMethod = 'nearest'):
         # Bound the coordinates to be interpolated in case data wasn't available in those borders
-        bnd = (1.00001, 0.99999)
+        # bnd = (1.00001, 0.99999)
+        bnd = (1, 1)
         if sliceOrientate is 'vertical':
             # Known x and z coordinates, to be interpolated later
             knownPoints = np.vstack((x, z)).T
@@ -98,23 +99,30 @@ class SliceProperties:
         # If vector, order is x, y, z
         # If symmetric tensor, order is xx, xy, xz, yy, yz, zz
         # Second axis to interpolate is z if vertical slice otherwise y fo horizontal slices
-        gridSecondCoor = z2D if sliceOrientate is 'vertical' else y2D
+        gridSecondCoor = z2D if sliceOrientate == 'vertical' else y2D
         if len(vals.shape) == 2:
             # Initialize nRow x nCol x nComponent array vals3D by interpolating first component of the values, x, or xx
-            vals3D = griddata(knownPoints, vals[:, 0].ravel(), (x2D, gridSecondCoor), method = interpMethod)
+            vals3D_0 = griddata(knownPoints, vals[:, 0].ravel(), (x2D, gridSecondCoor), method = interpMethod)
+            vals3D = np.empty((vals3D_0.shape[0], vals3D_0.shape[1], vals.shape[1]))
+            vals3D[:, :, 0] = vals3D_0
             # Then go through the rest components and stack them in 3D
-            for i in range(1, vals.shape[1]):
+            for i in prange(1, vals.shape[1]):
                 # Each component is interpolated from the known locations pointsXZ to refined fields (x2D, z2D)
                 vals3D_i = griddata(knownPoints, vals[:, i].ravel(), (x2D, gridSecondCoor), method = interpMethod)
-                vals3D = np.dstack((vals3D, vals3D_i))
+                # vals3D = np.dstack((vals3D, vals3D_i))
+                vals3D[:, :, i] = vals3D_i
+
         else:
             # Initialize nRow x nCol x nComponent array vals3D by interpolating first component of the values, x, or xx
-            vals3D = griddata(knownPoints, vals[:, :, 0].ravel(), (x2D, gridSecondCoor), method = interpMethod)
+            vals3D_0 = griddata(knownPoints, vals[:, :, 0].ravel(), (x2D, gridSecondCoor), method = interpMethod)
+            vals3D = np.empty((vals3D_0.shape[0], vals3D_0.shape[1], vals.shape[2]))
+            vals3D[:, :, 0] = vals3D_0
             # Then go through the rest components and stack them in 3D
-            for i in range(1, vals.shape[2]):
+            for i in prange(1, vals.shape[2]):
                 # Each component is interpolated from the known locations pointsXZ to refined fields (x2D, z2D)
                 vals3D_i = griddata(knownPoints, vals[:, :, i].ravel(), (x2D, gridSecondCoor), method = interpMethod)
-                vals3D = np.dstack((vals3D, vals3D_i))
+                # vals3D = np.dstack((vals3D, vals3D_i))
+                vals3D[:, :, i] = vals3D_i
 
         # if xOrientate != 0:
         #     # If vector, x, y, z
@@ -123,6 +131,8 @@ class SliceProperties:
         #         vals3D['1'] = -vals3D['0']*np.sin(xOrientate) + vals3D['1']*np.cos(xOrientate)
         #     else:
         #         vals3D['0'] =
+
+        vals3D = np.nan_to_num(vals3D)
 
         return x2D, y2D, z2D, vals3D
 
@@ -310,14 +320,14 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    # @njit
-    def getBarycentricMapCoordinates(eigValsGrid):
+    @njit(parallel = True, fastmath = True)
+    def getBarycentricMapCoordinates(eigValsGrid, c_offset = 0.65, c_exp = 5.):
         # Coordinates of the anisotropy tensor in the tensor basis {a1c, a2c, a3c}. From Banerjee (2007),
         # C1c = lambda1 - lambda2,
         # C2c = 2(lambda2 - lambda3),
         # C3c = 3lambda3 + 1
         c1 = eigValsGrid[:, :, 0] - eigValsGrid[:, :, 1]
-        # Not used?
+        # Not used for coordinates, only for color maps
         c2 = 2*(eigValsGrid[:, :, 1] - eigValsGrid[:, :, 2])
         c3 = 3*eigValsGrid[:, :, 2] + 1
         # Corners of the barycentric triangle
@@ -326,10 +336,17 @@ class SliceProperties:
         y1c, y2c, y3c = 0, 0, np.sqrt(3)/2
         # xBary, yBary = c1*x1c + c2*x2c + c3*x3c, c1*y1c + c2*y2c + c3*y3c
         xBary, yBary = c1 + 0.5*c3, y3c*c3
+        # Origin RGB values
         rgbVals = np.dstack((c1, c2, c3))
+        # For better barycentric map, use transformation on c1, c2, c3, as in Emory et al. (2014)
+        # ci_star = (ci + c_offset)^c_exp,
+        # Improved RGB = [c1_star, c2_star, c3_star]
+        rgbValsNew = np.empty((c1.shape[0], c1.shape[1], 3))
+        # Each 3rd dim is an RGB array of the 2D grid
+        for i in prange(3):
+            rgbValsNew[:, :, i] = (rgbVals[:, :, i] + c_offset)**c_exp
 
-
-        return xBary, yBary, rgbVals
+        return xBary, yBary, rgbValsNew
 
 
     @staticmethod
@@ -363,6 +380,7 @@ if __name__ is '__main__':
     """
     time = 'latest'
     caseDir = 'J:'
+    caseDir = '/media/yluan/1'
     caseName = 'ALM_N_H_ParTurb'
     propertyName = 'uuPrime2'
     sliceNames = 'alongWindRotorOne'
@@ -371,8 +389,8 @@ if __name__ is '__main__':
     # Angle in rad and counter-clockwise
     xOrientate = 6/np.pi
     precisionX, precisionY, precisionZ = 1000j, 1000j, 333j
-    interpMethod = 'cubic'
-    plot = 'quiver'
+    interpMethod = 'nearest'
+    plot = 'bary'
 
     case = SliceProperties(time = time, caseDir = caseDir, caseName = caseName, xOrientate = xOrientate)
 
@@ -401,7 +419,7 @@ if __name__ is '__main__':
         """
         Interpolation
         """
-        if plot is 'bary':
+        if plot == 'bary':
             xBary, yBary, rgbVals = case.getBarycentricMapCoordinates(eigValsGrid)
 
             x2D, y2D, z2D, rgbVals = \
@@ -410,7 +428,7 @@ if __name__ is '__main__':
                                                          precisionX = precisionX, precisionY =
                                                          precisionY, precisionZ = precisionZ, interpMethod = interpMethod)
 
-        elif plot is 'quiver':
+        elif plot == 'quiver':
             x2D, y2D, z2D, eigVecs3D = \
                 case.interpolateDecomposedSliceData_Fast(case.slicesCoor[sliceName][:, 0], case.slicesCoor[sliceName][:, 1],
                                                          case.slicesCoor[sliceName][:, 2], eigVecsGrid[:, :, :, 0], sliceOrientate =
@@ -422,7 +440,7 @@ if __name__ is '__main__':
         """
         Plotting
         """
-        if plot is 'bary':
+        if plot == 'bary':
             print('\nDumping values...')
             pickle.dump(tensors, open(case.resultPath + sliceName + '_rgbVals.p', 'wb'))
             pickle.dump(x2D, open(case.resultPath + sliceName + '_x2D.p', 'wb'))
@@ -475,7 +493,7 @@ if __name__ is '__main__':
             #
             #
             # # valsDecomp = case.mergeHorizontalComponents(valsDecomp)
-        elif plot is 'quiver':
+        elif plot == 'quiver':
             fig = plt.figure()
             ax = fig.gca(projection = '3d')
             ax.quiver(x2D, y2D, z2D, eigVecs3D[:, :, 0], eigVecs3D[:, :, 1], eigVecs3D[:, :, 2], length = 0.1, normalize = False)
