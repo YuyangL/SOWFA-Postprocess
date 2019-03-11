@@ -9,12 +9,6 @@ class SliceProperties:
     def __init__(self, time = 'latest', caseDir = '/media/yluan/Toshiba External Drive', caseName = 'ALM_N_H_ParTurb', caseSubfolder = 'Slices', resultFolder = 'Result', xOrientate = 0):
         self.caseFullPath = caseDir + '/' + caseName + '/' + caseSubfolder + '/'
         self.resultPath = self.caseFullPath + resultFolder + '/'
-        # Try to make the result folder under caseSubfolder
-        try:
-            os.makedirs(self.resultPath)
-        except OSError:
-            pass
-
         # If time is 'latest', find it automatically, excluding the result folder
         self.time = os.listdir(self.caseFullPath)[-2] if time is 'latest' else str(time)
         # Update case full path to include time folder as well
@@ -74,55 +68,95 @@ class SliceProperties:
     @staticmethod
     @timer
     @jit(parallel = True, fastmath = True)
-    def interpolateDecomposedSliceData_Fast(x, y, z, vals, sliceOrientate = 'vertical', xOrientate = 0, precisionX = 1500j, precisionY = 1500j,
-                          precisionZ = 500j, interpMethod = 'nearest'):
+    def interpolateDecomposedSliceData_Fast(x, y, z, vals, sliceOrientate = 'vertical', targetCells = 1e6,
+                                            xOrientate = \
+        0, interpMethod = 'nearest', confineBox = (None,)):
+        # confineBox[4:6] will be ignored if slice is horizontal
+        # Automatically determine best x, y, z precision
+        # If no confine region specified
+        if confineBox[0] is None:
+            lx = np.max(x) - np.min(x)
+            ly = np.max(y) - np.min(y)
+            lz = np.max(z) - np.min(z)
+        else:
+            lx = confineBox[1] - confineBox[0]
+            ly = confineBox[3] - confineBox[2]
+            # If horizontal slice, z length should be about 0
+            lz = confineBox[5] - confineBox[4] if sliceOrientate == 'vertical' else \
+                0
+
+        # Sum of all lengths, as scaler
+        lxyz = lx + ly + lz
+        # Weight of each precision, minimum 0.001
+        xratio, yratio, zratio = max(lx/lxyz, 0.001), max(ly/lxyz, 0.001), max(lz/lxyz, 0.001)
+        # Base precision
+        # Using xratio*base + yratio*base + zratio*base = targetCells
+        precisionBase = (targetCells/(xratio*yratio*zratio))**(1/3.)
+        # Derived precision, take ceiling
+        precisionX, precisionY, precisionZ = int(np.ceil(xratio*precisionBase)), int(np.ceil(yratio*precisionBase)), \
+                                             int(np.ceil(zratio*precisionBase))
+        print('\nInterpolating slice with precision ({0}, {1}, {2})...'.format(precisionX, precisionY, precisionZ))
+        precisionX *= 1j
+        precisionY *= 1j
+        precisionZ *= 1j
         # Bound the coordinates to be interpolated in case data wasn't available in those borders
-        # bnd = (1.00001, 0.99999)
         bnd = (1, 1)
-        if sliceOrientate is 'vertical':
+        bnd_xTarget = (x.min()*bnd[0], x.max()*bnd[1]) if confineBox[0] is None else confineBox[0], confineBox[1]
+        bnd_yTarget = (y.min()*bnd[0], y.max()*bnd[1]) if confineBox[0] is None else confineBox[2], confineBox[3]
+        bnd_zTarget = (z.min()*bnd[0], z.max()*bnd[1]) if confineBox[0] is None else confineBox[4], confineBox[5]
+        # If vertical slice
+        if sliceOrientate == 'vertical':
             # Known x and z coordinates, to be interpolated later
             knownPoints = np.vstack((x, z)).T
             # Interpolate x and z according to precisions
-            x2D, z2D = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precisionX, z.min()*bnd[0]:z.max()*bnd[1]:precisionZ]
+            x2D, z2D = np.mgrid[bnd_xTarget[0]:bnd_xTarget[1]:precisionX, bnd_zTarget[0]:bnd_zTarget[1]:precisionZ]
             # Then interpolate y in the same fashion of x
-            y2D, _ = np.mgrid[y.min()*bnd[0]:y.max()*bnd[1]:precisionY, z.min()*bnd[0]:z.max()*bnd[1]:precisionZ]
+            y2D, _ = np.mgrid[bnd_yTarget[0]:bnd_yTarget[1]:precisionY, bnd_zTarget[0]:bnd_zTarget[1]:precisionZ]
             # In case the vertical slice is at a negative angle,
             # i.e. when x goes from low to high, y goes from high to low,
             # flip y2D from low to high to high to low
             y2D = np.flipud(y2D) if x[0] > x[1] else y2D
+        # Else if slice is horizontal
         else:
             knownPoints = np.vstack((x, y)).T
-            x2D, y2D = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precisionX, y.min()*bnd[0]:y.max()*bnd[1]:precisionY]
-            _, z2D = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precisionX, z.min()*bnd[0]:z.max()*bnd[1]:precisionZ]
+            x2D, y2D = np.mgrid[bnd_xTarget[0]:bnd_xTarget[1]:precisionX, bnd_yTarget[0]:bnd_yTarget[1]:precisionY]
+            # For horizontal slice, z is constant, thus not affected by confineBox
+            _, z2D = np.mgrid[bnd_xTarget[0]:bnd_xTarget[1]:precisionX, z.min()*bnd[0]:z.max()*bnd[1]:precisionZ]
 
         # Decompose the vector/tensor of slice values
         # If vector, order is x, y, z
         # If symmetric tensor, order is xx, xy, xz, yy, yz, zz
         # Second axis to interpolate is z if vertical slice otherwise y fo horizontal slices
         gridSecondCoor = z2D if sliceOrientate == 'vertical' else y2D
+        # For gauging progress
+        milestone = 10
+        # If vals is 2D
         if len(vals.shape) == 2:
             # Initialize nRow x nCol x nComponent array vals3D by interpolating first component of the values, x, or xx
-            vals3D_0 = griddata(knownPoints, vals[:, 0].ravel(), (x2D, gridSecondCoor), method = interpMethod)
-            vals3D = np.empty((vals3D_0.shape[0], vals3D_0.shape[1], vals.shape[1]))
-            vals3D[:, :, 0] = vals3D_0
+            vals3D = np.empty((x2D.shape[0], x2D.shape[1], vals.shape[1]))
             # Then go through the rest components and stack them in 3D
-            for i in prange(1, vals.shape[1]):
+            for i in prange(vals.shape[1]):
+                print(i)
                 # Each component is interpolated from the known locations pointsXZ to refined fields (x2D, z2D)
                 vals3D_i = griddata(knownPoints, vals[:, i].ravel(), (x2D, gridSecondCoor), method = interpMethod)
                 # vals3D = np.dstack((vals3D, vals3D_i))
                 vals3D[:, :, i] = vals3D_i
+                # Gauge progress
+                progress = float(i)/(vals.shape[0] + 1)*100.
+                if progress >= milestone:
+                    print(' {0}%... '.format(milestone))
+                    milestone += 10
 
+        # Else if vals is 3D
         else:
-            # Initialize nRow x nCol x nComponent array vals3D by interpolating first component of the values, x, or xx
-            vals3D_0 = griddata(knownPoints, vals[:, :, 0].ravel(), (x2D, gridSecondCoor), method = interpMethod)
-            vals3D = np.empty((vals3D_0.shape[0], vals3D_0.shape[1], vals.shape[2]))
-            vals3D[:, :, 0] = vals3D_0
-            # Then go through the rest components and stack them in 3D
-            for i in prange(1, vals.shape[2]):
-                # Each component is interpolated from the known locations pointsXZ to refined fields (x2D, z2D)
+            vals3D = np.empty((x2D.shape[0], x2D.shape[1], vals.shape[2]))
+            for i in prange(vals.shape[2]):
                 vals3D_i = griddata(knownPoints, vals[:, :, i].ravel(), (x2D, gridSecondCoor), method = interpMethod)
-                # vals3D = np.dstack((vals3D, vals3D_i))
                 vals3D[:, :, i] = vals3D_i
+                progress = float(i)/(vals.shape[0] + 1)*100.
+                if progress >= milestone:
+                    print(' {0}%... '.format(milestone))
+                    milestone += 10
 
         # if xOrientate != 0:
         #     # If vector, x, y, z
@@ -132,6 +166,7 @@ class SliceProperties:
         #     else:
         #         vals3D['0'] =
 
+        x2D, y2D, z2D = np.nan_to_num(x2D), np.nan_to_num(y2D), np.nan_to_num(z2D)
         vals3D = np.nan_to_num(vals3D)
 
         return x2D, y2D, z2D, vals3D
@@ -463,7 +498,7 @@ if __name__ is '__main__':
             fig, ax = plt.subplots(1, 1)
             im = ax.imshow(rgbValsRot, origin = 'upper', aspect = 'equal', extent = (0, 3000, 0, 3000))
             # fig.colorbar(im, ax = ax, extend = 'both')
-            plt.savefig('R:/bary.png', dpi = 600)
+            plt.savefig('R:/bary.png', dpi = 1000)
 
             # baryPlot = PlotSurfaceSlices3D(x2D, y2D, z2D, (0,), show = True, name = 'bary', figDir = 'R:', save = True)
             # baryPlot.cmapLim = (0, 1)

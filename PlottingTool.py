@@ -240,7 +240,7 @@ class Plot2D_InsetZoom(Plot2D):
 
 
     @staticmethod
-    def mark_inset(parent_axes, inset_axes, loc1a = 1, loc1b = 1, loc2a = 2, loc2b = 2, **kwargs):
+    def _mark_inset(parent_axes, inset_axes, loc1a = 1, loc1b = 1, loc2a = 2, loc2b = 2, **kwargs):
         # Draw a bbox of the region of the inset axes in the parent axes and
         # connecting lines between the bbox and the inset axes area
         # loc1, loc2 : {1, 2, 3, 4}
@@ -280,7 +280,8 @@ class Plot2D_InsetZoom(Plot2D):
             self.axes[1].set_aspect('equal', 'box')
 
         self.axes[1].set_xscale(xyScale[0]), self.axes[1].set_yscale(xyScale[1])
-        self.mark_inset(self.axes[0], self.axes[1], loc1a = 1, loc1b = 4, loc2a = 2, loc2b = 3, fc = "none", ec = self.gray, ls = ':')
+        self._mark_inset(self.axes[0], self.axes[1], loc1a = 1, loc1b = 4, loc2a = 2, loc2b = 3, fc = "none",
+                         ec = self.gray, ls = ':')
         if self.type in ('contour', 'contourf'):
             for ax in self.axes:
                 ax.tick_params(axis = 'both', direction = 'out')
