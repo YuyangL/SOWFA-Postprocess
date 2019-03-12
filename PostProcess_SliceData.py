@@ -30,7 +30,8 @@ class SliceProperties:
     def readSlices(self, propertyName = 'U', sliceNames = ('alongWind',), sliceNamesSub = '_Slice', skipCol = 3, skipRow = 0, fileExt = '.raw'):
         # First 3 columns are x, y, z, thus skipCol = 3
         # skipRow unnecessary since np.genfromtxt trim any header with # at front
-        self.sliceNames = [sliceNames] if isinstance(sliceNames, str) else sliceNames
+        # self.sliceNames need to mutable
+        self.sliceNames = list((sliceNames,)) if isinstance(sliceNames, str) else list(sliceNames)
         # Combine propertyName with sliceNames and Subscript to form the full file names
         # Don't know why I had to copy it...
         # self.fileNames = list(sliceNames).copy()
@@ -68,7 +69,7 @@ class SliceProperties:
     @staticmethod
     @timer
     @jit(parallel = True, fastmath = True)
-    def interpolateDecomposedSliceData_Fast(x, y, z, vals, sliceOrientate = 'vertical', targetCells = 1e6,
+    def interpolateDecomposedSliceData_Fast(x, y, z, vals, sliceOrientate = 'vertical', targetCells = 1e4,
                                             xOrientate = \
         0, interpMethod = 'nearest', confineBox = (None,)):
         # confineBox[4:6] will be ignored if slice is horizontal
@@ -76,25 +77,35 @@ class SliceProperties:
         # If no confine region specified
         if confineBox[0] is None:
             lx = np.max(x) - np.min(x)
-            ly = np.max(y) - np.min(y)
-            lz = np.max(z) - np.min(z)
+            # If vertical slice, ly doesn't contribute to slice interpolation, thus 0
+            ly = np.max(y) - np.min(y) if sliceOrientate == 'horizontal' else 0
+            # If horizontal slice, z length should be about 0
+            lz = np.max(z) - np.min(z) if sliceOrientate == 'vertical' else 0
         else:
             lx = confineBox[1] - confineBox[0]
-            ly = confineBox[3] - confineBox[2]
-            # If horizontal slice, z length should be about 0
+            ly = confineBox[3] - confineBox[2] if sliceOrientate == 'horizontal' else 0
             lz = confineBox[5] - confineBox[4] if sliceOrientate == 'vertical' else \
                 0
 
-        # Sum of all lengths, as scaler
+        # Sum of all "contributing" lengths, as scaler
         lxyz = lx + ly + lz
         # Weight of each precision, minimum 0.001
-        xratio, yratio, zratio = max(lx/lxyz, 0.001), max(ly/lxyz, 0.001), max(lz/lxyz, 0.001)
+        xratio = np.max((lx/lxyz, 0.001))
+        # For vertical slices, the resolution for x is the same as y, i.e. targetCells is shared between x and z only
+        yratio = np.max((ly/lxyz, 0.001)) if sliceOrientate == 'horizontal' else 1.
+        # If horizontal slice, z cell is aimed at 1
+        # zratio = 1 effectively removes the impact of z on horizontal slice resolutions
+        zratio = np.max((lz/lxyz, 0.001)) if sliceOrientate == 'vertical' else 1.
         # Base precision
-        # Using xratio*base + yratio*base + zratio*base = targetCells
-        precisionBase = (targetCells/(xratio*yratio*zratio))**(1/3.)
+        # Using xratio*base*(yratio*base or zratio*base) = targetCells
+        precisionBase = targetCells/(xratio*yratio*zratio)
+        # If horizontal slice, targetCells is shared between x and y only
+        precisionBase = precisionBase**(1/2.)
         # Derived precision, take ceiling
-        precisionX, precisionY, precisionZ = int(np.ceil(xratio*precisionBase)), int(np.ceil(yratio*precisionBase)), \
-                                             int(np.ceil(zratio*precisionBase))
+        precisionX = int(np.ceil(xratio*precisionBase))
+        # If vertical slice, precisionY is the same as precisionX
+        precisionY = int(np.ceil(yratio*precisionBase)) if sliceOrientate == 'horizontal' else precisionX
+        precisionZ = int(np.ceil(zratio*precisionBase)) if sliceOrientate == 'vertical' else 1
         print('\nInterpolating slice with precision ({0}, {1}, {2})...'.format(precisionX, precisionY, precisionZ))
         precisionX *= 1j
         precisionY *= 1j
@@ -111,7 +122,8 @@ class SliceProperties:
             # Interpolate x and z according to precisions
             x2D, z2D = np.mgrid[bnd_xTarget[0]:bnd_xTarget[1]:precisionX, bnd_zTarget[0]:bnd_zTarget[1]:precisionZ]
             # Then interpolate y in the same fashion of x
-            y2D, _ = np.mgrid[bnd_yTarget[0]:bnd_yTarget[1]:precisionY, bnd_zTarget[0]:bnd_zTarget[1]:precisionZ]
+            # Thus the same precision as x
+            y2D, _ = np.mgrid[bnd_yTarget[0]:bnd_yTarget[1]:precisionX, bnd_zTarget[0]:bnd_zTarget[1]:precisionZ]
             # In case the vertical slice is at a negative angle,
             # i.e. when x goes from low to high, y goes from high to low,
             # flip y2D from low to high to high to low
@@ -121,7 +133,8 @@ class SliceProperties:
             knownPoints = np.vstack((x, y)).T
             x2D, y2D = np.mgrid[bnd_xTarget[0]:bnd_xTarget[1]:precisionX, bnd_yTarget[0]:bnd_yTarget[1]:precisionY]
             # For horizontal slice, z is constant, thus not affected by confineBox
-            _, z2D = np.mgrid[bnd_xTarget[0]:bnd_xTarget[1]:precisionX, z.min()*bnd[0]:z.max()*bnd[1]:precisionZ]
+            # Also z2D is like y2D, thus same precision as y
+            _, z2D = np.mgrid[bnd_xTarget[0]:bnd_xTarget[1]:precisionX, z.min()*bnd[0]:z.max()*bnd[1]:precisionY]
 
         # Decompose the vector/tensor of slice values
         # If vector, order is x, y, z
@@ -129,23 +142,22 @@ class SliceProperties:
         # Second axis to interpolate is z if vertical slice otherwise y fo horizontal slices
         gridSecondCoor = z2D if sliceOrientate == 'vertical' else y2D
         # For gauging progress
-        milestone = 10
+        milestone = 33
         # If vals is 2D
         if len(vals.shape) == 2:
             # Initialize nRow x nCol x nComponent array vals3D by interpolating first component of the values, x, or xx
             vals3D = np.empty((x2D.shape[0], x2D.shape[1], vals.shape[1]))
             # Then go through the rest components and stack them in 3D
             for i in prange(vals.shape[1]):
-                print(i)
                 # Each component is interpolated from the known locations pointsXZ to refined fields (x2D, z2D)
                 vals3D_i = griddata(knownPoints, vals[:, i].ravel(), (x2D, gridSecondCoor), method = interpMethod)
                 # vals3D = np.dstack((vals3D, vals3D_i))
                 vals3D[:, :, i] = vals3D_i
                 # Gauge progress
-                progress = float(i)/(vals.shape[0] + 1)*100.
+                progress = (i + 1)/vals.shape[1]*100.
                 if progress >= milestone:
                     print(' {0}%... '.format(milestone))
-                    milestone += 10
+                    milestone += 33
 
         # Else if vals is 3D
         else:
@@ -153,10 +165,10 @@ class SliceProperties:
             for i in prange(vals.shape[2]):
                 vals3D_i = griddata(knownPoints, vals[:, :, i].ravel(), (x2D, gridSecondCoor), method = interpMethod)
                 vals3D[:, :, i] = vals3D_i
-                progress = float(i)/(vals.shape[0] + 1)*100.
+                progress = (i + 1)/vals.shape[2]*100.
                 if progress >= milestone:
                     print(' {0}%... '.format(milestone))
-                    milestone += 10
+                    milestone += 33
 
         # if xOrientate != 0:
         #     # If vector, x, y, z
@@ -172,7 +184,7 @@ class SliceProperties:
         return x2D, y2D, z2D, vals3D
 
 
-    # [DEPRECATED]
+    # [DEPRECATED] Refer to interpolateDecomposedSliceData_Fast()
     @staticmethod
     @timer
     @jit(parallel = True, fastmath = True)
@@ -265,6 +277,7 @@ class SliceProperties:
         return vals3D, tensors, eigValsGrid
 
 
+    # [DEPRECATED] Refer to PostProcess_AnisotropyTensor
     @staticmethod
     @timer
     @njit(parallel = True, fastmath = True)
@@ -355,7 +368,7 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    @njit(parallel = True, fastmath = True)
+    # @njit(parallel = True, fastmath = True)
     def getBarycentricMapCoordinates(eigValsGrid, c_offset = 0.65, c_exp = 5.):
         # Coordinates of the anisotropy tensor in the tensor basis {a1c, a2c, a3c}. From Banerjee (2007),
         # C1c = lambda1 - lambda2,
