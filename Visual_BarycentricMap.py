@@ -18,7 +18,7 @@ User Inputs
 """
 time = 'latest'
 caseDir = 'J:'
-caseDir = '/media/yluan/1'
+caseDir = '/media/yluan'
 caseName = 'ALM_N_H_OneTurb'
 propertyName = 'uuPrime2'
 # sliceNames = ('rotorPlane', 'oneDdownstreamTurbine', 'threeDdownstreamTurbine', 'sevenDdownstreamTurbine')

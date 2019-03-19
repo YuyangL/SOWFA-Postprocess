@@ -7,6 +7,7 @@ from numba import njit, jit, prange
 from Utilities import timer
 from matplotlib import path
 from scipy.interpolate import griddata, Rbf
+import pickle
 
 class FieldData:
     def __init__(self, fields = 'all', times = 'all', caseName = 'ABL_N_H', caseDir = './', fileNamePre = '', fileNameSub
@@ -171,17 +172,25 @@ class FieldData:
 
 
     def readCellCenterCoordinates(self):
-        try:
-            # cellCenters has to be in the order of x, y, z
-            ccx = of.parse_internal_field(self.caseTimeFullPaths[self.times[-1]] + self.cellCenters[0])
-            ccy = of.parse_internal_field(self.caseTimeFullPaths[self.times[-1]] + self.cellCenters[1])
-            ccz = of.parse_internal_field(self.caseTimeFullPaths[self.times[-1]] + self.cellCenters[2])
-            cc = np.vstack((ccx, ccy, ccz))
-        except:
-            warn('\nCell centers have to be stored in the latest time directory', stacklevel = 2)
+        ccx, ccy, ccz, cc = [], [], [], []
+        for i in range(len(self.times)):
+            try:
+                # cellCenters has to be in the order of x, y, z
+                ccx = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + self.cellCenters[0])
+                ccy = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + self.cellCenters[1])
+                ccz = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + self.cellCenters[2])
+                cc = np.vstack((ccx, ccy, ccz)).T
+                break
+            except:
+                pass
+
+        if ccx == []:
+            warn('\nCell centers not found! They have to be stored in at least one of {}'.format(self.times),
+                 stacklevel
+            = 2)
 
         print('\nCell center coordinates read')
-        return ccx, ccy, ccz, cc.T
+        return ccx, ccy, ccz, cc
 
 
     @staticmethod
@@ -263,7 +272,7 @@ class FieldData:
 
     @staticmethod
     @timer
-    # @jit(parallel = True, fastmath = True)
+    @jit(parallel = True, fastmath = True)
     def interpolateFieldData(x, y, z, vals, precisionX = 1500j, precisionY = 1500j, precisionZ = 500j, interpMethod = 'linear'):
         print('\nInterpolating field data...')
         # Bound the coordinates to be interpolated in case data wasn't available in those borders
@@ -404,11 +413,8 @@ class FieldData:
         return x3D, y3D, z3D, valsND
 
 
-
-
-
-
-    def getMeshInfo(self, ccx, ccy, ccz):
+    # Only for uniform mesh
+    def getUniformMeshInfo(self, ccx, ccy, ccz):
         from Utilities import getArrayStepping
         # Mesh size in x
         valOld = ccx[0]
@@ -542,9 +548,37 @@ class FieldData:
         return fieldHorRes3D, fieldZres3D, fieldHorMean, fieldZmean
             
 
+    @staticmethod
+    @timer
+    @njit(parallel = True, fastmath = True)
+    def calcMeanDissipationRateField(epsilonSGSmean, nuSGSmean, nu = 1e-5, saveData = True, resultPath = '.'):
+        # According to Eq 5.64 - Eq 5.68 of Sagaut (2006), for isotropic homogeneous turbulence,
+        # <epsilon> = <epsilon_resolved> + <epsilon_SGS>,
+        # <epsilon_resolved>/<epsilon_SGS> = 1/(1 + (<nu_SGS>/nu)),
+        # where epsilon is the total turbulence dissipation rate (m^2/s^3); and <> is statistical averaging
+        epsilonMean = epsilonSGSmean/(1 - (1/(1 + nuSGSmean/nu)))
+
+        if saveData:
+            pickle.dump(epsilonMean, open(resultPath + '/epsilonMean.p', 'wb'))
+            print('\nepsilonMean saved at {0}'.format(resultPath))
+
+        return epsilonMean
 
 
+    @staticmethod
+    @jit(parallel = True)
+    def saveData(listData, resultPath = '.', fileNames = ('data',)):
+        if isinstance(listData, np.ndarray):
+            listData = (listData,)
 
+        if len(fileNames) != len(listData):
+            fileNames = ['data' + str(i) for i in range(len(listData))]
+            warn('\nInsufficient fileNames provided! Using default fileNames...', stacklevel = 2)
+
+        for i in prange(len(listData)):
+            pickle.dump(listData[i], open(resultPath + '/' + fileNames[i] + '.p', 'wb'))
+
+        print('\n{0} saved at {1}'.format(fileNames, resultPath))
         
         
         
