@@ -7,15 +7,20 @@ from numba import njit, jit, prange
 from Utilities import timer
 from matplotlib import path
 from scipy.interpolate import griddata, Rbf
+try:
+    import cpickle as pickle
+except ModuleNotFoundError:
+    import pickle
 
 class FieldData:
-    def __init__(self, fields = 'all', times = 'all', caseName = 'ABL_N_H', caseDir = './', fileNamePre = '', fileNameSub
-    = '', cellCenters = ('ccx', 'ccy', 'ccz'), resultFolder = 'Result'):
+    def __init__(self, fields = 'all', times = 'all', caseName = 'ABL_N_H', caseDir = '.', fileNamePre = '', fileNameSub
+    = '', cellCenters = ('ccx', 'ccy', 'ccz'), resultFolder = 'Result', save = True):
         self.fields, self.times = fields, times
         self.caseFullPath = caseDir + '/' + caseName + '/Fields/'
         self.fileNamePre, self.fileNameSub = fileNamePre, fileNameSub
         self.cellCenters = cellCenters
         self.caseTimeFullPaths, self.resultPath = {}, {}
+        self.save = save
         # If times in list/tuple or all times requested
         if isinstance(times, (list, tuple)) or times in ('all', 'All'):
             # If all times, try remove the result folder from found directories
@@ -23,11 +28,11 @@ class FieldData:
                 self.times = os.listdir(self.caseFullPath)
                 try:
                     self.times.remove(resultFolder)
-                except OSError:
+                except ValueError:
                     pass
 
             # Go through all provided times
-            for time in times:
+            for time in self.times:
                 self.caseTimeFullPaths[str(time)] = self.caseFullPath + str(time) + '/'
                 # In the result directory, there are time directories
                 self.resultPath[str(time)] = caseDir + '/' + caseName + '/Fields/' + resultFolder + '/' + str(time) + '/'
@@ -149,36 +154,61 @@ class FieldData:
 
     @timer
     @jit(parallel = True)
-    def readFieldData(self, time = None):
+    def readFieldData(self):
         fieldData = {}
-        for field in self.fields:
-            # if time is None:
-            #     fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[self.times[0]] + field)
-            # else:
-            #     fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[str(time)] + field)
-
+        for i in prange(len(self.fields)):
+            field = self.fields[i]
             # Read the data of field in the 1st time directory
             fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[self.times[0]] + field)
             # If multiple times requested, read data and stack them in 3rd D
             if len(self.times) > 1:
-                for i in prange(1, len(self.times)):
-                    print(i)
-                    fieldData_i = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + field)
-                    fieldData[field] = np.dstack((fieldData[field], fieldData_i))
+                for j in prange(1, len(self.times)):
+                    print(j)
+                    fieldData_j = of.parse_internal_field(self.caseTimeFullPaths[self.times[j]] + field)
+                    fieldData[field] = np.dstack((fieldData[field], fieldData_j))
+
+
+        # for field in self.fields:
+        #     # if time is None:
+        #     #     fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[self.times[0]] + field)
+        #     # else:
+        #     #     fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[str(time)] + field)
+        #
+        #     # Read the data of field in the 1st time directory
+        #     fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[self.times[0]] + field)
+        #     # If multiple times requested, read data and stack them in 3rd D
+        #     if len(self.times) > 1:
+        #         for i in prange(1, len(self.times)):
+        #             print(i)
+        #             fieldData_i = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + field)
+        #             fieldData[field] = np.dstack((fieldData[field], fieldData_i))
 
         print('\n' + str(self.fields) + ' data read, if multiple times requested, data of different times are stacked in 3D')
         return fieldData
 
-
+    @timer
     def readCellCenterCoordinates(self):
-        # cellCenters has to be in the order of x, y, z
-        ccx = of.parse_internal_field(self.caseTimeFullPathsRand + self.cellCenters[0])
-        ccy = of.parse_internal_field(self.caseTimeFullPathsRand + self.cellCenters[1])
-        ccz = of.parse_internal_field(self.caseTimeFullPathsRand + self.cellCenters[2])
-        cc = np.vstack((ccx, ccy, ccz))
+        ccx, ccy, ccz, cc = [], [], [], []
+        for i in range(len(self.times)):
+            try:
+                # cellCenters has to be in the order of x, y, z
+                ccx = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + self.cellCenters[0])
+                ccy = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + self.cellCenters[1])
+                ccz = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + self.cellCenters[2])
+                cc = np.vstack((ccx, ccy, ccz)).T
+                if self.save:
+                    self.savePickleData(cc, resultPath = self.resultPath[self.times[i]], fileNames = 'cc')
 
-        print('\nCell center coordinates read')
-        return ccx, ccy, ccz, cc.T
+                break
+            except:
+                pass
+
+        if ccx == []:
+            warn('\nCell centers not found! They have to be stored in at least one of {}'.format(self.times),
+                 stacklevel
+            = 2)
+
+        return ccx, ccy, ccz, cc
 
 
     @staticmethod
@@ -218,7 +248,7 @@ class FieldData:
     @staticmethod
     @timer
     @jit(parallel = True, fastmath = True)
-    def confineFieldDomain_Rotated(x, y, z, vals, boxL, boxW, boxH, boxO = (0, 0, 0), boxRot = 0):
+    def confineFieldDomain_Rotated(x, y, z, vals, boxL, boxW, boxH, boxO = (0, 0, 0), boxRot = 0, save = False, resultPath = '.', valsName = 'data', fileNameSub = 'Confined'):
         print('\nConfining field domain with rotated box...')
         # Create the bounding box
         box = path.Path(((boxO[0], boxO[1]),
@@ -255,12 +285,19 @@ class FieldData:
                 print(' ' + str(milestone) + '%...', end = '')
                 milestone += 25
 
-        return np.array(xNew2), np.array(yNew2), np.array(zNew2), np.array(valsNew2), box, flags
+        xNew2, yNew2, zNew2, valsNew2 = np.array(xNew2), np.array(yNew2), np.array(zNew2), np.array(valsNew2)
+        ccNew2 = np.vstack((xNew2, yNew2, zNew2)).T
+        if save:
+            pickle.dump(ccNew2, open(resultPath + '/cc_' + fileNameSub + '.p', 'wb'))
+            pickle.dump(valsNew2, open(resultPath + '/' + valsName + '_' + fileNameSub + '.p', 'wb'))
+            print('\n{0} and {1} saved at {2}'.format('cc_' + fileNameSub, valsName + '_' + fileNameSub, resultPath))
+
+        return xNew2, yNew2, zNew2, ccNew2, valsNew2, box, flags
 
 
     @staticmethod
     @timer
-    # @jit(parallel = True, fastmath = True)
+    @jit(parallel = True, fastmath = True)
     def interpolateFieldData(x, y, z, vals, precisionX = 1500j, precisionY = 1500j, precisionZ = 500j, interpMethod = 'linear'):
         print('\nInterpolating field data...')
         # Bound the coordinates to be interpolated in case data wasn't available in those borders
@@ -270,11 +307,16 @@ class FieldData:
         x3D, y3D, z3D = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precisionX,
                         y.min()*bnd[0]:y.max()*bnd[1]:precisionY,
                         z.min()*bnd[0]:z.max()*bnd[1]:precisionZ]
-        requestPts = np.vstack((x3D.ravel(), y3D.ravel(), z3D.ravel())).T
+        # requestPts = np.vstack((x3D.ravel(), y3D.ravel(), z3D.ravel())).T
+        requestPts = (x3D.ravel(), y3D.ravel(), z3D.ravel())
         dim = vals.shape
         orders, milestone, cnt = [], 2, 0
+        # If vals is 1D, i.e. scalar field
+        if len(dim) == 1:
+            print('\nInterpolating scalar field...')
+            valsND = griddata(knownPts, vals, requestPts, method = interpMethod)
         # If vals is 2D
-        if len(dim) == 2:
+        elif len(dim) == 2:
             # Initialize nRow x nCol x nComponent array valsND by interpolating 1st component of the values, x, or xx,
             # as others come later in the loop below
             valsND = griddata(knownPts, vals[:, 0].ravel(), requestPts, method = interpMethod)
@@ -294,6 +336,9 @@ class FieldData:
                 if progress >= milestone:
                     print(' ' + str(milestone) + '%...', end = '')
                     milestone += 2
+
+            print(orders)
+            valsND = valsND[:, :, :, np.array(orders)]
         # If vals is 3D or more
         else:
             print('good')
@@ -322,8 +367,9 @@ class FieldData:
                     print(' ' + str(milestone) + '%...', end = '')
                     milestone += 2
 
-        print(orders)
-        # valsND = valsND[:, :, :, np.array(orders)]
+            print(orders)
+            valsND = valsND[:, :, :, np.array(orders)]
+
         # If vals was 4D, then valsND should be 5D
         if len(dim) == 4:
             valsND = np.reshape(valsND, (valsND.shape[0], valsND.shape[1], dim[2], dim[3]))
@@ -347,11 +393,15 @@ class FieldData:
         # requestPts = np.vstack((x3D.ravel(), y3D.ravel(), z3D.ravel())).T
         dim = vals.shape
         orders, milestone, cnt = [], 2, 0
-        if len(dim) == 2:
+        if len(dim) == 1:
+            rbf = Rbf(x, y, z, vals, function = function)
+            valsND = rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())
+        elif len(dim) == 2:
             rbf = Rbf(x, y, z, vals[:, 0], function = function)
             valsND = rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())
             for i in prange(1, dim[1]):
                 print(i)
+                orders.append(i)
                 rbf = Rbf(x, y, z, vals[:, i], function = function)
                 valsND = np.vstack((valsND, rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())))
                 # Gauge progress
@@ -360,6 +410,9 @@ class FieldData:
                 if progress >= milestone:
                     print(' ' + str(milestone) + '%...', end = '')
                     milestone += 2
+
+            print(orders)
+            valsND = valsND[:, :, :, np.array(orders)]
         else:
             # If the vals is 4D or above, reduce it to 3D
             if len(dim) > 3:
@@ -369,6 +422,7 @@ class FieldData:
             valsND = rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())
             for i in prange(1, dim[1]):
                 print(i)
+                orders.append(i)
                 rbf = Rbf(x, y, z, vals[:, :, i], function = function)
                 valsND = np.vstack((valsND, rbf(x3D.ravel(), y3D.ravel(), z3D.ravel())))
                 # Gauge progress
@@ -378,14 +432,14 @@ class FieldData:
                     print(' ' + str(milestone) + '%...', end = '')
                     milestone += 2
 
+            print(orders)
+            valsND = valsND[:, :, :, np.array(orders)]
+
         return x3D, y3D, z3D, valsND
 
 
-
-
-
-
-    def getMeshInfo(self, ccx, ccy, ccz):
+    # Only for uniform mesh
+    def getUniformMeshInfo(self, ccx, ccy, ccz):
         from Utilities import getArrayStepping
         # Mesh size in x
         valOld = ccx[0]
@@ -519,12 +573,56 @@ class FieldData:
         return fieldHorRes3D, fieldZres3D, fieldHorMean, fieldZmean
             
 
+    @staticmethod
+    @timer
+    @jit(parallel = True, fastmath = True)
+    def calcMeanDissipationRateField(epsilonSGSmean, nuSGSmean, nu = 1e-5, save = True, resultPath = '.'):
+        # According to Eq 5.64 - Eq 5.68 of Sagaut (2006), for isotropic homogeneous turbulence,
+        # <epsilon> = <epsilon_resolved> + <epsilon_SGS>,
+        # <epsilon_resolved>/<epsilon_SGS> = 1/(1 + (<nu_SGS>/nu)),
+        # where epsilon is the total turbulence dissipation rate (m^2/s^3); and <> is statistical averaging
+        epsilonMean = epsilonSGSmean/(1 - (1/(1 + nuSGSmean/nu)))
+
+        if save:
+            pickle.dump(epsilonMean, open(resultPath + '/epsilonMean.p', 'wb'))
+            print('\nepsilonMean saved at {0}'.format(resultPath))
+
+        return epsilonMean
 
 
+    @staticmethod
+    # @jit(parallel = True)
+    def savePickleData(listData, resultPath = '.', fileNames = ('data',)):
+        if isinstance(listData, np.ndarray):
+            listData = (listData,)
 
+        if isinstance(fileNames, str):
+            fileNames = (fileNames,)
+
+        if len(fileNames) != len(listData):
+            fileNames = ['data' + str(i) for i in range(len(listData))]
+            warn('\nInsufficient fileNames provided! Using default fileNames...', stacklevel = 2)
+
+        for i in prange(len(listData)):
+            pickle.dump(listData[i], open(resultPath + '/' + fileNames[i] + '.p', 'wb'))
+
+        print('\n{0} saved at {1}'.format(fileNames, resultPath))
         
         
-        
+    @staticmethod
+    # Numba prange doesn't support dict
+    # @jit(parallel = True)
+    def readPickleData(fileNames, resultPath = '.'):
+        if isinstance(fileNames, str):
+            fileNames = (fileNames,)
+
+        dataDict = {}
+        for i in prange(len(fileNames)):
+            dataDict[fileNames[i]] = pickle.load(open(resultPath + fileNames[i] + '.p', 'rb'), encoding = 'latin1')
+
+        print('\n{} read'.format(fileNames))
+        return dataDict
+
 
 
 

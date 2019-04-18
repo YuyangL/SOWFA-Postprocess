@@ -14,6 +14,7 @@ import os
 User Inputs
 """
 caseDir = 'J:'
+caseDir = '/media/yluan/1'
 caseName = 'ALM_N_H'
 times = '22000.0918025'
 fields = 'uuPrime2'
@@ -53,17 +54,17 @@ for time in case.times:
         # 1D upstream upwind turbine, length is 13D, width is 0.5D, height is 1D above hub height
         # Box counter-clockwise rotation in x-y plane
         boxRot = np.pi/6.
-        if caseName is 'ALM_N_H_ParTurb':
+        if caseName == 'ALM_N_H_ParTurb':
             # For northern turbine a.k.a. turb1 in ALM_N_H_ParTurb
-            if pickleName is 'turb1':
+            if pickleName == 'turb1':
                 # Origin
                 boxO = (914.464, 1380.179 - 2.5, 0)
             # For southern turbine a.k.a. turb0 in ALM_N_H_ParTurb
-            elif pickleName is 'turb0':
+            elif pickleName == 'turb0':
                 boxO = (1103.464, 1052.821 - 2.5, 0)
 
             boxL, boxW, boxH = 6*126, 63 + 2.5*2, 216
-        elif caseName is 'ALM_N_H':
+        elif caseName == 'ALM_N_H':
             boxO= (1008.964, 1216.5 - 2.5, 0)
             boxL, boxW, boxH = 1638, 63 + 2.5*2, 216
 

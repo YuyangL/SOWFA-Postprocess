@@ -21,13 +21,14 @@ from PostProcess_FieldData import FieldData
 import numpy as np
 # from math import sqrt
 
-caseName = 'ABL_N_H'
+caseDir, caseName = 'J:', 'ALM_N_H_ParTurb'
+times = '22000.0918025'
 
-fields = FieldData(['U', 'T'], caseName = caseName + '/Field')
+fields = FieldData(['U', 'Q'], caseDir = caseDir, caseName = caseName, times = times)
 
 fieldData = fields.readFieldData()
 U = fieldData['U']
-T = fieldData['T']
+T = fieldData['Q']
 
 ccx, ccy, ccz, cc = fields.readCellCenterCoordinates()
 
@@ -78,7 +79,7 @@ from PlottingTool_Old import plotIsosurfaces3D
 plotIsosurfaces3D(ccx3D, ccy3D, ccz3D, [UhorRes3D, wRes3D], contourList = [[-1.25], [1.]], slice3Dlist = [T3D],
                   boundSurface = (0, 3000, 0, 3000, 0, 500), boundSlice = (0, 3000, 0, 3000, 0, 1000),
                   customColors = [(60/255., 200/255., 255/255.), (244/255., 66/255., 66/255.), 'gist_gray'],
-                  sliceOffsets = (20,), sliceValRange = (295, 310), name = caseName)
+                  sliceOffsets = (20,), sliceValRange = (295, 310), name = caseName, figDir = fields.resultPath)
 
 
 

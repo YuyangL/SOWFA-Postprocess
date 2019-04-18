@@ -1,6 +1,9 @@
 import numpy as np
 cimport numpy as np
 cimport cython
+from cython.parallel cimport prange
+from libc.stdio cimport printf
+from libc.math cimport max
 
 # Don't check for array bounds
 @cython.boundscheck(False)
@@ -19,6 +22,8 @@ cpdef tuple processAnisotropyTensor(np.ndarray[np.float_t, ndim = 3] vals3D):
     # TKE in the interpolated mesh
     # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
     k = 0.5*(vals3D[:, :, 0] + vals3D[:, :, 3] + vals3D[:, :, 5])
+    # Avoid FPE
+    k = max(k, 1e-8)
     # Convert Rij to bij
     for i in range(6):
         vals3D[:, :, i] = vals3D[:, :, i]/(2.*k) - 1/3. if i in (0, 3, 5) else vals3D[:, :, i]/(2.*k)
@@ -73,8 +78,8 @@ cpdef tuple processAnisotropyTensor(np.ndarray[np.float_t, ndim = 3] vals3D):
 @cython.cdivision(True)
 cpdef tuple processAnisotropyTensor_Uninterpolated(np.ndarray[np.float_t, ndim = 2] vals2D, int realizeIter = 0, makeAnisotropic = True):
     # If ndim is not provided but np.float_t is provided, 1D is assumed
-    cdef np.ndarray[np.float_t] k, eigVals
-    cdef np.ndarray[np.float_t, ndim = 2] eigVecs
+    cdef np.ndarray[np.float_t] k, eigVals_0, eigVals_i
+    cdef np.ndarray[np.float_t, ndim = 2] eigVecs_0, eigVecs_i
     cdef np.ndarray tensors, eigVals3D, eigVecs4D
     cdef int i, milestone
     cdef double progress
@@ -85,6 +90,8 @@ cpdef tuple processAnisotropyTensor_Uninterpolated(np.ndarray[np.float_t, ndim =
         # TKE
         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
         k = 0.5*(vals2D[:, 0] + vals2D[:, 3] + vals2D[:, 5])
+        # Avoid FPE
+        k = max(k, 1e-8)
         # Convert Rij to bij
         for i in range(6):
             vals2D[:, i] = vals2D[:, i]/(2.*k) - 1/3. if i in (0, 3, 5) else vals2D[:, i]/(2.*k)
@@ -106,33 +113,59 @@ cpdef tuple processAnisotropyTensor_Uninterpolated(np.ndarray[np.float_t, ndim =
     # Reshape the z dir to 3x3 instead of 9x1
     # Now tensors is 4D, with x, y being nRow, 1, z1, z2 being the 3x3 tensor at (x, y)
     tensors = tensors.reshape((tensors.shape[0], 1, 3, 3))
-
     # Evaluate eigenvalues and eigenvectors of the symmetric tensor
+    # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
+    # Each col of eigVecs is a vector, thus 3 x 3
+    eigVals_0, eigVecs_0 = np.linalg.eigh(tensors[0, 0, :, :])
+    eigVals_0, eigVecs_0 = np.flipud(eigVals_0), np.fliplr(eigVecs_0)
     # eigVecs4D is nX x nY x 9, where 9 is the flattened eigenvector matrix from np.linalg.eigh()
-    eigVals3D, eigVecs4D = np.zeros(3), np.zeros((tensors.shape[0], 1, 9))
+    # eigVals3D, eigVecs4D = np.zeros(3), np.zeros((tensors.shape[0], 1, 9))
+    eigVals3D, eigVecs4D = np.empty((tensors.shape[0], 3)), np.empty((tensors.shape[0], 1, 9))
+    eigVals3D[0, :], eigVecs4D[0, 0, :] = eigVals_0, eigVecs_0.ravel()
     # For gauging progress
     milestone = 10
-    for i in range(tensors.shape[0]):
+    # Go through each grid point
+    # prange requires nogil that doesn't support python array slicing, and tuple
+    for i in range(1, tensors.shape[0]):
         # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
         # Each col of eigVecs is a vector, thus 3 x 3
-        eigVals, eigVecs = np.linalg.eigh(tensors[i, 0, :, :])
-        eigVals, eigVecs = np.flipud(eigVals), np.fliplr(eigVecs)
-        # Each eigVals is a row, stack them vertically
-        # Each eigVecs is a 3 x 3 matrix, stack them in z dir to each of their i, j = 0 location
-        eigVals3D = np.vstack((eigVals3D, eigVals))
-        eigVecs4D[i, 0, :] = eigVecs.ravel()
+        eigVals_i, eigVecs_i = np.linalg.eigh(tensors[i, 0, :, :])
+        eigVals_i, eigVecs_i = np.flipud(eigVals_i), np.fliplr(eigVecs_i)
+        # Each eigVals_i is a row, stack them vertically
+        # Each eigVecs_i is a 3 x 3 matrix, stack them in z dir to each of their i, j = 0 location
+        eigVals3D[i, :] = eigVals_i
+        eigVecs4D[i, 0, :] = eigVecs_i.ravel()
+
         # Gauge progress
         progress = float(i)/(tensors.shape[0] + 1)*100.
         if progress >= milestone:
-            print(' ' + str(milestone) + '%...')
+            printf(' %d %%... ', milestone)
             milestone += 10
+
+    # # For gauging progress
+    # milestone = 10
+    # for i in range(tensors.shape[0]):
+    #     # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
+    #     # Each col of eigVecs is a vector, thus 3 x 3
+    #     eigVals, eigVecs = np.linalg.eigh(tensors[i, 0, :, :])
+    #     eigVals, eigVecs = np.flipud(eigVals), np.fliplr(eigVecs)
+    #     # Each eigVals is a row, stack them vertically
+    #     # Each eigVecs is a 3 x 3 matrix, stack them in z dir to each of their i, j = 0 location
+    #     eigVals3D = np.vstack((eigVals3D, eigVals))
+    #     eigVecs4D[i, 0, :] = eigVecs.ravel()
+    #     # Gauge progress
+    #     progress = float(i)/(tensors.shape[0] + 1)*100.
+    #     if progress >= milestone:
+    #         print(' ' + str(milestone) + '%...')
+    #         milestone += 10
 
     # Reshape eigVals3D to nRow x 1 x 3
     # so that each mesh grid location has 3 eigenvalues
     # Remove the first row since it was dummy
     # Also reshape eigVecs4D from nRow x 1 x 9 to nRow x 1 x 3 x 3
     # so that each col of the 3 x 3 matrix is an eigenvector corresponding to an eigenvalue
-    eigVals3D = np.reshape(eigVals3D[1:], (tensors.shape[0], 1, 3))
+    eigVals3D = np.reshape(eigVals3D, (tensors.shape[0], 1, 3))
+    # eigVals3D = np.reshape(eigVals3D[1:], (tensors.shape[0], 1, 3))
     eigVecs4D = np.reshape(eigVecs4D, (tensors.shape[0], 1, 3, 3))
 
     print('\nFinished processing anisotropy tensors')

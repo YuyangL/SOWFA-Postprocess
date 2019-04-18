@@ -862,7 +862,7 @@ typedef struct {
 } __Pyx_BufFmt_Context;
 
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":776
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":776
  * # in Cython to enable them only on the right systems.
  * 
  * ctypedef npy_int8       int8_t             # <<<<<<<<<<<<<<
@@ -871,7 +871,7 @@ typedef struct {
  */
 typedef npy_int8 __pyx_t_5numpy_int8_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":777
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":777
  * 
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t             # <<<<<<<<<<<<<<
@@ -880,7 +880,7 @@ typedef npy_int8 __pyx_t_5numpy_int8_t;
  */
 typedef npy_int16 __pyx_t_5numpy_int16_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":778
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":778
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t             # <<<<<<<<<<<<<<
@@ -889,7 +889,7 @@ typedef npy_int16 __pyx_t_5numpy_int16_t;
  */
 typedef npy_int32 __pyx_t_5numpy_int32_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":779
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":779
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t
  * ctypedef npy_int64      int64_t             # <<<<<<<<<<<<<<
@@ -898,7 +898,7 @@ typedef npy_int32 __pyx_t_5numpy_int32_t;
  */
 typedef npy_int64 __pyx_t_5numpy_int64_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":783
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":783
  * #ctypedef npy_int128     int128_t
  * 
  * ctypedef npy_uint8      uint8_t             # <<<<<<<<<<<<<<
@@ -907,7 +907,7 @@ typedef npy_int64 __pyx_t_5numpy_int64_t;
  */
 typedef npy_uint8 __pyx_t_5numpy_uint8_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":784
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":784
  * 
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t             # <<<<<<<<<<<<<<
@@ -916,7 +916,7 @@ typedef npy_uint8 __pyx_t_5numpy_uint8_t;
  */
 typedef npy_uint16 __pyx_t_5numpy_uint16_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":785
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":785
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t             # <<<<<<<<<<<<<<
@@ -925,7 +925,7 @@ typedef npy_uint16 __pyx_t_5numpy_uint16_t;
  */
 typedef npy_uint32 __pyx_t_5numpy_uint32_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":786
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":786
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t
  * ctypedef npy_uint64     uint64_t             # <<<<<<<<<<<<<<
@@ -934,7 +934,7 @@ typedef npy_uint32 __pyx_t_5numpy_uint32_t;
  */
 typedef npy_uint64 __pyx_t_5numpy_uint64_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":790
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":790
  * #ctypedef npy_uint128    uint128_t
  * 
  * ctypedef npy_float32    float32_t             # <<<<<<<<<<<<<<
@@ -943,7 +943,7 @@ typedef npy_uint64 __pyx_t_5numpy_uint64_t;
  */
 typedef npy_float32 __pyx_t_5numpy_float32_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":791
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":791
  * 
  * ctypedef npy_float32    float32_t
  * ctypedef npy_float64    float64_t             # <<<<<<<<<<<<<<
@@ -952,7 +952,7 @@ typedef npy_float32 __pyx_t_5numpy_float32_t;
  */
 typedef npy_float64 __pyx_t_5numpy_float64_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":800
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":800
  * # The int types are mapped a bit surprising --
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t             # <<<<<<<<<<<<<<
@@ -961,7 +961,7 @@ typedef npy_float64 __pyx_t_5numpy_float64_t;
  */
 typedef npy_long __pyx_t_5numpy_int_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":801
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":801
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   long_t             # <<<<<<<<<<<<<<
@@ -970,7 +970,7 @@ typedef npy_long __pyx_t_5numpy_int_t;
  */
 typedef npy_longlong __pyx_t_5numpy_long_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":802
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":802
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   long_t
  * ctypedef npy_longlong   longlong_t             # <<<<<<<<<<<<<<
@@ -979,7 +979,7 @@ typedef npy_longlong __pyx_t_5numpy_long_t;
  */
 typedef npy_longlong __pyx_t_5numpy_longlong_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":804
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":804
  * ctypedef npy_longlong   longlong_t
  * 
  * ctypedef npy_ulong      uint_t             # <<<<<<<<<<<<<<
@@ -988,7 +988,7 @@ typedef npy_longlong __pyx_t_5numpy_longlong_t;
  */
 typedef npy_ulong __pyx_t_5numpy_uint_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":805
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":805
  * 
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulong_t             # <<<<<<<<<<<<<<
@@ -997,7 +997,7 @@ typedef npy_ulong __pyx_t_5numpy_uint_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulong_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":806
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":806
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulong_t
  * ctypedef npy_ulonglong  ulonglong_t             # <<<<<<<<<<<<<<
@@ -1006,7 +1006,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulong_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":808
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":808
  * ctypedef npy_ulonglong  ulonglong_t
  * 
  * ctypedef npy_intp       intp_t             # <<<<<<<<<<<<<<
@@ -1015,7 +1015,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
  */
 typedef npy_intp __pyx_t_5numpy_intp_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":809
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":809
  * 
  * ctypedef npy_intp       intp_t
  * ctypedef npy_uintp      uintp_t             # <<<<<<<<<<<<<<
@@ -1024,7 +1024,7 @@ typedef npy_intp __pyx_t_5numpy_intp_t;
  */
 typedef npy_uintp __pyx_t_5numpy_uintp_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":811
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":811
  * ctypedef npy_uintp      uintp_t
  * 
  * ctypedef npy_double     float_t             # <<<<<<<<<<<<<<
@@ -1033,7 +1033,7 @@ typedef npy_uintp __pyx_t_5numpy_uintp_t;
  */
 typedef npy_double __pyx_t_5numpy_float_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":812
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":812
  * 
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t             # <<<<<<<<<<<<<<
@@ -1042,7 +1042,7 @@ typedef npy_double __pyx_t_5numpy_float_t;
  */
 typedef npy_double __pyx_t_5numpy_double_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":813
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":813
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t
  * ctypedef npy_longdouble longdouble_t             # <<<<<<<<<<<<<<
@@ -1077,7 +1077,7 @@ static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(do
 
 /*--- Type declarations ---*/
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":815
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":815
  * ctypedef npy_longdouble longdouble_t
  * 
  * ctypedef npy_cfloat      cfloat_t             # <<<<<<<<<<<<<<
@@ -1086,7 +1086,7 @@ static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(do
  */
 typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":816
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":816
  * 
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t             # <<<<<<<<<<<<<<
@@ -1095,7 +1095,7 @@ typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":817
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":817
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t
  * ctypedef npy_clongdouble clongdouble_t             # <<<<<<<<<<<<<<
@@ -1104,7 +1104,7 @@ typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
  */
 typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":819
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":819
  * ctypedef npy_clongdouble clongdouble_t
  * 
  * ctypedef npy_cdouble     complex_t             # <<<<<<<<<<<<<<
@@ -1114,12 +1114,12 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 struct __pyx_opt_args_28PostProcess_AnisotropyTensor_processAnisotropyTensor_Uninterpolated;
 
-/* "PostProcess_AnisotropyTensor.pyx":74
+/* "PostProcess_AnisotropyTensor.pyx":76
  * @cython.wraparound(False)
  * @cython.cdivision(True)
  * cpdef tuple processAnisotropyTensor_Uninterpolated(np.ndarray[np.float_t, ndim = 2] vals2D, int realizeIter = 0, makeAnisotropic = True):             # <<<<<<<<<<<<<<
  *     # If ndim is not provided but np.float_t is provided, 1D is assumed
- *     cdef np.ndarray[np.float_t] k, eigVals
+ *     cdef np.ndarray[np.float_t] k, eigVals_0, eigVals_i
  */
 struct __pyx_opt_args_28PostProcess_AnisotropyTensor_processAnisotropyTensor_Uninterpolated {
   int __pyx_n;
@@ -1769,6 +1769,7 @@ static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_sign[] = "sign";
 static const char __pyx_k_sort[] = "sort";
 static const char __pyx_k_test[] = "__test__";
+static const char __pyx_k_empty[] = "empty";
 static const char __pyx_k_numpy[] = "numpy";
 static const char __pyx_k_print[] = "print";
 static const char __pyx_k_range[] = "range";
@@ -1819,6 +1820,7 @@ static PyObject *__pyx_n_s_dot;
 static PyObject *__pyx_n_s_dstack;
 static PyObject *__pyx_n_s_eig;
 static PyObject *__pyx_n_s_eigh;
+static PyObject *__pyx_n_s_empty;
 static PyObject *__pyx_n_s_end;
 static PyObject *__pyx_n_s_file;
 static PyObject *__pyx_n_s_fliplr;
@@ -1887,9 +1889,12 @@ static PyObject *__pyx_tuple__21;
 static PyObject *__pyx_tuple__22;
 static PyObject *__pyx_tuple__23;
 static PyObject *__pyx_tuple__24;
+static PyObject *__pyx_tuple__25;
+static PyObject *__pyx_tuple__26;
+static PyObject *__pyx_tuple__27;
 /* Late includes */
 
-/* "PostProcess_AnisotropyTensor.pyx":10
+/* "PostProcess_AnisotropyTensor.pyx":12
  * @cython.wraparound(False)
  * @cython.cdivision(True)
  * cpdef tuple processAnisotropyTensor(np.ndarray[np.float_t, ndim = 3] vals3D):             # <<<<<<<<<<<<<<
@@ -1964,44 +1969,44 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   __pyx_pybuffernd_vals3D.rcbuffer = &__pyx_pybuffer_vals3D;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vals3D.rcbuffer->pybuffer, (PyObject*)__pyx_v_vals3D, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 3, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vals3D.rcbuffer->pybuffer, (PyObject*)__pyx_v_vals3D, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 3, 0, __pyx_stack) == -1)) __PYX_ERR(0, 12, __pyx_L1_error)
   }
   __pyx_pybuffernd_vals3D.diminfo[0].strides = __pyx_pybuffernd_vals3D.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_vals3D.diminfo[0].shape = __pyx_pybuffernd_vals3D.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_vals3D.diminfo[1].strides = __pyx_pybuffernd_vals3D.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_vals3D.diminfo[1].shape = __pyx_pybuffernd_vals3D.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_vals3D.diminfo[2].strides = __pyx_pybuffernd_vals3D.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_vals3D.diminfo[2].shape = __pyx_pybuffernd_vals3D.rcbuffer->pybuffer.shape[2];
 
-  /* "PostProcess_AnisotropyTensor.pyx":18
+  /* "PostProcess_AnisotropyTensor.pyx":20
  *     cdef double progress
  * 
  *     print('\nProcessing anisotropy tensors...')             # <<<<<<<<<<<<<<
  *     # TKE in the interpolated mesh
  *     # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
  */
-  if (__Pyx_PrintOne(0, __pyx_kp_s_Processing_anisotropy_tensors) < 0) __PYX_ERR(0, 18, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_kp_s_Processing_anisotropy_tensors) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
 
-  /* "PostProcess_AnisotropyTensor.pyx":21
+  /* "PostProcess_AnisotropyTensor.pyx":23
  *     # TKE in the interpolated mesh
  *     # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
  *     k = 0.5*(vals3D[:, :, 0] + vals3D[:, :, 3] + vals3D[:, :, 5])             # <<<<<<<<<<<<<<
  *     # Convert Rij to bij
  *     for i in range(6):
  */
-  __pyx_t_1 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyNumber_Add(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = PyNumber_Add(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Add(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyNumber_Multiply(__pyx_float_0_5, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Multiply(__pyx_float_0_5, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 21, __pyx_L1_error)
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 23, __pyx_L1_error)
   __pyx_t_4 = ((PyArrayObject *)__pyx_t_2);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -2018,13 +2023,13 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       __pyx_t_6 = __pyx_t_7 = __pyx_t_8 = 0;
     }
     __pyx_pybuffernd_k.diminfo[0].strides = __pyx_pybuffernd_k.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_k.diminfo[0].shape = __pyx_pybuffernd_k.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_k.diminfo[1].strides = __pyx_pybuffernd_k.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_k.diminfo[1].shape = __pyx_pybuffernd_k.rcbuffer->pybuffer.shape[1];
-    if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 21, __pyx_L1_error)
+    if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 23, __pyx_L1_error)
   }
   __pyx_t_4 = 0;
   __pyx_v_k = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":23
+  /* "PostProcess_AnisotropyTensor.pyx":25
  *     k = 0.5*(vals3D[:, :, 0] + vals3D[:, :, 3] + vals3D[:, :, 5])
  *     # Convert Rij to bij
  *     for i in range(6):             # <<<<<<<<<<<<<<
@@ -2034,7 +2039,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   for (__pyx_t_5 = 0; __pyx_t_5 < 6; __pyx_t_5+=1) {
     __pyx_v_i = __pyx_t_5;
 
-    /* "PostProcess_AnisotropyTensor.pyx":24
+    /* "PostProcess_AnisotropyTensor.pyx":26
  *     # Convert Rij to bij
  *     for i in range(6):
  *         vals3D[:, :, i] = vals3D[:, :, i]/(2.*k) - 1/3. if i in (0, 3, 5) else vals3D[:, :, i]/(2.*k)             # <<<<<<<<<<<<<<
@@ -2045,9 +2050,9 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       case 0:
       case 3:
       case 5:
-      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 26, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_INCREF(__pyx_slice_);
       __Pyx_GIVEREF(__pyx_slice_);
@@ -2058,18 +2063,18 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       __Pyx_GIVEREF(__pyx_t_1);
       PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_t_1);
       __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_Multiply(__pyx_float_2_, ((PyObject *)__pyx_v_k)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_Multiply(__pyx_float_2_, ((PyObject *)__pyx_v_k)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 26, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_9 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 26, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyFloat_FromDouble((1.0 / 3.)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_3 = PyFloat_FromDouble((1.0 / 3.)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 26, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_1 = PyNumber_Subtract(__pyx_t_9, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_1 = PyNumber_Subtract(__pyx_t_9, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -2077,9 +2082,9 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       __pyx_t_1 = 0;
       break;
       default:
-      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 26, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_INCREF(__pyx_slice_);
       __Pyx_GIVEREF(__pyx_slice_);
@@ -2090,12 +2095,12 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       __Pyx_GIVEREF(__pyx_t_1);
       PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_t_1);
       __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_Multiply(__pyx_float_2_, ((PyObject *)__pyx_v_k)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_Multiply(__pyx_float_2_, ((PyObject *)__pyx_v_k)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 26, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_9 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 24, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 26, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -2103,9 +2108,9 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       __pyx_t_9 = 0;
       break;
     }
-    __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 24, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 26, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 24, __pyx_L1_error)
+    __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 26, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_INCREF(__pyx_slice_);
     __Pyx_GIVEREF(__pyx_slice_);
@@ -2116,66 +2121,66 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
     __Pyx_GIVEREF(__pyx_t_9);
     PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_t_9);
     __pyx_t_9 = 0;
-    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_vals3D), __pyx_t_3, __pyx_t_2) < 0)) __PYX_ERR(0, 24, __pyx_L1_error)
+    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_vals3D), __pyx_t_3, __pyx_t_2) < 0)) __PYX_ERR(0, 26, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
 
-  /* "PostProcess_AnisotropyTensor.pyx":28
+  /* "PostProcess_AnisotropyTensor.pyx":30
  *     # Add each anisotropy tensor to each mesh grid location, in depth
  *     # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
  *     tensors = np.dstack((vals3D[:, :, 0], vals3D[:, :, 1], vals3D[:, :, 2],             # <<<<<<<<<<<<<<
  *                          vals3D[:, :, 1], vals3D[:, :, 3], vals3D[:, :, 4],
  *                          vals3D[:, :, 2], vals3D[:, :, 4], vals3D[:, :, 5]))
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_dstack); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_dstack); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_10 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
 
-  /* "PostProcess_AnisotropyTensor.pyx":29
+  /* "PostProcess_AnisotropyTensor.pyx":31
  *     # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
  *     tensors = np.dstack((vals3D[:, :, 0], vals3D[:, :, 1], vals3D[:, :, 2],
  *                          vals3D[:, :, 1], vals3D[:, :, 3], vals3D[:, :, 4],             # <<<<<<<<<<<<<<
  *                          vals3D[:, :, 2], vals3D[:, :, 4], vals3D[:, :, 5]))
  *     # Reshape the z dir to 3x3 instead of 9x1
  */
-  __pyx_t_11 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__5); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__5); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 31, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
-  __pyx_t_12 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__3); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_t_12 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__3); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 31, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_12);
-  __pyx_t_13 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__7); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_t_13 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__7); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 31, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_13);
 
-  /* "PostProcess_AnisotropyTensor.pyx":30
+  /* "PostProcess_AnisotropyTensor.pyx":32
  *     tensors = np.dstack((vals3D[:, :, 0], vals3D[:, :, 1], vals3D[:, :, 2],
  *                          vals3D[:, :, 1], vals3D[:, :, 3], vals3D[:, :, 4],
  *                          vals3D[:, :, 2], vals3D[:, :, 4], vals3D[:, :, 5]))             # <<<<<<<<<<<<<<
  *     # Reshape the z dir to 3x3 instead of 9x1
  *     # Now tensors is 4D, with x, y being mesh grid, z1, z2 being the 3x3 tensor at (x, y)
  */
-  __pyx_t_14 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__6); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_14 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__6); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_14);
-  __pyx_t_15 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__7); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__7); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
-  __pyx_t_16 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__4); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_16 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals3D), __pyx_tuple__4); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
 
-  /* "PostProcess_AnisotropyTensor.pyx":28
+  /* "PostProcess_AnisotropyTensor.pyx":30
  *     # Add each anisotropy tensor to each mesh grid location, in depth
  *     # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
  *     tensors = np.dstack((vals3D[:, :, 0], vals3D[:, :, 1], vals3D[:, :, 2],             # <<<<<<<<<<<<<<
  *                          vals3D[:, :, 1], vals3D[:, :, 3], vals3D[:, :, 4],
  *                          vals3D[:, :, 2], vals3D[:, :, 4], vals3D[:, :, 5]))
  */
-  __pyx_t_17 = PyTuple_New(9); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_t_17 = PyTuple_New(9); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
   __Pyx_GIVEREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_3);
@@ -2217,27 +2222,27 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   __pyx_t_2 = (__pyx_t_16) ? __Pyx_PyObject_Call2Args(__pyx_t_9, __pyx_t_16, __pyx_t_17) : __Pyx_PyObject_CallOneArg(__pyx_t_9, __pyx_t_17);
   __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 28, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 28, __pyx_L1_error)
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 30, __pyx_L1_error)
   __pyx_v_tensors = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":33
+  /* "PostProcess_AnisotropyTensor.pyx":35
  *     # Reshape the z dir to 3x3 instead of 9x1
  *     # Now tensors is 4D, with x, y being mesh grid, z1, z2 being the 3x3 tensor at (x, y)
  *     tensors = tensors.reshape((tensors.shape[0], tensors.shape[1], 3, 3))             # <<<<<<<<<<<<<<
  * 
  *     # Evaluate eigenvalues and eigenvectors of the symmetric tensor
  */
-  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_tensors), __pyx_n_s_reshape); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_tensors), __pyx_n_s_reshape); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_17 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_17 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_16 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[1])); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_16 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[1])); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
-  __pyx_t_15 = PyTuple_New(4); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_15 = PyTuple_New(4); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_GIVEREF(__pyx_t_17);
   PyTuple_SET_ITEM(__pyx_t_15, 0, __pyx_t_17);
@@ -2264,23 +2269,23 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   __pyx_t_2 = (__pyx_t_16) ? __Pyx_PyObject_Call2Args(__pyx_t_9, __pyx_t_16, __pyx_t_15) : __Pyx_PyObject_CallOneArg(__pyx_t_9, __pyx_t_15);
   __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 33, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 33, __pyx_L1_error)
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_DECREF_SET(__pyx_v_tensors, ((PyArrayObject *)__pyx_t_2));
   __pyx_t_2 = 0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":37
+  /* "PostProcess_AnisotropyTensor.pyx":39
  *     # Evaluate eigenvalues and eigenvectors of the symmetric tensor
  *     # eigVecsGrid is nX x nY x 9, where 9 is the flattened eigenvector matrix from np.linalg.eigh()
  *     eigValsGrid, eigVecsGrid = np.zeros(3), np.zeros((tensors.shape[0], tensors.shape[1], 9))             # <<<<<<<<<<<<<<
  *     # For gauging progress
  *     milestone = 10
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_np); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_np); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_zeros); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_zeros); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   __pyx_t_9 = NULL;
@@ -2295,20 +2300,20 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   }
   __pyx_t_2 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_15, __pyx_t_9, __pyx_int_3) : __Pyx_PyObject_CallOneArg(__pyx_t_15, __pyx_int_3);
   __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 37, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 37, __pyx_L1_error)
-  __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_np); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 37, __pyx_L1_error)
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 39, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_np); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_zeros); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_zeros); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-  __pyx_t_9 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_17 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[1])); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_17 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[1])); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_14 = PyTuple_New(3); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_14 = PyTuple_New(3); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_14);
   __Pyx_GIVEREF(__pyx_t_9);
   PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_9);
@@ -2332,16 +2337,16 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   __pyx_t_15 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_17, __pyx_t_14) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_t_14);
   __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
   __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-  if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 37, __pyx_L1_error)
+  if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-  if (!(likely(((__pyx_t_15) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_15, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 37, __pyx_L1_error)
+  if (!(likely(((__pyx_t_15) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_15, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 39, __pyx_L1_error)
   __pyx_v_eigValsGrid = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
   __pyx_v_eigVecsGrid = ((PyArrayObject *)__pyx_t_15);
   __pyx_t_15 = 0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":39
+  /* "PostProcess_AnisotropyTensor.pyx":41
  *     eigValsGrid, eigVecsGrid = np.zeros(3), np.zeros((tensors.shape[0], tensors.shape[1], 9))
  *     # For gauging progress
  *     milestone = 10             # <<<<<<<<<<<<<<
@@ -2350,7 +2355,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
  */
   __pyx_v_milestone = 10;
 
-  /* "PostProcess_AnisotropyTensor.pyx":40
+  /* "PostProcess_AnisotropyTensor.pyx":42
  *     # For gauging progress
  *     milestone = 10
  *     for i in range(tensors.shape[0]):             # <<<<<<<<<<<<<<
@@ -2362,7 +2367,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_19; __pyx_t_5+=1) {
     __pyx_v_i = __pyx_t_5;
 
-    /* "PostProcess_AnisotropyTensor.pyx":41
+    /* "PostProcess_AnisotropyTensor.pyx":43
  *     milestone = 10
  *     for i in range(tensors.shape[0]):
  *         for j in range(tensors.shape[1]):             # <<<<<<<<<<<<<<
@@ -2374,26 +2379,26 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
     for (__pyx_t_22 = 0; __pyx_t_22 < __pyx_t_21; __pyx_t_22+=1) {
       __pyx_v_j = __pyx_t_22;
 
-      /* "PostProcess_AnisotropyTensor.pyx":44
+      /* "PostProcess_AnisotropyTensor.pyx":46
  *             # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
  *             # Each col of eigVecs is a vector, thus 3 x 3
  *             eigVals, eigVecs = np.linalg.eigh(tensors[i, j, :, :])             # <<<<<<<<<<<<<<
  *             eigVals, eigVecs = np.flipud(eigVals), np.fliplr(eigVecs)
  *             # Each eigVals is a row, stack them vertically
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 46, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_linalg); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 44, __pyx_L1_error)
+      __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_linalg); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 46, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_eigh); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_eigh); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 46, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-      __pyx_t_16 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 44, __pyx_L1_error)
+      __pyx_t_16 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 46, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
-      __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_j); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 44, __pyx_L1_error)
+      __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_j); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 46, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
-      __pyx_t_17 = PyTuple_New(4); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 44, __pyx_L1_error)
+      __pyx_t_17 = PyTuple_New(4); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 46, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_GIVEREF(__pyx_t_16);
       PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_16);
@@ -2407,7 +2412,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       PyTuple_SET_ITEM(__pyx_t_17, 3, __pyx_slice_);
       __pyx_t_16 = 0;
       __pyx_t_14 = 0;
-      __pyx_t_14 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_tensors), __pyx_t_17); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 44, __pyx_L1_error)
+      __pyx_t_14 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_tensors), __pyx_t_17); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 46, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
       __pyx_t_17 = NULL;
@@ -2423,7 +2428,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       __pyx_t_15 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_17, __pyx_t_14) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_14);
       __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-      if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 44, __pyx_L1_error)
+      if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 46, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       if ((likely(PyTuple_CheckExact(__pyx_t_15))) || (PyList_CheckExact(__pyx_t_15))) {
@@ -2432,7 +2437,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
         if (unlikely(size != 2)) {
           if (size > 2) __Pyx_RaiseTooManyValuesError(2);
           else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-          __PYX_ERR(0, 44, __pyx_L1_error)
+          __PYX_ERR(0, 46, __pyx_L1_error)
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
         if (likely(PyTuple_CheckExact(sequence))) {
@@ -2445,15 +2450,15 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
         __Pyx_INCREF(__pyx_t_2);
         __Pyx_INCREF(__pyx_t_14);
         #else
-        __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
+        __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 46, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_14 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 44, __pyx_L1_error)
+        __pyx_t_14 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 46, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
         #endif
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       } else {
         Py_ssize_t index = -1;
-        __pyx_t_17 = PyObject_GetIter(__pyx_t_15); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 44, __pyx_L1_error)
+        __pyx_t_17 = PyObject_GetIter(__pyx_t_15); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 46, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_17);
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
         __pyx_t_23 = Py_TYPE(__pyx_t_17)->tp_iternext;
@@ -2461,7 +2466,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
         __Pyx_GOTREF(__pyx_t_2);
         index = 1; __pyx_t_14 = __pyx_t_23(__pyx_t_17); if (unlikely(!__pyx_t_14)) goto __pyx_L9_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_14);
-        if (__Pyx_IternextUnpackEndCheck(__pyx_t_23(__pyx_t_17), 2) < 0) __PYX_ERR(0, 44, __pyx_L1_error)
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_23(__pyx_t_17), 2) < 0) __PYX_ERR(0, 46, __pyx_L1_error)
         __pyx_t_23 = NULL;
         __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
         goto __pyx_L10_unpacking_done;
@@ -2469,11 +2474,11 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
         __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
         __pyx_t_23 = NULL;
         if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-        __PYX_ERR(0, 44, __pyx_L1_error)
+        __PYX_ERR(0, 46, __pyx_L1_error)
         __pyx_L10_unpacking_done:;
       }
-      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 44, __pyx_L1_error)
-      if (!(likely(((__pyx_t_14) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_14, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 44, __pyx_L1_error)
+      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 46, __pyx_L1_error)
+      if (!(likely(((__pyx_t_14) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_14, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 46, __pyx_L1_error)
       __pyx_t_24 = ((PyArrayObject *)__pyx_t_2);
       {
         __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -2490,7 +2495,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
           __pyx_t_8 = __pyx_t_7 = __pyx_t_6 = 0;
         }
         __pyx_pybuffernd_eigVals.diminfo[0].strides = __pyx_pybuffernd_eigVals.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVals.diminfo[0].shape = __pyx_pybuffernd_eigVals.rcbuffer->pybuffer.shape[0];
-        if (unlikely(__pyx_t_25 < 0)) __PYX_ERR(0, 44, __pyx_L1_error)
+        if (unlikely(__pyx_t_25 < 0)) __PYX_ERR(0, 46, __pyx_L1_error)
       }
       __pyx_t_24 = 0;
       __Pyx_XDECREF_SET(__pyx_v_eigVals, ((PyArrayObject *)__pyx_t_2));
@@ -2511,22 +2516,22 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
           __pyx_t_6 = __pyx_t_7 = __pyx_t_8 = 0;
         }
         __pyx_pybuffernd_eigVecs.diminfo[0].strides = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVecs.diminfo[0].shape = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_eigVecs.diminfo[1].strides = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_eigVecs.diminfo[1].shape = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.shape[1];
-        if (unlikely(__pyx_t_25 < 0)) __PYX_ERR(0, 44, __pyx_L1_error)
+        if (unlikely(__pyx_t_25 < 0)) __PYX_ERR(0, 46, __pyx_L1_error)
       }
       __pyx_t_4 = 0;
       __Pyx_XDECREF_SET(__pyx_v_eigVecs, ((PyArrayObject *)__pyx_t_14));
       __pyx_t_14 = 0;
 
-      /* "PostProcess_AnisotropyTensor.pyx":45
+      /* "PostProcess_AnisotropyTensor.pyx":47
  *             # Each col of eigVecs is a vector, thus 3 x 3
  *             eigVals, eigVecs = np.linalg.eigh(tensors[i, j, :, :])
  *             eigVals, eigVecs = np.flipud(eigVals), np.fliplr(eigVecs)             # <<<<<<<<<<<<<<
  *             # Each eigVals is a row, stack them vertically
  *             # Each eigVecs is a 3 x 3 matrix, stack them in z dir to each of their i, j location
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_flipud); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_flipud); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       __pyx_t_14 = NULL;
@@ -2541,13 +2546,13 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       }
       __pyx_t_15 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_14, ((PyObject *)__pyx_v_eigVals)) : __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_eigVals));
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-      if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 45, __pyx_L1_error)
+      if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (!(likely(((__pyx_t_15) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_15, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 45, __pyx_L1_error)
-      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 45, __pyx_L1_error)
+      if (!(likely(((__pyx_t_15) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_15, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 47, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
-      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_fliplr); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 45, __pyx_L1_error)
+      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_fliplr); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       __pyx_t_14 = NULL;
@@ -2562,10 +2567,10 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       }
       __pyx_t_2 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_14, ((PyObject *)__pyx_v_eigVecs)) : __Pyx_PyObject_CallOneArg(__pyx_t_17, ((PyObject *)__pyx_v_eigVecs));
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 45, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 45, __pyx_L1_error)
+      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 47, __pyx_L1_error)
       __pyx_t_24 = ((PyArrayObject *)__pyx_t_15);
       {
         __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -2582,7 +2587,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
           __pyx_t_8 = __pyx_t_7 = __pyx_t_6 = 0;
         }
         __pyx_pybuffernd_eigVals.diminfo[0].strides = __pyx_pybuffernd_eigVals.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVals.diminfo[0].shape = __pyx_pybuffernd_eigVals.rcbuffer->pybuffer.shape[0];
-        if (unlikely(__pyx_t_25 < 0)) __PYX_ERR(0, 45, __pyx_L1_error)
+        if (unlikely(__pyx_t_25 < 0)) __PYX_ERR(0, 47, __pyx_L1_error)
       }
       __pyx_t_24 = 0;
       __Pyx_DECREF_SET(__pyx_v_eigVals, ((PyArrayObject *)__pyx_t_15));
@@ -2603,25 +2608,25 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
           __pyx_t_6 = __pyx_t_7 = __pyx_t_8 = 0;
         }
         __pyx_pybuffernd_eigVecs.diminfo[0].strides = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVecs.diminfo[0].shape = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_eigVecs.diminfo[1].strides = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_eigVecs.diminfo[1].shape = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.shape[1];
-        if (unlikely(__pyx_t_25 < 0)) __PYX_ERR(0, 45, __pyx_L1_error)
+        if (unlikely(__pyx_t_25 < 0)) __PYX_ERR(0, 47, __pyx_L1_error)
       }
       __pyx_t_4 = 0;
       __Pyx_DECREF_SET(__pyx_v_eigVecs, ((PyArrayObject *)__pyx_t_2));
       __pyx_t_2 = 0;
 
-      /* "PostProcess_AnisotropyTensor.pyx":48
+      /* "PostProcess_AnisotropyTensor.pyx":50
  *             # Each eigVals is a row, stack them vertically
  *             # Each eigVecs is a 3 x 3 matrix, stack them in z dir to each of their i, j location
  *             eigValsGrid = np.vstack((eigValsGrid, eigVals))             # <<<<<<<<<<<<<<
  *             eigVecsGrid[i, j, :] = eigVecs.ravel()
  * 
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 48, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 50, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
-      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_vstack); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 48, __pyx_L1_error)
+      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_vstack); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 50, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-      __pyx_t_15 = PyTuple_New(2); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 48, __pyx_L1_error)
+      __pyx_t_15 = PyTuple_New(2); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 50, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_INCREF(((PyObject *)__pyx_v_eigValsGrid));
       __Pyx_GIVEREF(((PyObject *)__pyx_v_eigValsGrid));
@@ -2642,21 +2647,21 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       __pyx_t_2 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_14, __pyx_t_15) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_15);
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 48, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 50, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 48, __pyx_L1_error)
+      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 50, __pyx_L1_error)
       __Pyx_DECREF_SET(__pyx_v_eigValsGrid, ((PyArrayObject *)__pyx_t_2));
       __pyx_t_2 = 0;
 
-      /* "PostProcess_AnisotropyTensor.pyx":49
+      /* "PostProcess_AnisotropyTensor.pyx":51
  *             # Each eigVecs is a 3 x 3 matrix, stack them in z dir to each of their i, j location
  *             eigValsGrid = np.vstack((eigValsGrid, eigVals))
  *             eigVecsGrid[i, j, :] = eigVecs.ravel()             # <<<<<<<<<<<<<<
  * 
  *         # Gauge progress
  */
-      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_eigVecs), __pyx_n_s_ravel); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_17 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_eigVecs), __pyx_n_s_ravel); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 51, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
       __pyx_t_15 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_17))) {
@@ -2670,14 +2675,14 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       }
       __pyx_t_2 = (__pyx_t_15) ? __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_15) : __Pyx_PyObject_CallNoArg(__pyx_t_17);
       __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-      __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 51, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
-      __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_j); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_j); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 51, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
-      __pyx_t_14 = PyTuple_New(3); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_14 = PyTuple_New(3); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 51, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
       __Pyx_GIVEREF(__pyx_t_17);
       PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_17);
@@ -2688,12 +2693,12 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
       PyTuple_SET_ITEM(__pyx_t_14, 2, __pyx_slice_);
       __pyx_t_17 = 0;
       __pyx_t_15 = 0;
-      if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_eigVecsGrid), __pyx_t_14, __pyx_t_2) < 0)) __PYX_ERR(0, 49, __pyx_L1_error)
+      if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_eigVecsGrid), __pyx_t_14, __pyx_t_2) < 0)) __PYX_ERR(0, 51, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     }
 
-    /* "PostProcess_AnisotropyTensor.pyx":52
+    /* "PostProcess_AnisotropyTensor.pyx":54
  * 
  *         # Gauge progress
  *         progress = float(i)/(tensors.shape[0] + 1)*100.             # <<<<<<<<<<<<<<
@@ -2702,7 +2707,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
  */
     __pyx_v_progress = ((((double)__pyx_v_i) / ((__pyx_v_tensors->dimensions[0]) + 1)) * 100.);
 
-    /* "PostProcess_AnisotropyTensor.pyx":53
+    /* "PostProcess_AnisotropyTensor.pyx":55
  *         # Gauge progress
  *         progress = float(i)/(tensors.shape[0] + 1)*100.
  *         if progress >= milestone:             # <<<<<<<<<<<<<<
@@ -2712,28 +2717,28 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
     __pyx_t_26 = ((__pyx_v_progress >= __pyx_v_milestone) != 0);
     if (__pyx_t_26) {
 
-      /* "PostProcess_AnisotropyTensor.pyx":54
+      /* "PostProcess_AnisotropyTensor.pyx":56
  *         progress = float(i)/(tensors.shape[0] + 1)*100.
  *         if progress >= milestone:
  *             print(' ' + str(milestone) + '%...')             # <<<<<<<<<<<<<<
  *             milestone += 10
  * 
  */
-      __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_milestone); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_milestone); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_14 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_2); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 54, __pyx_L1_error)
+      __pyx_t_14 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_2); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 56, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = PyNumber_Add(__pyx_kp_s__8, __pyx_t_14); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
+      __pyx_t_2 = PyNumber_Add(__pyx_kp_s__8, __pyx_t_14); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-      __pyx_t_14 = PyNumber_Add(__pyx_t_2, __pyx_kp_s__9); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 54, __pyx_L1_error)
+      __pyx_t_14 = PyNumber_Add(__pyx_t_2, __pyx_kp_s__9); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 56, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (__Pyx_PrintOne(0, __pyx_t_14) < 0) __PYX_ERR(0, 54, __pyx_L1_error)
+      if (__Pyx_PrintOne(0, __pyx_t_14) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-      /* "PostProcess_AnisotropyTensor.pyx":55
+      /* "PostProcess_AnisotropyTensor.pyx":57
  *         if progress >= milestone:
  *             print(' ' + str(milestone) + '%...')
  *             milestone += 10             # <<<<<<<<<<<<<<
@@ -2742,7 +2747,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
  */
       __pyx_v_milestone = (__pyx_v_milestone + 10);
 
-      /* "PostProcess_AnisotropyTensor.pyx":53
+      /* "PostProcess_AnisotropyTensor.pyx":55
  *         # Gauge progress
  *         progress = float(i)/(tensors.shape[0] + 1)*100.
  *         if progress >= milestone:             # <<<<<<<<<<<<<<
@@ -2752,25 +2757,25 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
     }
   }
 
-  /* "PostProcess_AnisotropyTensor.pyx":62
+  /* "PostProcess_AnisotropyTensor.pyx":64
  *     # Also reshape eigVecsGrid from nRow x nCol x 9 to nRow x nCol x 3 x 3
  *     # so that each col of the 3 x 3 matrix is an eigenvector corresponding to an eigenvalue
  *     eigValsGrid = np.reshape(eigValsGrid[1:], (tensors.shape[0], tensors.shape[1], 3))             # <<<<<<<<<<<<<<
  *     eigVecsGrid = np.reshape(eigVecsGrid, (eigVecsGrid.shape[0], eigVecsGrid.shape[1], 3, 3))
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_reshape); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_reshape); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_eigValsGrid), 1, 0, NULL, NULL, &__pyx_slice__10, 1, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_eigValsGrid), 1, 0, NULL, NULL, &__pyx_slice__10, 1, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_17 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_17 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_16 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[1])); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_16 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[1])); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
-  __pyx_t_9 = PyTuple_New(3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_9 = PyTuple_New(3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_GIVEREF(__pyx_t_17);
   PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_17);
@@ -2796,7 +2801,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_15)) {
     PyObject *__pyx_temp[3] = {__pyx_t_16, __pyx_t_2, __pyx_t_9};
-    __pyx_t_14 = __Pyx_PyFunction_FastCall(__pyx_t_15, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __pyx_t_14 = __Pyx_PyFunction_FastCall(__pyx_t_15, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 64, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
     __Pyx_GOTREF(__pyx_t_14);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -2806,7 +2811,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_15)) {
     PyObject *__pyx_temp[3] = {__pyx_t_16, __pyx_t_2, __pyx_t_9};
-    __pyx_t_14 = __Pyx_PyCFunction_FastCall(__pyx_t_15, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __pyx_t_14 = __Pyx_PyCFunction_FastCall(__pyx_t_15, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 64, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
     __Pyx_GOTREF(__pyx_t_14);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -2814,7 +2819,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   } else
   #endif
   {
-    __pyx_t_17 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __pyx_t_17 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 64, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_17);
     if (__pyx_t_16) {
       __Pyx_GIVEREF(__pyx_t_16); PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_16); __pyx_t_16 = NULL;
@@ -2825,32 +2830,32 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
     PyTuple_SET_ITEM(__pyx_t_17, 1+__pyx_t_5, __pyx_t_9);
     __pyx_t_2 = 0;
     __pyx_t_9 = 0;
-    __pyx_t_14 = __Pyx_PyObject_Call(__pyx_t_15, __pyx_t_17, NULL); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __pyx_t_14 = __Pyx_PyObject_Call(__pyx_t_15, __pyx_t_17, NULL); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 64, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_14);
     __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
   }
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-  if (!(likely(((__pyx_t_14) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_14, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 62, __pyx_L1_error)
+  if (!(likely(((__pyx_t_14) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_14, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_DECREF_SET(__pyx_v_eigValsGrid, ((PyArrayObject *)__pyx_t_14));
   __pyx_t_14 = 0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":63
+  /* "PostProcess_AnisotropyTensor.pyx":65
  *     # so that each col of the 3 x 3 matrix is an eigenvector corresponding to an eigenvalue
  *     eigValsGrid = np.reshape(eigValsGrid[1:], (tensors.shape[0], tensors.shape[1], 3))
  *     eigVecsGrid = np.reshape(eigVecsGrid, (eigVecsGrid.shape[0], eigVecsGrid.shape[1], 3, 3))             # <<<<<<<<<<<<<<
  * 
  *     print('\nFinished processing anisotropy tensors')
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
-  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_reshape); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_reshape); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-  __pyx_t_15 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_eigVecsGrid->dimensions[0])); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_eigVecsGrid->dimensions[0])); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
-  __pyx_t_9 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_eigVecsGrid->dimensions[1])); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_eigVecsGrid->dimensions[1])); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_2 = PyTuple_New(4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_15);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_15);
@@ -2879,7 +2884,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_17)) {
     PyObject *__pyx_temp[3] = {__pyx_t_9, ((PyObject *)__pyx_v_eigVecsGrid), __pyx_t_2};
-    __pyx_t_14 = __Pyx_PyFunction_FastCall(__pyx_t_17, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __pyx_t_14 = __Pyx_PyFunction_FastCall(__pyx_t_17, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 65, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_GOTREF(__pyx_t_14);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -2888,14 +2893,14 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_17)) {
     PyObject *__pyx_temp[3] = {__pyx_t_9, ((PyObject *)__pyx_v_eigVecsGrid), __pyx_t_2};
-    __pyx_t_14 = __Pyx_PyCFunction_FastCall(__pyx_t_17, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __pyx_t_14 = __Pyx_PyCFunction_FastCall(__pyx_t_17, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 65, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_GOTREF(__pyx_t_14);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   } else
   #endif
   {
-    __pyx_t_15 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __pyx_t_15 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 65, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
     if (__pyx_t_9) {
       __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_15, 0, __pyx_t_9); __pyx_t_9 = NULL;
@@ -2906,25 +2911,25 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
     __Pyx_GIVEREF(__pyx_t_2);
     PyTuple_SET_ITEM(__pyx_t_15, 1+__pyx_t_5, __pyx_t_2);
     __pyx_t_2 = 0;
-    __pyx_t_14 = __Pyx_PyObject_Call(__pyx_t_17, __pyx_t_15, NULL); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __pyx_t_14 = __Pyx_PyObject_Call(__pyx_t_17, __pyx_t_15, NULL); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 65, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_14);
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
   }
   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-  if (!(likely(((__pyx_t_14) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_14, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 63, __pyx_L1_error)
+  if (!(likely(((__pyx_t_14) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_14, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 65, __pyx_L1_error)
   __Pyx_DECREF_SET(__pyx_v_eigVecsGrid, ((PyArrayObject *)__pyx_t_14));
   __pyx_t_14 = 0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":65
+  /* "PostProcess_AnisotropyTensor.pyx":67
  *     eigVecsGrid = np.reshape(eigVecsGrid, (eigVecsGrid.shape[0], eigVecsGrid.shape[1], 3, 3))
  * 
  *     print('\nFinished processing anisotropy tensors')             # <<<<<<<<<<<<<<
  *     return vals3D, tensors, eigValsGrid, eigVecsGrid
  * 
  */
-  if (__Pyx_PrintOne(0, __pyx_kp_s_Finished_processing_anisotropy) < 0) __PYX_ERR(0, 65, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_kp_s_Finished_processing_anisotropy) < 0) __PYX_ERR(0, 67, __pyx_L1_error)
 
-  /* "PostProcess_AnisotropyTensor.pyx":66
+  /* "PostProcess_AnisotropyTensor.pyx":68
  * 
  *     print('\nFinished processing anisotropy tensors')
  *     return vals3D, tensors, eigValsGrid, eigVecsGrid             # <<<<<<<<<<<<<<
@@ -2932,7 +2937,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_14 = PyTuple_New(4); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 66, __pyx_L1_error)
+  __pyx_t_14 = PyTuple_New(4); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 68, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_14);
   __Pyx_INCREF(((PyObject *)__pyx_v_vals3D));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_vals3D));
@@ -2950,7 +2955,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(
   __pyx_t_14 = 0;
   goto __pyx_L0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":10
+  /* "PostProcess_AnisotropyTensor.pyx":12
  * @cython.wraparound(False)
  * @cython.cdivision(True)
  * cpdef tuple processAnisotropyTensor(np.ndarray[np.float_t, ndim = 3] vals3D):             # <<<<<<<<<<<<<<
@@ -3007,7 +3012,7 @@ static PyObject *__pyx_pw_28PostProcess_AnisotropyTensor_1processAnisotropyTenso
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("processAnisotropyTensor (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_vals3D), __pyx_ptype_5numpy_ndarray, 1, "vals3D", 0))) __PYX_ERR(0, 10, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_vals3D), __pyx_ptype_5numpy_ndarray, 1, "vals3D", 0))) __PYX_ERR(0, 12, __pyx_L1_error)
   __pyx_r = __pyx_pf_28PostProcess_AnisotropyTensor_processAnisotropyTensor(__pyx_self, ((PyArrayObject *)__pyx_v_vals3D));
 
   /* function exit code */
@@ -3032,11 +3037,11 @@ static PyObject *__pyx_pf_28PostProcess_AnisotropyTensor_processAnisotropyTensor
   __pyx_pybuffernd_vals3D.rcbuffer = &__pyx_pybuffer_vals3D;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vals3D.rcbuffer->pybuffer, (PyObject*)__pyx_v_vals3D, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 3, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vals3D.rcbuffer->pybuffer, (PyObject*)__pyx_v_vals3D, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 3, 0, __pyx_stack) == -1)) __PYX_ERR(0, 12, __pyx_L1_error)
   }
   __pyx_pybuffernd_vals3D.diminfo[0].strides = __pyx_pybuffernd_vals3D.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_vals3D.diminfo[0].shape = __pyx_pybuffernd_vals3D.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_vals3D.diminfo[1].strides = __pyx_pybuffernd_vals3D.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_vals3D.diminfo[1].shape = __pyx_pybuffernd_vals3D.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_vals3D.diminfo[2].strides = __pyx_pybuffernd_vals3D.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_vals3D.diminfo[2].shape = __pyx_pybuffernd_vals3D.rcbuffer->pybuffer.shape[2];
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(__pyx_v_vals3D, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 10, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor(__pyx_v_vals3D, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -3062,12 +3067,12 @@ static PyObject *__pyx_pf_28PostProcess_AnisotropyTensor_processAnisotropyTensor
   return __pyx_r;
 }
 
-/* "PostProcess_AnisotropyTensor.pyx":74
+/* "PostProcess_AnisotropyTensor.pyx":76
  * @cython.wraparound(False)
  * @cython.cdivision(True)
  * cpdef tuple processAnisotropyTensor_Uninterpolated(np.ndarray[np.float_t, ndim = 2] vals2D, int realizeIter = 0, makeAnisotropic = True):             # <<<<<<<<<<<<<<
  *     # If ndim is not provided but np.float_t is provided, 1D is assumed
- *     cdef np.ndarray[np.float_t] k, eigVals
+ *     cdef np.ndarray[np.float_t] k, eigVals_0, eigVals_i
  */
 
 static PyObject *__pyx_pw_28PostProcess_AnisotropyTensor_3processAnisotropyTensor_Uninterpolated(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -3075,18 +3080,24 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
   int __pyx_v_realizeIter = ((int)0);
   PyObject *__pyx_v_makeAnisotropic = ((PyObject *)Py_True);
   PyArrayObject *__pyx_v_k = 0;
-  PyArrayObject *__pyx_v_eigVals = 0;
-  PyArrayObject *__pyx_v_eigVecs = 0;
+  PyArrayObject *__pyx_v_eigVals_0 = 0;
+  PyArrayObject *__pyx_v_eigVals_i = 0;
+  PyArrayObject *__pyx_v_eigVecs_0 = 0;
+  PyArrayObject *__pyx_v_eigVecs_i = 0;
   PyArrayObject *__pyx_v_tensors = 0;
   PyArrayObject *__pyx_v_eigVals3D = 0;
   PyArrayObject *__pyx_v_eigVecs4D = 0;
   int __pyx_v_i;
   int __pyx_v_milestone;
   double __pyx_v_progress;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_eigVals;
-  __Pyx_Buffer __pyx_pybuffer_eigVals;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_eigVecs;
-  __Pyx_Buffer __pyx_pybuffer_eigVecs;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_eigVals_0;
+  __Pyx_Buffer __pyx_pybuffer_eigVals_0;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_eigVals_i;
+  __Pyx_Buffer __pyx_pybuffer_eigVals_i;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_eigVecs_0;
+  __Pyx_Buffer __pyx_pybuffer_eigVecs_0;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_eigVecs_i;
+  __Pyx_Buffer __pyx_pybuffer_eigVecs_i;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_k;
   __Pyx_Buffer __pyx_pybuffer_k;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_vals2D;
@@ -3113,10 +3124,10 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
   PyObject *__pyx_t_18 = NULL;
   int __pyx_t_19;
   int __pyx_t_20;
-  npy_intp __pyx_t_21;
-  npy_intp __pyx_t_22;
-  PyObject *(*__pyx_t_23)(PyObject *);
-  PyArrayObject *__pyx_t_24 = NULL;
+  PyObject *(*__pyx_t_21)(PyObject *);
+  PyArrayObject *__pyx_t_22 = NULL;
+  npy_intp __pyx_t_23;
+  npy_intp __pyx_t_24;
   __Pyx_RefNannySetupContext("processAnisotropyTensor_Uninterpolated", 0);
   if (__pyx_optional_args) {
     if (__pyx_optional_args->__pyx_n > 0) {
@@ -3130,68 +3141,76 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
   __pyx_pybuffer_k.refcount = 0;
   __pyx_pybuffernd_k.data = NULL;
   __pyx_pybuffernd_k.rcbuffer = &__pyx_pybuffer_k;
-  __pyx_pybuffer_eigVals.pybuffer.buf = NULL;
-  __pyx_pybuffer_eigVals.refcount = 0;
-  __pyx_pybuffernd_eigVals.data = NULL;
-  __pyx_pybuffernd_eigVals.rcbuffer = &__pyx_pybuffer_eigVals;
-  __pyx_pybuffer_eigVecs.pybuffer.buf = NULL;
-  __pyx_pybuffer_eigVecs.refcount = 0;
-  __pyx_pybuffernd_eigVecs.data = NULL;
-  __pyx_pybuffernd_eigVecs.rcbuffer = &__pyx_pybuffer_eigVecs;
+  __pyx_pybuffer_eigVals_0.pybuffer.buf = NULL;
+  __pyx_pybuffer_eigVals_0.refcount = 0;
+  __pyx_pybuffernd_eigVals_0.data = NULL;
+  __pyx_pybuffernd_eigVals_0.rcbuffer = &__pyx_pybuffer_eigVals_0;
+  __pyx_pybuffer_eigVals_i.pybuffer.buf = NULL;
+  __pyx_pybuffer_eigVals_i.refcount = 0;
+  __pyx_pybuffernd_eigVals_i.data = NULL;
+  __pyx_pybuffernd_eigVals_i.rcbuffer = &__pyx_pybuffer_eigVals_i;
+  __pyx_pybuffer_eigVecs_0.pybuffer.buf = NULL;
+  __pyx_pybuffer_eigVecs_0.refcount = 0;
+  __pyx_pybuffernd_eigVecs_0.data = NULL;
+  __pyx_pybuffernd_eigVecs_0.rcbuffer = &__pyx_pybuffer_eigVecs_0;
+  __pyx_pybuffer_eigVecs_i.pybuffer.buf = NULL;
+  __pyx_pybuffer_eigVecs_i.refcount = 0;
+  __pyx_pybuffernd_eigVecs_i.data = NULL;
+  __pyx_pybuffernd_eigVecs_i.rcbuffer = &__pyx_pybuffer_eigVecs_i;
   __pyx_pybuffer_vals2D.pybuffer.buf = NULL;
   __pyx_pybuffer_vals2D.refcount = 0;
   __pyx_pybuffernd_vals2D.data = NULL;
   __pyx_pybuffernd_vals2D.rcbuffer = &__pyx_pybuffer_vals2D;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vals2D.rcbuffer->pybuffer, (PyObject*)__pyx_v_vals2D, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 74, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vals2D.rcbuffer->pybuffer, (PyObject*)__pyx_v_vals2D, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 76, __pyx_L1_error)
   }
   __pyx_pybuffernd_vals2D.diminfo[0].strides = __pyx_pybuffernd_vals2D.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_vals2D.diminfo[0].shape = __pyx_pybuffernd_vals2D.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_vals2D.diminfo[1].strides = __pyx_pybuffernd_vals2D.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_vals2D.diminfo[1].shape = __pyx_pybuffernd_vals2D.rcbuffer->pybuffer.shape[1];
 
-  /* "PostProcess_AnisotropyTensor.pyx":82
+  /* "PostProcess_AnisotropyTensor.pyx":84
  *     cdef double progress
  * 
  *     print('\nProcessing uninterpolated anisotropy tensors...')             # <<<<<<<<<<<<<<
  *     # If vals2D was not anisotropic
  *     if makeAnisotropic:
  */
-  if (__Pyx_PrintOne(0, __pyx_kp_s_Processing_uninterpolated_aniso) < 0) __PYX_ERR(0, 82, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_kp_s_Processing_uninterpolated_aniso) < 0) __PYX_ERR(0, 84, __pyx_L1_error)
 
-  /* "PostProcess_AnisotropyTensor.pyx":84
+  /* "PostProcess_AnisotropyTensor.pyx":86
  *     print('\nProcessing uninterpolated anisotropy tensors...')
  *     # If vals2D was not anisotropic
  *     if makeAnisotropic:             # <<<<<<<<<<<<<<
  *         # TKE
  *         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
  */
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_makeAnisotropic); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_makeAnisotropic); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 86, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "PostProcess_AnisotropyTensor.pyx":87
+    /* "PostProcess_AnisotropyTensor.pyx":89
  *         # TKE
  *         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
  *         k = 0.5*(vals2D[:, 0] + vals2D[:, 3] + vals2D[:, 5])             # <<<<<<<<<<<<<<
  *         # Convert Rij to bij
  *         for i in range(6):
  */
-    __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 89, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__12); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__12); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 89, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = PyNumber_Add(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 89, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 89, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = PyNumber_Add(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __pyx_t_2 = PyNumber_Add(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 89, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Multiply(__pyx_float_0_5, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_Multiply(__pyx_float_0_5, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 89, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 87, __pyx_L1_error)
+    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 89, __pyx_L1_error)
     __pyx_t_5 = ((PyArrayObject *)__pyx_t_3);
     {
       __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -3208,13 +3227,13 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
         __pyx_t_7 = __pyx_t_8 = __pyx_t_9 = 0;
       }
       __pyx_pybuffernd_k.diminfo[0].strides = __pyx_pybuffernd_k.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_k.diminfo[0].shape = __pyx_pybuffernd_k.rcbuffer->pybuffer.shape[0];
-      if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 87, __pyx_L1_error)
+      if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 89, __pyx_L1_error)
     }
     __pyx_t_5 = 0;
     __pyx_v_k = ((PyArrayObject *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "PostProcess_AnisotropyTensor.pyx":89
+    /* "PostProcess_AnisotropyTensor.pyx":91
  *         k = 0.5*(vals2D[:, 0] + vals2D[:, 3] + vals2D[:, 5])
  *         # Convert Rij to bij
  *         for i in range(6):             # <<<<<<<<<<<<<<
@@ -3224,7 +3243,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
     for (__pyx_t_6 = 0; __pyx_t_6 < 6; __pyx_t_6+=1) {
       __pyx_v_i = __pyx_t_6;
 
-      /* "PostProcess_AnisotropyTensor.pyx":90
+      /* "PostProcess_AnisotropyTensor.pyx":92
  *         # Convert Rij to bij
  *         for i in range(6):
  *             vals2D[:, i] = vals2D[:, i]/(2.*k) - 1/3. if i in (0, 3, 5) else vals2D[:, i]/(2.*k)             # <<<<<<<<<<<<<<
@@ -3235,9 +3254,9 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
         case 0:
         case 3:
         case 5:
-        __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_INCREF(__pyx_slice_);
         __Pyx_GIVEREF(__pyx_slice_);
@@ -3245,18 +3264,18 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
         __Pyx_GIVEREF(__pyx_t_2);
         PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_2);
         __pyx_t_2 = 0;
-        __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_4 = PyNumber_Multiply(__pyx_float_2_, ((PyObject *)__pyx_v_k)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_4 = PyNumber_Multiply(__pyx_float_2_, ((PyObject *)__pyx_v_k)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_10 = __Pyx_PyNumber_Divide(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_10 = __Pyx_PyNumber_Divide(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_4 = PyFloat_FromDouble((1.0 / 3.)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_4 = PyFloat_FromDouble((1.0 / 3.)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_2 = PyNumber_Subtract(__pyx_t_10, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_2 = PyNumber_Subtract(__pyx_t_10, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -3264,9 +3283,9 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
         __pyx_t_2 = 0;
         break;
         default:
-        __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_INCREF(__pyx_slice_);
         __Pyx_GIVEREF(__pyx_slice_);
@@ -3274,12 +3293,12 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
         __Pyx_GIVEREF(__pyx_t_2);
         PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_2);
         __pyx_t_2 = 0;
-        __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_4 = PyNumber_Multiply(__pyx_float_2_, ((PyObject *)__pyx_v_k)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_4 = PyNumber_Multiply(__pyx_float_2_, ((PyObject *)__pyx_v_k)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_10 = __Pyx_PyNumber_Divide(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_10 = __Pyx_PyNumber_Divide(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 92, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -3287,9 +3306,9 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
         __pyx_t_10 = 0;
         break;
       }
-      __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 90, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 92, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 90, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 92, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_INCREF(__pyx_slice_);
       __Pyx_GIVEREF(__pyx_slice_);
@@ -3297,66 +3316,66 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
       __Pyx_GIVEREF(__pyx_t_10);
       PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_10);
       __pyx_t_10 = 0;
-      if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_vals2D), __pyx_t_4, __pyx_t_3) < 0)) __PYX_ERR(0, 90, __pyx_L1_error)
+      if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_vals2D), __pyx_t_4, __pyx_t_3) < 0)) __PYX_ERR(0, 92, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
 
-    /* "PostProcess_AnisotropyTensor.pyx":94
+    /* "PostProcess_AnisotropyTensor.pyx":96
  *         # Add each anisotropy tensor to each mesh grid location, in depth
  *         # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
  *         tensors = np.dstack((vals2D[:, 0], vals2D[:, 1], vals2D[:, 2],             # <<<<<<<<<<<<<<
  *                              vals2D[:, 1], vals2D[:, 3], vals2D[:, 4],
  *                              vals2D[:, 2], vals2D[:, 4], vals2D[:, 5]))
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 94, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 96, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_dstack); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 94, __pyx_L1_error)
+    __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_dstack); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 96, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__11); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 94, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__11); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 96, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__14); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 94, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__14); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 96, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_11 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__15); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 94, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__15); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 96, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
 
-    /* "PostProcess_AnisotropyTensor.pyx":95
+    /* "PostProcess_AnisotropyTensor.pyx":97
  *         # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
  *         tensors = np.dstack((vals2D[:, 0], vals2D[:, 1], vals2D[:, 2],
  *                              vals2D[:, 1], vals2D[:, 3], vals2D[:, 4],             # <<<<<<<<<<<<<<
  *                              vals2D[:, 2], vals2D[:, 4], vals2D[:, 5]))
  * 
  */
-    __pyx_t_12 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__14); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 95, __pyx_L1_error)
+    __pyx_t_12 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__14); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 97, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
-    __pyx_t_13 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__12); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 95, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__12); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 97, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
-    __pyx_t_14 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__16); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 95, __pyx_L1_error)
+    __pyx_t_14 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__16); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 97, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_14);
 
-    /* "PostProcess_AnisotropyTensor.pyx":96
+    /* "PostProcess_AnisotropyTensor.pyx":98
  *         tensors = np.dstack((vals2D[:, 0], vals2D[:, 1], vals2D[:, 2],
  *                              vals2D[:, 1], vals2D[:, 3], vals2D[:, 4],
  *                              vals2D[:, 2], vals2D[:, 4], vals2D[:, 5]))             # <<<<<<<<<<<<<<
  * 
  *         tensors = tensors.reshape((tensors.shape[1], 9))
  */
-    __pyx_t_15 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__15); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 96, __pyx_L1_error)
+    __pyx_t_15 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__15); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 98, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
-    __pyx_t_16 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__16); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 96, __pyx_L1_error)
+    __pyx_t_16 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__16); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 98, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
-    __pyx_t_17 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__13); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 96, __pyx_L1_error)
+    __pyx_t_17 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_vals2D), __pyx_tuple__13); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 98, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_17);
 
-    /* "PostProcess_AnisotropyTensor.pyx":94
+    /* "PostProcess_AnisotropyTensor.pyx":96
  *         # Add each anisotropy tensor to each mesh grid location, in depth
  *         # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
  *         tensors = np.dstack((vals2D[:, 0], vals2D[:, 1], vals2D[:, 2],             # <<<<<<<<<<<<<<
  *                              vals2D[:, 1], vals2D[:, 3], vals2D[:, 4],
  *                              vals2D[:, 2], vals2D[:, 4], vals2D[:, 5]))
  */
-    __pyx_t_18 = PyTuple_New(9); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 94, __pyx_L1_error)
+    __pyx_t_18 = PyTuple_New(9); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 96, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_18);
     __Pyx_GIVEREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_t_4);
@@ -3398,25 +3417,25 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
     __pyx_t_3 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_10, __pyx_t_17, __pyx_t_18) : __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_t_18);
     __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
     __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 94, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 96, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 94, __pyx_L1_error)
+    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 96, __pyx_L1_error)
     __pyx_v_tensors = ((PyArrayObject *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "PostProcess_AnisotropyTensor.pyx":98
+    /* "PostProcess_AnisotropyTensor.pyx":100
  *                              vals2D[:, 2], vals2D[:, 4], vals2D[:, 5]))
  * 
  *         tensors = tensors.reshape((tensors.shape[1], 9))             # <<<<<<<<<<<<<<
  *     else:
  *         tensors = vals2D
  */
-    __pyx_t_10 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_tensors), __pyx_n_s_reshape); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 98, __pyx_L1_error)
+    __pyx_t_10 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_tensors), __pyx_n_s_reshape); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 100, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
-    __pyx_t_18 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[1])); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 98, __pyx_L1_error)
+    __pyx_t_18 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[1])); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 100, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_18);
-    __pyx_t_17 = PyTuple_New(2); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 98, __pyx_L1_error)
+    __pyx_t_17 = PyTuple_New(2); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 100, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_17);
     __Pyx_GIVEREF(__pyx_t_18);
     PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_18);
@@ -3437,14 +3456,14 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
     __pyx_t_3 = (__pyx_t_18) ? __Pyx_PyObject_Call2Args(__pyx_t_10, __pyx_t_18, __pyx_t_17) : __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_t_17);
     __Pyx_XDECREF(__pyx_t_18); __pyx_t_18 = 0;
     __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 98, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 100, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 98, __pyx_L1_error)
+    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 100, __pyx_L1_error)
     __Pyx_DECREF_SET(__pyx_v_tensors, ((PyArrayObject *)__pyx_t_3));
     __pyx_t_3 = 0;
 
-    /* "PostProcess_AnisotropyTensor.pyx":84
+    /* "PostProcess_AnisotropyTensor.pyx":86
  *     print('\nProcessing uninterpolated anisotropy tensors...')
  *     # If vals2D was not anisotropic
  *     if makeAnisotropic:             # <<<<<<<<<<<<<<
@@ -3454,7 +3473,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
     goto __pyx_L3;
   }
 
-  /* "PostProcess_AnisotropyTensor.pyx":100
+  /* "PostProcess_AnisotropyTensor.pyx":102
  *         tensors = tensors.reshape((tensors.shape[1], 9))
  *     else:
  *         tensors = vals2D             # <<<<<<<<<<<<<<
@@ -3467,7 +3486,7 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
   }
   __pyx_L3:;
 
-  /* "PostProcess_AnisotropyTensor.pyx":102
+  /* "PostProcess_AnisotropyTensor.pyx":104
  *         tensors = vals2D
  * 
  *     for i in range(realizeIter):             # <<<<<<<<<<<<<<
@@ -3479,49 +3498,49 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
   for (__pyx_t_20 = 0; __pyx_t_20 < __pyx_t_19; __pyx_t_20+=1) {
     __pyx_v_i = __pyx_t_20;
 
-    /* "PostProcess_AnisotropyTensor.pyx":103
+    /* "PostProcess_AnisotropyTensor.pyx":105
  * 
  *     for i in range(realizeIter):
  *         print('\nApplying realizability filter ' + str(i + 1))             # <<<<<<<<<<<<<<
  *         tensors = make_realizable(tensors)
  * 
  */
-    __pyx_t_3 = __Pyx_PyInt_From_long((__pyx_v_i + 1)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 103, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_long((__pyx_v_i + 1)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 105, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_10 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 103, __pyx_L1_error)
+    __pyx_t_10 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 105, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_kp_s_Applying_realizability_filter, __pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 103, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_Add(__pyx_kp_s_Applying_realizability_filter, __pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 105, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-    if (__Pyx_PrintOne(0, __pyx_t_3) < 0) __PYX_ERR(0, 103, __pyx_L1_error)
+    if (__Pyx_PrintOne(0, __pyx_t_3) < 0) __PYX_ERR(0, 105, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "PostProcess_AnisotropyTensor.pyx":104
+    /* "PostProcess_AnisotropyTensor.pyx":106
  *     for i in range(realizeIter):
  *         print('\nApplying realizability filter ' + str(i + 1))
  *         tensors = make_realizable(tensors)             # <<<<<<<<<<<<<<
  * 
  *     # Reshape the z dir to 3x3 instead of 9x1
  */
-    __pyx_t_3 = ((PyObject *)__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(((PyArrayObject *)__pyx_v_tensors))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 104, __pyx_L1_error)
+    __pyx_t_3 = ((PyObject *)__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(((PyArrayObject *)__pyx_v_tensors))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 106, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF_SET(__pyx_v_tensors, ((PyArrayObject *)__pyx_t_3));
     __pyx_t_3 = 0;
   }
 
-  /* "PostProcess_AnisotropyTensor.pyx":108
+  /* "PostProcess_AnisotropyTensor.pyx":110
  *     # Reshape the z dir to 3x3 instead of 9x1
  *     # Now tensors is 4D, with x, y being nRow, 1, z1, z2 being the 3x3 tensor at (x, y)
  *     tensors = tensors.reshape((tensors.shape[0], 1, 3, 3))             # <<<<<<<<<<<<<<
- * 
  *     # Evaluate eigenvalues and eigenvectors of the symmetric tensor
+ *     # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
  */
-  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_tensors), __pyx_n_s_reshape); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 108, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_tensors), __pyx_n_s_reshape); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  __pyx_t_17 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 108, __pyx_L1_error)
+  __pyx_t_17 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_18 = PyTuple_New(4); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 108, __pyx_L1_error)
+  __pyx_t_18 = PyTuple_New(4); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_GIVEREF(__pyx_t_17);
   PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_t_17);
@@ -3548,123 +3567,381 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
   __pyx_t_3 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_10, __pyx_t_17, __pyx_t_18) : __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_t_18);
   __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
   __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 108, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 108, __pyx_L1_error)
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_DECREF_SET(__pyx_v_tensors, ((PyArrayObject *)__pyx_t_3));
   __pyx_t_3 = 0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":112
- *     # Evaluate eigenvalues and eigenvectors of the symmetric tensor
+  /* "PostProcess_AnisotropyTensor.pyx":114
+ *     # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
+ *     # Each col of eigVecs is a vector, thus 3 x 3
+ *     eigVals_0, eigVecs_0 = np.linalg.eigh(tensors[0, 0, :, :])             # <<<<<<<<<<<<<<
+ *     eigVals_0, eigVecs_0 = np.flipud(eigVals_0), np.fliplr(eigVecs_0)
  *     # eigVecs4D is nX x nY x 9, where 9 is the flattened eigenvector matrix from np.linalg.eigh()
- *     eigVals3D, eigVecs4D = np.zeros(3), np.zeros((tensors.shape[0], 1, 9))             # <<<<<<<<<<<<<<
- *     # For gauging progress
- *     milestone = 10
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_n_s_np); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 112, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_n_s_np); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 114, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_n_s_zeros); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 112, __pyx_L1_error)
+  __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_n_s_linalg); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 114, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_18);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  __pyx_t_10 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_18))) {
-    __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_18);
-    if (likely(__pyx_t_10)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_18);
-      __Pyx_INCREF(__pyx_t_10);
+  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_18, __pyx_n_s_eigh); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 114, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_10);
+  __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
+  __pyx_t_18 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_tensors), __pyx_tuple__17); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 114, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_18);
+  __pyx_t_17 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_10))) {
+    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_10);
+    if (likely(__pyx_t_17)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_10);
+      __Pyx_INCREF(__pyx_t_17);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_18, function);
+      __Pyx_DECREF_SET(__pyx_t_10, function);
     }
   }
-  __pyx_t_3 = (__pyx_t_10) ? __Pyx_PyObject_Call2Args(__pyx_t_18, __pyx_t_10, __pyx_int_3) : __Pyx_PyObject_CallOneArg(__pyx_t_18, __pyx_int_3);
-  __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 112, __pyx_L1_error)
+  __pyx_t_3 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_10, __pyx_t_17, __pyx_t_18) : __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_t_18);
+  __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
+  __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 114, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+  if ((likely(PyTuple_CheckExact(__pyx_t_3))) || (PyList_CheckExact(__pyx_t_3))) {
+    PyObject* sequence = __pyx_t_3;
+    Py_ssize_t size = __Pyx_PySequence_SIZE(sequence);
+    if (unlikely(size != 2)) {
+      if (size > 2) __Pyx_RaiseTooManyValuesError(2);
+      else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
+      __PYX_ERR(0, 114, __pyx_L1_error)
+    }
+    #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+    if (likely(PyTuple_CheckExact(sequence))) {
+      __pyx_t_10 = PyTuple_GET_ITEM(sequence, 0); 
+      __pyx_t_18 = PyTuple_GET_ITEM(sequence, 1); 
+    } else {
+      __pyx_t_10 = PyList_GET_ITEM(sequence, 0); 
+      __pyx_t_18 = PyList_GET_ITEM(sequence, 1); 
+    }
+    __Pyx_INCREF(__pyx_t_10);
+    __Pyx_INCREF(__pyx_t_18);
+    #else
+    __pyx_t_10 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 114, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_10);
+    __pyx_t_18 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 114, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_18);
+    #endif
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  } else {
+    Py_ssize_t index = -1;
+    __pyx_t_17 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 114, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_17);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_21 = Py_TYPE(__pyx_t_17)->tp_iternext;
+    index = 0; __pyx_t_10 = __pyx_t_21(__pyx_t_17); if (unlikely(!__pyx_t_10)) goto __pyx_L8_unpacking_failed;
+    __Pyx_GOTREF(__pyx_t_10);
+    index = 1; __pyx_t_18 = __pyx_t_21(__pyx_t_17); if (unlikely(!__pyx_t_18)) goto __pyx_L8_unpacking_failed;
+    __Pyx_GOTREF(__pyx_t_18);
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_21(__pyx_t_17), 2) < 0) __PYX_ERR(0, 114, __pyx_L1_error)
+    __pyx_t_21 = NULL;
+    __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+    goto __pyx_L9_unpacking_done;
+    __pyx_L8_unpacking_failed:;
+    __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+    __pyx_t_21 = NULL;
+    if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
+    __PYX_ERR(0, 114, __pyx_L1_error)
+    __pyx_L9_unpacking_done:;
+  }
+  if (!(likely(((__pyx_t_10) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_10, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 114, __pyx_L1_error)
+  if (!(likely(((__pyx_t_18) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_18, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 114, __pyx_L1_error)
+  __pyx_t_5 = ((PyArrayObject *)__pyx_t_10);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVals_0.rcbuffer->pybuffer);
+    __pyx_t_6 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVals_0.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack);
+    if (unlikely(__pyx_t_6 < 0)) {
+      PyErr_Fetch(&__pyx_t_9, &__pyx_t_8, &__pyx_t_7);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVals_0.rcbuffer->pybuffer, (PyObject*)__pyx_v_eigVals_0, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_9); Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_7);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_9, __pyx_t_8, __pyx_t_7);
+      }
+      __pyx_t_9 = __pyx_t_8 = __pyx_t_7 = 0;
+    }
+    __pyx_pybuffernd_eigVals_0.diminfo[0].strides = __pyx_pybuffernd_eigVals_0.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVals_0.diminfo[0].shape = __pyx_pybuffernd_eigVals_0.rcbuffer->pybuffer.shape[0];
+    if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 114, __pyx_L1_error)
+  }
+  __pyx_t_5 = 0;
+  __pyx_v_eigVals_0 = ((PyArrayObject *)__pyx_t_10);
+  __pyx_t_10 = 0;
+  __pyx_t_22 = ((PyArrayObject *)__pyx_t_18);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer);
+    __pyx_t_6 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer, (PyObject*)__pyx_t_22, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack);
+    if (unlikely(__pyx_t_6 < 0)) {
+      PyErr_Fetch(&__pyx_t_7, &__pyx_t_8, &__pyx_t_9);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer, (PyObject*)__pyx_v_eigVecs_0, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_9);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_7, __pyx_t_8, __pyx_t_9);
+      }
+      __pyx_t_7 = __pyx_t_8 = __pyx_t_9 = 0;
+    }
+    __pyx_pybuffernd_eigVecs_0.diminfo[0].strides = __pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVecs_0.diminfo[0].shape = __pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_eigVecs_0.diminfo[1].strides = __pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_eigVecs_0.diminfo[1].shape = __pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer.shape[1];
+    if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 114, __pyx_L1_error)
+  }
+  __pyx_t_22 = 0;
+  __pyx_v_eigVecs_0 = ((PyArrayObject *)__pyx_t_18);
+  __pyx_t_18 = 0;
+
+  /* "PostProcess_AnisotropyTensor.pyx":115
+ *     # Each col of eigVecs is a vector, thus 3 x 3
+ *     eigVals_0, eigVecs_0 = np.linalg.eigh(tensors[0, 0, :, :])
+ *     eigVals_0, eigVecs_0 = np.flipud(eigVals_0), np.fliplr(eigVecs_0)             # <<<<<<<<<<<<<<
+ *     # eigVecs4D is nX x nY x 9, where 9 is the flattened eigenvector matrix from np.linalg.eigh()
+ *     # eigVals3D, eigVecs4D = np.zeros(3), np.zeros((tensors.shape[0], 1, 9))
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_18, __pyx_n_s_np); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_18);
+  __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_18, __pyx_n_s_flipud); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_10);
+  __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
+  __pyx_t_18 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_10))) {
+    __pyx_t_18 = PyMethod_GET_SELF(__pyx_t_10);
+    if (likely(__pyx_t_18)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_10);
+      __Pyx_INCREF(__pyx_t_18);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_10, function);
+    }
+  }
+  __pyx_t_3 = (__pyx_t_18) ? __Pyx_PyObject_Call2Args(__pyx_t_10, __pyx_t_18, ((PyObject *)__pyx_v_eigVals_0)) : __Pyx_PyObject_CallOneArg(__pyx_t_10, ((PyObject *)__pyx_v_eigVals_0));
+  __Pyx_XDECREF(__pyx_t_18); __pyx_t_18 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 115, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_18, __pyx_n_s_np); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_18);
+  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_18, __pyx_n_s_fliplr); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_17);
+  __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
+  __pyx_t_18 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_17))) {
+    __pyx_t_18 = PyMethod_GET_SELF(__pyx_t_17);
+    if (likely(__pyx_t_18)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
+      __Pyx_INCREF(__pyx_t_18);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_17, function);
+    }
+  }
+  __pyx_t_10 = (__pyx_t_18) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_18, ((PyObject *)__pyx_v_eigVecs_0)) : __Pyx_PyObject_CallOneArg(__pyx_t_17, ((PyObject *)__pyx_v_eigVecs_0));
+  __Pyx_XDECREF(__pyx_t_18); __pyx_t_18 = 0;
+  if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_10);
+  __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+  if (!(likely(((__pyx_t_10) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_10, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_t_5 = ((PyArrayObject *)__pyx_t_3);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVals_0.rcbuffer->pybuffer);
+    __pyx_t_6 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVals_0.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack);
+    if (unlikely(__pyx_t_6 < 0)) {
+      PyErr_Fetch(&__pyx_t_9, &__pyx_t_8, &__pyx_t_7);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVals_0.rcbuffer->pybuffer, (PyObject*)__pyx_v_eigVals_0, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_9); Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_7);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_9, __pyx_t_8, __pyx_t_7);
+      }
+      __pyx_t_9 = __pyx_t_8 = __pyx_t_7 = 0;
+    }
+    __pyx_pybuffernd_eigVals_0.diminfo[0].strides = __pyx_pybuffernd_eigVals_0.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVals_0.diminfo[0].shape = __pyx_pybuffernd_eigVals_0.rcbuffer->pybuffer.shape[0];
+    if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 115, __pyx_L1_error)
+  }
+  __pyx_t_5 = 0;
+  __Pyx_DECREF_SET(__pyx_v_eigVals_0, ((PyArrayObject *)__pyx_t_3));
+  __pyx_t_3 = 0;
+  __pyx_t_22 = ((PyArrayObject *)__pyx_t_10);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer);
+    __pyx_t_6 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer, (PyObject*)__pyx_t_22, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack);
+    if (unlikely(__pyx_t_6 < 0)) {
+      PyErr_Fetch(&__pyx_t_7, &__pyx_t_8, &__pyx_t_9);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer, (PyObject*)__pyx_v_eigVecs_0, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_9);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_7, __pyx_t_8, __pyx_t_9);
+      }
+      __pyx_t_7 = __pyx_t_8 = __pyx_t_9 = 0;
+    }
+    __pyx_pybuffernd_eigVecs_0.diminfo[0].strides = __pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVecs_0.diminfo[0].shape = __pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_eigVecs_0.diminfo[1].strides = __pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_eigVecs_0.diminfo[1].shape = __pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer.shape[1];
+    if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 115, __pyx_L1_error)
+  }
+  __pyx_t_22 = 0;
+  __Pyx_DECREF_SET(__pyx_v_eigVecs_0, ((PyArrayObject *)__pyx_t_10));
+  __pyx_t_10 = 0;
+
+  /* "PostProcess_AnisotropyTensor.pyx":118
+ *     # eigVecs4D is nX x nY x 9, where 9 is the flattened eigenvector matrix from np.linalg.eigh()
+ *     # eigVals3D, eigVecs4D = np.zeros(3), np.zeros((tensors.shape[0], 1, 9))
+ *     eigVals3D, eigVecs4D = np.empty((tensors.shape[0], 3)), np.empty((tensors.shape[0], 1, 9))             # <<<<<<<<<<<<<<
+ *     eigVals3D[0, :], eigVecs4D[0, 0, :] = eigVals_0, eigVecs_0.ravel()
+ *     # For gauging progress
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 118, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_empty); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 118, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_17);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 118, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 118, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_18);
+  __Pyx_GIVEREF(__pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_t_3);
+  __Pyx_INCREF(__pyx_int_3);
+  __Pyx_GIVEREF(__pyx_int_3);
+  PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_int_3);
+  __pyx_t_3 = 0;
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_17))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_17);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_17, function);
+    }
+  }
+  __pyx_t_10 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_3, __pyx_t_18) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_18);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
+  if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 118, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_10);
+  __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+  if (!(likely(((__pyx_t_10) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_10, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 118, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_18, __pyx_n_s_np); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 118, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_18);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_18, __pyx_n_s_empty); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 118, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 112, __pyx_L1_error)
-  __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_n_s_np); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 112, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_10);
-  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_n_s_zeros); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 112, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_17);
-  __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  __pyx_t_10 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 112, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_10);
-  __pyx_t_16 = PyTuple_New(3); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 112, __pyx_L1_error)
+  __pyx_t_18 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 118, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_18);
+  __pyx_t_16 = PyTuple_New(3); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 118, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
-  __Pyx_GIVEREF(__pyx_t_10);
-  PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_10);
+  __Pyx_GIVEREF(__pyx_t_18);
+  PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_18);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
   PyTuple_SET_ITEM(__pyx_t_16, 1, __pyx_int_1);
   __Pyx_INCREF(__pyx_int_9);
   __Pyx_GIVEREF(__pyx_int_9);
   PyTuple_SET_ITEM(__pyx_t_16, 2, __pyx_int_9);
-  __pyx_t_10 = 0;
-  __pyx_t_10 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_17))) {
-    __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_17);
-    if (likely(__pyx_t_10)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
-      __Pyx_INCREF(__pyx_t_10);
+  __pyx_t_18 = 0;
+  __pyx_t_18 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+    __pyx_t_18 = PyMethod_GET_SELF(__pyx_t_3);
+    if (likely(__pyx_t_18)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      __Pyx_INCREF(__pyx_t_18);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_17, function);
+      __Pyx_DECREF_SET(__pyx_t_3, function);
     }
   }
-  __pyx_t_18 = (__pyx_t_10) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_10, __pyx_t_16) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_16);
-  __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+  __pyx_t_17 = (__pyx_t_18) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_18, __pyx_t_16) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_16);
+  __Pyx_XDECREF(__pyx_t_18); __pyx_t_18 = 0;
   __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-  if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 112, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_18);
-  __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-  if (!(likely(((__pyx_t_18) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_18, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 112, __pyx_L1_error)
-  __pyx_v_eigVals3D = ((PyArrayObject *)__pyx_t_3);
-  __pyx_t_3 = 0;
-  __pyx_v_eigVecs4D = ((PyArrayObject *)__pyx_t_18);
-  __pyx_t_18 = 0;
+  if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 118, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_17);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (!(likely(((__pyx_t_17) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_17, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 118, __pyx_L1_error)
+  __pyx_v_eigVals3D = ((PyArrayObject *)__pyx_t_10);
+  __pyx_t_10 = 0;
+  __pyx_v_eigVecs4D = ((PyArrayObject *)__pyx_t_17);
+  __pyx_t_17 = 0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":114
- *     eigVals3D, eigVecs4D = np.zeros(3), np.zeros((tensors.shape[0], 1, 9))
+  /* "PostProcess_AnisotropyTensor.pyx":119
+ *     # eigVals3D, eigVecs4D = np.zeros(3), np.zeros((tensors.shape[0], 1, 9))
+ *     eigVals3D, eigVecs4D = np.empty((tensors.shape[0], 3)), np.empty((tensors.shape[0], 1, 9))
+ *     eigVals3D[0, :], eigVecs4D[0, 0, :] = eigVals_0, eigVecs_0.ravel()             # <<<<<<<<<<<<<<
+ *     # For gauging progress
+ *     milestone = 10
+ */
+  __pyx_t_17 = ((PyObject *)__pyx_v_eigVals_0);
+  __Pyx_INCREF(__pyx_t_17);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_eigVecs_0), __pyx_n_s_ravel); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 119, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_16 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
+    __pyx_t_16 = PyMethod_GET_SELF(__pyx_t_3);
+    if (likely(__pyx_t_16)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      __Pyx_INCREF(__pyx_t_16);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_3, function);
+    }
+  }
+  __pyx_t_10 = (__pyx_t_16) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_16) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
+  if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 119, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_10);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_eigVals3D), __pyx_tuple__18, __pyx_t_17) < 0)) __PYX_ERR(0, 119, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+  if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_eigVecs4D), __pyx_tuple__19, __pyx_t_10) < 0)) __PYX_ERR(0, 119, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+
+  /* "PostProcess_AnisotropyTensor.pyx":121
+ *     eigVals3D[0, :], eigVecs4D[0, 0, :] = eigVals_0, eigVecs_0.ravel()
  *     # For gauging progress
  *     milestone = 10             # <<<<<<<<<<<<<<
- *     for i in range(tensors.shape[0]):
- *         # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
+ *     # Go through each grid point
+ *     # prange requires nogil that doesn't support python array slicing, and tuple
  */
   __pyx_v_milestone = 10;
 
-  /* "PostProcess_AnisotropyTensor.pyx":115
- *     # For gauging progress
- *     milestone = 10
- *     for i in range(tensors.shape[0]):             # <<<<<<<<<<<<<<
+  /* "PostProcess_AnisotropyTensor.pyx":124
+ *     # Go through each grid point
+ *     # prange requires nogil that doesn't support python array slicing, and tuple
+ *     for i in range(1, tensors.shape[0]):             # <<<<<<<<<<<<<<
  *         # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
  *         # Each col of eigVecs is a vector, thus 3 x 3
  */
-  __pyx_t_21 = (__pyx_v_tensors->dimensions[0]);
-  __pyx_t_22 = __pyx_t_21;
-  for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_22; __pyx_t_6+=1) {
+  __pyx_t_23 = (__pyx_v_tensors->dimensions[0]);
+  __pyx_t_24 = __pyx_t_23;
+  for (__pyx_t_6 = 1; __pyx_t_6 < __pyx_t_24; __pyx_t_6+=1) {
     __pyx_v_i = __pyx_t_6;
 
-    /* "PostProcess_AnisotropyTensor.pyx":118
+    /* "PostProcess_AnisotropyTensor.pyx":127
  *         # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
  *         # Each col of eigVecs is a vector, thus 3 x 3
- *         eigVals, eigVecs = np.linalg.eigh(tensors[i, 0, :, :])             # <<<<<<<<<<<<<<
- *         eigVals, eigVecs = np.flipud(eigVals), np.fliplr(eigVecs)
- *         # Each eigVals is a row, stack them vertically
+ *         eigVals_i, eigVecs_i = np.linalg.eigh(tensors[i, 0, :, :])             # <<<<<<<<<<<<<<
+ *         eigVals_i, eigVecs_i = np.flipud(eigVals_i), np.fliplr(eigVecs_i)
+ *         # Each eigVals_i is a row, stack them vertically
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 118, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_linalg); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 118, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_17, __pyx_n_s_np); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 127, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_17);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_eigh); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 118, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_linalg); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 127, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-    __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 118, __pyx_L1_error)
+    __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_eigh); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 127, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_17);
-    __pyx_t_16 = PyTuple_New(4); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 118, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 127, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_16 = PyTuple_New(4); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 127, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
-    __Pyx_GIVEREF(__pyx_t_17);
-    PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_17);
+    __Pyx_GIVEREF(__pyx_t_3);
+    PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_3);
     __Pyx_INCREF(__pyx_int_0);
     __Pyx_GIVEREF(__pyx_int_0);
     PyTuple_SET_ITEM(__pyx_t_16, 1, __pyx_int_0);
@@ -3674,82 +3951,82 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
     __Pyx_INCREF(__pyx_slice_);
     __Pyx_GIVEREF(__pyx_slice_);
     PyTuple_SET_ITEM(__pyx_t_16, 3, __pyx_slice_);
-    __pyx_t_17 = 0;
-    __pyx_t_17 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_tensors), __pyx_t_16); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 118, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_17);
+    __pyx_t_3 = 0;
+    __pyx_t_3 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_tensors), __pyx_t_16); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 127, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
     __pyx_t_16 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-      __pyx_t_16 = PyMethod_GET_SELF(__pyx_t_3);
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_17))) {
+      __pyx_t_16 = PyMethod_GET_SELF(__pyx_t_17);
       if (likely(__pyx_t_16)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
         __Pyx_INCREF(__pyx_t_16);
         __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_3, function);
+        __Pyx_DECREF_SET(__pyx_t_17, function);
       }
     }
-    __pyx_t_18 = (__pyx_t_16) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_16, __pyx_t_17) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_17);
+    __pyx_t_10 = (__pyx_t_16) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_16, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_3);
     __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
-    __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-    if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 118, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_18);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if ((likely(PyTuple_CheckExact(__pyx_t_18))) || (PyList_CheckExact(__pyx_t_18))) {
-      PyObject* sequence = __pyx_t_18;
+    if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 127, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_10);
+    __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+    if ((likely(PyTuple_CheckExact(__pyx_t_10))) || (PyList_CheckExact(__pyx_t_10))) {
+      PyObject* sequence = __pyx_t_10;
       Py_ssize_t size = __Pyx_PySequence_SIZE(sequence);
       if (unlikely(size != 2)) {
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-        __PYX_ERR(0, 118, __pyx_L1_error)
+        __PYX_ERR(0, 127, __pyx_L1_error)
       }
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
       if (likely(PyTuple_CheckExact(sequence))) {
-        __pyx_t_3 = PyTuple_GET_ITEM(sequence, 0); 
-        __pyx_t_17 = PyTuple_GET_ITEM(sequence, 1); 
+        __pyx_t_17 = PyTuple_GET_ITEM(sequence, 0); 
+        __pyx_t_3 = PyTuple_GET_ITEM(sequence, 1); 
       } else {
-        __pyx_t_3 = PyList_GET_ITEM(sequence, 0); 
-        __pyx_t_17 = PyList_GET_ITEM(sequence, 1); 
+        __pyx_t_17 = PyList_GET_ITEM(sequence, 0); 
+        __pyx_t_3 = PyList_GET_ITEM(sequence, 1); 
       }
-      __Pyx_INCREF(__pyx_t_3);
       __Pyx_INCREF(__pyx_t_17);
+      __Pyx_INCREF(__pyx_t_3);
       #else
-      __pyx_t_3 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 118, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_17 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 118, __pyx_L1_error)
+      __pyx_t_17 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 127, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_17);
+      __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 127, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
       #endif
-      __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
+      __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
     } else {
       Py_ssize_t index = -1;
-      __pyx_t_16 = PyObject_GetIter(__pyx_t_18); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 118, __pyx_L1_error)
+      __pyx_t_16 = PyObject_GetIter(__pyx_t_10); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 127, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
-      __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-      __pyx_t_23 = Py_TYPE(__pyx_t_16)->tp_iternext;
-      index = 0; __pyx_t_3 = __pyx_t_23(__pyx_t_16); if (unlikely(!__pyx_t_3)) goto __pyx_L10_unpacking_failed;
-      __Pyx_GOTREF(__pyx_t_3);
-      index = 1; __pyx_t_17 = __pyx_t_23(__pyx_t_16); if (unlikely(!__pyx_t_17)) goto __pyx_L10_unpacking_failed;
+      __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+      __pyx_t_21 = Py_TYPE(__pyx_t_16)->tp_iternext;
+      index = 0; __pyx_t_17 = __pyx_t_21(__pyx_t_16); if (unlikely(!__pyx_t_17)) goto __pyx_L12_unpacking_failed;
       __Pyx_GOTREF(__pyx_t_17);
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_23(__pyx_t_16), 2) < 0) __PYX_ERR(0, 118, __pyx_L1_error)
-      __pyx_t_23 = NULL;
+      index = 1; __pyx_t_3 = __pyx_t_21(__pyx_t_16); if (unlikely(!__pyx_t_3)) goto __pyx_L12_unpacking_failed;
+      __Pyx_GOTREF(__pyx_t_3);
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_21(__pyx_t_16), 2) < 0) __PYX_ERR(0, 127, __pyx_L1_error)
+      __pyx_t_21 = NULL;
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-      goto __pyx_L11_unpacking_done;
-      __pyx_L10_unpacking_failed:;
+      goto __pyx_L13_unpacking_done;
+      __pyx_L12_unpacking_failed:;
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-      __pyx_t_23 = NULL;
+      __pyx_t_21 = NULL;
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-      __PYX_ERR(0, 118, __pyx_L1_error)
-      __pyx_L11_unpacking_done:;
+      __PYX_ERR(0, 127, __pyx_L1_error)
+      __pyx_L13_unpacking_done:;
     }
-    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 118, __pyx_L1_error)
-    if (!(likely(((__pyx_t_17) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_17, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 118, __pyx_L1_error)
-    __pyx_t_5 = ((PyArrayObject *)__pyx_t_3);
+    if (!(likely(((__pyx_t_17) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_17, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 127, __pyx_L1_error)
+    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 127, __pyx_L1_error)
+    __pyx_t_5 = ((PyArrayObject *)__pyx_t_17);
     {
       __Pyx_BufFmt_StackElem __pyx_stack[1];
-      __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVals.rcbuffer->pybuffer);
-      __pyx_t_19 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVals.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack);
+      __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVals_i.rcbuffer->pybuffer);
+      __pyx_t_19 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVals_i.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack);
       if (unlikely(__pyx_t_19 < 0)) {
         PyErr_Fetch(&__pyx_t_9, &__pyx_t_8, &__pyx_t_7);
-        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVals.rcbuffer->pybuffer, (PyObject*)__pyx_v_eigVals, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {
+        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVals_i.rcbuffer->pybuffer, (PyObject*)__pyx_v_eigVals_i, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {
           Py_XDECREF(__pyx_t_9); Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_7);
           __Pyx_RaiseBufferFallbackError();
         } else {
@@ -3757,20 +4034,20 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
         }
         __pyx_t_9 = __pyx_t_8 = __pyx_t_7 = 0;
       }
-      __pyx_pybuffernd_eigVals.diminfo[0].strides = __pyx_pybuffernd_eigVals.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVals.diminfo[0].shape = __pyx_pybuffernd_eigVals.rcbuffer->pybuffer.shape[0];
-      if (unlikely(__pyx_t_19 < 0)) __PYX_ERR(0, 118, __pyx_L1_error)
+      __pyx_pybuffernd_eigVals_i.diminfo[0].strides = __pyx_pybuffernd_eigVals_i.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVals_i.diminfo[0].shape = __pyx_pybuffernd_eigVals_i.rcbuffer->pybuffer.shape[0];
+      if (unlikely(__pyx_t_19 < 0)) __PYX_ERR(0, 127, __pyx_L1_error)
     }
     __pyx_t_5 = 0;
-    __Pyx_XDECREF_SET(__pyx_v_eigVals, ((PyArrayObject *)__pyx_t_3));
-    __pyx_t_3 = 0;
-    __pyx_t_24 = ((PyArrayObject *)__pyx_t_17);
+    __Pyx_XDECREF_SET(__pyx_v_eigVals_i, ((PyArrayObject *)__pyx_t_17));
+    __pyx_t_17 = 0;
+    __pyx_t_22 = ((PyArrayObject *)__pyx_t_3);
     {
       __Pyx_BufFmt_StackElem __pyx_stack[1];
-      __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVecs.rcbuffer->pybuffer);
-      __pyx_t_19 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVecs.rcbuffer->pybuffer, (PyObject*)__pyx_t_24, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack);
+      __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer);
+      __pyx_t_19 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer, (PyObject*)__pyx_t_22, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack);
       if (unlikely(__pyx_t_19 < 0)) {
         PyErr_Fetch(&__pyx_t_7, &__pyx_t_8, &__pyx_t_9);
-        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVecs.rcbuffer->pybuffer, (PyObject*)__pyx_v_eigVecs, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {
+        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer, (PyObject*)__pyx_v_eigVecs_i, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {
           Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_9);
           __Pyx_RaiseBufferFallbackError();
         } else {
@@ -3778,414 +4055,378 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
         }
         __pyx_t_7 = __pyx_t_8 = __pyx_t_9 = 0;
       }
-      __pyx_pybuffernd_eigVecs.diminfo[0].strides = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVecs.diminfo[0].shape = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_eigVecs.diminfo[1].strides = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_eigVecs.diminfo[1].shape = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.shape[1];
-      if (unlikely(__pyx_t_19 < 0)) __PYX_ERR(0, 118, __pyx_L1_error)
+      __pyx_pybuffernd_eigVecs_i.diminfo[0].strides = __pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVecs_i.diminfo[0].shape = __pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_eigVecs_i.diminfo[1].strides = __pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_eigVecs_i.diminfo[1].shape = __pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer.shape[1];
+      if (unlikely(__pyx_t_19 < 0)) __PYX_ERR(0, 127, __pyx_L1_error)
     }
-    __pyx_t_24 = 0;
-    __Pyx_XDECREF_SET(__pyx_v_eigVecs, ((PyArrayObject *)__pyx_t_17));
+    __pyx_t_22 = 0;
+    __Pyx_XDECREF_SET(__pyx_v_eigVecs_i, ((PyArrayObject *)__pyx_t_3));
+    __pyx_t_3 = 0;
+
+    /* "PostProcess_AnisotropyTensor.pyx":128
+ *         # Each col of eigVecs is a vector, thus 3 x 3
+ *         eigVals_i, eigVecs_i = np.linalg.eigh(tensors[i, 0, :, :])
+ *         eigVals_i, eigVecs_i = np.flipud(eigVals_i), np.fliplr(eigVecs_i)             # <<<<<<<<<<<<<<
+ *         # Each eigVals_i is a row, stack them vertically
+ *         # Each eigVecs_i is a 3 x 3 matrix, stack them in z dir to each of their i, j = 0 location
+ */
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 128, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_flipud); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 128, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_17);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_17))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_17);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_17, function);
+      }
+    }
+    __pyx_t_10 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_17, __pyx_t_3, ((PyObject *)__pyx_v_eigVals_i)) : __Pyx_PyObject_CallOneArg(__pyx_t_17, ((PyObject *)__pyx_v_eigVals_i));
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 128, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_10);
+    __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+    if (!(likely(((__pyx_t_10) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_10, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 128, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 128, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_fliplr); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 128, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_16);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_16))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_16);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_16);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_16, function);
+      }
+    }
+    __pyx_t_17 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_3, ((PyObject *)__pyx_v_eigVecs_i)) : __Pyx_PyObject_CallOneArg(__pyx_t_16, ((PyObject *)__pyx_v_eigVecs_i));
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 128, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_17);
+    __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
+    if (!(likely(((__pyx_t_17) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_17, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 128, __pyx_L1_error)
+    __pyx_t_5 = ((PyArrayObject *)__pyx_t_10);
+    {
+      __Pyx_BufFmt_StackElem __pyx_stack[1];
+      __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVals_i.rcbuffer->pybuffer);
+      __pyx_t_19 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVals_i.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack);
+      if (unlikely(__pyx_t_19 < 0)) {
+        PyErr_Fetch(&__pyx_t_9, &__pyx_t_8, &__pyx_t_7);
+        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVals_i.rcbuffer->pybuffer, (PyObject*)__pyx_v_eigVals_i, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {
+          Py_XDECREF(__pyx_t_9); Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_7);
+          __Pyx_RaiseBufferFallbackError();
+        } else {
+          PyErr_Restore(__pyx_t_9, __pyx_t_8, __pyx_t_7);
+        }
+        __pyx_t_9 = __pyx_t_8 = __pyx_t_7 = 0;
+      }
+      __pyx_pybuffernd_eigVals_i.diminfo[0].strides = __pyx_pybuffernd_eigVals_i.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVals_i.diminfo[0].shape = __pyx_pybuffernd_eigVals_i.rcbuffer->pybuffer.shape[0];
+      if (unlikely(__pyx_t_19 < 0)) __PYX_ERR(0, 128, __pyx_L1_error)
+    }
+    __pyx_t_5 = 0;
+    __Pyx_DECREF_SET(__pyx_v_eigVals_i, ((PyArrayObject *)__pyx_t_10));
+    __pyx_t_10 = 0;
+    __pyx_t_22 = ((PyArrayObject *)__pyx_t_17);
+    {
+      __Pyx_BufFmt_StackElem __pyx_stack[1];
+      __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer);
+      __pyx_t_19 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer, (PyObject*)__pyx_t_22, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack);
+      if (unlikely(__pyx_t_19 < 0)) {
+        PyErr_Fetch(&__pyx_t_7, &__pyx_t_8, &__pyx_t_9);
+        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer, (PyObject*)__pyx_v_eigVecs_i, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {
+          Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_9);
+          __Pyx_RaiseBufferFallbackError();
+        } else {
+          PyErr_Restore(__pyx_t_7, __pyx_t_8, __pyx_t_9);
+        }
+        __pyx_t_7 = __pyx_t_8 = __pyx_t_9 = 0;
+      }
+      __pyx_pybuffernd_eigVecs_i.diminfo[0].strides = __pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVecs_i.diminfo[0].shape = __pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_eigVecs_i.diminfo[1].strides = __pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_eigVecs_i.diminfo[1].shape = __pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer.shape[1];
+      if (unlikely(__pyx_t_19 < 0)) __PYX_ERR(0, 128, __pyx_L1_error)
+    }
+    __pyx_t_22 = 0;
+    __Pyx_DECREF_SET(__pyx_v_eigVecs_i, ((PyArrayObject *)__pyx_t_17));
     __pyx_t_17 = 0;
 
-    /* "PostProcess_AnisotropyTensor.pyx":119
- *         # Each col of eigVecs is a vector, thus 3 x 3
- *         eigVals, eigVecs = np.linalg.eigh(tensors[i, 0, :, :])
- *         eigVals, eigVecs = np.flipud(eigVals), np.fliplr(eigVecs)             # <<<<<<<<<<<<<<
- *         # Each eigVals is a row, stack them vertically
- *         # Each eigVecs is a 3 x 3 matrix, stack them in z dir to each of their i, j = 0 location
+    /* "PostProcess_AnisotropyTensor.pyx":131
+ *         # Each eigVals_i is a row, stack them vertically
+ *         # Each eigVecs_i is a 3 x 3 matrix, stack them in z dir to each of their i, j = 0 location
+ *         eigVals3D[i, :] = eigVals_i             # <<<<<<<<<<<<<<
+ *         eigVecs4D[i, 0, :] = eigVecs_i.ravel()
+ * 
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_17, __pyx_n_s_np); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 131, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_17);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_flipud); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 119, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-    __pyx_t_17 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-      __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_3);
-      if (likely(__pyx_t_17)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-        __Pyx_INCREF(__pyx_t_17);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_3, function);
-      }
-    }
-    __pyx_t_18 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_17, ((PyObject *)__pyx_v_eigVals)) : __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_eigVals));
-    __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-    if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 119, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_18);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (!(likely(((__pyx_t_18) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_18, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 119, __pyx_L1_error)
-    __Pyx_GetModuleGlobalName(__pyx_t_17, __pyx_n_s_np); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 119, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_17);
-    __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_fliplr); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 119, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_16);
-    __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-    __pyx_t_17 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_16))) {
-      __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_16);
-      if (likely(__pyx_t_17)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_16);
-        __Pyx_INCREF(__pyx_t_17);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_16, function);
-      }
-    }
-    __pyx_t_3 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_17, ((PyObject *)__pyx_v_eigVecs)) : __Pyx_PyObject_CallOneArg(__pyx_t_16, ((PyObject *)__pyx_v_eigVecs));
-    __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 119, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 119, __pyx_L1_error)
-    __pyx_t_5 = ((PyArrayObject *)__pyx_t_18);
-    {
-      __Pyx_BufFmt_StackElem __pyx_stack[1];
-      __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVals.rcbuffer->pybuffer);
-      __pyx_t_19 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVals.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack);
-      if (unlikely(__pyx_t_19 < 0)) {
-        PyErr_Fetch(&__pyx_t_9, &__pyx_t_8, &__pyx_t_7);
-        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVals.rcbuffer->pybuffer, (PyObject*)__pyx_v_eigVals, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {
-          Py_XDECREF(__pyx_t_9); Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_7);
-          __Pyx_RaiseBufferFallbackError();
-        } else {
-          PyErr_Restore(__pyx_t_9, __pyx_t_8, __pyx_t_7);
-        }
-        __pyx_t_9 = __pyx_t_8 = __pyx_t_7 = 0;
-      }
-      __pyx_pybuffernd_eigVals.diminfo[0].strides = __pyx_pybuffernd_eigVals.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVals.diminfo[0].shape = __pyx_pybuffernd_eigVals.rcbuffer->pybuffer.shape[0];
-      if (unlikely(__pyx_t_19 < 0)) __PYX_ERR(0, 119, __pyx_L1_error)
-    }
-    __pyx_t_5 = 0;
-    __Pyx_DECREF_SET(__pyx_v_eigVals, ((PyArrayObject *)__pyx_t_18));
-    __pyx_t_18 = 0;
-    __pyx_t_24 = ((PyArrayObject *)__pyx_t_3);
-    {
-      __Pyx_BufFmt_StackElem __pyx_stack[1];
-      __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVecs.rcbuffer->pybuffer);
-      __pyx_t_19 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVecs.rcbuffer->pybuffer, (PyObject*)__pyx_t_24, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack);
-      if (unlikely(__pyx_t_19 < 0)) {
-        PyErr_Fetch(&__pyx_t_7, &__pyx_t_8, &__pyx_t_9);
-        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_eigVecs.rcbuffer->pybuffer, (PyObject*)__pyx_v_eigVecs, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {
-          Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_9);
-          __Pyx_RaiseBufferFallbackError();
-        } else {
-          PyErr_Restore(__pyx_t_7, __pyx_t_8, __pyx_t_9);
-        }
-        __pyx_t_7 = __pyx_t_8 = __pyx_t_9 = 0;
-      }
-      __pyx_pybuffernd_eigVecs.diminfo[0].strides = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_eigVecs.diminfo[0].shape = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_eigVecs.diminfo[1].strides = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_eigVecs.diminfo[1].shape = __pyx_pybuffernd_eigVecs.rcbuffer->pybuffer.shape[1];
-      if (unlikely(__pyx_t_19 < 0)) __PYX_ERR(0, 119, __pyx_L1_error)
-    }
-    __pyx_t_24 = 0;
-    __Pyx_DECREF_SET(__pyx_v_eigVecs, ((PyArrayObject *)__pyx_t_3));
-    __pyx_t_3 = 0;
-
-    /* "PostProcess_AnisotropyTensor.pyx":122
- *         # Each eigVals is a row, stack them vertically
- *         # Each eigVecs is a 3 x 3 matrix, stack them in z dir to each of their i, j = 0 location
- *         eigVals3D = np.vstack((eigVals3D, eigVals))             # <<<<<<<<<<<<<<
- *         eigVecs4D[i, 0, :] = eigVecs.ravel()
- *         # Gauge progress
- */
-    __Pyx_GetModuleGlobalName(__pyx_t_18, __pyx_n_s_np); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 122, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_18);
-    __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_18, __pyx_n_s_vstack); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 122, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_16);
-    __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-    __pyx_t_18 = PyTuple_New(2); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 122, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_18);
-    __Pyx_INCREF(((PyObject *)__pyx_v_eigVals3D));
-    __Pyx_GIVEREF(((PyObject *)__pyx_v_eigVals3D));
-    PyTuple_SET_ITEM(__pyx_t_18, 0, ((PyObject *)__pyx_v_eigVals3D));
-    __Pyx_INCREF(((PyObject *)__pyx_v_eigVals));
-    __Pyx_GIVEREF(((PyObject *)__pyx_v_eigVals));
-    PyTuple_SET_ITEM(__pyx_t_18, 1, ((PyObject *)__pyx_v_eigVals));
-    __pyx_t_17 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_16))) {
-      __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_16);
-      if (likely(__pyx_t_17)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_16);
-        __Pyx_INCREF(__pyx_t_17);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_16, function);
-      }
-    }
-    __pyx_t_3 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_17, __pyx_t_18) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_t_18);
-    __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-    __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 122, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 122, __pyx_L1_error)
-    __Pyx_DECREF_SET(__pyx_v_eigVals3D, ((PyArrayObject *)__pyx_t_3));
-    __pyx_t_3 = 0;
-
-    /* "PostProcess_AnisotropyTensor.pyx":123
- *         # Each eigVecs is a 3 x 3 matrix, stack them in z dir to each of their i, j = 0 location
- *         eigVals3D = np.vstack((eigVals3D, eigVals))
- *         eigVecs4D[i, 0, :] = eigVecs.ravel()             # <<<<<<<<<<<<<<
- *         # Gauge progress
- *         progress = float(i)/(tensors.shape[0] + 1)*100.
- */
-    __pyx_t_16 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_eigVecs), __pyx_n_s_ravel); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 123, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_16);
-    __pyx_t_18 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_16))) {
-      __pyx_t_18 = PyMethod_GET_SELF(__pyx_t_16);
-      if (likely(__pyx_t_18)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_16);
-        __Pyx_INCREF(__pyx_t_18);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_16, function);
-      }
-    }
-    __pyx_t_3 = (__pyx_t_18) ? __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_t_18) : __Pyx_PyObject_CallNoArg(__pyx_t_16);
-    __Pyx_XDECREF(__pyx_t_18); __pyx_t_18 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 123, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-    __pyx_t_16 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 123, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_16);
-    __pyx_t_18 = PyTuple_New(3); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 123, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_18);
-    __Pyx_GIVEREF(__pyx_t_16);
-    PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_t_16);
-    __Pyx_INCREF(__pyx_int_0);
-    __Pyx_GIVEREF(__pyx_int_0);
-    PyTuple_SET_ITEM(__pyx_t_18, 1, __pyx_int_0);
+    __pyx_t_10 = PyTuple_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 131, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_10);
+    __Pyx_GIVEREF(__pyx_t_17);
+    PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_17);
     __Pyx_INCREF(__pyx_slice_);
     __Pyx_GIVEREF(__pyx_slice_);
-    PyTuple_SET_ITEM(__pyx_t_18, 2, __pyx_slice_);
-    __pyx_t_16 = 0;
-    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_eigVecs4D), __pyx_t_18, __pyx_t_3) < 0)) __PYX_ERR(0, 123, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_slice_);
+    __pyx_t_17 = 0;
+    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_eigVals3D), __pyx_t_10, ((PyObject *)__pyx_v_eigVals_i)) < 0)) __PYX_ERR(0, 131, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-    /* "PostProcess_AnisotropyTensor.pyx":125
- *         eigVecs4D[i, 0, :] = eigVecs.ravel()
+    /* "PostProcess_AnisotropyTensor.pyx":132
+ *         # Each eigVecs_i is a 3 x 3 matrix, stack them in z dir to each of their i, j = 0 location
+ *         eigVals3D[i, :] = eigVals_i
+ *         eigVecs4D[i, 0, :] = eigVecs_i.ravel()             # <<<<<<<<<<<<<<
+ * 
+ *         # Gauge progress
+ */
+    __pyx_t_17 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_eigVecs_i), __pyx_n_s_ravel); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 132, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_17);
+    __pyx_t_16 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_17))) {
+      __pyx_t_16 = PyMethod_GET_SELF(__pyx_t_17);
+      if (likely(__pyx_t_16)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
+        __Pyx_INCREF(__pyx_t_16);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_17, function);
+      }
+    }
+    __pyx_t_10 = (__pyx_t_16) ? __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_16) : __Pyx_PyObject_CallNoArg(__pyx_t_17);
+    __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
+    if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 132, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_10);
+    __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+    __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 132, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_17);
+    __pyx_t_16 = PyTuple_New(3); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 132, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_16);
+    __Pyx_GIVEREF(__pyx_t_17);
+    PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_17);
+    __Pyx_INCREF(__pyx_int_0);
+    __Pyx_GIVEREF(__pyx_int_0);
+    PyTuple_SET_ITEM(__pyx_t_16, 1, __pyx_int_0);
+    __Pyx_INCREF(__pyx_slice_);
+    __Pyx_GIVEREF(__pyx_slice_);
+    PyTuple_SET_ITEM(__pyx_t_16, 2, __pyx_slice_);
+    __pyx_t_17 = 0;
+    if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_eigVecs4D), __pyx_t_16, __pyx_t_10) < 0)) __PYX_ERR(0, 132, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
+    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+
+    /* "PostProcess_AnisotropyTensor.pyx":135
+ * 
  *         # Gauge progress
  *         progress = float(i)/(tensors.shape[0] + 1)*100.             # <<<<<<<<<<<<<<
  *         if progress >= milestone:
- *             print(' ' + str(milestone) + '%...')
+ *             printf(' %d %%... ', milestone)
  */
     __pyx_v_progress = ((((double)__pyx_v_i) / ((__pyx_v_tensors->dimensions[0]) + 1)) * 100.);
 
-    /* "PostProcess_AnisotropyTensor.pyx":126
+    /* "PostProcess_AnisotropyTensor.pyx":136
  *         # Gauge progress
  *         progress = float(i)/(tensors.shape[0] + 1)*100.
  *         if progress >= milestone:             # <<<<<<<<<<<<<<
- *             print(' ' + str(milestone) + '%...')
+ *             printf(' %d %%... ', milestone)
  *             milestone += 10
  */
     __pyx_t_1 = ((__pyx_v_progress >= __pyx_v_milestone) != 0);
     if (__pyx_t_1) {
 
-      /* "PostProcess_AnisotropyTensor.pyx":127
+      /* "PostProcess_AnisotropyTensor.pyx":137
  *         progress = float(i)/(tensors.shape[0] + 1)*100.
  *         if progress >= milestone:
- *             print(' ' + str(milestone) + '%...')             # <<<<<<<<<<<<<<
+ *             printf(' %d %%... ', milestone)             # <<<<<<<<<<<<<<
  *             milestone += 10
  * 
  */
-      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_milestone); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 127, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_18 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_3); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 127, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_18);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_Add(__pyx_kp_s__8, __pyx_t_18); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 127, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-      __pyx_t_18 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__9); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 127, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_18);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (__Pyx_PrintOne(0, __pyx_t_18) < 0) __PYX_ERR(0, 127, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
+      (void)(printf(((char const *)" %d %%... "), __pyx_v_milestone));
 
-      /* "PostProcess_AnisotropyTensor.pyx":128
+      /* "PostProcess_AnisotropyTensor.pyx":138
  *         if progress >= milestone:
- *             print(' ' + str(milestone) + '%...')
+ *             printf(' %d %%... ', milestone)
  *             milestone += 10             # <<<<<<<<<<<<<<
  * 
- *     # Reshape eigVals3D to nRow x 1 x 3
+ *     # # For gauging progress
  */
       __pyx_v_milestone = (__pyx_v_milestone + 10);
 
-      /* "PostProcess_AnisotropyTensor.pyx":126
+      /* "PostProcess_AnisotropyTensor.pyx":136
  *         # Gauge progress
  *         progress = float(i)/(tensors.shape[0] + 1)*100.
  *         if progress >= milestone:             # <<<<<<<<<<<<<<
- *             print(' ' + str(milestone) + '%...')
+ *             printf(' %d %%... ', milestone)
  *             milestone += 10
  */
     }
   }
 
-  /* "PostProcess_AnisotropyTensor.pyx":135
+  /* "PostProcess_AnisotropyTensor.pyx":162
  *     # Also reshape eigVecs4D from nRow x 1 x 9 to nRow x 1 x 3 x 3
  *     # so that each col of the 3 x 3 matrix is an eigenvector corresponding to an eigenvalue
- *     eigVals3D = np.reshape(eigVals3D[1:], (tensors.shape[0], 1, 3))             # <<<<<<<<<<<<<<
+ *     eigVals3D = np.reshape(eigVals3D, (tensors.shape[0], 1, 3))             # <<<<<<<<<<<<<<
+ *     # eigVals3D = np.reshape(eigVals3D[1:], (tensors.shape[0], 1, 3))
  *     eigVecs4D = np.reshape(eigVecs4D, (tensors.shape[0], 1, 3, 3))
- * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 135, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_reshape); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 135, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_np); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 162, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_eigVals3D), 1, 0, NULL, NULL, &__pyx_slice__10, 1, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 135, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_17 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 135, __pyx_L1_error)
+  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_reshape); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 162, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
-  __pyx_t_10 = PyTuple_New(3); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 135, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_10);
-  __Pyx_GIVEREF(__pyx_t_17);
-  PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_17);
+  __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
+  __pyx_t_16 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 162, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_16);
+  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 162, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_16);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_16);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
-  PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_int_1);
+  PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_int_1);
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
-  PyTuple_SET_ITEM(__pyx_t_10, 2, __pyx_int_3);
-  __pyx_t_17 = 0;
-  __pyx_t_17 = NULL;
+  PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_int_3);
+  __pyx_t_16 = 0;
+  __pyx_t_16 = NULL;
   __pyx_t_6 = 0;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_16))) {
-    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_16);
-    if (likely(__pyx_t_17)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_16);
-      __Pyx_INCREF(__pyx_t_17);
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_17))) {
+    __pyx_t_16 = PyMethod_GET_SELF(__pyx_t_17);
+    if (likely(__pyx_t_16)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
+      __Pyx_INCREF(__pyx_t_16);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_16, function);
+      __Pyx_DECREF_SET(__pyx_t_17, function);
       __pyx_t_6 = 1;
     }
   }
   #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_16)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_17, __pyx_t_3, __pyx_t_10};
-    __pyx_t_18 = __Pyx_PyFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 135, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-    __Pyx_GOTREF(__pyx_t_18);
+  if (PyFunction_Check(__pyx_t_17)) {
+    PyObject *__pyx_temp[3] = {__pyx_t_16, ((PyObject *)__pyx_v_eigVals3D), __pyx_t_3};
+    __pyx_t_10 = __Pyx_PyFunction_FastCall(__pyx_t_17, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 162, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
+    __Pyx_GOTREF(__pyx_t_10);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   } else
   #endif
   #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_16)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_17, __pyx_t_3, __pyx_t_10};
-    __pyx_t_18 = __Pyx_PyCFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 135, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-    __Pyx_GOTREF(__pyx_t_18);
+  if (__Pyx_PyFastCFunction_Check(__pyx_t_17)) {
+    PyObject *__pyx_temp[3] = {__pyx_t_16, ((PyObject *)__pyx_v_eigVals3D), __pyx_t_3};
+    __pyx_t_10 = __Pyx_PyCFunction_FastCall(__pyx_t_17, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 162, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
+    __Pyx_GOTREF(__pyx_t_10);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   } else
   #endif
   {
-    __pyx_t_15 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 135, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_15);
-    if (__pyx_t_17) {
-      __Pyx_GIVEREF(__pyx_t_17); PyTuple_SET_ITEM(__pyx_t_15, 0, __pyx_t_17); __pyx_t_17 = NULL;
-    }
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_15, 0+__pyx_t_6, __pyx_t_3);
-    __Pyx_GIVEREF(__pyx_t_10);
-    PyTuple_SET_ITEM(__pyx_t_15, 1+__pyx_t_6, __pyx_t_10);
-    __pyx_t_3 = 0;
-    __pyx_t_10 = 0;
-    __pyx_t_18 = __Pyx_PyObject_Call(__pyx_t_16, __pyx_t_15, NULL); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 135, __pyx_L1_error)
+    __pyx_t_18 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 162, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_18);
-    __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
+    if (__pyx_t_16) {
+      __Pyx_GIVEREF(__pyx_t_16); PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_t_16); __pyx_t_16 = NULL;
+    }
+    __Pyx_INCREF(((PyObject *)__pyx_v_eigVals3D));
+    __Pyx_GIVEREF(((PyObject *)__pyx_v_eigVals3D));
+    PyTuple_SET_ITEM(__pyx_t_18, 0+__pyx_t_6, ((PyObject *)__pyx_v_eigVals3D));
+    __Pyx_GIVEREF(__pyx_t_3);
+    PyTuple_SET_ITEM(__pyx_t_18, 1+__pyx_t_6, __pyx_t_3);
+    __pyx_t_3 = 0;
+    __pyx_t_10 = __Pyx_PyObject_Call(__pyx_t_17, __pyx_t_18, NULL); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 162, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_10);
+    __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
   }
-  __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-  if (!(likely(((__pyx_t_18) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_18, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 135, __pyx_L1_error)
-  __Pyx_DECREF_SET(__pyx_v_eigVals3D, ((PyArrayObject *)__pyx_t_18));
-  __pyx_t_18 = 0;
+  __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+  if (!(likely(((__pyx_t_10) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_10, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 162, __pyx_L1_error)
+  __Pyx_DECREF_SET(__pyx_v_eigVals3D, ((PyArrayObject *)__pyx_t_10));
+  __pyx_t_10 = 0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":136
- *     # so that each col of the 3 x 3 matrix is an eigenvector corresponding to an eigenvalue
- *     eigVals3D = np.reshape(eigVals3D[1:], (tensors.shape[0], 1, 3))
+  /* "PostProcess_AnisotropyTensor.pyx":164
+ *     eigVals3D = np.reshape(eigVals3D, (tensors.shape[0], 1, 3))
+ *     # eigVals3D = np.reshape(eigVals3D[1:], (tensors.shape[0], 1, 3))
  *     eigVecs4D = np.reshape(eigVecs4D, (tensors.shape[0], 1, 3, 3))             # <<<<<<<<<<<<<<
  * 
  *     print('\nFinished processing anisotropy tensors')
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_np); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 136, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_16);
-  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_reshape); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 136, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_15);
-  __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-  __pyx_t_16 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 136, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_16);
-  __pyx_t_10 = PyTuple_New(4); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 136, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_10);
-  __Pyx_GIVEREF(__pyx_t_16);
-  PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_16);
+  __Pyx_GetModuleGlobalName(__pyx_t_17, __pyx_n_s_np); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 164, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_17);
+  __pyx_t_18 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_reshape); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 164, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_18);
+  __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+  __pyx_t_17 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_tensors->dimensions[0])); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 164, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_17);
+  __pyx_t_3 = PyTuple_New(4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 164, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_17);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_17);
   __Pyx_INCREF(__pyx_int_1);
   __Pyx_GIVEREF(__pyx_int_1);
-  PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_int_1);
+  PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_int_1);
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
-  PyTuple_SET_ITEM(__pyx_t_10, 2, __pyx_int_3);
+  PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_int_3);
   __Pyx_INCREF(__pyx_int_3);
   __Pyx_GIVEREF(__pyx_int_3);
-  PyTuple_SET_ITEM(__pyx_t_10, 3, __pyx_int_3);
-  __pyx_t_16 = 0;
-  __pyx_t_16 = NULL;
+  PyTuple_SET_ITEM(__pyx_t_3, 3, __pyx_int_3);
+  __pyx_t_17 = 0;
+  __pyx_t_17 = NULL;
   __pyx_t_6 = 0;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_15))) {
-    __pyx_t_16 = PyMethod_GET_SELF(__pyx_t_15);
-    if (likely(__pyx_t_16)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_15);
-      __Pyx_INCREF(__pyx_t_16);
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_18))) {
+    __pyx_t_17 = PyMethod_GET_SELF(__pyx_t_18);
+    if (likely(__pyx_t_17)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_18);
+      __Pyx_INCREF(__pyx_t_17);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_15, function);
+      __Pyx_DECREF_SET(__pyx_t_18, function);
       __pyx_t_6 = 1;
     }
   }
   #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_15)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_16, ((PyObject *)__pyx_v_eigVecs4D), __pyx_t_10};
-    __pyx_t_18 = __Pyx_PyFunction_FastCall(__pyx_t_15, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 136, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
-    __Pyx_GOTREF(__pyx_t_18);
-    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+  if (PyFunction_Check(__pyx_t_18)) {
+    PyObject *__pyx_temp[3] = {__pyx_t_17, ((PyObject *)__pyx_v_eigVecs4D), __pyx_t_3};
+    __pyx_t_10 = __Pyx_PyFunction_FastCall(__pyx_t_18, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 164, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
+    __Pyx_GOTREF(__pyx_t_10);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else
   #endif
   #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_15)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_16, ((PyObject *)__pyx_v_eigVecs4D), __pyx_t_10};
-    __pyx_t_18 = __Pyx_PyCFunction_FastCall(__pyx_t_15, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 136, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
-    __Pyx_GOTREF(__pyx_t_18);
-    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+  if (__Pyx_PyFastCFunction_Check(__pyx_t_18)) {
+    PyObject *__pyx_temp[3] = {__pyx_t_17, ((PyObject *)__pyx_v_eigVecs4D), __pyx_t_3};
+    __pyx_t_10 = __Pyx_PyCFunction_FastCall(__pyx_t_18, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 164, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
+    __Pyx_GOTREF(__pyx_t_10);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else
   #endif
   {
-    __pyx_t_3 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 136, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    if (__pyx_t_16) {
-      __Pyx_GIVEREF(__pyx_t_16); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_16); __pyx_t_16 = NULL;
+    __pyx_t_16 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 164, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_16);
+    if (__pyx_t_17) {
+      __Pyx_GIVEREF(__pyx_t_17); PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_17); __pyx_t_17 = NULL;
     }
     __Pyx_INCREF(((PyObject *)__pyx_v_eigVecs4D));
     __Pyx_GIVEREF(((PyObject *)__pyx_v_eigVecs4D));
-    PyTuple_SET_ITEM(__pyx_t_3, 0+__pyx_t_6, ((PyObject *)__pyx_v_eigVecs4D));
-    __Pyx_GIVEREF(__pyx_t_10);
-    PyTuple_SET_ITEM(__pyx_t_3, 1+__pyx_t_6, __pyx_t_10);
-    __pyx_t_10 = 0;
-    __pyx_t_18 = __Pyx_PyObject_Call(__pyx_t_15, __pyx_t_3, NULL); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 136, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_18);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    PyTuple_SET_ITEM(__pyx_t_16, 0+__pyx_t_6, ((PyObject *)__pyx_v_eigVecs4D));
+    __Pyx_GIVEREF(__pyx_t_3);
+    PyTuple_SET_ITEM(__pyx_t_16, 1+__pyx_t_6, __pyx_t_3);
+    __pyx_t_3 = 0;
+    __pyx_t_10 = __Pyx_PyObject_Call(__pyx_t_18, __pyx_t_16, NULL); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 164, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_10);
+    __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
   }
-  __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-  if (!(likely(((__pyx_t_18) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_18, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 136, __pyx_L1_error)
-  __Pyx_DECREF_SET(__pyx_v_eigVecs4D, ((PyArrayObject *)__pyx_t_18));
-  __pyx_t_18 = 0;
+  __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
+  if (!(likely(((__pyx_t_10) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_10, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 164, __pyx_L1_error)
+  __Pyx_DECREF_SET(__pyx_v_eigVecs4D, ((PyArrayObject *)__pyx_t_10));
+  __pyx_t_10 = 0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":138
+  /* "PostProcess_AnisotropyTensor.pyx":166
  *     eigVecs4D = np.reshape(eigVecs4D, (tensors.shape[0], 1, 3, 3))
  * 
  *     print('\nFinished processing anisotropy tensors')             # <<<<<<<<<<<<<<
  *     return vals2D, tensors, eigVals3D, eigVecs4D
  * 
  */
-  if (__Pyx_PrintOne(0, __pyx_kp_s_Finished_processing_anisotropy) < 0) __PYX_ERR(0, 138, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_kp_s_Finished_processing_anisotropy) < 0) __PYX_ERR(0, 166, __pyx_L1_error)
 
-  /* "PostProcess_AnisotropyTensor.pyx":139
+  /* "PostProcess_AnisotropyTensor.pyx":167
  * 
  *     print('\nFinished processing anisotropy tensors')
  *     return vals2D, tensors, eigVals3D, eigVecs4D             # <<<<<<<<<<<<<<
@@ -4193,30 +4434,30 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_18 = PyTuple_New(4); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 139, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_18);
+  __pyx_t_10 = PyTuple_New(4); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 167, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_10);
   __Pyx_INCREF(((PyObject *)__pyx_v_vals2D));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_vals2D));
-  PyTuple_SET_ITEM(__pyx_t_18, 0, ((PyObject *)__pyx_v_vals2D));
+  PyTuple_SET_ITEM(__pyx_t_10, 0, ((PyObject *)__pyx_v_vals2D));
   __Pyx_INCREF(((PyObject *)__pyx_v_tensors));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_tensors));
-  PyTuple_SET_ITEM(__pyx_t_18, 1, ((PyObject *)__pyx_v_tensors));
+  PyTuple_SET_ITEM(__pyx_t_10, 1, ((PyObject *)__pyx_v_tensors));
   __Pyx_INCREF(((PyObject *)__pyx_v_eigVals3D));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_eigVals3D));
-  PyTuple_SET_ITEM(__pyx_t_18, 2, ((PyObject *)__pyx_v_eigVals3D));
+  PyTuple_SET_ITEM(__pyx_t_10, 2, ((PyObject *)__pyx_v_eigVals3D));
   __Pyx_INCREF(((PyObject *)__pyx_v_eigVecs4D));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_eigVecs4D));
-  PyTuple_SET_ITEM(__pyx_t_18, 3, ((PyObject *)__pyx_v_eigVecs4D));
-  __pyx_r = ((PyObject*)__pyx_t_18);
-  __pyx_t_18 = 0;
+  PyTuple_SET_ITEM(__pyx_t_10, 3, ((PyObject *)__pyx_v_eigVecs4D));
+  __pyx_r = ((PyObject*)__pyx_t_10);
+  __pyx_t_10 = 0;
   goto __pyx_L0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":74
+  /* "PostProcess_AnisotropyTensor.pyx":76
  * @cython.wraparound(False)
  * @cython.cdivision(True)
  * cpdef tuple processAnisotropyTensor_Uninterpolated(np.ndarray[np.float_t, ndim = 2] vals2D, int realizeIter = 0, makeAnisotropic = True):             # <<<<<<<<<<<<<<
  *     # If ndim is not provided but np.float_t is provided, 1D is assumed
- *     cdef np.ndarray[np.float_t] k, eigVals
+ *     cdef np.ndarray[np.float_t] k, eigVals_0, eigVals_i
  */
 
   /* function exit code */
@@ -4237,8 +4478,10 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVals.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVecs.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVals_0.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVals_i.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_k.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_vals2D.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
@@ -4246,14 +4489,18 @@ static PyObject *__pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVals.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVecs.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVals_0.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVals_i.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVecs_0.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_eigVecs_i.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_k.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_vals2D.rcbuffer->pybuffer);
   __pyx_L2:;
   __Pyx_XDECREF((PyObject *)__pyx_v_k);
-  __Pyx_XDECREF((PyObject *)__pyx_v_eigVals);
-  __Pyx_XDECREF((PyObject *)__pyx_v_eigVecs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_eigVals_0);
+  __Pyx_XDECREF((PyObject *)__pyx_v_eigVals_i);
+  __Pyx_XDECREF((PyObject *)__pyx_v_eigVecs_0);
+  __Pyx_XDECREF((PyObject *)__pyx_v_eigVecs_i);
   __Pyx_XDECREF((PyObject *)__pyx_v_tensors);
   __Pyx_XDECREF((PyObject *)__pyx_v_eigVals3D);
   __Pyx_XDECREF((PyObject *)__pyx_v_eigVecs4D);
@@ -4307,7 +4554,7 @@ static PyObject *__pyx_pw_28PostProcess_AnisotropyTensor_3processAnisotropyTenso
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "processAnisotropyTensor_Uninterpolated") < 0)) __PYX_ERR(0, 74, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "processAnisotropyTensor_Uninterpolated") < 0)) __PYX_ERR(0, 76, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -4322,7 +4569,7 @@ static PyObject *__pyx_pw_28PostProcess_AnisotropyTensor_3processAnisotropyTenso
     }
     __pyx_v_vals2D = ((PyArrayObject *)values[0]);
     if (values[1]) {
-      __pyx_v_realizeIter = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_realizeIter == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 74, __pyx_L3_error)
+      __pyx_v_realizeIter = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_realizeIter == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 76, __pyx_L3_error)
     } else {
       __pyx_v_realizeIter = ((int)0);
     }
@@ -4330,13 +4577,13 @@ static PyObject *__pyx_pw_28PostProcess_AnisotropyTensor_3processAnisotropyTenso
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("processAnisotropyTensor_Uninterpolated", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 74, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("processAnisotropyTensor_Uninterpolated", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 76, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("PostProcess_AnisotropyTensor.processAnisotropyTensor_Uninterpolated", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_vals2D), __pyx_ptype_5numpy_ndarray, 1, "vals2D", 0))) __PYX_ERR(0, 74, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_vals2D), __pyx_ptype_5numpy_ndarray, 1, "vals2D", 0))) __PYX_ERR(0, 76, __pyx_L1_error)
   __pyx_r = __pyx_pf_28PostProcess_AnisotropyTensor_2processAnisotropyTensor_Uninterpolated(__pyx_self, __pyx_v_vals2D, __pyx_v_realizeIter, __pyx_v_makeAnisotropic);
 
   /* function exit code */
@@ -4362,14 +4609,14 @@ static PyObject *__pyx_pf_28PostProcess_AnisotropyTensor_2processAnisotropyTenso
   __pyx_pybuffernd_vals2D.rcbuffer = &__pyx_pybuffer_vals2D;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vals2D.rcbuffer->pybuffer, (PyObject*)__pyx_v_vals2D, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 74, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vals2D.rcbuffer->pybuffer, (PyObject*)__pyx_v_vals2D, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 76, __pyx_L1_error)
   }
   __pyx_pybuffernd_vals2D.diminfo[0].strides = __pyx_pybuffernd_vals2D.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_vals2D.diminfo[0].shape = __pyx_pybuffernd_vals2D.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_vals2D.diminfo[1].strides = __pyx_pybuffernd_vals2D.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_vals2D.diminfo[1].shape = __pyx_pybuffernd_vals2D.rcbuffer->pybuffer.shape[1];
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2.__pyx_n = 2;
   __pyx_t_2.realizeIter = __pyx_v_realizeIter;
   __pyx_t_2.makeAnisotropic = __pyx_v_makeAnisotropic;
-  __pyx_t_1 = __pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_Uninterpolated(__pyx_v_vals2D, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_28PostProcess_AnisotropyTensor_processAnisotropyTensor_Uninterpolated(__pyx_v_vals2D, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 76, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -4395,7 +4642,7 @@ static PyObject *__pyx_pf_28PostProcess_AnisotropyTensor_2processAnisotropyTenso
   return __pyx_r;
 }
 
-/* "PostProcess_AnisotropyTensor.pyx":147
+/* "PostProcess_AnisotropyTensor.pyx":175
  * @cython.wraparound(False)
  * @cython.cdivision(True)
  * cdef np.ndarray[np.float_t, ndim = 2] make_realizable(np.ndarray[np.float_t, ndim = 2] labels):             # <<<<<<<<<<<<<<
@@ -4616,11 +4863,11 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
   __pyx_pybuffernd_labels.rcbuffer = &__pyx_pybuffer_labels;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_labels.rcbuffer->pybuffer, (PyObject*)__pyx_v_labels, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 147, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_labels.rcbuffer->pybuffer, (PyObject*)__pyx_v_labels, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 175, __pyx_L1_error)
   }
   __pyx_pybuffernd_labels.diminfo[0].strides = __pyx_pybuffernd_labels.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_labels.diminfo[0].shape = __pyx_pybuffernd_labels.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_labels.diminfo[1].strides = __pyx_pybuffernd_labels.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_labels.diminfo[1].shape = __pyx_pybuffernd_labels.rcbuffer->pybuffer.shape[1];
 
-  /* "PostProcess_AnisotropyTensor.pyx":162
+  /* "PostProcess_AnisotropyTensor.pyx":190
  *     cdef np.ndarray[np.float_t] evalues
  * 
  *     numPoints = labels.shape[0]             # <<<<<<<<<<<<<<
@@ -4629,16 +4876,16 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
  */
   __pyx_v_numPoints = (__pyx_v_labels->dimensions[0]);
 
-  /* "PostProcess_AnisotropyTensor.pyx":163
+  /* "PostProcess_AnisotropyTensor.pyx":191
  * 
  *     numPoints = labels.shape[0]
  *     A = np.zeros((3, 3))             # <<<<<<<<<<<<<<
  *     for i in range(numPoints):
  *         # Scales all on-diags to retain zero trace
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 163, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 191, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 163, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 191, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -4651,12 +4898,12 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __Pyx_DECREF_SET(__pyx_t_3, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_tuple__17) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_tuple__17);
+  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_tuple__20) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_tuple__20);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 163, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 191, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 163, __pyx_L1_error)
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 191, __pyx_L1_error)
   __pyx_t_4 = ((PyArrayObject *)__pyx_t_1);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -4673,13 +4920,13 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_6 = __pyx_t_7 = __pyx_t_8 = 0;
     }
     __pyx_pybuffernd_A.diminfo[0].strides = __pyx_pybuffernd_A.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_A.diminfo[0].shape = __pyx_pybuffernd_A.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_A.diminfo[1].strides = __pyx_pybuffernd_A.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_A.diminfo[1].shape = __pyx_pybuffernd_A.rcbuffer->pybuffer.shape[1];
-    if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 163, __pyx_L1_error)
+    if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 191, __pyx_L1_error)
   }
   __pyx_t_4 = 0;
   __pyx_v_A = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":164
+  /* "PostProcess_AnisotropyTensor.pyx":192
  *     numPoints = labels.shape[0]
  *     A = np.zeros((3, 3))
  *     for i in range(numPoints):             # <<<<<<<<<<<<<<
@@ -4691,21 +4938,21 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
   for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
     __pyx_v_i = __pyx_t_10;
 
-    /* "PostProcess_AnisotropyTensor.pyx":166
+    /* "PostProcess_AnisotropyTensor.pyx":194
  *     for i in range(numPoints):
  *         # Scales all on-diags to retain zero trace
  *         if np.min(labels[i, [0, 4, 8]]) < -1./3.:             # <<<<<<<<<<<<<<
  *             labels[i, [0, 4, 8]] *= -1./(3.*np.min(labels[i, [0, 4, 8]]))
  *         if 2.*np.abs(labels[i, 1]) > labels[i, 0] + labels[i, 4] + 2./3.:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_min); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_min); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_11 = PyList_New(3); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_11 = PyList_New(3); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_INCREF(__pyx_int_0);
     __Pyx_GIVEREF(__pyx_int_0);
@@ -4716,7 +4963,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __Pyx_INCREF(__pyx_int_8);
     __Pyx_GIVEREF(__pyx_int_8);
     PyList_SET_ITEM(__pyx_t_11, 2, __pyx_int_8);
-    __pyx_t_12 = PyTuple_New(2); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_12 = PyTuple_New(2); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_3);
@@ -4724,7 +4971,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     PyTuple_SET_ITEM(__pyx_t_12, 1, __pyx_t_11);
     __pyx_t_3 = 0;
     __pyx_t_11 = 0;
-    __pyx_t_11 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_labels), __pyx_t_12); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_labels), __pyx_t_12); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
     __pyx_t_12 = NULL;
@@ -4740,28 +4987,28 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_1 = (__pyx_t_12) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_12, __pyx_t_11) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_11);
     __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 166, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyFloat_FromDouble((-1. / 3.)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_2 = PyFloat_FromDouble((-1. / 3.)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_11 = PyObject_RichCompare(__pyx_t_1, __pyx_t_2, Py_LT); __Pyx_XGOTREF(__pyx_t_11); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_11 = PyObject_RichCompare(__pyx_t_1, __pyx_t_2, Py_LT); __Pyx_XGOTREF(__pyx_t_11); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_11); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_11); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     if (__pyx_t_13) {
 
-      /* "PostProcess_AnisotropyTensor.pyx":167
+      /* "PostProcess_AnisotropyTensor.pyx":195
  *         # Scales all on-diags to retain zero trace
  *         if np.min(labels[i, [0, 4, 8]]) < -1./3.:
  *             labels[i, [0, 4, 8]] *= -1./(3.*np.min(labels[i, [0, 4, 8]]))             # <<<<<<<<<<<<<<
  *         if 2.*np.abs(labels[i, 1]) > labels[i, 0] + labels[i, 4] + 2./3.:
  *             labels[i, 1] = (labels[i, 0] + labels[i, 4] + 2./3.)*.5*np.sign(labels[i, 1])
  */
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_2 = PyList_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_2 = PyList_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_INCREF(__pyx_int_0);
       __Pyx_GIVEREF(__pyx_int_0);
@@ -4772,7 +5019,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __Pyx_INCREF(__pyx_int_8);
       __Pyx_GIVEREF(__pyx_int_8);
       PyList_SET_ITEM(__pyx_t_2, 2, __pyx_int_8);
-      __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_GIVEREF(__pyx_t_11);
       PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_11);
@@ -4780,16 +5027,16 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_2);
       __pyx_t_11 = 0;
       __pyx_t_2 = 0;
-      __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_labels), __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_labels), __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_n_s_np); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_n_s_np); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_n_s_min); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_n_s_min); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
-      __pyx_t_14 = PyList_New(3); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_14 = PyList_New(3); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
       __Pyx_INCREF(__pyx_int_0);
       __Pyx_GIVEREF(__pyx_int_0);
@@ -4800,7 +5047,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __Pyx_INCREF(__pyx_int_8);
       __Pyx_GIVEREF(__pyx_int_8);
       PyList_SET_ITEM(__pyx_t_14, 2, __pyx_int_8);
-      __pyx_t_15 = PyTuple_New(2); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_15 = PyTuple_New(2); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_GIVEREF(__pyx_t_12);
       PyTuple_SET_ITEM(__pyx_t_15, 0, __pyx_t_12);
@@ -4808,7 +5055,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       PyTuple_SET_ITEM(__pyx_t_15, 1, __pyx_t_14);
       __pyx_t_12 = 0;
       __pyx_t_14 = 0;
-      __pyx_t_14 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_labels), __pyx_t_15); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_14 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_labels), __pyx_t_15); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       __pyx_t_15 = NULL;
@@ -4824,24 +5071,24 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_11 = (__pyx_t_15) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_15, __pyx_t_14) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_14);
       __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 167, __pyx_L1_error)
+      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_Multiply(__pyx_float_3_, __pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_Multiply(__pyx_float_3_, __pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      __pyx_t_11 = __Pyx_PyFloat_DivideCObj(__pyx_float_neg_1_, __pyx_t_3, -1., 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyFloat_DivideCObj(__pyx_float_neg_1_, __pyx_t_3, -1., 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_InPlaceMultiply(__pyx_t_2, __pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_InPlaceMultiply(__pyx_t_2, __pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_labels), __pyx_t_1, __pyx_t_3) < 0)) __PYX_ERR(0, 167, __pyx_L1_error)
+      if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_labels), __pyx_t_1, __pyx_t_3) < 0)) __PYX_ERR(0, 195, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "PostProcess_AnisotropyTensor.pyx":166
+      /* "PostProcess_AnisotropyTensor.pyx":194
  *     for i in range(numPoints):
  *         # Scales all on-diags to retain zero trace
  *         if np.min(labels[i, [0, 4, 8]]) < -1./3.:             # <<<<<<<<<<<<<<
@@ -4850,21 +5097,21 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
  */
     }
 
-    /* "PostProcess_AnisotropyTensor.pyx":168
+    /* "PostProcess_AnisotropyTensor.pyx":196
  *         if np.min(labels[i, [0, 4, 8]]) < -1./3.:
  *             labels[i, [0, 4, 8]] *= -1./(3.*np.min(labels[i, [0, 4, 8]]))
  *         if 2.*np.abs(labels[i, 1]) > labels[i, 0] + labels[i, 4] + 2./3.:             # <<<<<<<<<<<<<<
  *             labels[i, 1] = (labels[i, 0] + labels[i, 4] + 2./3.)*.5*np.sign(labels[i, 1])
  *             labels[i, 3] = (labels[i, 0] + labels[i, 4] + 2./3.)*.5*np.sign(labels[i, 1])
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 168, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 196, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_abs); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 168, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_abs); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 196, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_16 = __pyx_v_i;
     __pyx_t_17 = 1;
-    __pyx_t_3 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_16, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_17, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 168, __pyx_L1_error)
+    __pyx_t_3 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_16, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_17, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 196, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_2 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_11))) {
@@ -4879,26 +5126,26 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_11, __pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_11, __pyx_t_3);
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 168, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 196, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-    __pyx_t_11 = PyNumber_Multiply(__pyx_float_2_, __pyx_t_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 168, __pyx_L1_error)
+    __pyx_t_11 = PyNumber_Multiply(__pyx_float_2_, __pyx_t_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 196, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_18 = __pyx_v_i;
     __pyx_t_19 = 0;
     __pyx_t_20 = __pyx_v_i;
     __pyx_t_21 = 4;
-    __pyx_t_1 = PyFloat_FromDouble((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_19, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_21, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 168, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_19, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_21, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 196, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = PyObject_RichCompare(__pyx_t_11, __pyx_t_1, Py_GT); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 168, __pyx_L1_error)
+    __pyx_t_3 = PyObject_RichCompare(__pyx_t_11, __pyx_t_1, Py_GT); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 196, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 168, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 196, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (__pyx_t_13) {
 
-      /* "PostProcess_AnisotropyTensor.pyx":169
+      /* "PostProcess_AnisotropyTensor.pyx":197
  *             labels[i, [0, 4, 8]] *= -1./(3.*np.min(labels[i, [0, 4, 8]]))
  *         if 2.*np.abs(labels[i, 1]) > labels[i, 0] + labels[i, 4] + 2./3.:
  *             labels[i, 1] = (labels[i, 0] + labels[i, 4] + 2./3.)*.5*np.sign(labels[i, 1])             # <<<<<<<<<<<<<<
@@ -4909,16 +5156,16 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_23 = 0;
       __pyx_t_24 = __pyx_v_i;
       __pyx_t_25 = 4;
-      __pyx_t_3 = PyFloat_FromDouble(((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_22, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_23, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_24, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_25, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.)) * .5)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 169, __pyx_L1_error)
+      __pyx_t_3 = PyFloat_FromDouble(((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_22, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_23, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_24, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_25, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.)) * .5)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_np); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 169, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_np); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_sign); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 169, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_sign); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_t_26 = __pyx_v_i;
       __pyx_t_27 = 1;
-      __pyx_t_11 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_26, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_27, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 169, __pyx_L1_error)
+      __pyx_t_11 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_26, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_27, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_14 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -4933,20 +5180,20 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_1 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_14, __pyx_t_11) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_11);
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 169, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = PyNumber_Multiply(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 169, __pyx_L1_error)
+      __pyx_t_2 = PyNumber_Multiply(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_28 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_28 == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 169, __pyx_L1_error)
+      __pyx_t_28 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_28 == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 197, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_t_29 = __pyx_v_i;
       __pyx_t_30 = 1;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_29, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_30, __pyx_pybuffernd_labels.diminfo[1].strides) = __pyx_t_28;
 
-      /* "PostProcess_AnisotropyTensor.pyx":170
+      /* "PostProcess_AnisotropyTensor.pyx":198
  *         if 2.*np.abs(labels[i, 1]) > labels[i, 0] + labels[i, 4] + 2./3.:
  *             labels[i, 1] = (labels[i, 0] + labels[i, 4] + 2./3.)*.5*np.sign(labels[i, 1])
  *             labels[i, 3] = (labels[i, 0] + labels[i, 4] + 2./3.)*.5*np.sign(labels[i, 1])             # <<<<<<<<<<<<<<
@@ -4957,16 +5204,16 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_32 = 0;
       __pyx_t_33 = __pyx_v_i;
       __pyx_t_34 = 4;
-      __pyx_t_2 = PyFloat_FromDouble(((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_31, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_32, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_33, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_34, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.)) * .5)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 170, __pyx_L1_error)
+      __pyx_t_2 = PyFloat_FromDouble(((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_31, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_32, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_33, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_34, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.)) * .5)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 170, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_sign); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 170, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_sign); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_35 = __pyx_v_i;
       __pyx_t_36 = 1;
-      __pyx_t_3 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_35, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_36, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 170, __pyx_L1_error)
+      __pyx_t_3 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_35, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_36, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __pyx_t_14 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_11))) {
@@ -4981,20 +5228,20 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_1 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_11, __pyx_t_14, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_11, __pyx_t_3);
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 170, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      __pyx_t_11 = PyNumber_Multiply(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 170, __pyx_L1_error)
+      __pyx_t_11 = PyNumber_Multiply(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_28 = __pyx_PyFloat_AsDouble(__pyx_t_11); if (unlikely((__pyx_t_28 == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 170, __pyx_L1_error)
+      __pyx_t_28 = __pyx_PyFloat_AsDouble(__pyx_t_11); if (unlikely((__pyx_t_28 == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 198, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_t_37 = __pyx_v_i;
       __pyx_t_38 = 3;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_37, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_38, __pyx_pybuffernd_labels.diminfo[1].strides) = __pyx_t_28;
 
-      /* "PostProcess_AnisotropyTensor.pyx":168
+      /* "PostProcess_AnisotropyTensor.pyx":196
  *         if np.min(labels[i, [0, 4, 8]]) < -1./3.:
  *             labels[i, [0, 4, 8]] *= -1./(3.*np.min(labels[i, [0, 4, 8]]))
  *         if 2.*np.abs(labels[i, 1]) > labels[i, 0] + labels[i, 4] + 2./3.:             # <<<<<<<<<<<<<<
@@ -5003,21 +5250,21 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
  */
     }
 
-    /* "PostProcess_AnisotropyTensor.pyx":171
+    /* "PostProcess_AnisotropyTensor.pyx":199
  *             labels[i, 1] = (labels[i, 0] + labels[i, 4] + 2./3.)*.5*np.sign(labels[i, 1])
  *             labels[i, 3] = (labels[i, 0] + labels[i, 4] + 2./3.)*.5*np.sign(labels[i, 1])
  *         if 2.*np.abs(labels[i, 5]) > labels[i, 4] + labels[i, 8] + 2./3.:             # <<<<<<<<<<<<<<
  *             labels[i, 5] = (labels[i, 4] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 5])
  *             labels[i, 7] = (labels[i, 4] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 5])
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 199, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_abs); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_abs); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 199, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_39 = __pyx_v_i;
     __pyx_t_40 = 5;
-    __pyx_t_1 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_39, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_40, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_39, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_40, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 199, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_3 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -5032,26 +5279,26 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_11 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 171, __pyx_L1_error)
+    if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 199, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyNumber_Multiply(__pyx_float_2_, __pyx_t_11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __pyx_t_2 = PyNumber_Multiply(__pyx_float_2_, __pyx_t_11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 199, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __pyx_t_41 = __pyx_v_i;
     __pyx_t_42 = 4;
     __pyx_t_43 = __pyx_v_i;
     __pyx_t_44 = 8;
-    __pyx_t_11 = PyFloat_FromDouble((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_41, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_42, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_43, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_44, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.))); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __pyx_t_11 = PyFloat_FromDouble((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_41, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_42, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_43, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_44, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.))); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 199, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
-    __pyx_t_1 = PyObject_RichCompare(__pyx_t_2, __pyx_t_11, Py_GT); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __pyx_t_1 = PyObject_RichCompare(__pyx_t_2, __pyx_t_11, Py_GT); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 199, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 199, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_13) {
 
-      /* "PostProcess_AnisotropyTensor.pyx":172
+      /* "PostProcess_AnisotropyTensor.pyx":200
  *             labels[i, 3] = (labels[i, 0] + labels[i, 4] + 2./3.)*.5*np.sign(labels[i, 1])
  *         if 2.*np.abs(labels[i, 5]) > labels[i, 4] + labels[i, 8] + 2./3.:
  *             labels[i, 5] = (labels[i, 4] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 5])             # <<<<<<<<<<<<<<
@@ -5062,16 +5309,16 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_46 = 4;
       __pyx_t_47 = __pyx_v_i;
       __pyx_t_48 = 8;
-      __pyx_t_1 = PyFloat_FromDouble(((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_45, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_46, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_47, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_48, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.)) * .5)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 172, __pyx_L1_error)
+      __pyx_t_1 = PyFloat_FromDouble(((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_45, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_46, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_47, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_48, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.)) * .5)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 200, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 172, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 200, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_sign); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_sign); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_t_49 = __pyx_v_i;
       __pyx_t_50 = 5;
-      __pyx_t_2 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_49, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_50, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 172, __pyx_L1_error)
+      __pyx_t_2 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_49, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_50, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 200, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_14 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -5086,20 +5333,20 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_11 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_14, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2);
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 172, __pyx_L1_error)
+      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 200, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      __pyx_t_28 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_28 == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 172, __pyx_L1_error)
+      __pyx_t_28 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_28 == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 200, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_51 = __pyx_v_i;
       __pyx_t_52 = 5;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_51, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_52, __pyx_pybuffernd_labels.diminfo[1].strides) = __pyx_t_28;
 
-      /* "PostProcess_AnisotropyTensor.pyx":173
+      /* "PostProcess_AnisotropyTensor.pyx":201
  *         if 2.*np.abs(labels[i, 5]) > labels[i, 4] + labels[i, 8] + 2./3.:
  *             labels[i, 5] = (labels[i, 4] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 5])
  *             labels[i, 7] = (labels[i, 4] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 5])             # <<<<<<<<<<<<<<
@@ -5110,16 +5357,16 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_54 = 4;
       __pyx_t_55 = __pyx_v_i;
       __pyx_t_56 = 8;
-      __pyx_t_3 = PyFloat_FromDouble(((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_53, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_54, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_55, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_56, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.)) * .5)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L1_error)
+      __pyx_t_3 = PyFloat_FromDouble(((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_53, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_54, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_55, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_56, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.)) * .5)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 201, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 173, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 201, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_sign); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 173, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_sign); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 201, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_t_57 = __pyx_v_i;
       __pyx_t_58 = 5;
-      __pyx_t_1 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_57, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_58, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 173, __pyx_L1_error)
+      __pyx_t_1 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_57, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_58, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 201, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __pyx_t_14 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -5134,20 +5381,20 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_11 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_14, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1);
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 173, __pyx_L1_error)
+      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 201, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = PyNumber_Multiply(__pyx_t_3, __pyx_t_11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 173, __pyx_L1_error)
+      __pyx_t_2 = PyNumber_Multiply(__pyx_t_3, __pyx_t_11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 201, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      __pyx_t_28 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_28 == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 173, __pyx_L1_error)
+      __pyx_t_28 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_28 == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 201, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_t_59 = __pyx_v_i;
       __pyx_t_60 = 7;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_59, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_60, __pyx_pybuffernd_labels.diminfo[1].strides) = __pyx_t_28;
 
-      /* "PostProcess_AnisotropyTensor.pyx":171
+      /* "PostProcess_AnisotropyTensor.pyx":199
  *             labels[i, 1] = (labels[i, 0] + labels[i, 4] + 2./3.)*.5*np.sign(labels[i, 1])
  *             labels[i, 3] = (labels[i, 0] + labels[i, 4] + 2./3.)*.5*np.sign(labels[i, 1])
  *         if 2.*np.abs(labels[i, 5]) > labels[i, 4] + labels[i, 8] + 2./3.:             # <<<<<<<<<<<<<<
@@ -5156,21 +5403,21 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
  */
     }
 
-    /* "PostProcess_AnisotropyTensor.pyx":174
+    /* "PostProcess_AnisotropyTensor.pyx":202
  *             labels[i, 5] = (labels[i, 4] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 5])
  *             labels[i, 7] = (labels[i, 4] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 5])
  *         if 2.*np.abs(labels[i, 2]) > labels[i, 0] + labels[i, 8] + 2./3.:             # <<<<<<<<<<<<<<
  *             labels[i, 2] = (labels[i, 0] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 2])
  *             labels[i, 6] = (labels[i, 0] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 2])
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_np); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_np); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 202, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_abs); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_abs); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 202, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __pyx_t_61 = __pyx_v_i;
     __pyx_t_62 = 2;
-    __pyx_t_11 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_61, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_62, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __pyx_t_11 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_61, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_62, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 202, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __pyx_t_1 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -5185,26 +5432,26 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_2 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_1, __pyx_t_11) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_11);
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 174, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 202, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Multiply(__pyx_float_2_, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_Multiply(__pyx_float_2_, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 202, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_t_63 = __pyx_v_i;
     __pyx_t_64 = 0;
     __pyx_t_65 = __pyx_v_i;
     __pyx_t_66 = 8;
-    __pyx_t_2 = PyFloat_FromDouble((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_63, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_64, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_65, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_66, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __pyx_t_2 = PyFloat_FromDouble((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_63, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_64, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_65, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_66, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 202, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_11 = PyObject_RichCompare(__pyx_t_3, __pyx_t_2, Py_GT); __Pyx_XGOTREF(__pyx_t_11); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __pyx_t_11 = PyObject_RichCompare(__pyx_t_3, __pyx_t_2, Py_GT); __Pyx_XGOTREF(__pyx_t_11); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 202, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_11); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_11); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 202, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     if (__pyx_t_13) {
 
-      /* "PostProcess_AnisotropyTensor.pyx":175
+      /* "PostProcess_AnisotropyTensor.pyx":203
  *             labels[i, 7] = (labels[i, 4] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 5])
  *         if 2.*np.abs(labels[i, 2]) > labels[i, 0] + labels[i, 8] + 2./3.:
  *             labels[i, 2] = (labels[i, 0] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 2])             # <<<<<<<<<<<<<<
@@ -5215,16 +5462,16 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_68 = 0;
       __pyx_t_69 = __pyx_v_i;
       __pyx_t_70 = 8;
-      __pyx_t_11 = PyFloat_FromDouble(((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_67, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_68, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_69, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_70, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.)) * .5)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 175, __pyx_L1_error)
+      __pyx_t_11 = PyFloat_FromDouble(((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_67, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_68, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_69, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_70, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.)) * .5)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 203, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 175, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 203, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_sign); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 175, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_sign); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 203, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_71 = __pyx_v_i;
       __pyx_t_72 = 2;
-      __pyx_t_3 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_71, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_72, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 175, __pyx_L1_error)
+      __pyx_t_3 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_71, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_72, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 203, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __pyx_t_14 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
@@ -5239,20 +5486,20 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_2 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_14, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3);
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 175, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 203, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = PyNumber_Multiply(__pyx_t_11, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 175, __pyx_L1_error)
+      __pyx_t_1 = PyNumber_Multiply(__pyx_t_11, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 203, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_28 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_28 == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 175, __pyx_L1_error)
+      __pyx_t_28 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_28 == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 203, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_t_73 = __pyx_v_i;
       __pyx_t_74 = 2;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_73, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_74, __pyx_pybuffernd_labels.diminfo[1].strides) = __pyx_t_28;
 
-      /* "PostProcess_AnisotropyTensor.pyx":176
+      /* "PostProcess_AnisotropyTensor.pyx":204
  *         if 2.*np.abs(labels[i, 2]) > labels[i, 0] + labels[i, 8] + 2./3.:
  *             labels[i, 2] = (labels[i, 0] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 2])
  *             labels[i, 6] = (labels[i, 0] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 2])             # <<<<<<<<<<<<<<
@@ -5263,16 +5510,16 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_76 = 0;
       __pyx_t_77 = __pyx_v_i;
       __pyx_t_78 = 8;
-      __pyx_t_1 = PyFloat_FromDouble(((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_75, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_76, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_77, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_78, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.)) * .5)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 176, __pyx_L1_error)
+      __pyx_t_1 = PyFloat_FromDouble(((((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_75, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_76, __pyx_pybuffernd_labels.diminfo[1].strides)) + (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_77, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_78, __pyx_pybuffernd_labels.diminfo[1].strides))) + (2. / 3.)) * .5)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 204, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_np); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 176, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_np); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 204, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_sign); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 176, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_sign); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 204, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_t_79 = __pyx_v_i;
       __pyx_t_80 = 2;
-      __pyx_t_11 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_79, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_80, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 176, __pyx_L1_error)
+      __pyx_t_11 = PyFloat_FromDouble((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_79, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_80, __pyx_pybuffernd_labels.diminfo[1].strides))); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 204, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_14 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -5287,20 +5534,20 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_2 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_14, __pyx_t_11) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_11);
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 176, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 204, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 176, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 204, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_28 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_28 == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 176, __pyx_L1_error)
+      __pyx_t_28 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_28 == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 204, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_81 = __pyx_v_i;
       __pyx_t_82 = 6;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_81, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_82, __pyx_pybuffernd_labels.diminfo[1].strides) = __pyx_t_28;
 
-      /* "PostProcess_AnisotropyTensor.pyx":174
+      /* "PostProcess_AnisotropyTensor.pyx":202
  *             labels[i, 5] = (labels[i, 4] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 5])
  *             labels[i, 7] = (labels[i, 4] + labels[i, 8] + 2./3.)*.5*np.sign(labels[i, 5])
  *         if 2.*np.abs(labels[i, 2]) > labels[i, 0] + labels[i, 8] + 2./3.:             # <<<<<<<<<<<<<<
@@ -5309,7 +5556,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
  */
     }
 
-    /* "PostProcess_AnisotropyTensor.pyx":179
+    /* "PostProcess_AnisotropyTensor.pyx":207
  * 
  *         # Enforce positive semidefinite by pushing evalues to non-negative
  *         A[0, 0] = labels[i, 0]             # <<<<<<<<<<<<<<
@@ -5322,7 +5569,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_86 = 0;
     *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_85, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_86, __pyx_pybuffernd_A.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_83, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_84, __pyx_pybuffernd_labels.diminfo[1].strides));
 
-    /* "PostProcess_AnisotropyTensor.pyx":180
+    /* "PostProcess_AnisotropyTensor.pyx":208
  *         # Enforce positive semidefinite by pushing evalues to non-negative
  *         A[0, 0] = labels[i, 0]
  *         A[1, 1] = labels[i, 4]             # <<<<<<<<<<<<<<
@@ -5335,7 +5582,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_90 = 1;
     *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_89, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_90, __pyx_pybuffernd_A.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_87, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_88, __pyx_pybuffernd_labels.diminfo[1].strides));
 
-    /* "PostProcess_AnisotropyTensor.pyx":181
+    /* "PostProcess_AnisotropyTensor.pyx":209
  *         A[0, 0] = labels[i, 0]
  *         A[1, 1] = labels[i, 4]
  *         A[2, 2] = labels[i, 8]             # <<<<<<<<<<<<<<
@@ -5348,7 +5595,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_94 = 2;
     *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_93, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_94, __pyx_pybuffernd_A.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_91, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_92, __pyx_pybuffernd_labels.diminfo[1].strides));
 
-    /* "PostProcess_AnisotropyTensor.pyx":182
+    /* "PostProcess_AnisotropyTensor.pyx":210
  *         A[1, 1] = labels[i, 4]
  *         A[2, 2] = labels[i, 8]
  *         A[0, 1] = labels[i, 1]             # <<<<<<<<<<<<<<
@@ -5361,7 +5608,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_98 = 1;
     *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_97, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_98, __pyx_pybuffernd_A.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_95, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_96, __pyx_pybuffernd_labels.diminfo[1].strides));
 
-    /* "PostProcess_AnisotropyTensor.pyx":183
+    /* "PostProcess_AnisotropyTensor.pyx":211
  *         A[2, 2] = labels[i, 8]
  *         A[0, 1] = labels[i, 1]
  *         A[1, 0] = labels[i, 1]             # <<<<<<<<<<<<<<
@@ -5374,7 +5621,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_102 = 0;
     *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_101, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_102, __pyx_pybuffernd_A.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_99, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_100, __pyx_pybuffernd_labels.diminfo[1].strides));
 
-    /* "PostProcess_AnisotropyTensor.pyx":184
+    /* "PostProcess_AnisotropyTensor.pyx":212
  *         A[0, 1] = labels[i, 1]
  *         A[1, 0] = labels[i, 1]
  *         A[1, 2] = labels[i, 5]             # <<<<<<<<<<<<<<
@@ -5387,7 +5634,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_106 = 2;
     *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_105, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_106, __pyx_pybuffernd_A.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_103, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_104, __pyx_pybuffernd_labels.diminfo[1].strides));
 
-    /* "PostProcess_AnisotropyTensor.pyx":185
+    /* "PostProcess_AnisotropyTensor.pyx":213
  *         A[1, 0] = labels[i, 1]
  *         A[1, 2] = labels[i, 5]
  *         A[2, 1] = labels[i, 5]             # <<<<<<<<<<<<<<
@@ -5400,7 +5647,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_110 = 1;
     *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_109, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_110, __pyx_pybuffernd_A.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_107, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_108, __pyx_pybuffernd_labels.diminfo[1].strides));
 
-    /* "PostProcess_AnisotropyTensor.pyx":186
+    /* "PostProcess_AnisotropyTensor.pyx":214
  *         A[1, 2] = labels[i, 5]
  *         A[2, 1] = labels[i, 5]
  *         A[0, 2] = labels[i, 2]             # <<<<<<<<<<<<<<
@@ -5413,7 +5660,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_114 = 2;
     *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_113, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_114, __pyx_pybuffernd_A.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_111, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_112, __pyx_pybuffernd_labels.diminfo[1].strides));
 
-    /* "PostProcess_AnisotropyTensor.pyx":187
+    /* "PostProcess_AnisotropyTensor.pyx":215
  *         A[2, 1] = labels[i, 5]
  *         A[0, 2] = labels[i, 2]
  *         A[2, 0] = labels[i, 2]             # <<<<<<<<<<<<<<
@@ -5426,19 +5673,19 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_118 = 0;
     *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_117, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_118, __pyx_pybuffernd_A.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_115, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_116, __pyx_pybuffernd_labels.diminfo[1].strides));
 
-    /* "PostProcess_AnisotropyTensor.pyx":188
+    /* "PostProcess_AnisotropyTensor.pyx":216
  *         A[0, 2] = labels[i, 2]
  *         A[2, 0] = labels[i, 2]
  *         evalues, evectors = np.linalg.eig(A)             # <<<<<<<<<<<<<<
  *         if np.max(evalues) < (3.*np.abs(np.sort(evalues)[1]) - np.sort(evalues)[1])/2.:
  *             evalues = evalues*(3.*np.abs(np.sort(evalues)[1]) - np.sort(evalues)[1])/(2.*np.max(evalues))
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 188, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 216, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_linalg); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 188, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_linalg); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 216, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_eig); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 188, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_eig); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 216, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_1 = NULL;
@@ -5453,7 +5700,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     }
     __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_1, ((PyObject *)__pyx_v_A)) : __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_A));
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 188, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 216, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     if ((likely(PyTuple_CheckExact(__pyx_t_3))) || (PyList_CheckExact(__pyx_t_3))) {
@@ -5462,7 +5709,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       if (unlikely(size != 2)) {
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-        __PYX_ERR(0, 188, __pyx_L1_error)
+        __PYX_ERR(0, 216, __pyx_L1_error)
       }
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
       if (likely(PyTuple_CheckExact(sequence))) {
@@ -5475,15 +5722,15 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __Pyx_INCREF(__pyx_t_2);
       __Pyx_INCREF(__pyx_t_1);
       #else
-      __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 188, __pyx_L1_error)
+      __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 216, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_1 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 188, __pyx_L1_error)
+      __pyx_t_1 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 216, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       #endif
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     } else {
       Py_ssize_t index = -1;
-      __pyx_t_11 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 188, __pyx_L1_error)
+      __pyx_t_11 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 216, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_119 = Py_TYPE(__pyx_t_11)->tp_iternext;
@@ -5491,7 +5738,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __Pyx_GOTREF(__pyx_t_2);
       index = 1; __pyx_t_1 = __pyx_t_119(__pyx_t_11); if (unlikely(!__pyx_t_1)) goto __pyx_L9_unpacking_failed;
       __Pyx_GOTREF(__pyx_t_1);
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_119(__pyx_t_11), 2) < 0) __PYX_ERR(0, 188, __pyx_L1_error)
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_119(__pyx_t_11), 2) < 0) __PYX_ERR(0, 216, __pyx_L1_error)
       __pyx_t_119 = NULL;
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       goto __pyx_L10_unpacking_done;
@@ -5499,11 +5746,11 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_t_119 = NULL;
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-      __PYX_ERR(0, 188, __pyx_L1_error)
+      __PYX_ERR(0, 216, __pyx_L1_error)
       __pyx_L10_unpacking_done:;
     }
-    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 188, __pyx_L1_error)
-    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 188, __pyx_L1_error)
+    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 216, __pyx_L1_error)
+    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 216, __pyx_L1_error)
     __pyx_t_120 = ((PyArrayObject *)__pyx_t_2);
     {
       __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -5520,7 +5767,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
         __pyx_t_8 = __pyx_t_7 = __pyx_t_6 = 0;
       }
       __pyx_pybuffernd_evalues.diminfo[0].strides = __pyx_pybuffernd_evalues.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_evalues.diminfo[0].shape = __pyx_pybuffernd_evalues.rcbuffer->pybuffer.shape[0];
-      if (unlikely(__pyx_t_121 < 0)) __PYX_ERR(0, 188, __pyx_L1_error)
+      if (unlikely(__pyx_t_121 < 0)) __PYX_ERR(0, 216, __pyx_L1_error)
     }
     __pyx_t_120 = 0;
     __Pyx_XDECREF_SET(__pyx_v_evalues, ((PyArrayObject *)__pyx_t_2));
@@ -5541,22 +5788,22 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
         __pyx_t_6 = __pyx_t_7 = __pyx_t_8 = 0;
       }
       __pyx_pybuffernd_evectors.diminfo[0].strides = __pyx_pybuffernd_evectors.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_evectors.diminfo[0].shape = __pyx_pybuffernd_evectors.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_evectors.diminfo[1].strides = __pyx_pybuffernd_evectors.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_evectors.diminfo[1].shape = __pyx_pybuffernd_evectors.rcbuffer->pybuffer.shape[1];
-      if (unlikely(__pyx_t_121 < 0)) __PYX_ERR(0, 188, __pyx_L1_error)
+      if (unlikely(__pyx_t_121 < 0)) __PYX_ERR(0, 216, __pyx_L1_error)
     }
     __pyx_t_4 = 0;
     __Pyx_XDECREF_SET(__pyx_v_evectors, ((PyArrayObject *)__pyx_t_1));
     __pyx_t_1 = 0;
 
-    /* "PostProcess_AnisotropyTensor.pyx":189
+    /* "PostProcess_AnisotropyTensor.pyx":217
  *         A[2, 0] = labels[i, 2]
  *         evalues, evectors = np.linalg.eig(A)
  *         if np.max(evalues) < (3.*np.abs(np.sort(evalues)[1]) - np.sort(evalues)[1])/2.:             # <<<<<<<<<<<<<<
  *             evalues = evalues*(3.*np.abs(np.sort(evalues)[1]) - np.sort(evalues)[1])/(2.*np.max(evalues))
  *             A = np.dot(np.dot(evectors, np.diag(evalues)), np.linalg.inv(evectors))
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_max); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_max); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_1 = NULL;
@@ -5571,17 +5818,17 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     }
     __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_1, ((PyObject *)__pyx_v_evalues)) : __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_evalues));
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 189, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_abs); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_abs); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_14);
-    __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_sort); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_sort); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
     __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
     __pyx_t_14 = NULL;
@@ -5596,10 +5843,10 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     }
     __pyx_t_1 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_15, __pyx_t_14, ((PyObject *)__pyx_v_evalues)) : __Pyx_PyObject_CallOneArg(__pyx_t_15, ((PyObject *)__pyx_v_evalues));
     __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 189, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-    __pyx_t_15 = __Pyx_GetItemInt(__pyx_t_1, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_15 = __Pyx_GetItemInt(__pyx_t_1, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_1 = NULL;
@@ -5615,15 +5862,15 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     __pyx_t_2 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_11, __pyx_t_1, __pyx_t_15) : __Pyx_PyObject_CallOneArg(__pyx_t_11, __pyx_t_15);
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 189, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-    __pyx_t_11 = PyNumber_Multiply(__pyx_float_3_, __pyx_t_2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_11 = PyNumber_Multiply(__pyx_float_3_, __pyx_t_2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_sort); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_sort); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
     __pyx_t_15 = NULL;
@@ -5638,41 +5885,41 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     }
     __pyx_t_2 = (__pyx_t_15) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_15, ((PyObject *)__pyx_v_evalues)) : __Pyx_PyObject_CallOneArg(__pyx_t_1, ((PyObject *)__pyx_v_evalues));
     __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 189, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_2, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_2, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyNumber_Subtract(__pyx_t_11, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_2 = PyNumber_Subtract(__pyx_t_11, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyFloat_DivideObjC(__pyx_t_2, __pyx_float_2_, 2., 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFloat_DivideObjC(__pyx_t_2, __pyx_float_2_, 2., 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyObject_RichCompare(__pyx_t_3, __pyx_t_1, Py_LT); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_2 = PyObject_RichCompare(__pyx_t_3, __pyx_t_1, Py_LT); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 217, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     if (__pyx_t_13) {
 
-      /* "PostProcess_AnisotropyTensor.pyx":190
+      /* "PostProcess_AnisotropyTensor.pyx":218
  *         evalues, evectors = np.linalg.eig(A)
  *         if np.max(evalues) < (3.*np.abs(np.sort(evalues)[1]) - np.sort(evalues)[1])/2.:
  *             evalues = evalues*(3.*np.abs(np.sort(evalues)[1]) - np.sort(evalues)[1])/(2.*np.max(evalues))             # <<<<<<<<<<<<<<
  *             A = np.dot(np.dot(evectors, np.diag(evalues)), np.linalg.inv(evectors))
  *             for j in range(3):
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_abs); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_abs); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_np); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_np); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_sort); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_sort); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_t_11 = NULL;
@@ -5687,10 +5934,10 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       }
       __pyx_t_1 = (__pyx_t_11) ? __Pyx_PyObject_Call2Args(__pyx_t_15, __pyx_t_11, ((PyObject *)__pyx_v_evalues)) : __Pyx_PyObject_CallOneArg(__pyx_t_15, ((PyObject *)__pyx_v_evalues));
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-      __pyx_t_15 = __Pyx_GetItemInt(__pyx_t_1, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __pyx_t_15 = __Pyx_GetItemInt(__pyx_t_1, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_t_1 = NULL;
@@ -5706,15 +5953,15 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_2 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_1, __pyx_t_15) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_15);
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 190, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_Multiply(__pyx_float_3_, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_Multiply(__pyx_float_3_, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_sort); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_sort); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       __pyx_t_15 = NULL;
@@ -5729,22 +5976,22 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       }
       __pyx_t_2 = (__pyx_t_15) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_15, ((PyObject *)__pyx_v_evalues)) : __Pyx_PyObject_CallOneArg(__pyx_t_1, ((PyObject *)__pyx_v_evalues));
       __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 190, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_2, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_2, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = PyNumber_Subtract(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __pyx_t_2 = PyNumber_Subtract(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = PyNumber_Multiply(((PyObject *)__pyx_v_evalues), __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __pyx_t_1 = PyNumber_Multiply(((PyObject *)__pyx_v_evalues), __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_max); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_max); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_3 = NULL;
@@ -5759,17 +6006,17 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       }
       __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_15, __pyx_t_3, ((PyObject *)__pyx_v_evalues)) : __Pyx_PyObject_CallOneArg(__pyx_t_15, ((PyObject *)__pyx_v_evalues));
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 190, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-      __pyx_t_15 = PyNumber_Multiply(__pyx_float_2_, __pyx_t_2); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __pyx_t_15 = PyNumber_Multiply(__pyx_float_2_, __pyx_t_2); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_15); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 190, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_15); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 190, __pyx_L1_error)
+      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 218, __pyx_L1_error)
       __pyx_t_120 = ((PyArrayObject *)__pyx_t_2);
       {
         __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -5786,32 +6033,32 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
           __pyx_t_8 = __pyx_t_7 = __pyx_t_6 = 0;
         }
         __pyx_pybuffernd_evalues.diminfo[0].strides = __pyx_pybuffernd_evalues.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_evalues.diminfo[0].shape = __pyx_pybuffernd_evalues.rcbuffer->pybuffer.shape[0];
-        if (unlikely(__pyx_t_121 < 0)) __PYX_ERR(0, 190, __pyx_L1_error)
+        if (unlikely(__pyx_t_121 < 0)) __PYX_ERR(0, 218, __pyx_L1_error)
       }
       __pyx_t_120 = 0;
       __Pyx_DECREF_SET(__pyx_v_evalues, ((PyArrayObject *)__pyx_t_2));
       __pyx_t_2 = 0;
 
-      /* "PostProcess_AnisotropyTensor.pyx":191
+      /* "PostProcess_AnisotropyTensor.pyx":219
  *         if np.max(evalues) < (3.*np.abs(np.sort(evalues)[1]) - np.sort(evalues)[1])/2.:
  *             evalues = evalues*(3.*np.abs(np.sort(evalues)[1]) - np.sort(evalues)[1])/(2.*np.max(evalues))
  *             A = np.dot(np.dot(evectors, np.diag(evalues)), np.linalg.inv(evectors))             # <<<<<<<<<<<<<<
  *             for j in range(3):
  *                 labels[i, j] = A[j, j]
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 191, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 219, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_dot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 191, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_dot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 219, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 191, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 219, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_dot); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 191, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_dot); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 219, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 191, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 219, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
-      __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_diag); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 191, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_diag); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 219, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       __pyx_t_14 = NULL;
@@ -5826,7 +6073,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       }
       __pyx_t_3 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_12, __pyx_t_14, ((PyObject *)__pyx_v_evalues)) : __Pyx_PyObject_CallOneArg(__pyx_t_12, ((PyObject *)__pyx_v_evalues));
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 191, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 219, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       __pyx_t_12 = NULL;
@@ -5844,7 +6091,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_11)) {
         PyObject *__pyx_temp[3] = {__pyx_t_12, ((PyObject *)__pyx_v_evectors), __pyx_t_3};
-        __pyx_t_15 = __Pyx_PyFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_15 = __Pyx_PyFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_GOTREF(__pyx_t_15);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -5853,14 +6100,14 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_11)) {
         PyObject *__pyx_temp[3] = {__pyx_t_12, ((PyObject *)__pyx_v_evectors), __pyx_t_3};
-        __pyx_t_15 = __Pyx_PyCFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_15 = __Pyx_PyCFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_GOTREF(__pyx_t_15);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       } else
       #endif
       {
-        __pyx_t_14 = PyTuple_New(2+__pyx_t_121); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_14 = PyTuple_New(2+__pyx_t_121); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
         if (__pyx_t_12) {
           __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_12); __pyx_t_12 = NULL;
@@ -5871,17 +6118,17 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
         __Pyx_GIVEREF(__pyx_t_3);
         PyTuple_SET_ITEM(__pyx_t_14, 1+__pyx_t_121, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_15 = __Pyx_PyObject_Call(__pyx_t_11, __pyx_t_14, NULL); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_15 = __Pyx_PyObject_Call(__pyx_t_11, __pyx_t_14, NULL); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_15);
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       }
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 191, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 219, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_linalg); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 191, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_linalg); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 219, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-      __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_inv); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 191, __pyx_L1_error)
+      __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_inv); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 219, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_3 = NULL;
@@ -5896,7 +6143,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       }
       __pyx_t_11 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_14, __pyx_t_3, ((PyObject *)__pyx_v_evectors)) : __Pyx_PyObject_CallOneArg(__pyx_t_14, ((PyObject *)__pyx_v_evectors));
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 191, __pyx_L1_error)
+      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 219, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       __pyx_t_14 = NULL;
@@ -5914,7 +6161,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[3] = {__pyx_t_14, __pyx_t_15, __pyx_t_11};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
@@ -5924,7 +6171,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[3] = {__pyx_t_14, __pyx_t_15, __pyx_t_11};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
@@ -5932,7 +6179,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       } else
       #endif
       {
-        __pyx_t_3 = PyTuple_New(2+__pyx_t_121); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_3 = PyTuple_New(2+__pyx_t_121); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         if (__pyx_t_14) {
           __Pyx_GIVEREF(__pyx_t_14); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_14); __pyx_t_14 = NULL;
@@ -5943,12 +6190,12 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
         PyTuple_SET_ITEM(__pyx_t_3, 1+__pyx_t_121, __pyx_t_11);
         __pyx_t_15 = 0;
         __pyx_t_11 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 219, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 191, __pyx_L1_error)
+      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 219, __pyx_L1_error)
       __pyx_t_4 = ((PyArrayObject *)__pyx_t_2);
       {
         __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -5965,13 +6212,13 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
           __pyx_t_6 = __pyx_t_7 = __pyx_t_8 = 0;
         }
         __pyx_pybuffernd_A.diminfo[0].strides = __pyx_pybuffernd_A.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_A.diminfo[0].shape = __pyx_pybuffernd_A.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_A.diminfo[1].strides = __pyx_pybuffernd_A.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_A.diminfo[1].shape = __pyx_pybuffernd_A.rcbuffer->pybuffer.shape[1];
-        if (unlikely(__pyx_t_121 < 0)) __PYX_ERR(0, 191, __pyx_L1_error)
+        if (unlikely(__pyx_t_121 < 0)) __PYX_ERR(0, 219, __pyx_L1_error)
       }
       __pyx_t_4 = 0;
       __Pyx_DECREF_SET(__pyx_v_A, ((PyArrayObject *)__pyx_t_2));
       __pyx_t_2 = 0;
 
-      /* "PostProcess_AnisotropyTensor.pyx":192
+      /* "PostProcess_AnisotropyTensor.pyx":220
  *             evalues = evalues*(3.*np.abs(np.sort(evalues)[1]) - np.sort(evalues)[1])/(2.*np.max(evalues))
  *             A = np.dot(np.dot(evectors, np.diag(evalues)), np.linalg.inv(evectors))
  *             for j in range(3):             # <<<<<<<<<<<<<<
@@ -5981,7 +6228,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       for (__pyx_t_121 = 0; __pyx_t_121 < 3; __pyx_t_121+=1) {
         __pyx_v_j = __pyx_t_121;
 
-        /* "PostProcess_AnisotropyTensor.pyx":193
+        /* "PostProcess_AnisotropyTensor.pyx":221
  *             A = np.dot(np.dot(evectors, np.diag(evalues)), np.linalg.inv(evectors))
  *             for j in range(3):
  *                 labels[i, j] = A[j, j]             # <<<<<<<<<<<<<<
@@ -5995,7 +6242,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
         *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_124, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_125, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_122, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_123, __pyx_pybuffernd_A.diminfo[1].strides));
       }
 
-      /* "PostProcess_AnisotropyTensor.pyx":194
+      /* "PostProcess_AnisotropyTensor.pyx":222
  *             for j in range(3):
  *                 labels[i, j] = A[j, j]
  *             labels[i, 1] = A[0, 1]             # <<<<<<<<<<<<<<
@@ -6008,7 +6255,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_129 = 1;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_128, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_129, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_126, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_127, __pyx_pybuffernd_A.diminfo[1].strides));
 
-      /* "PostProcess_AnisotropyTensor.pyx":195
+      /* "PostProcess_AnisotropyTensor.pyx":223
  *                 labels[i, j] = A[j, j]
  *             labels[i, 1] = A[0, 1]
  *             labels[i, 5] = A[1, 2]             # <<<<<<<<<<<<<<
@@ -6021,7 +6268,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_133 = 5;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_132, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_133, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_130, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_131, __pyx_pybuffernd_A.diminfo[1].strides));
 
-      /* "PostProcess_AnisotropyTensor.pyx":196
+      /* "PostProcess_AnisotropyTensor.pyx":224
  *             labels[i, 1] = A[0, 1]
  *             labels[i, 5] = A[1, 2]
  *             labels[i, 2] = A[0, 2]             # <<<<<<<<<<<<<<
@@ -6034,7 +6281,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_137 = 2;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_136, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_137, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_134, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_135, __pyx_pybuffernd_A.diminfo[1].strides));
 
-      /* "PostProcess_AnisotropyTensor.pyx":197
+      /* "PostProcess_AnisotropyTensor.pyx":225
  *             labels[i, 5] = A[1, 2]
  *             labels[i, 2] = A[0, 2]
  *             labels[i, 3] = A[0, 1]             # <<<<<<<<<<<<<<
@@ -6047,7 +6294,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_141 = 3;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_140, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_141, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_138, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_139, __pyx_pybuffernd_A.diminfo[1].strides));
 
-      /* "PostProcess_AnisotropyTensor.pyx":198
+      /* "PostProcess_AnisotropyTensor.pyx":226
  *             labels[i, 2] = A[0, 2]
  *             labels[i, 3] = A[0, 1]
  *             labels[i, 7] = A[1, 2]             # <<<<<<<<<<<<<<
@@ -6060,7 +6307,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_145 = 7;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_144, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_145, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_142, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_143, __pyx_pybuffernd_A.diminfo[1].strides));
 
-      /* "PostProcess_AnisotropyTensor.pyx":199
+      /* "PostProcess_AnisotropyTensor.pyx":227
  *             labels[i, 3] = A[0, 1]
  *             labels[i, 7] = A[1, 2]
  *             labels[i, 6] = A[0, 2]             # <<<<<<<<<<<<<<
@@ -6073,7 +6320,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_149 = 6;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_148, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_149, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_146, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_147, __pyx_pybuffernd_A.diminfo[1].strides));
 
-      /* "PostProcess_AnisotropyTensor.pyx":189
+      /* "PostProcess_AnisotropyTensor.pyx":217
  *         A[2, 0] = labels[i, 2]
  *         evalues, evectors = np.linalg.eig(A)
  *         if np.max(evalues) < (3.*np.abs(np.sort(evalues)[1]) - np.sort(evalues)[1])/2.:             # <<<<<<<<<<<<<<
@@ -6082,16 +6329,16 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
  */
     }
 
-    /* "PostProcess_AnisotropyTensor.pyx":200
+    /* "PostProcess_AnisotropyTensor.pyx":228
  *             labels[i, 7] = A[1, 2]
  *             labels[i, 6] = A[0, 2]
  *         if np.max(evalues) > 1./3. - np.sort(evalues)[1]:             # <<<<<<<<<<<<<<
  *             evalues = evalues*(1./3. - np.sort(evalues)[1])/np.max(evalues)
  *             A = np.dot(np.dot(evectors, np.diag(evalues)), np.linalg.inv(evectors))
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 200, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_max); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_max); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 228, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_1 = NULL;
@@ -6106,14 +6353,14 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     }
     __pyx_t_2 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_1, ((PyObject *)__pyx_v_evalues)) : __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_evalues));
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 200, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 228, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyFloat_FromDouble((1. / 3.)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
+    __pyx_t_3 = PyFloat_FromDouble((1. / 3.)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 228, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_np); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 200, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_11, __pyx_n_s_np); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 228, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
-    __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_sort); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 200, __pyx_L1_error)
+    __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_sort); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 228, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __pyx_t_11 = NULL;
@@ -6128,35 +6375,35 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     }
     __pyx_t_1 = (__pyx_t_11) ? __Pyx_PyObject_Call2Args(__pyx_t_15, __pyx_t_11, ((PyObject *)__pyx_v_evalues)) : __Pyx_PyObject_CallOneArg(__pyx_t_15, ((PyObject *)__pyx_v_evalues));
     __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 200, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-    __pyx_t_15 = __Pyx_GetItemInt(__pyx_t_1, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 200, __pyx_L1_error)
+    __pyx_t_15 = __Pyx_GetItemInt(__pyx_t_1, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 228, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyNumber_Subtract(__pyx_t_3, __pyx_t_15); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 200, __pyx_L1_error)
+    __pyx_t_1 = PyNumber_Subtract(__pyx_t_3, __pyx_t_15); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-    __pyx_t_15 = PyObject_RichCompare(__pyx_t_2, __pyx_t_1, Py_GT); __Pyx_XGOTREF(__pyx_t_15); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 200, __pyx_L1_error)
+    __pyx_t_15 = PyObject_RichCompare(__pyx_t_2, __pyx_t_1, Py_GT); __Pyx_XGOTREF(__pyx_t_15); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 228, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_15); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 200, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_15); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 228, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
     if (__pyx_t_13) {
 
-      /* "PostProcess_AnisotropyTensor.pyx":201
+      /* "PostProcess_AnisotropyTensor.pyx":229
  *             labels[i, 6] = A[0, 2]
  *         if np.max(evalues) > 1./3. - np.sort(evalues)[1]:
  *             evalues = evalues*(1./3. - np.sort(evalues)[1])/np.max(evalues)             # <<<<<<<<<<<<<<
  *             A = np.dot(np.dot(evectors, np.diag(evalues)), np.linalg.inv(evectors))
  *             for j in range(3):
  */
-      __pyx_t_15 = PyFloat_FromDouble((1. / 3.)); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 201, __pyx_L1_error)
+      __pyx_t_15 = PyFloat_FromDouble((1. / 3.)); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 229, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
-      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 201, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 229, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_sort); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 201, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_sort); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 229, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_t_2 = NULL;
@@ -6171,22 +6418,22 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       }
       __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, ((PyObject *)__pyx_v_evalues)) : __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_evalues));
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 201, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 229, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 201, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 229, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = PyNumber_Subtract(__pyx_t_15, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 201, __pyx_L1_error)
+      __pyx_t_1 = PyNumber_Subtract(__pyx_t_15, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 229, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyNumber_Multiply(((PyObject *)__pyx_v_evalues), __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 201, __pyx_L1_error)
+      __pyx_t_3 = PyNumber_Multiply(((PyObject *)__pyx_v_evalues), __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 229, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 201, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 229, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_max); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 201, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_max); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 229, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       __pyx_t_15 = NULL;
@@ -6201,14 +6448,14 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       }
       __pyx_t_1 = (__pyx_t_15) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_15, ((PyObject *)__pyx_v_evalues)) : __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_evalues));
       __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 201, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 229, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = __Pyx_PyNumber_Divide(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 201, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyNumber_Divide(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 229, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 201, __pyx_L1_error)
+      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 229, __pyx_L1_error)
       __pyx_t_120 = ((PyArrayObject *)__pyx_t_2);
       {
         __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -6225,32 +6472,32 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
           __pyx_t_8 = __pyx_t_7 = __pyx_t_6 = 0;
         }
         __pyx_pybuffernd_evalues.diminfo[0].strides = __pyx_pybuffernd_evalues.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_evalues.diminfo[0].shape = __pyx_pybuffernd_evalues.rcbuffer->pybuffer.shape[0];
-        if (unlikely(__pyx_t_121 < 0)) __PYX_ERR(0, 201, __pyx_L1_error)
+        if (unlikely(__pyx_t_121 < 0)) __PYX_ERR(0, 229, __pyx_L1_error)
       }
       __pyx_t_120 = 0;
       __Pyx_DECREF_SET(__pyx_v_evalues, ((PyArrayObject *)__pyx_t_2));
       __pyx_t_2 = 0;
 
-      /* "PostProcess_AnisotropyTensor.pyx":202
+      /* "PostProcess_AnisotropyTensor.pyx":230
  *         if np.max(evalues) > 1./3. - np.sort(evalues)[1]:
  *             evalues = evalues*(1./3. - np.sort(evalues)[1])/np.max(evalues)
  *             A = np.dot(np.dot(evectors, np.diag(evalues)), np.linalg.inv(evectors))             # <<<<<<<<<<<<<<
  *             for j in range(3):
  *                 labels[i, j] = A[j, j]
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 202, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_dot); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 202, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_dot); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 202, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_np); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
-      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_dot); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 202, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_dot); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 202, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
-      __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_diag); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 202, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_diag); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       __pyx_t_14 = NULL;
@@ -6265,7 +6512,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       }
       __pyx_t_15 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_12, __pyx_t_14, ((PyObject *)__pyx_v_evalues)) : __Pyx_PyObject_CallOneArg(__pyx_t_12, ((PyObject *)__pyx_v_evalues));
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-      if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 202, __pyx_L1_error)
+      if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       __pyx_t_12 = NULL;
@@ -6283,7 +6530,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_11)) {
         PyObject *__pyx_temp[3] = {__pyx_t_12, ((PyObject *)__pyx_v_evectors), __pyx_t_15};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 202, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 230, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
@@ -6292,14 +6539,14 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_11)) {
         PyObject *__pyx_temp[3] = {__pyx_t_12, ((PyObject *)__pyx_v_evectors), __pyx_t_15};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 202, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_11, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 230, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       } else
       #endif
       {
-        __pyx_t_14 = PyTuple_New(2+__pyx_t_121); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 202, __pyx_L1_error)
+        __pyx_t_14 = PyTuple_New(2+__pyx_t_121); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 230, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
         if (__pyx_t_12) {
           __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_12); __pyx_t_12 = NULL;
@@ -6310,17 +6557,17 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
         __Pyx_GIVEREF(__pyx_t_15);
         PyTuple_SET_ITEM(__pyx_t_14, 1+__pyx_t_121, __pyx_t_15);
         __pyx_t_15 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_11, __pyx_t_14, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 202, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_11, __pyx_t_14, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 230, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       }
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 202, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
-      __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_linalg); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 202, __pyx_L1_error)
+      __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_linalg); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-      __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_inv); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 202, __pyx_L1_error)
+      __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_inv); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       __pyx_t_15 = NULL;
@@ -6335,7 +6582,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       }
       __pyx_t_11 = (__pyx_t_15) ? __Pyx_PyObject_Call2Args(__pyx_t_14, __pyx_t_15, ((PyObject *)__pyx_v_evectors)) : __Pyx_PyObject_CallOneArg(__pyx_t_14, ((PyObject *)__pyx_v_evectors));
       __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
-      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 202, __pyx_L1_error)
+      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       __pyx_t_14 = NULL;
@@ -6353,7 +6600,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[3] = {__pyx_t_14, __pyx_t_1, __pyx_t_11};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 202, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 230, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -6363,7 +6610,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[3] = {__pyx_t_14, __pyx_t_1, __pyx_t_11};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 202, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_121, 2+__pyx_t_121); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 230, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -6371,7 +6618,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       } else
       #endif
       {
-        __pyx_t_15 = PyTuple_New(2+__pyx_t_121); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 202, __pyx_L1_error)
+        __pyx_t_15 = PyTuple_New(2+__pyx_t_121); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 230, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_15);
         if (__pyx_t_14) {
           __Pyx_GIVEREF(__pyx_t_14); PyTuple_SET_ITEM(__pyx_t_15, 0, __pyx_t_14); __pyx_t_14 = NULL;
@@ -6382,12 +6629,12 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
         PyTuple_SET_ITEM(__pyx_t_15, 1+__pyx_t_121, __pyx_t_11);
         __pyx_t_1 = 0;
         __pyx_t_11 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_15, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 202, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_15, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 230, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       }
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 202, __pyx_L1_error)
+      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 230, __pyx_L1_error)
       __pyx_t_4 = ((PyArrayObject *)__pyx_t_2);
       {
         __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -6404,13 +6651,13 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
           __pyx_t_6 = __pyx_t_7 = __pyx_t_8 = 0;
         }
         __pyx_pybuffernd_A.diminfo[0].strides = __pyx_pybuffernd_A.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_A.diminfo[0].shape = __pyx_pybuffernd_A.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_A.diminfo[1].strides = __pyx_pybuffernd_A.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_A.diminfo[1].shape = __pyx_pybuffernd_A.rcbuffer->pybuffer.shape[1];
-        if (unlikely(__pyx_t_121 < 0)) __PYX_ERR(0, 202, __pyx_L1_error)
+        if (unlikely(__pyx_t_121 < 0)) __PYX_ERR(0, 230, __pyx_L1_error)
       }
       __pyx_t_4 = 0;
       __Pyx_DECREF_SET(__pyx_v_A, ((PyArrayObject *)__pyx_t_2));
       __pyx_t_2 = 0;
 
-      /* "PostProcess_AnisotropyTensor.pyx":203
+      /* "PostProcess_AnisotropyTensor.pyx":231
  *             evalues = evalues*(1./3. - np.sort(evalues)[1])/np.max(evalues)
  *             A = np.dot(np.dot(evectors, np.diag(evalues)), np.linalg.inv(evectors))
  *             for j in range(3):             # <<<<<<<<<<<<<<
@@ -6420,7 +6667,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       for (__pyx_t_121 = 0; __pyx_t_121 < 3; __pyx_t_121+=1) {
         __pyx_v_j = __pyx_t_121;
 
-        /* "PostProcess_AnisotropyTensor.pyx":204
+        /* "PostProcess_AnisotropyTensor.pyx":232
  *             A = np.dot(np.dot(evectors, np.diag(evalues)), np.linalg.inv(evectors))
  *             for j in range(3):
  *                 labels[i, j] = A[j, j]             # <<<<<<<<<<<<<<
@@ -6434,7 +6681,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
         *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_152, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_153, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_150, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_151, __pyx_pybuffernd_A.diminfo[1].strides));
       }
 
-      /* "PostProcess_AnisotropyTensor.pyx":205
+      /* "PostProcess_AnisotropyTensor.pyx":233
  *             for j in range(3):
  *                 labels[i, j] = A[j, j]
  *             labels[i, 1] = A[0, 1]             # <<<<<<<<<<<<<<
@@ -6447,7 +6694,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_157 = 1;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_156, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_157, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_154, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_155, __pyx_pybuffernd_A.diminfo[1].strides));
 
-      /* "PostProcess_AnisotropyTensor.pyx":206
+      /* "PostProcess_AnisotropyTensor.pyx":234
  *                 labels[i, j] = A[j, j]
  *             labels[i, 1] = A[0, 1]
  *             labels[i, 5] = A[1, 2]             # <<<<<<<<<<<<<<
@@ -6460,7 +6707,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_161 = 5;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_160, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_161, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_158, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_159, __pyx_pybuffernd_A.diminfo[1].strides));
 
-      /* "PostProcess_AnisotropyTensor.pyx":207
+      /* "PostProcess_AnisotropyTensor.pyx":235
  *             labels[i, 1] = A[0, 1]
  *             labels[i, 5] = A[1, 2]
  *             labels[i, 2] = A[0, 2]             # <<<<<<<<<<<<<<
@@ -6473,7 +6720,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_165 = 2;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_164, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_165, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_162, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_163, __pyx_pybuffernd_A.diminfo[1].strides));
 
-      /* "PostProcess_AnisotropyTensor.pyx":208
+      /* "PostProcess_AnisotropyTensor.pyx":236
  *             labels[i, 5] = A[1, 2]
  *             labels[i, 2] = A[0, 2]
  *             labels[i, 3] = A[0, 1]             # <<<<<<<<<<<<<<
@@ -6486,7 +6733,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_169 = 3;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_168, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_169, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_166, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_167, __pyx_pybuffernd_A.diminfo[1].strides));
 
-      /* "PostProcess_AnisotropyTensor.pyx":209
+      /* "PostProcess_AnisotropyTensor.pyx":237
  *             labels[i, 2] = A[0, 2]
  *             labels[i, 3] = A[0, 1]
  *             labels[i, 7] = A[1, 2]             # <<<<<<<<<<<<<<
@@ -6499,7 +6746,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_173 = 7;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_172, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_173, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_170, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_171, __pyx_pybuffernd_A.diminfo[1].strides));
 
-      /* "PostProcess_AnisotropyTensor.pyx":210
+      /* "PostProcess_AnisotropyTensor.pyx":238
  *             labels[i, 3] = A[0, 1]
  *             labels[i, 7] = A[1, 2]
  *             labels[i, 6] = A[0, 2]             # <<<<<<<<<<<<<<
@@ -6512,7 +6759,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
       __pyx_t_177 = 6;
       *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_176, __pyx_pybuffernd_labels.diminfo[0].strides, __pyx_t_177, __pyx_pybuffernd_labels.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_A.rcbuffer->pybuffer.buf, __pyx_t_174, __pyx_pybuffernd_A.diminfo[0].strides, __pyx_t_175, __pyx_pybuffernd_A.diminfo[1].strides));
 
-      /* "PostProcess_AnisotropyTensor.pyx":200
+      /* "PostProcess_AnisotropyTensor.pyx":228
  *             labels[i, 7] = A[1, 2]
  *             labels[i, 6] = A[0, 2]
  *         if np.max(evalues) > 1./3. - np.sort(evalues)[1]:             # <<<<<<<<<<<<<<
@@ -6522,7 +6769,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
     }
   }
 
-  /* "PostProcess_AnisotropyTensor.pyx":212
+  /* "PostProcess_AnisotropyTensor.pyx":240
  *             labels[i, 6] = A[0, 2]
  * 
  *     return labels             # <<<<<<<<<<<<<<
@@ -6534,7 +6781,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
   __pyx_r = ((PyArrayObject *)__pyx_v_labels);
   goto __pyx_L0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":147
+  /* "PostProcess_AnisotropyTensor.pyx":175
  * @cython.wraparound(False)
  * @cython.cdivision(True)
  * cdef np.ndarray[np.float_t, ndim = 2] make_realizable(np.ndarray[np.float_t, ndim = 2] labels):             # <<<<<<<<<<<<<<
@@ -6577,7 +6824,7 @@ static PyArrayObject *__pyx_f_28PostProcess_AnisotropyTensor_make_realizable(PyA
   return __pyx_r;
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":258
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":258
  *         # experimental exception made for __getbuffer__ and __releasebuffer__
  *         # -- the details of this may change.
  *         def __getbuffer__(ndarray self, Py_buffer* info, int flags):             # <<<<<<<<<<<<<<
@@ -6626,7 +6873,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_v_info->obj = Py_None; __Pyx_INCREF(Py_None);
   __Pyx_GIVEREF(__pyx_v_info->obj);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":265
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":265
  * 
  *             cdef int i, ndim
  *             cdef int endian_detector = 1             # <<<<<<<<<<<<<<
@@ -6635,7 +6882,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_endian_detector = 1;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":266
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":266
  *             cdef int i, ndim
  *             cdef int endian_detector = 1
  *             cdef bint little_endian = ((<char*>&endian_detector)[0] != 0)             # <<<<<<<<<<<<<<
@@ -6644,7 +6891,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_little_endian = ((((char *)(&__pyx_v_endian_detector))[0]) != 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":268
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":268
  *             cdef bint little_endian = ((<char*>&endian_detector)[0] != 0)
  * 
  *             ndim = PyArray_NDIM(self)             # <<<<<<<<<<<<<<
@@ -6653,7 +6900,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_ndim = PyArray_NDIM(__pyx_v_self);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":270
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":270
  *             ndim = PyArray_NDIM(self)
  * 
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -6667,7 +6914,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     goto __pyx_L4_bool_binop_done;
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":271
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":271
  * 
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_ARRAY_C_CONTIGUOUS)):             # <<<<<<<<<<<<<<
@@ -6678,7 +6925,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_t_1 = __pyx_t_2;
   __pyx_L4_bool_binop_done:;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":270
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":270
  *             ndim = PyArray_NDIM(self)
  * 
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -6687,20 +6934,20 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   if (unlikely(__pyx_t_1)) {
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":272
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":272
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_ARRAY_C_CONTIGUOUS)):
  *                 raise ValueError(u"ndarray is not C contiguous")             # <<<<<<<<<<<<<<
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__18, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 272, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__21, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 272, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __PYX_ERR(1, 272, __pyx_L1_error)
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":270
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":270
  *             ndim = PyArray_NDIM(self)
  * 
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -6709,7 +6956,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":274
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":274
  *                 raise ValueError(u"ndarray is not C contiguous")
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -6723,7 +6970,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     goto __pyx_L7_bool_binop_done;
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":275
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":275
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_ARRAY_F_CONTIGUOUS)):             # <<<<<<<<<<<<<<
@@ -6734,7 +6981,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_t_1 = __pyx_t_2;
   __pyx_L7_bool_binop_done:;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":274
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":274
  *                 raise ValueError(u"ndarray is not C contiguous")
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -6743,20 +6990,20 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   if (unlikely(__pyx_t_1)) {
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":276
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":276
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_ARRAY_F_CONTIGUOUS)):
  *                 raise ValueError(u"ndarray is not Fortran contiguous")             # <<<<<<<<<<<<<<
  * 
  *             info.buf = PyArray_DATA(self)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__19, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 276, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__22, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 276, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __PYX_ERR(1, 276, __pyx_L1_error)
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":274
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":274
  *                 raise ValueError(u"ndarray is not C contiguous")
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -6765,7 +7012,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":278
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":278
  *                 raise ValueError(u"ndarray is not Fortran contiguous")
  * 
  *             info.buf = PyArray_DATA(self)             # <<<<<<<<<<<<<<
@@ -6774,7 +7021,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->buf = PyArray_DATA(__pyx_v_self);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":279
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":279
  * 
  *             info.buf = PyArray_DATA(self)
  *             info.ndim = ndim             # <<<<<<<<<<<<<<
@@ -6783,7 +7030,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->ndim = __pyx_v_ndim;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":280
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":280
  *             info.buf = PyArray_DATA(self)
  *             info.ndim = ndim
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):             # <<<<<<<<<<<<<<
@@ -6793,7 +7040,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_t_1 = (((sizeof(npy_intp)) != (sizeof(Py_ssize_t))) != 0);
   if (__pyx_t_1) {
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":283
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":283
  *                 # Allocate new buffer for strides and shape info.
  *                 # This is allocated as one block, strides first.
  *                 info.strides = <Py_ssize_t*>PyObject_Malloc(sizeof(Py_ssize_t) * 2 * <size_t>ndim)             # <<<<<<<<<<<<<<
@@ -6802,7 +7049,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_info->strides = ((Py_ssize_t *)PyObject_Malloc((((sizeof(Py_ssize_t)) * 2) * ((size_t)__pyx_v_ndim))));
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":284
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":284
  *                 # This is allocated as one block, strides first.
  *                 info.strides = <Py_ssize_t*>PyObject_Malloc(sizeof(Py_ssize_t) * 2 * <size_t>ndim)
  *                 info.shape = info.strides + ndim             # <<<<<<<<<<<<<<
@@ -6811,7 +7058,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_info->shape = (__pyx_v_info->strides + __pyx_v_ndim);
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":285
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":285
  *                 info.strides = <Py_ssize_t*>PyObject_Malloc(sizeof(Py_ssize_t) * 2 * <size_t>ndim)
  *                 info.shape = info.strides + ndim
  *                 for i in range(ndim):             # <<<<<<<<<<<<<<
@@ -6823,7 +7070,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_v_i = __pyx_t_6;
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":286
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":286
  *                 info.shape = info.strides + ndim
  *                 for i in range(ndim):
  *                     info.strides[i] = PyArray_STRIDES(self)[i]             # <<<<<<<<<<<<<<
@@ -6832,7 +7079,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
       (__pyx_v_info->strides[__pyx_v_i]) = (PyArray_STRIDES(__pyx_v_self)[__pyx_v_i]);
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":287
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":287
  *                 for i in range(ndim):
  *                     info.strides[i] = PyArray_STRIDES(self)[i]
  *                     info.shape[i] = PyArray_DIMS(self)[i]             # <<<<<<<<<<<<<<
@@ -6842,7 +7089,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       (__pyx_v_info->shape[__pyx_v_i]) = (PyArray_DIMS(__pyx_v_self)[__pyx_v_i]);
     }
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":280
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":280
  *             info.buf = PyArray_DATA(self)
  *             info.ndim = ndim
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):             # <<<<<<<<<<<<<<
@@ -6852,7 +7099,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     goto __pyx_L9;
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":289
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":289
  *                     info.shape[i] = PyArray_DIMS(self)[i]
  *             else:
  *                 info.strides = <Py_ssize_t*>PyArray_STRIDES(self)             # <<<<<<<<<<<<<<
@@ -6862,7 +7109,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   /*else*/ {
     __pyx_v_info->strides = ((Py_ssize_t *)PyArray_STRIDES(__pyx_v_self));
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":290
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":290
  *             else:
  *                 info.strides = <Py_ssize_t*>PyArray_STRIDES(self)
  *                 info.shape = <Py_ssize_t*>PyArray_DIMS(self)             # <<<<<<<<<<<<<<
@@ -6873,7 +7120,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   }
   __pyx_L9:;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":291
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":291
  *                 info.strides = <Py_ssize_t*>PyArray_STRIDES(self)
  *                 info.shape = <Py_ssize_t*>PyArray_DIMS(self)
  *             info.suboffsets = NULL             # <<<<<<<<<<<<<<
@@ -6882,7 +7129,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->suboffsets = NULL;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":292
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":292
  *                 info.shape = <Py_ssize_t*>PyArray_DIMS(self)
  *             info.suboffsets = NULL
  *             info.itemsize = PyArray_ITEMSIZE(self)             # <<<<<<<<<<<<<<
@@ -6891,7 +7138,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->itemsize = PyArray_ITEMSIZE(__pyx_v_self);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":293
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":293
  *             info.suboffsets = NULL
  *             info.itemsize = PyArray_ITEMSIZE(self)
  *             info.readonly = not PyArray_ISWRITEABLE(self)             # <<<<<<<<<<<<<<
@@ -6900,7 +7147,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->readonly = (!(PyArray_ISWRITEABLE(__pyx_v_self) != 0));
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":296
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":296
  * 
  *             cdef int t
  *             cdef char* f = NULL             # <<<<<<<<<<<<<<
@@ -6909,7 +7156,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_f = NULL;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":297
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":297
  *             cdef int t
  *             cdef char* f = NULL
  *             cdef dtype descr = <dtype>PyArray_DESCR(self)             # <<<<<<<<<<<<<<
@@ -6922,7 +7169,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_v_descr = ((PyArray_Descr *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":300
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":300
  *             cdef int offset
  * 
  *             info.obj = self             # <<<<<<<<<<<<<<
@@ -6935,7 +7182,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __Pyx_DECREF(__pyx_v_info->obj);
   __pyx_v_info->obj = ((PyObject *)__pyx_v_self);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":302
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":302
  *             info.obj = self
  * 
  *             if not PyDataType_HASFIELDS(descr):             # <<<<<<<<<<<<<<
@@ -6945,7 +7192,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_t_1 = ((!(PyDataType_HASFIELDS(__pyx_v_descr) != 0)) != 0);
   if (__pyx_t_1) {
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":303
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":303
  * 
  *             if not PyDataType_HASFIELDS(descr):
  *                 t = descr.type_num             # <<<<<<<<<<<<<<
@@ -6955,7 +7202,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __pyx_t_4 = __pyx_v_descr->type_num;
     __pyx_v_t = __pyx_t_4;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":304
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":304
  *             if not PyDataType_HASFIELDS(descr):
  *                 t = descr.type_num
  *                 if ((descr.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -6975,7 +7222,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     }
     __pyx_L15_next_or:;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":305
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":305
  *                 t = descr.type_num
  *                 if ((descr.byteorder == c'>' and little_endian) or
  *                     (descr.byteorder == c'<' and not little_endian)):             # <<<<<<<<<<<<<<
@@ -6992,7 +7239,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __pyx_t_1 = __pyx_t_2;
     __pyx_L14_bool_binop_done:;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":304
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":304
  *             if not PyDataType_HASFIELDS(descr):
  *                 t = descr.type_num
  *                 if ((descr.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -7001,20 +7248,20 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     if (unlikely(__pyx_t_1)) {
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":306
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":306
  *                 if ((descr.byteorder == c'>' and little_endian) or
  *                     (descr.byteorder == c'<' and not little_endian)):
  *                     raise ValueError(u"Non-native byte order not supported")             # <<<<<<<<<<<<<<
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__20, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 306, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__23, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 306, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __PYX_ERR(1, 306, __pyx_L1_error)
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":304
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":304
  *             if not PyDataType_HASFIELDS(descr):
  *                 t = descr.type_num
  *                 if ((descr.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -7023,7 +7270,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     }
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":307
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":307
  *                     (descr.byteorder == c'<' and not little_endian)):
  *                     raise ValueError(u"Non-native byte order not supported")
  *                 if   t == NPY_BYTE:        f = "b"             # <<<<<<<<<<<<<<
@@ -7036,7 +7283,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_UBYTE:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":308
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":308
  *                     raise ValueError(u"Non-native byte order not supported")
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"             # <<<<<<<<<<<<<<
@@ -7047,7 +7294,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_SHORT:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":309
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":309
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  *                 elif t == NPY_SHORT:       f = "h"             # <<<<<<<<<<<<<<
@@ -7058,7 +7305,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_USHORT:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":310
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":310
  *                 elif t == NPY_UBYTE:       f = "B"
  *                 elif t == NPY_SHORT:       f = "h"
  *                 elif t == NPY_USHORT:      f = "H"             # <<<<<<<<<<<<<<
@@ -7069,7 +7316,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_INT:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":311
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":311
  *                 elif t == NPY_SHORT:       f = "h"
  *                 elif t == NPY_USHORT:      f = "H"
  *                 elif t == NPY_INT:         f = "i"             # <<<<<<<<<<<<<<
@@ -7080,7 +7327,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_UINT:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":312
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":312
  *                 elif t == NPY_USHORT:      f = "H"
  *                 elif t == NPY_INT:         f = "i"
  *                 elif t == NPY_UINT:        f = "I"             # <<<<<<<<<<<<<<
@@ -7091,7 +7338,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_LONG:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":313
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":313
  *                 elif t == NPY_INT:         f = "i"
  *                 elif t == NPY_UINT:        f = "I"
  *                 elif t == NPY_LONG:        f = "l"             # <<<<<<<<<<<<<<
@@ -7102,7 +7349,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_ULONG:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":314
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":314
  *                 elif t == NPY_UINT:        f = "I"
  *                 elif t == NPY_LONG:        f = "l"
  *                 elif t == NPY_ULONG:       f = "L"             # <<<<<<<<<<<<<<
@@ -7113,7 +7360,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_LONGLONG:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":315
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":315
  *                 elif t == NPY_LONG:        f = "l"
  *                 elif t == NPY_ULONG:       f = "L"
  *                 elif t == NPY_LONGLONG:    f = "q"             # <<<<<<<<<<<<<<
@@ -7124,7 +7371,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_ULONGLONG:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":316
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":316
  *                 elif t == NPY_ULONG:       f = "L"
  *                 elif t == NPY_LONGLONG:    f = "q"
  *                 elif t == NPY_ULONGLONG:   f = "Q"             # <<<<<<<<<<<<<<
@@ -7135,7 +7382,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_FLOAT:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":317
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":317
  *                 elif t == NPY_LONGLONG:    f = "q"
  *                 elif t == NPY_ULONGLONG:   f = "Q"
  *                 elif t == NPY_FLOAT:       f = "f"             # <<<<<<<<<<<<<<
@@ -7146,7 +7393,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_DOUBLE:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":318
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":318
  *                 elif t == NPY_ULONGLONG:   f = "Q"
  *                 elif t == NPY_FLOAT:       f = "f"
  *                 elif t == NPY_DOUBLE:      f = "d"             # <<<<<<<<<<<<<<
@@ -7157,7 +7404,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_LONGDOUBLE:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":319
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":319
  *                 elif t == NPY_FLOAT:       f = "f"
  *                 elif t == NPY_DOUBLE:      f = "d"
  *                 elif t == NPY_LONGDOUBLE:  f = "g"             # <<<<<<<<<<<<<<
@@ -7168,7 +7415,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_CFLOAT:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":320
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":320
  *                 elif t == NPY_DOUBLE:      f = "d"
  *                 elif t == NPY_LONGDOUBLE:  f = "g"
  *                 elif t == NPY_CFLOAT:      f = "Zf"             # <<<<<<<<<<<<<<
@@ -7179,7 +7426,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_CDOUBLE:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":321
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":321
  *                 elif t == NPY_LONGDOUBLE:  f = "g"
  *                 elif t == NPY_CFLOAT:      f = "Zf"
  *                 elif t == NPY_CDOUBLE:     f = "Zd"             # <<<<<<<<<<<<<<
@@ -7190,7 +7437,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_CLONGDOUBLE:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":322
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":322
  *                 elif t == NPY_CFLOAT:      f = "Zf"
  *                 elif t == NPY_CDOUBLE:     f = "Zd"
  *                 elif t == NPY_CLONGDOUBLE: f = "Zg"             # <<<<<<<<<<<<<<
@@ -7201,7 +7448,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       case NPY_OBJECT:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":323
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":323
  *                 elif t == NPY_CDOUBLE:     f = "Zd"
  *                 elif t == NPY_CLONGDOUBLE: f = "Zg"
  *                 elif t == NPY_OBJECT:      f = "O"             # <<<<<<<<<<<<<<
@@ -7212,7 +7459,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       default:
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":325
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":325
  *                 elif t == NPY_OBJECT:      f = "O"
  *                 else:
  *                     raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)             # <<<<<<<<<<<<<<
@@ -7233,7 +7480,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
     }
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":326
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":326
  *                 else:
  *                     raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)
  *                 info.format = f             # <<<<<<<<<<<<<<
@@ -7242,7 +7489,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_info->format = __pyx_v_f;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":327
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":327
  *                     raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)
  *                 info.format = f
  *                 return             # <<<<<<<<<<<<<<
@@ -7252,7 +7499,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":302
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":302
  *             info.obj = self
  * 
  *             if not PyDataType_HASFIELDS(descr):             # <<<<<<<<<<<<<<
@@ -7261,7 +7508,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":329
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":329
  *                 return
  *             else:
  *                 info.format = <char*>PyObject_Malloc(_buffer_format_string_len)             # <<<<<<<<<<<<<<
@@ -7271,7 +7518,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   /*else*/ {
     __pyx_v_info->format = ((char *)PyObject_Malloc(0xFF));
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":330
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":330
  *             else:
  *                 info.format = <char*>PyObject_Malloc(_buffer_format_string_len)
  *                 info.format[0] = c'^' # Native data types, manual alignment             # <<<<<<<<<<<<<<
@@ -7280,7 +7527,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     (__pyx_v_info->format[0]) = '^';
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":331
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":331
  *                 info.format = <char*>PyObject_Malloc(_buffer_format_string_len)
  *                 info.format[0] = c'^' # Native data types, manual alignment
  *                 offset = 0             # <<<<<<<<<<<<<<
@@ -7289,7 +7536,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_offset = 0;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":332
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":332
  *                 info.format[0] = c'^' # Native data types, manual alignment
  *                 offset = 0
  *                 f = _util_dtypestring(descr, info.format + 1,             # <<<<<<<<<<<<<<
@@ -7299,7 +7546,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __pyx_t_9 = __pyx_f_5numpy__util_dtypestring(__pyx_v_descr, (__pyx_v_info->format + 1), (__pyx_v_info->format + 0xFF), (&__pyx_v_offset)); if (unlikely(__pyx_t_9 == ((char *)NULL))) __PYX_ERR(1, 332, __pyx_L1_error)
     __pyx_v_f = __pyx_t_9;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":335
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":335
  *                                       info.format + _buffer_format_string_len,
  *                                       &offset)
  *                 f[0] = c'\0' # Terminate format string             # <<<<<<<<<<<<<<
@@ -7309,7 +7556,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     (__pyx_v_f[0]) = '\x00';
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":258
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":258
  *         # experimental exception made for __getbuffer__ and __releasebuffer__
  *         # -- the details of this may change.
  *         def __getbuffer__(ndarray self, Py_buffer* info, int flags):             # <<<<<<<<<<<<<<
@@ -7341,7 +7588,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   return __pyx_r;
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":337
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":337
  *                 f[0] = c'\0' # Terminate format string
  * 
  *         def __releasebuffer__(ndarray self, Py_buffer* info):             # <<<<<<<<<<<<<<
@@ -7365,7 +7612,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__releasebuffer__", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":338
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":338
  * 
  *         def __releasebuffer__(ndarray self, Py_buffer* info):
  *             if PyArray_HASFIELDS(self):             # <<<<<<<<<<<<<<
@@ -7375,7 +7622,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   __pyx_t_1 = (PyArray_HASFIELDS(__pyx_v_self) != 0);
   if (__pyx_t_1) {
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":339
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":339
  *         def __releasebuffer__(ndarray self, Py_buffer* info):
  *             if PyArray_HASFIELDS(self):
  *                 PyObject_Free(info.format)             # <<<<<<<<<<<<<<
@@ -7384,7 +7631,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
  */
     PyObject_Free(__pyx_v_info->format);
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":338
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":338
  * 
  *         def __releasebuffer__(ndarray self, Py_buffer* info):
  *             if PyArray_HASFIELDS(self):             # <<<<<<<<<<<<<<
@@ -7393,7 +7640,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
  */
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":340
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":340
  *             if PyArray_HASFIELDS(self):
  *                 PyObject_Free(info.format)
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):             # <<<<<<<<<<<<<<
@@ -7403,7 +7650,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   __pyx_t_1 = (((sizeof(npy_intp)) != (sizeof(Py_ssize_t))) != 0);
   if (__pyx_t_1) {
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":341
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":341
  *                 PyObject_Free(info.format)
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):
  *                 PyObject_Free(info.strides)             # <<<<<<<<<<<<<<
@@ -7412,7 +7659,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
  */
     PyObject_Free(__pyx_v_info->strides);
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":340
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":340
  *             if PyArray_HASFIELDS(self):
  *                 PyObject_Free(info.format)
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):             # <<<<<<<<<<<<<<
@@ -7421,7 +7668,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
  */
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":337
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":337
  *                 f[0] = c'\0' # Terminate format string
  * 
  *         def __releasebuffer__(ndarray self, Py_buffer* info):             # <<<<<<<<<<<<<<
@@ -7433,7 +7680,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   __Pyx_RefNannyFinishContext();
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":821
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":821
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -7447,7 +7694,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew1", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":822
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":822
  * 
  * cdef inline object PyArray_MultiIterNew1(a):
  *     return PyArray_MultiIterNew(1, <void*>a)             # <<<<<<<<<<<<<<
@@ -7461,7 +7708,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":821
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":821
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -7480,7 +7727,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   return __pyx_r;
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":824
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":824
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -7494,7 +7741,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew2", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":825
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":825
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)             # <<<<<<<<<<<<<<
@@ -7508,7 +7755,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":824
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":824
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -7527,7 +7774,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   return __pyx_r;
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":827
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":827
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -7541,7 +7788,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew3", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":828
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":828
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)             # <<<<<<<<<<<<<<
@@ -7555,7 +7802,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":827
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":827
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -7574,7 +7821,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   return __pyx_r;
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":830
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":830
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -7588,7 +7835,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew4", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":831
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":831
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)             # <<<<<<<<<<<<<<
@@ -7602,7 +7849,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":830
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":830
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -7621,7 +7868,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   return __pyx_r;
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":833
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":833
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -7635,7 +7882,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew5", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":834
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":834
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)             # <<<<<<<<<<<<<<
@@ -7649,7 +7896,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":833
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":833
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -7668,7 +7915,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   return __pyx_r;
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":836
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":836
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -7682,7 +7929,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("PyDataType_SHAPE", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":837
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":837
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -7692,7 +7939,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   __pyx_t_1 = (PyDataType_HASSUBARRAY(__pyx_v_d) != 0);
   if (__pyx_t_1) {
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":838
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":838
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):
  *         return <tuple>d.subarray.shape             # <<<<<<<<<<<<<<
@@ -7704,7 +7951,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     __pyx_r = ((PyObject*)__pyx_v_d->subarray->shape);
     goto __pyx_L0;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":837
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":837
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -7713,7 +7960,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
  */
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":840
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":840
  *         return <tuple>d.subarray.shape
  *     else:
  *         return ()             # <<<<<<<<<<<<<<
@@ -7727,7 +7974,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     goto __pyx_L0;
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":836
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":836
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -7742,7 +7989,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   return __pyx_r;
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":842
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":842
  *         return ()
  * 
  * cdef inline char* _util_dtypestring(dtype descr, char* f, char* end, int* offset) except NULL:             # <<<<<<<<<<<<<<
@@ -7771,7 +8018,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
   char *__pyx_t_9;
   __Pyx_RefNannySetupContext("_util_dtypestring", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":847
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":847
  * 
  *     cdef dtype child
  *     cdef int endian_detector = 1             # <<<<<<<<<<<<<<
@@ -7780,7 +8027,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
   __pyx_v_endian_detector = 1;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":848
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":848
  *     cdef dtype child
  *     cdef int endian_detector = 1
  *     cdef bint little_endian = ((<char*>&endian_detector)[0] != 0)             # <<<<<<<<<<<<<<
@@ -7789,7 +8036,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
   __pyx_v_little_endian = ((((char *)(&__pyx_v_endian_detector))[0]) != 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":851
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":851
  *     cdef tuple fields
  * 
  *     for childname in descr.names:             # <<<<<<<<<<<<<<
@@ -7812,7 +8059,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __Pyx_XDECREF_SET(__pyx_v_childname, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":852
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":852
  * 
  *     for childname in descr.names:
  *         fields = descr.fields[childname]             # <<<<<<<<<<<<<<
@@ -7829,7 +8076,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __Pyx_XDECREF_SET(__pyx_v_fields, ((PyObject*)__pyx_t_3));
     __pyx_t_3 = 0;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":853
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":853
  *     for childname in descr.names:
  *         fields = descr.fields[childname]
  *         child, new_offset = fields             # <<<<<<<<<<<<<<
@@ -7864,7 +8111,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __Pyx_XDECREF_SET(__pyx_v_new_offset, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":855
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":855
  *         child, new_offset = fields
  * 
  *         if (end - f) - <int>(new_offset - offset[0]) < 15:             # <<<<<<<<<<<<<<
@@ -7881,20 +8128,20 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __pyx_t_6 = ((((__pyx_v_end - __pyx_v_f) - ((int)__pyx_t_5)) < 15) != 0);
     if (unlikely(__pyx_t_6)) {
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":856
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":856
  * 
  *         if (end - f) - <int>(new_offset - offset[0]) < 15:
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")             # <<<<<<<<<<<<<<
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__21, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 856, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__24, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 856, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __PYX_ERR(1, 856, __pyx_L1_error)
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":855
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":855
  *         child, new_offset = fields
  * 
  *         if (end - f) - <int>(new_offset - offset[0]) < 15:             # <<<<<<<<<<<<<<
@@ -7903,7 +8150,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
     }
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":858
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":858
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")
  * 
  *         if ((child.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -7923,7 +8170,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     }
     __pyx_L8_next_or:;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":859
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":859
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  *             (child.byteorder == c'<' and not little_endian)):             # <<<<<<<<<<<<<<
@@ -7940,7 +8187,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __pyx_t_6 = __pyx_t_7;
     __pyx_L7_bool_binop_done:;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":858
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":858
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")
  * 
  *         if ((child.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -7949,20 +8196,20 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
     if (unlikely(__pyx_t_6)) {
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":860
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":860
  *         if ((child.byteorder == c'>' and little_endian) or
  *             (child.byteorder == c'<' and not little_endian)):
  *             raise ValueError(u"Non-native byte order not supported")             # <<<<<<<<<<<<<<
  *             # One could encode it in the format string and have Cython
  *             # complain instead, BUT: < and > in format strings also imply
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__20, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 860, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__23, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 860, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __PYX_ERR(1, 860, __pyx_L1_error)
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":858
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":858
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")
  * 
  *         if ((child.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -7971,7 +8218,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
     }
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":870
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":870
  * 
  *         # Output padding bytes
  *         while offset[0] < new_offset:             # <<<<<<<<<<<<<<
@@ -7987,7 +8234,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       if (!__pyx_t_6) break;
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":871
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":871
  *         # Output padding bytes
  *         while offset[0] < new_offset:
  *             f[0] = 120 # "x"; pad byte             # <<<<<<<<<<<<<<
@@ -7996,7 +8243,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
       (__pyx_v_f[0]) = 0x78;
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":872
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":872
  *         while offset[0] < new_offset:
  *             f[0] = 120 # "x"; pad byte
  *             f += 1             # <<<<<<<<<<<<<<
@@ -8005,7 +8252,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
       __pyx_v_f = (__pyx_v_f + 1);
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":873
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":873
  *             f[0] = 120 # "x"; pad byte
  *             f += 1
  *             offset[0] += 1             # <<<<<<<<<<<<<<
@@ -8016,7 +8263,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       (__pyx_v_offset[__pyx_t_8]) = ((__pyx_v_offset[__pyx_t_8]) + 1);
     }
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":875
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":875
  *             offset[0] += 1
  * 
  *         offset[0] += child.itemsize             # <<<<<<<<<<<<<<
@@ -8026,7 +8273,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __pyx_t_8 = 0;
     (__pyx_v_offset[__pyx_t_8]) = ((__pyx_v_offset[__pyx_t_8]) + __pyx_v_child->elsize);
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":877
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":877
  *         offset[0] += child.itemsize
  * 
  *         if not PyDataType_HASFIELDS(child):             # <<<<<<<<<<<<<<
@@ -8036,7 +8283,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __pyx_t_6 = ((!(PyDataType_HASFIELDS(__pyx_v_child) != 0)) != 0);
     if (__pyx_t_6) {
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":878
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":878
  * 
  *         if not PyDataType_HASFIELDS(child):
  *             t = child.type_num             # <<<<<<<<<<<<<<
@@ -8048,7 +8295,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       __Pyx_XDECREF_SET(__pyx_v_t, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":879
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":879
  *         if not PyDataType_HASFIELDS(child):
  *             t = child.type_num
  *             if end - f < 5:             # <<<<<<<<<<<<<<
@@ -8058,20 +8305,20 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       __pyx_t_6 = (((__pyx_v_end - __pyx_v_f) < 5) != 0);
       if (unlikely(__pyx_t_6)) {
 
-        /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":880
+        /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":880
  *             t = child.type_num
  *             if end - f < 5:
  *                 raise RuntimeError(u"Format string allocated too short.")             # <<<<<<<<<<<<<<
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  */
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__22, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 880, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__25, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 880, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_Raise(__pyx_t_4, 0, 0, 0);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __PYX_ERR(1, 880, __pyx_L1_error)
 
-        /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":879
+        /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":879
  *         if not PyDataType_HASFIELDS(child):
  *             t = child.type_num
  *             if end - f < 5:             # <<<<<<<<<<<<<<
@@ -8080,7 +8327,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":883
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":883
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  *             if   t == NPY_BYTE:        f[0] =  98 #"b"             # <<<<<<<<<<<<<<
@@ -8098,7 +8345,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":884
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":884
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  *             if   t == NPY_BYTE:        f[0] =  98 #"b"
  *             elif t == NPY_UBYTE:       f[0] =  66 #"B"             # <<<<<<<<<<<<<<
@@ -8116,7 +8363,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":885
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":885
  *             if   t == NPY_BYTE:        f[0] =  98 #"b"
  *             elif t == NPY_UBYTE:       f[0] =  66 #"B"
  *             elif t == NPY_SHORT:       f[0] = 104 #"h"             # <<<<<<<<<<<<<<
@@ -8134,7 +8381,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":886
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":886
  *             elif t == NPY_UBYTE:       f[0] =  66 #"B"
  *             elif t == NPY_SHORT:       f[0] = 104 #"h"
  *             elif t == NPY_USHORT:      f[0] =  72 #"H"             # <<<<<<<<<<<<<<
@@ -8152,7 +8399,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":887
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":887
  *             elif t == NPY_SHORT:       f[0] = 104 #"h"
  *             elif t == NPY_USHORT:      f[0] =  72 #"H"
  *             elif t == NPY_INT:         f[0] = 105 #"i"             # <<<<<<<<<<<<<<
@@ -8170,7 +8417,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":888
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":888
  *             elif t == NPY_USHORT:      f[0] =  72 #"H"
  *             elif t == NPY_INT:         f[0] = 105 #"i"
  *             elif t == NPY_UINT:        f[0] =  73 #"I"             # <<<<<<<<<<<<<<
@@ -8188,7 +8435,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":889
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":889
  *             elif t == NPY_INT:         f[0] = 105 #"i"
  *             elif t == NPY_UINT:        f[0] =  73 #"I"
  *             elif t == NPY_LONG:        f[0] = 108 #"l"             # <<<<<<<<<<<<<<
@@ -8206,7 +8453,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":890
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":890
  *             elif t == NPY_UINT:        f[0] =  73 #"I"
  *             elif t == NPY_LONG:        f[0] = 108 #"l"
  *             elif t == NPY_ULONG:       f[0] = 76  #"L"             # <<<<<<<<<<<<<<
@@ -8224,7 +8471,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":891
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":891
  *             elif t == NPY_LONG:        f[0] = 108 #"l"
  *             elif t == NPY_ULONG:       f[0] = 76  #"L"
  *             elif t == NPY_LONGLONG:    f[0] = 113 #"q"             # <<<<<<<<<<<<<<
@@ -8242,7 +8489,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":892
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":892
  *             elif t == NPY_ULONG:       f[0] = 76  #"L"
  *             elif t == NPY_LONGLONG:    f[0] = 113 #"q"
  *             elif t == NPY_ULONGLONG:   f[0] = 81  #"Q"             # <<<<<<<<<<<<<<
@@ -8260,7 +8507,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":893
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":893
  *             elif t == NPY_LONGLONG:    f[0] = 113 #"q"
  *             elif t == NPY_ULONGLONG:   f[0] = 81  #"Q"
  *             elif t == NPY_FLOAT:       f[0] = 102 #"f"             # <<<<<<<<<<<<<<
@@ -8278,7 +8525,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":894
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":894
  *             elif t == NPY_ULONGLONG:   f[0] = 81  #"Q"
  *             elif t == NPY_FLOAT:       f[0] = 102 #"f"
  *             elif t == NPY_DOUBLE:      f[0] = 100 #"d"             # <<<<<<<<<<<<<<
@@ -8296,7 +8543,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":895
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":895
  *             elif t == NPY_FLOAT:       f[0] = 102 #"f"
  *             elif t == NPY_DOUBLE:      f[0] = 100 #"d"
  *             elif t == NPY_LONGDOUBLE:  f[0] = 103 #"g"             # <<<<<<<<<<<<<<
@@ -8314,7 +8561,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":896
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":896
  *             elif t == NPY_DOUBLE:      f[0] = 100 #"d"
  *             elif t == NPY_LONGDOUBLE:  f[0] = 103 #"g"
  *             elif t == NPY_CFLOAT:      f[0] = 90; f[1] = 102; f += 1 # Zf             # <<<<<<<<<<<<<<
@@ -8334,7 +8581,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":897
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":897
  *             elif t == NPY_LONGDOUBLE:  f[0] = 103 #"g"
  *             elif t == NPY_CFLOAT:      f[0] = 90; f[1] = 102; f += 1 # Zf
  *             elif t == NPY_CDOUBLE:     f[0] = 90; f[1] = 100; f += 1 # Zd             # <<<<<<<<<<<<<<
@@ -8354,7 +8601,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":898
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":898
  *             elif t == NPY_CFLOAT:      f[0] = 90; f[1] = 102; f += 1 # Zf
  *             elif t == NPY_CDOUBLE:     f[0] = 90; f[1] = 100; f += 1 # Zd
  *             elif t == NPY_CLONGDOUBLE: f[0] = 90; f[1] = 103; f += 1 # Zg             # <<<<<<<<<<<<<<
@@ -8374,7 +8621,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":899
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":899
  *             elif t == NPY_CDOUBLE:     f[0] = 90; f[1] = 100; f += 1 # Zd
  *             elif t == NPY_CLONGDOUBLE: f[0] = 90; f[1] = 103; f += 1 # Zg
  *             elif t == NPY_OBJECT:      f[0] = 79 #"O"             # <<<<<<<<<<<<<<
@@ -8392,7 +8639,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":901
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":901
  *             elif t == NPY_OBJECT:      f[0] = 79 #"O"
  *             else:
  *                 raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)             # <<<<<<<<<<<<<<
@@ -8411,7 +8658,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       }
       __pyx_L15:;
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":902
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":902
  *             else:
  *                 raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)
  *             f += 1             # <<<<<<<<<<<<<<
@@ -8420,7 +8667,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
       __pyx_v_f = (__pyx_v_f + 1);
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":877
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":877
  *         offset[0] += child.itemsize
  * 
  *         if not PyDataType_HASFIELDS(child):             # <<<<<<<<<<<<<<
@@ -8430,7 +8677,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       goto __pyx_L13;
     }
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":906
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":906
  *             # Cython ignores struct boundary information ("T{...}"),
  *             # so don't output it
  *             f = _util_dtypestring(child, f, end, offset)             # <<<<<<<<<<<<<<
@@ -8443,7 +8690,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     }
     __pyx_L13:;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":851
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":851
  *     cdef tuple fields
  * 
  *     for childname in descr.names:             # <<<<<<<<<<<<<<
@@ -8453,7 +8700,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":907
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":907
  *             # so don't output it
  *             f = _util_dtypestring(child, f, end, offset)
  *     return f             # <<<<<<<<<<<<<<
@@ -8463,7 +8710,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
   __pyx_r = __pyx_v_f;
   goto __pyx_L0;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":842
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":842
  *         return ()
  * 
  * cdef inline char* _util_dtypestring(dtype descr, char* f, char* end, int* offset) except NULL:             # <<<<<<<<<<<<<<
@@ -8488,7 +8735,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
   return __pyx_r;
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1022
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1022
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -8500,7 +8747,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_array_base", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1023
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1023
  * 
  * cdef inline void set_array_base(ndarray arr, object base):
  *     Py_INCREF(base) # important to do this before stealing the reference below!             # <<<<<<<<<<<<<<
@@ -8509,7 +8756,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   Py_INCREF(__pyx_v_base);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1024
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1024
  * cdef inline void set_array_base(ndarray arr, object base):
  *     Py_INCREF(base) # important to do this before stealing the reference below!
  *     PyArray_SetBaseObject(arr, base)             # <<<<<<<<<<<<<<
@@ -8518,7 +8765,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   (void)(PyArray_SetBaseObject(__pyx_v_arr, __pyx_v_base));
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1022
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1022
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -8530,7 +8777,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __Pyx_RefNannyFinishContext();
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1026
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1026
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -8545,7 +8792,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("get_array_base", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1027
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1027
  * 
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)             # <<<<<<<<<<<<<<
@@ -8554,7 +8801,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   __pyx_v_base = PyArray_BASE(__pyx_v_arr);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1028
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1028
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -8564,7 +8811,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_t_1 = ((__pyx_v_base == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1029
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1029
  *     base = PyArray_BASE(arr)
  *     if base is NULL:
  *         return None             # <<<<<<<<<<<<<<
@@ -8575,7 +8822,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1028
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1028
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -8584,7 +8831,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1030
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1030
  *     if base is NULL:
  *         return None
  *     return <object>base             # <<<<<<<<<<<<<<
@@ -8596,7 +8843,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_r = ((PyObject *)__pyx_v_base);
   goto __pyx_L0;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1026
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1026
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -8611,7 +8858,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   return __pyx_r;
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1034
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1034
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -8632,7 +8879,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("import_array", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1035
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1035
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8648,7 +8895,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1036
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1036
  * cdef inline int import_array() except -1:
  *     try:
  *         _import_array()             # <<<<<<<<<<<<<<
@@ -8657,7 +8904,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
  */
       __pyx_t_4 = _import_array(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(1, 1036, __pyx_L3_error)
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1035
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1035
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8671,7 +8918,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1037
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1037
  *     try:
  *         _import_array()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -8686,14 +8933,14 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1038
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1038
  *         _import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
  * 
  * cdef inline int import_umath() except -1:
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__23, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1038, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__26, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1038, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -8702,7 +8949,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1035
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1035
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8717,7 +8964,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1034
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1034
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -8740,7 +8987,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   return __pyx_r;
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1040
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1040
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -8761,7 +9008,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("import_umath", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1041
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1041
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8777,7 +9024,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1042
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1042
  * cdef inline int import_umath() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -8786,7 +9033,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
  */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(1, 1042, __pyx_L3_error)
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1041
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1041
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8800,7 +9047,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1043
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1043
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -8815,14 +9062,14 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1044
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1044
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  * 
  * cdef inline int import_ufunc() except -1:
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__24, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1044, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__27, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1044, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -8831,7 +9078,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1041
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1041
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8846,7 +9093,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1040
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1040
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -8869,7 +9116,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   return __pyx_r;
 }
 
-/* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1046
+/* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1046
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -8890,7 +9137,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("import_ufunc", 0);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1047
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1047
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8906,7 +9153,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1048
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1048
  * cdef inline int import_ufunc() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -8915,7 +9162,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
  */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(1, 1048, __pyx_L3_error)
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1047
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1047
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8929,7 +9176,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1049
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1049
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -8943,12 +9190,12 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1050
+      /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1050
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__24, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1050, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__27, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1050, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -8957,7 +9204,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1047
+    /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1047
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -8972,7 +9219,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1046
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1046
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -9062,6 +9309,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_dstack, __pyx_k_dstack, sizeof(__pyx_k_dstack), 0, 0, 1, 1},
   {&__pyx_n_s_eig, __pyx_k_eig, sizeof(__pyx_k_eig), 0, 0, 1, 1},
   {&__pyx_n_s_eigh, __pyx_k_eigh, sizeof(__pyx_k_eigh), 0, 0, 1, 1},
+  {&__pyx_n_s_empty, __pyx_k_empty, sizeof(__pyx_k_empty), 0, 0, 1, 1},
   {&__pyx_n_s_end, __pyx_k_end, sizeof(__pyx_k_end), 0, 0, 1, 1},
   {&__pyx_n_s_file, __pyx_k_file, sizeof(__pyx_k_file), 0, 0, 1, 1},
   {&__pyx_n_s_fliplr, __pyx_k_fliplr, sizeof(__pyx_k_fliplr), 0, 0, 1, 1},
@@ -9095,7 +9343,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 25, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 272, __pyx_L1_error)
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(1, 856, __pyx_L1_error)
   __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(1, 1038, __pyx_L1_error)
@@ -9108,191 +9356,216 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "PostProcess_AnisotropyTensor.pyx":21
+  /* "PostProcess_AnisotropyTensor.pyx":23
  *     # TKE in the interpolated mesh
  *     # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
  *     k = 0.5*(vals3D[:, :, 0] + vals3D[:, :, 3] + vals3D[:, :, 5])             # <<<<<<<<<<<<<<
  *     # Convert Rij to bij
  *     for i in range(6):
  */
-  __pyx_slice_ = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice_)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_slice_ = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice_)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_slice_);
   __Pyx_GIVEREF(__pyx_slice_);
-  __pyx_tuple__2 = PyTuple_Pack(3, __pyx_slice_, __pyx_slice_, __pyx_int_0); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(3, __pyx_slice_, __pyx_slice_, __pyx_int_0); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
-  __pyx_tuple__3 = PyTuple_Pack(3, __pyx_slice_, __pyx_slice_, __pyx_int_3); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(3, __pyx_slice_, __pyx_slice_, __pyx_int_3); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
-  __pyx_tuple__4 = PyTuple_Pack(3, __pyx_slice_, __pyx_slice_, __pyx_int_5); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_tuple__4 = PyTuple_Pack(3, __pyx_slice_, __pyx_slice_, __pyx_int_5); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
 
-  /* "PostProcess_AnisotropyTensor.pyx":28
+  /* "PostProcess_AnisotropyTensor.pyx":30
  *     # Add each anisotropy tensor to each mesh grid location, in depth
  *     # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
  *     tensors = np.dstack((vals3D[:, :, 0], vals3D[:, :, 1], vals3D[:, :, 2],             # <<<<<<<<<<<<<<
  *                          vals3D[:, :, 1], vals3D[:, :, 3], vals3D[:, :, 4],
  *                          vals3D[:, :, 2], vals3D[:, :, 4], vals3D[:, :, 5]))
  */
-  __pyx_tuple__5 = PyTuple_Pack(3, __pyx_slice_, __pyx_slice_, __pyx_int_1); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_tuple__5 = PyTuple_Pack(3, __pyx_slice_, __pyx_slice_, __pyx_int_1); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
-  __pyx_tuple__6 = PyTuple_Pack(3, __pyx_slice_, __pyx_slice_, __pyx_int_2); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_tuple__6 = PyTuple_Pack(3, __pyx_slice_, __pyx_slice_, __pyx_int_2); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
-  /* "PostProcess_AnisotropyTensor.pyx":29
+  /* "PostProcess_AnisotropyTensor.pyx":31
  *     # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
  *     tensors = np.dstack((vals3D[:, :, 0], vals3D[:, :, 1], vals3D[:, :, 2],
  *                          vals3D[:, :, 1], vals3D[:, :, 3], vals3D[:, :, 4],             # <<<<<<<<<<<<<<
  *                          vals3D[:, :, 2], vals3D[:, :, 4], vals3D[:, :, 5]))
  *     # Reshape the z dir to 3x3 instead of 9x1
  */
-  __pyx_tuple__7 = PyTuple_Pack(3, __pyx_slice_, __pyx_slice_, __pyx_int_4); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_tuple__7 = PyTuple_Pack(3, __pyx_slice_, __pyx_slice_, __pyx_int_4); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 31, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
 
-  /* "PostProcess_AnisotropyTensor.pyx":62
+  /* "PostProcess_AnisotropyTensor.pyx":64
  *     # Also reshape eigVecsGrid from nRow x nCol x 9 to nRow x nCol x 3 x 3
  *     # so that each col of the 3 x 3 matrix is an eigenvector corresponding to an eigenvalue
  *     eigValsGrid = np.reshape(eigValsGrid[1:], (tensors.shape[0], tensors.shape[1], 3))             # <<<<<<<<<<<<<<
  *     eigVecsGrid = np.reshape(eigVecsGrid, (eigVecsGrid.shape[0], eigVecsGrid.shape[1], 3, 3))
  * 
  */
-  __pyx_slice__10 = PySlice_New(__pyx_int_1, Py_None, Py_None); if (unlikely(!__pyx_slice__10)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_slice__10 = PySlice_New(__pyx_int_1, Py_None, Py_None); if (unlikely(!__pyx_slice__10)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_slice__10);
   __Pyx_GIVEREF(__pyx_slice__10);
 
-  /* "PostProcess_AnisotropyTensor.pyx":87
+  /* "PostProcess_AnisotropyTensor.pyx":89
  *         # TKE
  *         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
  *         k = 0.5*(vals2D[:, 0] + vals2D[:, 3] + vals2D[:, 5])             # <<<<<<<<<<<<<<
  *         # Convert Rij to bij
  *         for i in range(6):
  */
-  __pyx_tuple__11 = PyTuple_Pack(2, __pyx_slice_, __pyx_int_0); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_tuple__11 = PyTuple_Pack(2, __pyx_slice_, __pyx_int_0); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 89, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__11);
   __Pyx_GIVEREF(__pyx_tuple__11);
-  __pyx_tuple__12 = PyTuple_Pack(2, __pyx_slice_, __pyx_int_3); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_tuple__12 = PyTuple_Pack(2, __pyx_slice_, __pyx_int_3); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 89, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__12);
   __Pyx_GIVEREF(__pyx_tuple__12);
-  __pyx_tuple__13 = PyTuple_Pack(2, __pyx_slice_, __pyx_int_5); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_tuple__13 = PyTuple_Pack(2, __pyx_slice_, __pyx_int_5); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 89, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__13);
   __Pyx_GIVEREF(__pyx_tuple__13);
 
-  /* "PostProcess_AnisotropyTensor.pyx":94
+  /* "PostProcess_AnisotropyTensor.pyx":96
  *         # Add each anisotropy tensor to each mesh grid location, in depth
  *         # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
  *         tensors = np.dstack((vals2D[:, 0], vals2D[:, 1], vals2D[:, 2],             # <<<<<<<<<<<<<<
  *                              vals2D[:, 1], vals2D[:, 3], vals2D[:, 4],
  *                              vals2D[:, 2], vals2D[:, 4], vals2D[:, 5]))
  */
-  __pyx_tuple__14 = PyTuple_Pack(2, __pyx_slice_, __pyx_int_1); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_tuple__14 = PyTuple_Pack(2, __pyx_slice_, __pyx_int_1); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 96, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__14);
   __Pyx_GIVEREF(__pyx_tuple__14);
-  __pyx_tuple__15 = PyTuple_Pack(2, __pyx_slice_, __pyx_int_2); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_tuple__15 = PyTuple_Pack(2, __pyx_slice_, __pyx_int_2); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 96, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__15);
   __Pyx_GIVEREF(__pyx_tuple__15);
 
-  /* "PostProcess_AnisotropyTensor.pyx":95
+  /* "PostProcess_AnisotropyTensor.pyx":97
  *         # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
  *         tensors = np.dstack((vals2D[:, 0], vals2D[:, 1], vals2D[:, 2],
  *                              vals2D[:, 1], vals2D[:, 3], vals2D[:, 4],             # <<<<<<<<<<<<<<
  *                              vals2D[:, 2], vals2D[:, 4], vals2D[:, 5]))
  * 
  */
-  __pyx_tuple__16 = PyTuple_Pack(2, __pyx_slice_, __pyx_int_4); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_tuple__16 = PyTuple_Pack(2, __pyx_slice_, __pyx_int_4); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 97, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__16);
   __Pyx_GIVEREF(__pyx_tuple__16);
 
-  /* "PostProcess_AnisotropyTensor.pyx":163
+  /* "PostProcess_AnisotropyTensor.pyx":114
+ *     # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
+ *     # Each col of eigVecs is a vector, thus 3 x 3
+ *     eigVals_0, eigVecs_0 = np.linalg.eigh(tensors[0, 0, :, :])             # <<<<<<<<<<<<<<
+ *     eigVals_0, eigVecs_0 = np.flipud(eigVals_0), np.fliplr(eigVecs_0)
+ *     # eigVecs4D is nX x nY x 9, where 9 is the flattened eigenvector matrix from np.linalg.eigh()
+ */
+  __pyx_tuple__17 = PyTuple_Pack(4, __pyx_int_0, __pyx_int_0, __pyx_slice_, __pyx_slice_); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 114, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__17);
+  __Pyx_GIVEREF(__pyx_tuple__17);
+
+  /* "PostProcess_AnisotropyTensor.pyx":119
+ *     # eigVals3D, eigVecs4D = np.zeros(3), np.zeros((tensors.shape[0], 1, 9))
+ *     eigVals3D, eigVecs4D = np.empty((tensors.shape[0], 3)), np.empty((tensors.shape[0], 1, 9))
+ *     eigVals3D[0, :], eigVecs4D[0, 0, :] = eigVals_0, eigVecs_0.ravel()             # <<<<<<<<<<<<<<
+ *     # For gauging progress
+ *     milestone = 10
+ */
+  __pyx_tuple__18 = PyTuple_Pack(2, __pyx_int_0, __pyx_slice_); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(0, 119, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__18);
+  __Pyx_GIVEREF(__pyx_tuple__18);
+  __pyx_tuple__19 = PyTuple_Pack(3, __pyx_int_0, __pyx_int_0, __pyx_slice_); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 119, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__19);
+  __Pyx_GIVEREF(__pyx_tuple__19);
+
+  /* "PostProcess_AnisotropyTensor.pyx":191
  * 
  *     numPoints = labels.shape[0]
  *     A = np.zeros((3, 3))             # <<<<<<<<<<<<<<
  *     for i in range(numPoints):
  *         # Scales all on-diags to retain zero trace
  */
-  __pyx_tuple__17 = PyTuple_Pack(2, __pyx_int_3, __pyx_int_3); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 163, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__17);
-  __Pyx_GIVEREF(__pyx_tuple__17);
+  __pyx_tuple__20 = PyTuple_Pack(2, __pyx_int_3, __pyx_int_3); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 191, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__20);
+  __Pyx_GIVEREF(__pyx_tuple__20);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":272
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":272
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_ARRAY_C_CONTIGUOUS)):
  *                 raise ValueError(u"ndarray is not C contiguous")             # <<<<<<<<<<<<<<
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  */
-  __pyx_tuple__18 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_C_contiguous); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(1, 272, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__18);
-  __Pyx_GIVEREF(__pyx_tuple__18);
+  __pyx_tuple__21 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_C_contiguous); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(1, 272, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__21);
+  __Pyx_GIVEREF(__pyx_tuple__21);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":276
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":276
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_ARRAY_F_CONTIGUOUS)):
  *                 raise ValueError(u"ndarray is not Fortran contiguous")             # <<<<<<<<<<<<<<
  * 
  *             info.buf = PyArray_DATA(self)
  */
-  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_Fortran_contiguou); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(1, 276, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__19);
-  __Pyx_GIVEREF(__pyx_tuple__19);
+  __pyx_tuple__22 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_Fortran_contiguou); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(1, 276, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__22);
+  __Pyx_GIVEREF(__pyx_tuple__22);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":306
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":306
  *                 if ((descr.byteorder == c'>' and little_endian) or
  *                     (descr.byteorder == c'<' and not little_endian)):
  *                     raise ValueError(u"Non-native byte order not supported")             # <<<<<<<<<<<<<<
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  */
-  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(1, 306, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__20);
-  __Pyx_GIVEREF(__pyx_tuple__20);
+  __pyx_tuple__23 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(1, 306, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__23);
+  __Pyx_GIVEREF(__pyx_tuple__23);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":856
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":856
  * 
  *         if (end - f) - <int>(new_offset - offset[0]) < 15:
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")             # <<<<<<<<<<<<<<
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  */
-  __pyx_tuple__21 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(1, 856, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__21);
-  __Pyx_GIVEREF(__pyx_tuple__21);
+  __pyx_tuple__24 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(1, 856, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__24);
+  __Pyx_GIVEREF(__pyx_tuple__24);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":880
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":880
  *             t = child.type_num
  *             if end - f < 5:
  *                 raise RuntimeError(u"Format string allocated too short.")             # <<<<<<<<<<<<<<
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  */
-  __pyx_tuple__22 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor_2); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(1, 880, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__22);
-  __Pyx_GIVEREF(__pyx_tuple__22);
+  __pyx_tuple__25 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor_2); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(1, 880, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__25);
+  __Pyx_GIVEREF(__pyx_tuple__25);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1038
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1038
  *         _import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
  * 
  * cdef inline int import_umath() except -1:
  */
-  __pyx_tuple__23 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(1, 1038, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__23);
-  __Pyx_GIVEREF(__pyx_tuple__23);
+  __pyx_tuple__26 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(1, 1038, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__26);
+  __Pyx_GIVEREF(__pyx_tuple__26);
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1044
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1044
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  * 
  * cdef inline int import_ufunc() except -1:
  */
-  __pyx_tuple__24 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(1, 1044, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__24);
-  __Pyx_GIVEREF(__pyx_tuple__24);
+  __pyx_tuple__27 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(1, 1044, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__27);
+  __Pyx_GIVEREF(__pyx_tuple__27);
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -9301,6 +9574,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 }
 
 static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
+  /* InitThreads.init */
+  #ifdef WITH_THREAD
+PyEval_InitThreads();
+#endif
+
+if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
+
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
   __pyx_float_2_ = PyFloat_FromDouble(2.); if (unlikely(!__pyx_float_2_)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_3_ = PyFloat_FromDouble(3.); if (unlikely(!__pyx_float_3_)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -9620,7 +9900,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "PostProcess_AnisotropyTensor.pyx":147
+  /* "PostProcess_AnisotropyTensor.pyx":175
  * @cython.wraparound(False)
  * @cython.cdivision(True)
  * cdef np.ndarray[np.float_t, ndim = 2] make_realizable(np.ndarray[np.float_t, ndim = 2] labels):             # <<<<<<<<<<<<<<
@@ -9632,7 +9912,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "C:/Users/Yuyang/venv/python3.7/lib/site-packages/Cython/Includes/numpy/__init__.pxd":1046
+  /* "../../../opt/miniconda3/envs/SOWFA-Postprocess/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1046
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
