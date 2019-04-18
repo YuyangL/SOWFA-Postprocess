@@ -22,7 +22,9 @@ caseDir = '/media/yluan'
 caseName = 'ALM_N_H_OneTurb'
 propertyName = 'uuPrime2'
 # sliceNames = ('rotorPlane', 'oneDdownstreamTurbine', 'threeDdownstreamTurbine', 'sevenDdownstreamTurbine')
-sliceNames = ('groundHeight', 'hubHeight', 'turbineApexHeight')
+sliceNames = ('groundHeight', 'hubHeight', 'turbineApex')
+# Subscript for the slice names
+sliceNamesSub = 'Slice'
 resultFolder = 'Result'
 # Confine the region of interest, list grows with number of slices
 # (800, 1800, 800, 1800, 0, 405) good for rotor plane slice
@@ -93,7 +95,7 @@ Read Slice Data
 """
 case = SliceProperties(time = time, caseDir = caseDir, caseName = caseName, xOrientate = xOrientate, resultFolder =
 resultFolder)
-case.readSlices(propertyName = propertyName, sliceNames = sliceNames)
+case.readSlices(propertyNames = propertyName, sliceNames = sliceNames, sliceNamesSub = sliceNamesSub)
 listX2D, listY2D, listZ2D, listRGB = [], [], [], []
 # Go through specified slices
 for i, sliceName in enumerate(case.sliceNames):

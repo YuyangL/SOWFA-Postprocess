@@ -463,8 +463,8 @@ class BaseFigure3D(BaseFigure):
 
 
 class PlotContourSlices3D(BaseFigure3D):
-    def __init__(self, contourX2D, contourY2D, listSlices2D, sliceOffsets, zDir = 'z', contourLvl = 10, gradientBg = True, **kwargs):
-        super(PlotContourSlices3D, self).__init__(listX2D = contourX2D, listY2D = contourY2D, **kwargs)
+    def __init__(self, contourX2D, contourY2D, listSlices2D, sliceOffsets, zDir = 'z', contourLvl = 10, gradientBg = True, equalAxis = False, **kwargs):
+        super(PlotContourSlices3D, self).__init__(listX2D = contourX2D, listY2D = contourY2D, equalAxis = equalAxis, **kwargs)
 
         self.listSlices2D = (listSlices2D,) if isinstance(listSlices2D, np.ndarray) else listSlices2D
         self.sliceOffsets, self.zDir = iter(sliceOffsets), zDir
@@ -481,18 +481,19 @@ class PlotContourSlices3D(BaseFigure3D):
         # if self.zLim[0] is None:
         #     self.zLim = (np.min(listSlices2D), np.max(listSlices2D))
         _ = self.getSlicesLimits(listX2D = self.listX2D, listY2D = self.listY2D, listZ2D = self.listSlices2D)
-        self.sliceMin, self.sliceMax = self.zLim
+        # self.sliceMin, self.sliceMax = self.zLim
+        self.sliceMin, self.sliceMax = np.amin(listSlices2D), np.amax(listSlices2D)
         self.contourLvl, self.gradientBg = contourLvl, gradientBg
-        # Good initial view angle
-        self.viewAngles = (20, -115) if zDir is 'z' else (15, -60)
+        # # Good initial view angle
+        # self.viewAngles = (20, -115) if zDir is 'z' else (15, -60)
         self.cbarOrientate = 'vertical' if zDir is 'z' else 'horizontal'
 
 
-    def initializeFigure(self, **kwargs):
-        # If zDir is 'z', then the figure height is twice width, else, figure width is twice height
-        figSize = (2.75, 1) if self.zDir is 'z' else (1, 2)
-
-        super().initializeFigure(figSize = figSize)
+    # def initializeFigure(self, figSize = (1, 1)):
+    #     # If zDir is 'z', then the figure height is twice width, else, figure width is twice height
+    #     # figSize = (2.75, 1) if self.zDir is 'z' else (1, 2)
+    #
+    #     super().initializeFigure(figSize = figSize)
 
 
     def plotFigure(self):

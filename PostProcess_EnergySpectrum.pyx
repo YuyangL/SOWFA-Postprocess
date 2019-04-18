@@ -75,104 +75,97 @@ cpdef tuple readStructuredSliceData(str sliceName, str case = 'ABL_N_H', str cas
     return x2D, y2D, z2D, scalarField2D, u2D, v2D, w2D
 
 
-# [DEPRECATED] Refer to Visual_EnergySpectrum.getPlanarEnergySpectrum()
-#@cython.boundscheck(False)
-#@cython.wraparound(False)
-#@cython.cdivision(True)
-#cpdef tuple getSliceEnergySpectrum(np.ndarray[np.float_t, ndim = 2] u2D, np.ndarray[np.float_t, ndim = 2] v2D, np.ndarray[np.float_t, ndim = 2] w2D, list cellSizes, str type = 'decomposed'):
-#    print('\nThis function is deprecated! The performance is slow and the results are incorrect!')
-#    print('\nRefer to Visual_EnergySpectrum.getPlanarEnergySpectrum()')
-#    cdef np.ndarray[np.float_t, ndim = 2] uRes2D, vRes2D, wRes2D
-#    cdef np.ndarray[np.float_t, ndim = 2] uResFft, vResFft, wResFft
-#    cdef np.ndarray[np.float_t] freqX, freqY
-#    cdef np.ndarray[np.float_t] Kr, Eii_r, Eij_r, E33_r, KrSorted, EiiSorted, EijSorted, E33Sorted
-#    cdef np.ndarray[np.int_t] sortIdx
-#    cdef np.ndarray[np.float_t, ndim = 2] Eii, Eij, E33
-#    cdef int nX, nY, i_r, i, j, iNew
-#    cdef double Eii_repeated, Eij_repeated, E33_repeated, match
-#
-#    # Velocity fluctuations
-#    # The mean here is spatial average in slice plane
-#    # The Taylor hypothesis states that for fully developed turbulence,
-#    # the spatial average and the time average are equivalent
-#    uRes2D, vRes2D, wRes2D = u2D - u2D.mean(), v2D - v2D.mean(), w2D - w2D.mean()
-##    # Normalized
-##    uRes2D, vRes2D, wRes2D = (u2D - u2D.mean())/u2D.mean(), (v2D - v2D.mean())/v2D.mean(), (w2D - w2D.mean())/w2D.mean()
-#    # Perform 2D FFT
-#    uResFft = np.fft.fft2(uRes2D, axes = (0, 1))
-#    vResFft = np.fft.fft2(vRes2D, axes = (0, 1))
-#    wResFft = np.fft.fft2(wRes2D, axes = (0, 1))
-#    # Shift FFT results so that 0-frequency component is in the center of the spectrum
-#    uResFft, vResFft, wResFft = np.fft.fftshift(uResFft), np.fft.fftshift(vResFft), np.fft.fftshift(wResFft)
-#    nX, nY = uRes2D.shape[1], uRes2D.shape[0]
-#    # Frequencies are number of rows/columns with a unit of cellSize meters
-#    # Note these are wavelength vector (Kx, Ky)
-#    freqX, freqY = np.fft.fftfreq(nX, d = cellSizes[0]), np.fft.fftfreq(nY, d = cellSizes[1])
-#    # Also shift corresponding frequencies
-#    freqX, freqY = np.fft.fftshift(freqX), np.fft.fftshift(freqY)
-#    # Calculate energy density Eii(Kx, Ky) (per d(Kx, Ky))
-#    # If 'decomposed' type, calculate E of horizontal velocity and vertical separately
-#    if type == 'decomposed':
-#        # Eii(Kx, Ky) = 0.5(|uResFft(Kx, Ky)^2| + ...)
-#        # u*np.conj(u) equals |u|^2
-#        # abs() to get the real part
-#        Eii = 0.5*np.abs(uResFft*np.conj(uResFft) + vResFft*np.conj(vResFft))
-##        # Not sure about this
-##        Eij = 0.5*np.abs(uResFft*np.conj(vResFft) + vResFft*np.conj(uResFft))
-#        # Vertical E separate from the horizontal one
-#        E33 = 0.5*np.abs(wResFft*np.conj(wResFft))
-#    else:
-#        Eii = 0.5*np.abs(uResFft*np.conj(uResFft) + vResFft*np.conj(vResFft) + wResFft*np.conj(wResFft))
-#        # Dummy array for vertical E33 and Eij
-#        Eij, E33 = np.zeros((wResFft.shape[0], wResFft.shape[1])), np.zeros((wResFft.shape[0], wResFft.shape[1]))
-#
-#    # No Eij yet
-#    # Convert (Kx, Ky) to Kr for 1D energy spectrum result/plot
-#    # First, get all Kr[i_r] = sqrt(Kx^2 + Ky^2) and its corresponding Eii(Kr)
-#    Kr = np.empty(len(freqX)*len(freqY))
-#    Eii_r, E33_r = np.empty(len(freqX)*len(freqY)), np.empty(len(freqX)*len(freqY))
-#    i_r = 0
-#    for iX in range(len(freqX)):
-#        for iY in range(len(freqY)):
-#            Kr[i_r] = np.sqrt(freqX[iX]**2 + freqY[iY]**2)
-#            Eii_r[i_r], E33_r[i_r] = Eii[iY, iX], E33[iY, iX]
-#            i_r += 1
-#
-#    # Then, sort Kr from low to high and sort Eii(Kr) accordingly
-#    KrSorted = np.sort(Kr)
-#    sortIdx = np.argsort(Kr)
-#    EiiSorted, E33Sorted = Eii_r[sortIdx], E33_r[sortIdx]
-#    # Lastly, find all Eii, Eij, E33 of equal Kr and line-integrate over co-centric Kr (would have been sphere for slice not slice)
-#    E, Evert, KrFinal = [], [], []
-#    i = 0
-#    # Go through all Kr from low to high
-#    while i < len(KrSorted):
-#        # Remember E of current Kr[i]
-#        Eii_repeated, E33_repeated = EiiSorted[i], E33Sorted[i]
-#        match = 0.
-#        # Go through the rest of Kr other than Kr[i]
-#        for j in range(i + 1, len(KrSorted)):
-#            # If the other Kr[j] matches current Kr[i]
-#            if KrSorted[j] == KrSorted[i]:
-#                Eii_repeated += EiiSorted[j]
-#                E33_repeated += E33Sorted[j]
-#                iNew = j
-#                match += 1.
-#
-#        # If Kr[i] is unique, no change to new i
-#        if match == 0:
-#            iNew = i
-#        # If multiple matches, i.e. if multiple E in the same cocentric ring, then get the average E
-#        else:
-#            Eii_repeated /= (match + 1)
-#            E33_repeated /= (match + 1)
-#
-##        E.append(Eii_repeated*2*np.pi*KrSorted[i])
-##        Evert.append(E33_repeated*2*np.pi*KrSorted[i])
-#        E.append(Eii_repeated)
-#        Evert.append(E33_repeated)
-#        KrFinal.append(KrSorted[i])
-#        i = iNew + 1
-#
-#    print('\nEnergy spectrum calculated')
-#    return np.array(E), np.array(Evert), np.array(KrFinal)
+@cython.boundscheck(False)
+@cython.wraparound(False)
+@cython.cdivision(True)
+cpdef getPlanarEnergySpectrum(np.ndarray[np.float_t, ndim= 2] u2D, np.ndarray[np.float_t, ndim= 2] v2D, np.ndarray[np.float_t, ndim= 2] w2D, double L, tuple cellSizes2D, horizontalEii = False):
+    cdef np.ndarray[np.float_t, ndim = 2] uRes2D, vRes2D, wRes2D, KrOld
+    cdef np.ndarray[np.complex128_t, ndim = 2] uResFft, vResFft, wResFft
+    cdef double TKE, Kr0
+    cdef int nPtX, nPtY, i, j
+    cdef tuple U1ResFft, U2ResFft
+    cdef np.ndarray[np.complex128_t, ndim = 2] RiiFft, Eij
+    cdef np.ndarray[np.complex128_t, ndim = 3] RijFft
+    cdef np.ndarray[np.complex128_t] Eii
+    cdef np.ndarray[np.float_t] Kr, occurrence
+
+    # Velocity fluctuations
+    # The mean here is spatial average in slice plane
+    # The Taylor hypothesis states that for fully developed turbulence,
+    # the spatial average and the time average are equivalent
+    uRes2D, vRes2D, wRes2D = u2D - u2D.mean(), v2D - v2D.mean(), w2D - w2D.mean()
+    # TKE calculated form physical space
+    TKE = 0.5*np.sum(uRes2D**2 + vRes2D**2 + wRes2D**2)
+    # Number of samples in x and y/z, columns correspond to x
+    nPtX, nPtY = uRes2D.shape[1], uRes2D.shape[0]
+    # 2D DFT, no normalization (will be done manually below)
+    uResFft, vResFft, wResFft = np.fft.fft2(uRes2D, axes = (0, 1), norm = None), \
+                                np.fft.fft2(vRes2D, axes = (0, 1), norm = None), \
+                                np.fft.fft2(wRes2D, axes = (0, 1), norm = None)
+    # Normalization by N^(dimension)
+    uResFft /= (nPtX*nPtY)
+    vResFft /= (nPtX*nPtY)
+    wResFft /= (nPtX*nPtY)
+
+    # Corresponding frequency in x and y/z directions, expressed in cycles/m
+    # Kx corresponds to k/n in np.fft.fft documentation, where
+    # k = 0, ..., (n - 1)/2; n is number of samples
+    # Number of columns are number of x
+    # d is sample spacing, which should be equidistant,
+    # in this case, cell size in x and y/z respectively
+    Kx, Ky = np.fft.fftfreq(nPtX, d = cellSizes2D[0]), np.fft.fftfreq(nPtY, d = cellSizes2D[1])
+    # Kx and Ky/Kz is defined as 2n*pi/L, while the K in np.fft.fftn() is simply n/L, n in [1, N]
+    # Thus scale old Kx, Ky/Kz by 2pi and 2D meshgrid treatment
+    Kx *= 2*np.pi
+    Ky *= 2*np.pi
+    Kx, Ky = np.meshgrid(Kx, Ky)
+    # Before calculating (cross-)correlation, add arrays to 2 tuples
+    U1ResFft = (uResFft, uResFft, uResFft, vResFft, vResFft, wResFft)
+    U2ResFft = (uResFft, vResFft, wResFft, vResFft, wResFft, wResFft)
+    # Initialize 2D Rij in spectral space
+    RijFft = np.empty((nPtY, nPtX, 6), dtype = np.complex128)
+    # Go through each component of RijFft
+    # The 6 components are 11, 12, 13,
+    # 22, 23,
+    # 33
+    for i in range(6):
+        # Perform the 2-point (cross-)correlation
+        RijFft[:, :, i] = np.multiply(U1ResFft[i], np.conj(U2ResFft[i]))
+
+    # Trace of 2-point correlations
+    # If decompose Rii to horizontal Rii and R33
+    if horizontalEii:
+        RiiFft = RijFft[:, :, 0] + RijFft[:, :, 3]
+    else:
+        RiiFft = RijFft[:, :, 0] + RijFft[:, :, 3] + RijFft[:, :, 5]
+
+    # Original resultant Kr
+    KrOld = np.sqrt(Kx**2 + Ky**2)
+    # New proposed Kr for E spectrum, same number of points as x
+    Kr0 = 2*np.pi/L
+    Kr = Kr0*np.linspace(1, nPtX, nPtX)
+    # Initialize Eij combined from 2D to 1D
+    # Eij[i] is 0.5ui'uj' = 0.5sum(Rij of equal Kr[i])
+    Eij = np.empty((len(Kr), 6), dtype = np.complex128)
+    Eii = np.empty_like(Kr, dtype = np.complex128)
+    # Occurrence when KrOld is close to each Kr[i]
+    occurrence = np.empty(len(Kr))
+    # Go through each proposed Kr
+    # Integrate Rij where KrOld lies between Kr0*[(i + 1) - 0.5, (i + 1) + 0.5)
+    # This is possible since RijFft and KrOld has matching 2D indices
+    for i in range(len(Kr)):
+        occurrence[i] = len(KrOld[(KrOld >= Kr0*(i + 1 - 0.5)) & (KrOld < Kr0*(i + 1 + 0.5))])
+        # For Eij, go through all 6 components
+        for j in range(6):
+            Eij[i, j] = 0.5*np.sum(RijFft[:, :, j][(KrOld >= Kr0*(i + 1 - 0.5)) & (KrOld < Kr0*(i + 1 + 0.5))])
+
+        Eii[i] = 0.5*np.sum(RiiFft[(KrOld >= Kr0*(i + 1 - 0.5)) & (KrOld < Kr0*(i + 1 + 0.5))])
+
+    # # If done right, TKE from energy spectrum should equal TKE in physical space
+    # TKE_k = sum(Eii)*nPtX*nPtY
+
+    # # Optional equal Kr histogram
+    # plt.figure('Histogram')
+    # plt.hist(occurrence)
+
+    return RiiFft, Eii, RijFft, Eij, Kx, Ky, Kr, TKE

@@ -16,7 +16,7 @@ class SliceProperties:
         # Add the selected time folder in result path if not existent already
         self.resultPath += self.time + '/'
         try:
-            os.mkdir(self.resultPath)
+            os.makedirs(self.resultPath)
         except OSError:
             pass
 
@@ -26,28 +26,33 @@ class SliceProperties:
 
 
     @timer
-    @jit(parallel = True, fastmath = True)
-    def readSlices(self, propertyName = 'U', sliceNames = ('alongWind',), sliceNamesSub = '_Slice', skipCol = 3, skipRow = 0, fileExt = '.raw'):
+    # Numba prange doesn't support dict
+    # @jit(parallel = True, fastmath = True)
+    def readSlices(self, propertyNames = ('U',), sliceNames = ('alongWind',), sliceNamesSub = 'Slice', skipCol = 3, skipRow = 0, fileExt = 'raw'):
         # First 3 columns are x, y, z, thus skipCol = 3
         # skipRow unnecessary since np.genfromtxt trim any header with # at front
         # self.sliceNames need to mutable
-        self.sliceNames = list((sliceNames,)) if isinstance(sliceNames, str) else list(sliceNames)
+        # self.sliceNames = list((sliceNames,)) if isinstance(sliceNames, str) else list(sliceNames)
+        sliceNames = (sliceNames,) if isinstance(sliceNames, str) else sliceNames
+        self.propertyNames = (propertyNames,) if isinstance(propertyNames, str) else propertyNames
         # Combine propertyName with sliceNames and Subscript to form the full file names
         # Don't know why I had to copy it...
-        # self.fileNames = list(sliceNames).copy()
-        for i in prange(len(self.sliceNames)):
-            self.sliceNames[i] = propertyName + '_' + self.sliceNames[i]
+        # self.sliceNames = ['placeholder']*len(sliceNames)*len(propertyNames)
+        self.sliceNames = []
+        for propertyName in self.propertyNames:
+            for sliceName in sliceNames:
+                self.sliceNames.append(propertyName + '_' + sliceName)
 
         self.slicesVal, self.slicesOrientate, self.slicesCoor = {}, {}, {}
         # Go through all specified slices
         # and append coordinates,, slice type (vertical or horizontal), and slice values each to dictionaries
         # Keys are slice names
-        for i in prange(len(self.sliceNames)):
-            vals = np.genfromtxt(self.caseFullPath + self.sliceNames[i] + sliceNamesSub + fileExt)
+        for sliceName in self.sliceNames:
+            vals = np.genfromtxt(self.caseFullPath + sliceName + '_' + sliceNamesSub + '.' + fileExt)
             # If max(z) - min(z) < 1 then it's assumed horizontal
             # partition('.') removes anything after '.'
             # fileName.partition('.')[0]
-            self.slicesOrientate[self.sliceNames[i]] = 'vertical' if (vals[skipRow:, 2]).max() - (
+            self.slicesOrientate[sliceName] = 'vertical' if (vals[skipRow:, 2]).max() - (
                 vals[skipRow:, 2]).min() > 1. else 'horizontal'
             # # If interpolation enabled
             # if interpMethod not in ('none', 'None'):
@@ -58,9 +63,9 @@ class SliceProperties:
             #
             # else:
             # X, Y, Z coordinate dictionary without interpolation
-            self.slicesCoor[self.sliceNames[i]] = vals[skipRow:, :skipCol]
+            self.slicesCoor[sliceName] = vals[skipRow:, :skipCol]
             # Vals dictionary without interpolation
-            self.slicesVal[self.sliceNames[i]] = vals[skipRow:, skipCol:]
+            self.slicesVal[sliceName] = vals[skipRow:, skipCol:]
 
         print('\n' + str(self.sliceNames) + ' read')
         # return slicesCoor, slicesOrientate, slicesVal
@@ -404,6 +409,349 @@ class SliceProperties:
         valsDecomp['hor'] = np.sqrt(valsDecomp['0']**2 + valsDecomp['1']**2)
         return valsDecomp
 
+
+    @staticmethod
+    @timer
+    @jit(parallel = True, fastmath = True)
+    def calcSliceMeanDissipationRate(epsilonSGSmean, nuSGSmean, nu = 1e-5, save = False, resultPath = '.'):
+        # According to Eq 5.64 - Eq 5.68 of Sagaut (2006), for isotropic homogeneous turbulence,
+        # <epsilon> = <epsilon_resolved> + <epsilon_SGS>,
+        # <epsilon_resolved>/<epsilon_SGS> = 1/(1 + (<nu_SGS>/nu)),
+        # where epsilon is the total turbulence dissipation rate (m^2/s^3); and <> is statistical averaging
+        epsilonMean = epsilonSGSmean/(1 - (1/(1 + nuSGSmean/nu)))
+
+        if save:
+            pickle.dump(epsilonMean, open(resultPath + '/epsilonMean.p', 'wb'))
+            print('\nepsilonMean saved at {0}'.format(resultPath))
+
+        return epsilonMean
+
+
+    @staticmethod
+    @timer
+    # Advanced slicing not supported by njit, e.g. Sij[Sij > cap] - ...
+    @jit(parallel = True, fastmath = True)
+    def calcSliceSijAndRij(grad_u, tke, eps, cap = 7.):
+        """
+        Calculates the non-dimonsionalized strain rate and rotation rate tensors.  Normalizes by k and eps:
+        Sij = k/eps * 0.5* (grad_u  + grad_u^T)
+        Rij = k/eps * 0.5* (grad_u  - grad_u^T)
+        :param grad_u: num_points X 3 X 3
+        :param tke: turbulent kinetic energy
+        :param eps: turbulent dissipation rate epsilon
+        :param cap: This is the max magnitude that Sij or Rij components are allowed.  Greater values
+                    are capped at this level
+        :return: Sij, Rij: num_points X 3 X 3 tensors
+        """
+
+        if len(grad_u.shape) == 2 and grad_u.shape[1] == 9:
+            grad_u = grad_u.reshape((grad_u.shape[0], 3, 3))
+
+        if len(tke.shape) == 2:
+            tke = tke.ravel()
+
+        if len(eps.shape) == 2:
+            eps = eps.ravel()
+
+        num_points = grad_u.shape[0]
+        eps = np.maximum(eps, 1e-8)
+        tke_eps = tke/eps
+        Sij = np.zeros((num_points, 3, 3))
+        Rij = np.zeros((num_points, 3, 3))
+        for i in prange(num_points):
+            Sij[i, :, :] = tke_eps[i]*0.5*(grad_u[i, :, :] + np.transpose(grad_u[i, :, :]))
+            Rij[i, :, :] = tke_eps[i]*0.5*(grad_u[i, :, :] - np.transpose(grad_u[i, :, :]))
+
+        maxSij, maxRij = np.amax(Sij), np.amax(Rij)
+        minSij, minRij = np.amin(Sij), np.amin(Rij)
+        print(' Max of Sij is ' + str(maxSij) + ', and of Rij is ' + str(maxRij))
+        print(' Min of Sij is ' + str(minSij) + ', and of Rij is ' + str(minRij))
+        # Why caps?????????????
+        Sij[Sij > cap] = cap
+        Sij[Sij < -cap] = -cap
+        Rij[Rij > cap] = cap
+        Rij[Rij < -cap] = -cap
+
+        # Because we enforced limits on maximum Sij values, we need to re-enforce trace of 0
+        for i in prange(num_points):
+            Sij[i, :, :] = Sij[i, :, :] - 1/3.*np.eye(3)*np.trace(Sij[i, :, :])
+
+        return Sij, Rij
+    
+    
+    @staticmethod
+    @timer
+    # Numba is unable to determine "self" type
+    @jit(parallel = True, fastmath = True)
+    def calcSliceScalarBasis(Sij, Rij, is_train = False, cap = 2.0, is_scale = True, mean = None, std = None):
+        """
+        Given the non-dimensionalized mean strain rate and mean rotation rate tensors Sij and Rij,
+        this returns a set of normalized scalar invariants
+        :param Sij: k/eps * 0.5 * (du_i/dx_j + du_j/dx_i)
+        :param Rij: k/eps * 0.5 * (du_i/dx_j - du_j/dx_i)
+        :param is_train: Determines whether normalization constants should be reset
+                        --True if it is training, False if it is test set
+        :param cap: Caps the max value of the invariants after first normalization pass
+        :return: invariants: The num_points X num_scalar_invariants numpy matrix of scalar invariants
+        :return: mean: Mean of the scalar basis, can be used when predicting
+        :return: std: Standard deviation of the scalar basis, can be used when predicting
+        >>> A = np.zeros((1, 3, 3))
+        >>> B = np.zeros((1, 3, 3))
+        >>> A[0, :, :] = np.eye(3) * 2.0
+        >>> B[0, 1, 0] = 1.0
+        >>> B[0, 0, 1] = -1.0
+        >>> tdp = PostProcess_SliceData()
+        >>> scalar_basis, mean, std = tdp.calcSliceScalarBasis(A, B, is_scale=False)
+        >>> print scalar_basis
+        [[ 12.  -2.  24.  -4.  -8.]]
+        """
+        if is_train or mean is None or std is None:
+            print("Re-setting normalization constants")
+            
+        num_points = Sij.shape[0]
+        num_invariants = 5
+        invariants = np.zeros((num_points, num_invariants))
+        for i in prange(num_points):
+            invariants[i, 0] = np.trace(np.dot(Sij[i, :, :], Sij[i, :, :]))
+            invariants[i, 1] = np.trace(np.dot(Rij[i, :, :], Rij[i, :, :]))
+            invariants[i, 2] = np.trace(np.dot(Sij[i, :, :], np.dot(Sij[i, :, :], Sij[i, :, :])))
+            invariants[i, 3] = np.trace(np.dot(Rij[i, :, :], np.dot(Rij[i, :, :], Sij[i, :, :])))
+            invariants[i, 4] = np.trace(
+                np.dot(np.dot(Rij[i, :, :], Rij[i, :, :]), np.dot(Sij[i, :, :], Sij[i, :, :])))
+
+        # Renormalize invariants using mean and standard deviation:
+        if is_scale:
+            if mean is None or std is None:
+                is_train = True
+
+            if is_train:
+                mean = np.zeros((num_invariants, 2))
+                std = np.zeros((num_invariants, 2))
+                mean[:, 0] = np.mean(invariants, axis = 0)
+                std[:, 0] = np.std(invariants, axis = 0)
+
+            invariants = (invariants - mean[:, 0])/std[:, 0]
+            maxInvariants, minInvariants = np.amax(invariants), np.amin(invariants)
+            print(' Max of scaled scalar basis is {}'.format(maxInvariants))
+            print(' Min of scaled scalar basis is {}'.format(minInvariants))
+            # Why cap?????
+            invariants[invariants > cap] = cap  # Cap max magnitude
+            invariants[invariants < -cap] = -cap
+            invariants = invariants*std[:, 0] + mean[:, 0]
+            if is_train:
+                mean[:, 1] = np.mean(invariants, axis = 0)
+                std[:, 1] = np.std(invariants, axis = 0)
+
+            invariants = (invariants - mean[:, 1])/std[:, 1]  # Renormalize a second time after capping
+        return invariants, mean, std
+
+
+    @staticmethod
+    @timer
+    @njit(parallel = True, fastmath = True)
+    def calcSliceTensorBasis(Sij, Rij, quadratic_only = False, is_scale = True):
+        """
+        Given non-dimsionalized Sij and Rij, it calculates the tensor basis
+        :param Sij: normalized strain rate tensor
+        :param Rij: normalized rotation rate tensor
+        :param quadratic_only: True if only linear and quadratic terms are desired.  False if full basis is desired.
+        :return: T_flat: num_points X num_tensor_basis X 9 numpy array of tensor basis.
+                        Ordering is 11, 12, 13, 21, 22, ...
+        >>> A = np.zeros((1, 3, 3))
+        >>> B = np.zeros((1, 3, 3))
+        >>> A[0, :, :] = np.eye(3)
+        >>> B[0, 1, 0] = 3.0
+        >>> B[0, 0, 1] = -3.0
+        >>> tdp = PostProcess_SliceData()
+        >>> tb = tdp.calcSliceTensorBasis(A, B, is_scale=False)
+        >>> print tb[0, :, :]
+        [[  0.   0.   0.   0.   0.   0.   0.   0.   0.]
+         [  0.   0.   0.   0.   0.   0.   0.   0.   0.]
+         [  0.   0.   0.   0.   0.   0.   0.   0.   0.]
+         [ -3.   0.   0.   0.  -3.   0.   0.   0.   6.]
+         [  0.   0.   0.   0.   0.   0.   0.   0.   0.]
+         [ -6.   0.   0.   0.  -6.   0.   0.   0.  12.]
+         [  0.   0.   0.   0.   0.   0.   0.   0.   0.]
+         [  0.   0.   0.   0.   0.   0.   0.   0.   0.]
+         [ -6.   0.   0.   0.  -6.   0.   0.   0.  12.]
+         [  0.   0.   0.   0.   0.   0.   0.   0.   0.]]
+        """
+        num_points = Sij.shape[0]
+        if not quadratic_only:
+            num_tensor_basis = 10
+        else:
+            num_tensor_basis = 4
+
+        T = np.zeros((num_points, num_tensor_basis, 3, 3))
+        for i in prange(num_points):
+            sij = Sij[i, :, :]
+            rij = Rij[i, :, :]
+            T[i, 0, :, :] = sij
+            T[i, 1, :, :] = np.dot(sij, rij) - np.dot(rij, sij)
+            T[i, 2, :, :] = np.dot(sij, sij) - 1./3.*np.eye(3)*np.trace(np.dot(sij, sij))
+            T[i, 3, :, :] = np.dot(rij, rij) - 1./3.*np.eye(3)*np.trace(np.dot(rij, rij))
+            if not quadratic_only:
+                T[i, 4, :, :] = np.dot(rij, np.dot(sij, sij)) - np.dot(np.dot(sij, sij), rij)
+                T[i, 5, :, :] = np.dot(rij, np.dot(rij, sij)) \
+                                + np.dot(sij, np.dot(rij, rij)) \
+                                - 2./3.*np.eye(3)*np.trace(np.dot(sij, np.dot(rij, rij)))
+                T[i, 6, :, :] = np.dot(np.dot(rij, sij), np.dot(rij, rij)) - np.dot(np.dot(rij, rij), np.dot(sij, rij))
+                T[i, 7, :, :] = np.dot(np.dot(sij, rij), np.dot(sij, sij)) - np.dot(np.dot(sij, sij), np.dot(rij, sij))
+                T[i, 8, :, :] = np.dot(np.dot(rij, rij), np.dot(sij, sij)) \
+                                + np.dot(np.dot(sij, sij), np.dot(rij, rij)) \
+                                - 2./3.*np.eye(3)*np.trace(np.dot(np.dot(sij, sij), np.dot(rij, rij)))
+                T[i, 9, :, :] = np.dot(np.dot(rij, np.dot(sij, sij)), np.dot(rij, rij)) \
+                                - np.dot(np.dot(rij, np.dot(rij, sij)), np.dot(sij, rij))
+            # Enforce zero trace for anisotropy
+            for j in range(num_tensor_basis):
+                T[i, j, :, :] = T[i, j, :, :] - 1./3.*np.eye(3)*np.trace(T[i, j, :, :])
+
+        # Scale down to promote convergence
+        if is_scale:
+            scale_factor = [10, 100, 100, 100, 1000, 1000, 10000, 10000, 10000, 10000]
+            for i in prange(num_tensor_basis):
+                T[:, i, :, :] /= scale_factor[i]
+
+        # Flatten:
+        # T_flat = np.zeros((num_points, num_tensor_basis, 9))
+        # for i in prange(3):
+        #     for j in range(3):
+        #         T_flat[:, :, 3*i+j] = T[:, :, i, j]
+        T_flat = T.reshape((T.shape[0], T.shape[1], 9))
+
+        return T_flat
+
+
+    @staticmethod
+    @timer
+    def rotateSpatialCorrelationTensors(listData, rotateXY = 0., rotateUnit = 'rad', dependencies = ('xx',)):
+        """
+        Rotate one or more single/double spatial correlation tensor field/slice data in the x-y plane, doesn't work on rate of strain/rotation tensors
+        :param listData: Any (nPt x nComponent) or (nX x nY x nComponent) or (nX x nY x nZ x nComponent) data of interest, appended to a tuple/list.
+        If nComponent is 6, data is symmetric 3 x 3 double spatial correlation tensor field.
+        If nComponent is 9, data is single/double spatial correlation tensor field depending on dependencies keyword
+        :type listData: tuple/list([:, :]/[:, :, :]/[:, :, :, :])
+        :param rotateXY:
+        :type rotateXY:
+        :param rotateUnit:
+        :type rotateUnit:
+        :param dependencies: 'x' or 'xx'. Default is ('xx',)
+        Whether the component of data is dependent on single spatial correlation 'x' e.g. gradient, vector, or double spatial correlation 'xx' e.g. double correlation.
+        Only used if nComponent is 9
+        :type dependencies: str or tuple/list(str)
+        :return: listData_rot
+        :rtype:
+        """
+
+        # Ensure list input since each listData[i] is modified to nPt x nComponent later
+        listData = list((listData,)) if isinstance(listData, np.ndarray) else list(listData)
+        # Ensure tuple input
+        dependencies = (dependencies,) if isinstance(dependencies, str) else dependencies
+        # Ensure dependencies has the same entries as the number of data provided
+        dependencies *= len(listData) if len(dependencies) < len(listData) else 1
+        # Ensure radian unit
+        rotateXY *= np.pi/180 if rotateUnit != 'rad' else 1.
+
+        # Reshape here screwed up njit :/
+        @jit(parallel = True, fastmath = True)
+        def __transform(listData, rotateXY, rotateUnit, dependencies):
+            # Copy listData (a list) that has original shapes as listData will be flattened to nPt x nComponent
+            listDataRot_oldShapes = listData.copy()
+            sinVal, cosVal = np.sin(rotateXY), np.cos(rotateXY)
+            # Go through every data in listData and flatten to nPt x nComponent if necessary
+            for i in prange(len(listData)):
+                # # Ensure Numpy array
+                # listData[i] = np.array(listData[i])
+                # Flatten data from 3D to 2D
+                if len(listData[i].shape) >= 3:
+                    # Go through 2nd D to (last - 1) D
+                    nRow = 1
+                    for j in range(len(listData[i].shape) - 1):
+                        nRow *= listData[i].shape[j]
+
+                    # Flatten data to nPt x nComponent
+                    nComponent = listData[i].shape[len(listData[i].shape) - 1]
+                    listData[i] = listData[i].reshape((nRow, nComponent))
+
+            # Create a copy so listData values remain unchanged during the transformation, listData[i] is nPt x nComponent now
+            listData_rot = listData.copy()
+            # Go through all provided data and perform transformation
+            for i in prange(len(listData)):
+                # Number of component is the last D
+                nComponent = listData[i].shape[len(listData[i].shape) - 1]
+                # If nComponent is 3, i.e. x, y, z or data is single spatial correlation with 9 components
+                if nComponent == 3 or (nComponent == 9 and dependencies[i] == 'x'):
+                    # x_rot becomes x*cos + y*sin
+                    x_rot = listData[i][:, 0]*cosVal + listData[i][:,
+                                                       1]*sinVal
+                    # y_rot becomes -x*sin + y*cos
+                    y_rot = -listData[i][:, 0]*sinVal + listData[i][:,
+                                                        1]*cosVal
+                    # z_rot doesn't change
+                    z_rot = listData[i][:, 2]
+                    listData_rot[i][:, 0], listData_rot[i][:, 1], listData_rot[i][:, 2] = x_rot, y_rot, z_rot
+                    # If 9 components with single spatial correlation, e.g.gradient tensor, do it for 2nd row and 3rd row
+                    if nComponent == 9:
+                        x_rot2 = listData[i][:, 3]*cosVal + listData[i][:,
+                                                            4]*sinVal
+                        y_rot2 = -listData[i][:, 3]*sinVal + listData[i][:,
+                                                            4]*cosVal
+                        z_rot2 = listData[i][:, 5]
+                        x_rot3 = listData[i][:, 6]*cosVal + listData[i][:,
+                                                            7]*sinVal
+                        y_rot3 = -listData[i][:, 6]*sinVal + listData[i][:,
+                                                             7]*cosVal
+                        z_rot3 = listData[i][:, 8]
+                        listData_rot[i][:, 3], listData_rot[i][:, 4], listData_rot[i][:, 5] = x_rot2, y_rot2, z_rot2
+                        listData_rot[i][:, 6], listData_rot[i][:, 7], listData_rot[i][:, 8] = x_rot3, y_rot3, z_rot3
+
+                # Else if nComponent is 6 or 9 with double spatial correlation
+                elif nComponent == 6 or (nComponent == 9 and dependencies[i] == 'xx'):
+                    # If 6 components and double spatial correlation, i.e.xx, xy, xz, yy, yz, zz
+                    # or 9 components and double spatial correlation, i.e. xx, xy, xz, yx, yy, yz, zx, zy, zz
+                    if dependencies[i] == 'xx':
+                        xx, xy, xz = listData[i][:, 0], listData[i][:, 1], listData[i][:, 2]
+                        yy, yz = listData[i][:, 3], listData[i][:, 4]
+                        zz = listData[i][:, 5]
+                        # xx_rot becomes x_rot*x_rot = xx*cos^2 + 2xy*sin*cos + yy*sin^2
+                        xx_rot = xx*cosVal**2 + 2*xy*sinVal*cosVal + yy*sinVal**2
+                        # xy_rot becomes x_rot*y_rot = xy*cos^2 + yy*sin*cos - xx*sin*cos -xy*sin^2
+                        xy_rot = xy*cosVal**2 + yy*sinVal*cosVal - xx*sinVal*cosVal - xy*sinVal**2
+                        # xz_rot become x_rot*z_rot = xz*cos + yz*sin
+                        xz_rot = xz*cosVal + yz*sinVal
+                        # yy_rot becomes y_rot*y_rot = yy*cos^2 - 2xy*sin*cos + xx*sin^2
+                        yy_rot = yy*cosVal**2 - 2*xy*sinVal*cosVal + xx*sinVal**2
+                        # yz_rot becomes y_rot*z_rot = yz*cos - xz*sin
+                        yz_rot = yz*cosVal - xz*sinVal
+                        # zz_rot remains the same
+                        zz_rot = zz
+                        # Apply these changes
+                        listData_rot[i][:, 0], listData_rot[i][:, 1], listData_rot[i][:, 2] = xx_rot, xy_rot, xz_rot
+                        # For 6 component symmetric data
+                        if nComponent == 6:
+                            listData_rot[i][:, 3], listData_rot[i][:, 4] = yy_rot, yz_rot
+                            listData_rot[i][:, 5] = zz_rot
+                        # For 9 component symmetric data
+                        elif nComponent == 9:
+                            listData_rot[i][:, 3], listData_rot[i][:, 4], listData_rot[i][:, 5] = xy_rot, yy_rot, yz_rot
+                            listData_rot[i][:, 6], listData_rot[i][:, 7], listData_rot[i][:, 8] = xz_rot, yz_rot, zz_rot
+
+                # Lastly, reshape transformed data i back to old shape while replacing old values with the transformed one
+                listDataRot_oldShapes[i] = listData_rot[i].reshape(np.array(listDataRot_oldShapes[i]).shape)
+            return listDataRot_oldShapes
+
+        return __transform(listData, rotateXY, rotateUnit, dependencies)
+
+
+    def processSliceTBNN_Inputs(self, gradUAvg, kMean, epsilonMean, capSijRij = 1e9, capSB = 1e9, scaleSB = True, scaleTB = True):
+        # Calculate the non-dimensionalized Sij and Rij using kMean/epsilonMean
+        Sij, Rij = self.calcSliceSijAndRij(gradUAvg, kMean, epsilonMean, capSijRij)
+        # Calculate the 5 scalar basis using Sij and Rij
+        scalarBasis, mean, std = self.calcSliceScalarBasis(Sij, Rij, is_train = True, is_scale = scaleSB, cap = capSB)
+        # Calculate the 10 tensor basis using Sij and Rij
+        tensorBasis = self.calcSliceTensorBasis(Sij, Rij, scaleTB)
+
+        return scalarBasis, tensorBasis, mean, std
 
 
 

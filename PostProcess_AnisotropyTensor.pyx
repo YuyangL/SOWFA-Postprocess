@@ -3,6 +3,7 @@ cimport numpy as np
 cimport cython
 from cython.parallel cimport prange
 from libc.stdio cimport printf
+from libc.math cimport max
 
 # Don't check for array bounds
 @cython.boundscheck(False)
@@ -21,6 +22,8 @@ cpdef tuple processAnisotropyTensor(np.ndarray[np.float_t, ndim = 3] vals3D):
     # TKE in the interpolated mesh
     # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
     k = 0.5*(vals3D[:, :, 0] + vals3D[:, :, 3] + vals3D[:, :, 5])
+    # Avoid FPE
+    k = max(k, 1e-8)
     # Convert Rij to bij
     for i in range(6):
         vals3D[:, :, i] = vals3D[:, :, i]/(2.*k) - 1/3. if i in (0, 3, 5) else vals3D[:, :, i]/(2.*k)
@@ -87,6 +90,8 @@ cpdef tuple processAnisotropyTensor_Uninterpolated(np.ndarray[np.float_t, ndim =
         # TKE
         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
         k = 0.5*(vals2D[:, 0] + vals2D[:, 3] + vals2D[:, 5])
+        # Avoid FPE
+        k = max(k, 1e-8)
         # Convert Rij to bij
         for i in range(6):
             vals2D[:, i] = vals2D[:, i]/(2.*k) - 1/3. if i in (0, 3, 5) else vals2D[:, i]/(2.*k)
