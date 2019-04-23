@@ -31,7 +31,11 @@ class BaseProperties:
     def _ensureTupleInput(self, input):
         inputTuple = (input,) if isinstance(input, (str, np.ndarray, int)) else input
         # If input[0] is '*' or 'all', get all file names
-        inputTuple = os.listdir(self.ensembleFolderPath) if inputTuple[0] in ('*', 'all') else inputTuple
+        # inputTuple = os.listdir(self.ensembleFolderPath) if inputTuple[0] in ('*', 'all') else inputTuple
+        if inputTuple[0] in ('*', 'all'):
+            # Ignore hidden files
+            inputTuple = tuple([f for f in os.listdir(self.ensembleFolderPath) if not f.startswith('.')])
+
         return inputTuple
 
 
@@ -194,15 +198,16 @@ class BaseProperties:
 
 
     @jit(parallel = True)
-    def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 0):
+    def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 0, skipFooter = 0):
         self.fileNames = self._ensureTupleInput(fileNames)
         skipRow = (skipRow,)*len(self.fileNames) if isinstance(skipRow, int) else skipRow
         skipCol = (skipCol,)*len(self.fileNames) if isinstance(skipCol, int) else skipCol
+        skipFooter = (skipFooter,)*len(self.fileNames) if isinstance(skipFooter, int) else skipFooter
 
         for i in prange(len(self.fileNames)):
             # Data dictionary of specified property(s) of all times
             self.propertyData[self.fileNames[i]] = \
-                np.genfromtxt(self.ensembleFolderPath + self.filePre + self.fileNames[i] + self.fileSub)[skipRow[i]:,
+                np.genfromtxt(self.ensembleFolderPath + self.filePre + self.fileNames[i] + self.fileSub, skip_footer = skipFooter[i])[skipRow[i]:,
                 skipCol[i]:]
         # for fileName in self.fileNames:
         #     # Data dictionary of specified property(s) of all times
@@ -230,7 +235,6 @@ class BaseProperties:
 
     def trimInvalidCharacters(self, fileNames, invalidChars):
         fileNames = self._ensureTupleInput(fileNames)
-
         invalidChars = (invalidChars,) if isinstance(invalidChars, str) else invalidChars
 
         for fileName in fileNames:
@@ -242,6 +246,7 @@ class BaseProperties:
 
             with open(self.ensembleFolderPath + fileName, "w") as f:
                 f.writelines('\n'.join(lst))
+
 
 
 class BoundaryLayerProperties(BaseProperties):
@@ -264,7 +269,7 @@ class BoundaryLayerProperties(BaseProperties):
 
     def calculatePropertyMean(self, startTime = None, stopTime = None, **kwargs):
         # Override axis to suit inflow property files
-        super(BoundaryLayerProperties, self).calculatePropertyMean(axis = 0, startTime = startTime, stopTime = stopTime)
+        super(BoundaryLayerProperties, self).calculatePropertyMean(axis = 0, startTime = startTime, stopTime = stopTime, **kwargs)
 
 
 class TurbineOutputs(BaseProperties):
@@ -317,10 +322,232 @@ class TurbineOutputs(BaseProperties):
             print('\n' + str(self.fileNames) + ' read')
 
 
-    # @timer
-    # @jit(parallel = True)
-    # def calculatePropertyMean(self, axis = 1):
-    #     super(TurbineOutputs, self).calculatePropertyMean(axis = axis)
+
+class InflowBoundaryField(BaseProperties):
+    def __init__(self, caseName, caseDir = '.', boundaryDataFolder = 'boundaryData', avgFolder = 'Average', filePre = '', fileSub = '', **kwargs):
+        self.caseName, self.caseDir = caseName, caseDir
+        self.caseFullPath = caseDir + '/' + caseName + '/' + boundaryDataFolder + '/'
+        # self.startTime, self.stopTime = startTime, stopTime
+        self.filePre, self.fileSub = filePre, fileSub
+        self.inflowPatches = os.listdir(self.caseFullPath)
+        # Try remove "Average" folder from collected patch names
+        try:
+            self.inflowPatches.remove(avgFolder)
+        except ValueError:
+            pass
+
+
+        self.avgFolderPath = self.caseFullPath + avgFolder + '/'
+        # Patch folder paths in Average folder
+        self.avgFolderPatchPaths, self.casePatchFullPaths = [], []
+        for patch in self.inflowPatches:
+            self.avgFolderPatchPaths.append(self.avgFolderPath + patch + '/')
+            self.casePatchFullPaths.append(self.caseFullPath + patch + '/')
+            # Try making Average folder and its subfolder, if not already
+            try:
+                os.makedirs(self.avgFolderPath + patch + '/')
+            except OSError:
+                pass
+
+        self.propertyData, self.propertyDataMean = {}, {}
+        self.timesAll = self._readTimes(**kwargs)
+
+        print('InflowBoundaryField object initialized')
+
+
+    def _readTimes(self, remove = 'points', **kwargs):
+        timesAll = os.listdir(self.casePatchFullPaths[0])
+        try:
+            timesAll.remove(remove)
+        except ValueError:
+            pass
+
+        timesAll = np.array([float(i) for i in timesAll])
+        timesAll.sort()
+
+        return timesAll
+
+
+    @timer
+    # Parallel doesn't work here due to decode?
+    def readPropertyData(self, fileNames = ('*',), skipRow = 22, skipFooter = 1, nTimeSample = -1, lstrPrecision = 12, rstrPrecision = 20):
+        def __trimBracketCharacters(data):
+            # Get left and right column of U
+            dataCol0, dataCol1, dataCol2 = data['f0'], data['f1'], data['f2']
+            # New corrected data
+            dataNew = np.empty((data.shape[0], 3, data.shape[2]))
+            # Go through each point then each time
+            for l in range(data.shape[0]):
+                # print(l)
+                for m in range(data.shape[2]):
+                    newVal0, newVal2 = dataCol0[l, 0, m].decode('utf-8'), dataCol2[l, 0, m].decode('utf-8')
+                    dataNew[l, 0, m] = float(newVal0.lstrip('('))
+                    dataNew[l, 1, m] = dataCol1[l, 0, m]
+                    # Right column doesn't need to strip ) since precision limit was 10 and not enough to reach ")"
+                    dataNew[l, 2, m] = float(newVal2.rstrip(')'))
+
+            return dataNew
+
+        # Ensure tuple inputs and interpret "*" as all files
+        # ensembleFolderPath is a dummy variable here
+        self.ensembleFolderPath = self.casePatchFullPaths[0] + str(self.timesAll[0]) + '/'
+        self.fileNames = self._ensureTupleInput(fileNames)
+        self.ensembleFolderPath = ''
+        # Ensure same size as number of files specified
+        skipRow = (skipRow,)*len(self.fileNames) if isinstance(skipRow, int) else skipRow
+        skipFooter = (skipFooter,)*len(self.fileNames) if isinstance(skipFooter, int) else skipFooter
+        # If nTimeSample is -1 or sample interval < 1.5, then use all times
+        sampleInterval = 1 if nTimeSample == -1 or nTimeSample > len(self.timesAll)/1.5 else int(np.ceil(len(self.timesAll))/nTimeSample)
+        self.sampleTimes = [self.timesAll[0]] if sampleInterval > 1 else self.timesAll
+        # Go through all specified properties
+        for i in range(len(self.fileNames)):
+            # String dtype for left and right column of U so that "(12345" can be read, precision is lstrPrecision and rstrPrecision
+            dtype = ('|S' + str(lstrPrecision), float, '|S' + str(rstrPrecision)) if self.fileNames[i] == 'U' else float
+            # Go through all patches
+            for j in range(len(self.inflowPatches)):
+                print('\nReading {}'.format(self.fileNames[i] + ' ' + self.inflowPatches[j]))
+                fileNameFullPath = self.casePatchFullPaths[j] + str(self.timesAll[0]) + '/' + self.fileNames[i]
+                propertyDictKey = self.fileNames[i] + '_' + self.inflowPatches[j]
+                # Initialize first index in the 3rd dimension
+                data = np.genfromtxt(fileNameFullPath, skip_header = skipRow[i], skip_footer = skipFooter[i], dtype = dtype)
+                # Then go through all times from 2nd time onward
+                cnt, milestone = 0, 25
+                for k in range(sampleInterval, len(self.timesAll), sampleInterval):
+                    # print(self.fileNames[i] + ' ' + self.inflowPatches[j] + ' ' + str(self.timesAll[k]))
+                    fileNameFullPath = self.casePatchFullPaths[j] + str(self.timesAll[k]) + '/' + self.fileNames[i]
+                    dataPerTime = np.genfromtxt(fileNameFullPath, skip_header = skipRow[i], skip_footer = skipFooter[i], dtype = dtype)
+                    data = np.dstack((data, dataPerTime))
+                    # Gauge progress
+                    cnt += sampleInterval
+                    progress = cnt/(len(self.timesAll) + 1)*100.
+                    if progress >= milestone:
+                        print(' ' + str(milestone) + '%...', end = '')
+                        milestone += 25
+
+                # Some postprocessing after reading and dstacking data per time
+                data = data.reshape((data.shape[1], data.shape[0], data.shape[2]))
+                # If file is U, then strip "(" and ")"
+                if self.fileNames[i] == 'U':
+                    dataNew = __trimBracketCharacters(data)
+                else:
+                    dataNew = data
+
+                # Finally, the property data
+                self.propertyData[propertyDictKey] = dataNew
+
+        # Collect sample times
+        self.sampleTimes = np.empty(dataNew.shape[2])
+        i = 0
+        for k in range(0, len(self.timesAll), sampleInterval):
+            self.sampleTimes[i] = self.timesAll[k]
+            i += 1
+
+        # Collect all property keys
+        self.propertyKeys = tuple(self.propertyData.keys())
+        # Numpy array treatment
+        self.sampleTimes = np.array(self.sampleTimes)
+
+        print('\n' + str(self.fileNames) + ' read')
+
+
+    @timer
+    @jit(parallel = True, fastmath = True)
+    def calculatePropertyMean(self, startTime = None, stopTime = None, **kwargs):
+        # timesAll in _selectTimes() should be sampleTimes in this case, thus temporarily change timesAll to sampleTimes
+        timesAllTmp = self.timesAll.copy()
+        self.timesAll = self.sampleTimes
+        # Find selected times and start, stop indices from sampleTimes
+        self.timesSelected, _, _, iStart, iStop = self._selectTimes(startTime = startTime, stopTime = stopTime)
+        # Switch timesAll back
+        self.timesAll = timesAllTmp
+        # Go through all properties
+        for i in range(len(self.propertyKeys)):
+            # print(i)
+            # Selected property data at selected times
+            propertySelected = self.propertyData[self.propertyKeys[i]][:, :, iStart:(iStop + 1)]
+            # Property mean is sum(property_j*time_j)/sum(times)
+            propertyDotTime_sum = 0.
+            for j in prange(len(self.timesSelected)):
+                # print(j)
+                propertyDotTime = np.multiply(propertySelected[:, :, j], self.timesSelected[j])
+                propertyDotTime_sum += propertyDotTime
+
+            # Store in dictionary
+            self.propertyDataMean[self.propertyKeys[i]] = propertyDotTime_sum/np.sum(self.timesSelected)
+
+
+
+    @timer
+    @jit(parallel = True)
+    def saveOpenFOAM_Format(self):
+        for i, patch in enumerate(self.inflowPatches):
+            for j in prange(len(self.propertyKeys)):
+                if patch in self.propertyKeys[j]:
+                    propertyName = self.propertyKeys[j].replace('_' + patch, '')
+                    propertyDataMean = self.propertyDataMean[self.propertyKeys[j]]
+                    fid = open(self.avgFolderPatchPaths[i] + propertyName, 'w')
+                    print('Writing {0} to {1}'.format(propertyName, self.avgFolderPatchPaths[i]))
+                    if propertyName in ('k', 'T', 'pd', 'nuSGS', 'kappat'):
+                        dataType, average = 'scalar', '0'
+                    else:
+                        dataType, average = 'vector', '(0 0 0)'
+
+                    # Write the file header
+                    fid.write('/*--------------------------------*- C++ -*----------------------------------*\\\n')
+                    fid.write('| =========                 |                                                 |\n')
+                    fid.write('| \\\\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |\n')
+                    fid.write('|  \\\\    /   O peration     | Version:  1.6                                   |\n')
+                    fid.write('|   \\\\  /    A nd           | Web:      http://www.OpenFOAM.org               |\n')
+                    fid.write('|    \\\\/     M anipulation  |                                                 |\n')
+                    fid.write('\*---------------------------------------------------------------------------*/\n')
+                    fid.write('FoamFile\n')
+                    fid.write('{\n')
+                    fid.write('    version     2.0;\n')
+                    fid.write('    format      ascii;\n')
+                    fid.write('    class       ')
+                    fid.write(dataType)
+                    fid.write('AverageField;\n')
+                    fid.write('    object      values;\n')
+                    fid.write('}\n')
+                    fid.write('// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //\n\n')
+                    fid.write('// Average\n')
+                    fid.write(average)
+                    fid.write('\n\n\n')
+                    fid.write(str(propertyDataMean.shape[0]))
+                    fid.write('\n')
+                    fid.write('(\n')
+                    # Write property data
+                    for k in range(propertyDataMean.shape[0]):
+                        if propertyName == 'U':
+                            fid.write(str(tuple(propertyDataMean[k])).replace(',', ''))
+                        else:
+                            fid.write(str(propertyDataMean[k, 0]))
+
+                        fid.write('\n')
+                    fid.write(')')
+                    fid.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -347,81 +574,99 @@ class TurbineOutputs(BaseProperties):
 if __name__ is '__main__':
     from PlottingTool import Plot2D
 
-    caseName = 'ALM_N_H_ParTurb'
-    fileNames = 'Cd'
-    startTime1 = 20000
-    stopTime1 = 22000
-    frameSkip = 182#28
+    caseName = 'ABL_N_H'
+    caseDir = '/media/yluan'
+    fileNames = '*'
+    nTimeSample = 50
+    startTime, stopTime = None, 23000
+    case = InflowBoundaryField(caseName = caseName, caseDir = caseDir)
+    case.readPropertyData(fileNames = fileNames, nTimeSample = nTimeSample)
+    case.calculatePropertyMean(startTime = startTime, stopTime = stopTime)
+    case.saveOpenFOAM_Format()
 
-    turb = TurbineOutputs(caseName = caseName, caseDir = '/media/yluan/Toshiba External Drive')
+    # kSouth = case.propertyData['k_south']
+    # uSouth = case.propertyData['U_south']
 
-    turb.readPropertyData(fileNames = fileNames)
 
-    turb.calculatePropertyMean(startTime = startTime1, stopTime = stopTime1)
 
-    listX1 = (turb.timesSelected[::frameSkip],)*3
-    listY1 = (turb.propertyData[fileNames + '_Turb0_Bld0_mean'][::frameSkip],
-             turb.propertyData[fileNames + '_Turb0_Bld1_mean'][::frameSkip],
-             turb.propertyData[fileNames + '_Turb0_Bld2_mean'][::frameSkip])
-    listY2 = (turb.propertyData[fileNames + '_Turb1_Bld0_mean'][::frameSkip],
-              turb.propertyData[fileNames + '_Turb1_Bld1_mean'][::frameSkip],
-              turb.propertyData[fileNames + '_Turb1_Bld2_mean'][::frameSkip])
 
-    startTime2 = 21000
-    stopTime2 = 22000
-    turb.calculatePropertyMean(startTime = startTime2, stopTime = stopTime2)
 
-    listX2 = (turb.timesSelected[::frameSkip],)*3
-    listY3 = (turb.propertyData[fileNames + '_Turb0_Bld0_mean'][::frameSkip],
-              turb.propertyData[fileNames + '_Turb0_Bld1_mean'][::frameSkip],
-              turb.propertyData[fileNames + '_Turb0_Bld2_mean'][::frameSkip])
-    listY4 = (turb.propertyData[fileNames + '_Turb1_Bld0_mean'][::frameSkip],
-              turb.propertyData[fileNames + '_Turb1_Bld1_mean'][::frameSkip],
-              turb.propertyData[fileNames + '_Turb1_Bld2_mean'][::frameSkip])
 
-    figDir = '/media/yluan/Toshiba External Drive/' + caseName + '/turbineOutput/Result'
-
-    # Custom colors
-    colors, _ = Plot2D.setColors()
-
-    plotsLabel = ('Blade 1', 'Blade 2', 'Blade 3')
-    transparentBg = False
-    xLim1 = (startTime1, stopTime1)
-    yLim = (min(np.min(listY1), np.min(listY2), np.min(listY3), np.min(listY4)), max(np.max(listY1), np.max(listY2), np.max(listY3), np.max(listY4)))
-
-    show = False
-
-    clPlot = Plot2D(listY1, listX1, save = True, name = 'Turb0_' + fileNames  + '1', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]', figDir = figDir, xLim = yLim, yLim = xLim1, figWidth = 'half', figHeightMultiplier = 2., show = show, colors = colors[:3][:], gradientBg = True, gradientBgRange = (startTime1, 21800), gradientBgDir = 'y')
-    clPlot.initializeFigure()
-
-    clPlot.plotFigure(plotsLabel = plotsLabel)
-
-    clPlot.finalizeFigure(transparentBg = transparentBg)
-
-    # clPlot2 = Plot2D(listX1, listY2, save = True, name = 'Turb1_' + fileNames  + '1', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]', figDir = figDir, xLim = xLim1, yLim = yLim, figWidth = 'full', show = show, colors = colors[3:6][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
-    # clPlot2.initializeFigure()
-    # clPlot2.plotFigure(plotsLabel = plotsLabel)
-    # clPlot2.finalizeFigure(transparentBg = transparentBg)
+    # caseName = 'ALM_N_H_ParTurb'
+    # fileNames = 'Cd'
+    # startTime1 = 20000
+    # stopTime1 = 22000
+    # frameSkip = 182#28
     #
+    # turb = TurbineOutputs(caseName = caseName, caseDir = '/media/yluan/Toshiba External Drive')
     #
+    # turb.readPropertyData(fileNames = fileNames)
     #
+    # turb.calculatePropertyMean(startTime = startTime1, stopTime = stopTime1)
     #
+    # listX1 = (turb.timesSelected[::frameSkip],)*3
+    # listY1 = (turb.propertyData[fileNames + '_Turb0_Bld0_mean'][::frameSkip],
+    #          turb.propertyData[fileNames + '_Turb0_Bld1_mean'][::frameSkip],
+    #          turb.propertyData[fileNames + '_Turb0_Bld2_mean'][::frameSkip])
+    # listY2 = (turb.propertyData[fileNames + '_Turb1_Bld0_mean'][::frameSkip],
+    #           turb.propertyData[fileNames + '_Turb1_Bld1_mean'][::frameSkip],
+    #           turb.propertyData[fileNames + '_Turb1_Bld2_mean'][::frameSkip])
     #
+    # startTime2 = 21000
+    # stopTime2 = 22000
+    # turb.calculatePropertyMean(startTime = startTime2, stopTime = stopTime2)
     #
-    # xLim2 = (startTime2, stopTime2)
+    # listX2 = (turb.timesSelected[::frameSkip],)*3
+    # listY3 = (turb.propertyData[fileNames + '_Turb0_Bld0_mean'][::frameSkip],
+    #           turb.propertyData[fileNames + '_Turb0_Bld1_mean'][::frameSkip],
+    #           turb.propertyData[fileNames + '_Turb0_Bld2_mean'][::frameSkip])
+    # listY4 = (turb.propertyData[fileNames + '_Turb1_Bld0_mean'][::frameSkip],
+    #           turb.propertyData[fileNames + '_Turb1_Bld1_mean'][::frameSkip],
+    #           turb.propertyData[fileNames + '_Turb1_Bld2_mean'][::frameSkip])
     #
-    # show = True
+    # figDir = '/media/yluan/Toshiba External Drive/' + caseName + '/turbineOutput/Result'
     #
-    # clPlot = Plot2D(listX2, listY3, save = True, name = 'Turb0_' + fileNames + '2', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]',
-    #                 figDir = figDir, xLim = xLim2, yLim = yLim, figWidth = 'full', show = show, colors = colors[:3][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
+    # # Custom colors
+    # colors, _ = Plot2D.setColors()
+    #
+    # plotsLabel = ('Blade 1', 'Blade 2', 'Blade 3')
+    # transparentBg = False
+    # xLim1 = (startTime1, stopTime1)
+    # yLim = (min(np.min(listY1), np.min(listY2), np.min(listY3), np.min(listY4)), max(np.max(listY1), np.max(listY2), np.max(listY3), np.max(listY4)))
+    #
+    # show = False
+    #
+    # clPlot = Plot2D(listY1, listX1, save = True, name = 'Turb0_' + fileNames  + '1', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]', figDir = figDir, xLim = yLim, yLim = xLim1, figWidth = 'half', figHeightMultiplier = 2., show = show, colors = colors[:3][:], gradientBg = True, gradientBgRange = (startTime1, 21800), gradientBgDir = 'y')
     # clPlot.initializeFigure()
     #
     # clPlot.plotFigure(plotsLabel = plotsLabel)
     #
     # clPlot.finalizeFigure(transparentBg = transparentBg)
     #
-    # clPlot2 = Plot2D(listX2, listY4, save = True, name = 'Turb1_' + fileNames + '2', xLabel = 'Time [s]',
-    #                  yLabel = r'$C_d$ [-]', figDir = figDir, xLim = xLim2, yLim = yLim, figWidth = 'full', show = show, colors = colors[3:6][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
-    # clPlot2.initializeFigure()
-    # clPlot2.plotFigure(plotsLabel = plotsLabel)
-    # clPlot2.finalizeFigure(transparentBg = transparentBg)
+    # # clPlot2 = Plot2D(listX1, listY2, save = True, name = 'Turb1_' + fileNames  + '1', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]', figDir = figDir, xLim = xLim1, yLim = yLim, figWidth = 'full', show = show, colors = colors[3:6][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
+    # # clPlot2.initializeFigure()
+    # # clPlot2.plotFigure(plotsLabel = plotsLabel)
+    # # clPlot2.finalizeFigure(transparentBg = transparentBg)
+    # #
+    # #
+    # #
+    # #
+    # #
+    # #
+    # # xLim2 = (startTime2, stopTime2)
+    # #
+    # # show = True
+    # #
+    # # clPlot = Plot2D(listX2, listY3, save = True, name = 'Turb0_' + fileNames + '2', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]',
+    # #                 figDir = figDir, xLim = xLim2, yLim = yLim, figWidth = 'full', show = show, colors = colors[:3][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
+    # # clPlot.initializeFigure()
+    # #
+    # # clPlot.plotFigure(plotsLabel = plotsLabel)
+    # #
+    # # clPlot.finalizeFigure(transparentBg = transparentBg)
+    # #
+    # # clPlot2 = Plot2D(listX2, listY4, save = True, name = 'Turb1_' + fileNames + '2', xLabel = 'Time [s]',
+    # #                  yLabel = r'$C_d$ [-]', figDir = figDir, xLim = xLim2, yLim = yLim, figWidth = 'full', show = show, colors = colors[3:6][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
+    # # clPlot2.initializeFigure()
+    # # clPlot2.plotFigure(plotsLabel = plotsLabel)
+    # # clPlot2.finalizeFigure(transparentBg = transparentBg)
