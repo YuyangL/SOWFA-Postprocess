@@ -184,14 +184,14 @@ class BaseProperties:
 
     def _selectTimes(self, startTime = None, stopTime = None):
         startTime = self.timesAll[0] if startTime is None else startTime
-        stopTime = self.timesAll[1] if stopTime is None else stopTime
+        stopTime = self.timesAll[len(self.timesAll)] if stopTime is None else stopTime
         # Bisection left to find actual starting and ending time and their indices
         (iStart, iStop) = np.searchsorted(self.timesAll, (startTime, stopTime))
         # If stopTime larger than any time, iStop = len(timesAll)
         iStop = min(iStop, len(self.timesAll) - 1)
         startTimeReal, stopTimeReal = self.timesAll[iStart], self.timesAll[iStop]
 
-        timesSelected = self.timesAll[iStart:(iStop + 1)]
+        timesSelected = self.timesAll[iStart:iStop]
 
         # print('\nTime and index information extracted for ' + str(startTimeReal) + ' s - ' + str(stopTimeReal) + ' s')
         return timesSelected, startTimeReal, stopTimeReal, iStart, iStop
@@ -249,10 +249,10 @@ class BaseProperties:
 
 
 
-class BoundaryLayerProperties(BaseProperties):
+class BoundaryLayerProfiles(BaseProperties):
     def __init__(self, caseName, fileNameH = 'hLevelsCell', blFolder = 'ABL', **kwargs):
         self.fileNameH = fileNameH
-        super(BoundaryLayerProperties, self).__init__(caseName = caseName + '/' + blFolder, timeCols = 0, excludeFile =
+        super(BoundaryLayerProfiles, self).__init__(caseName = caseName + '/' + blFolder, timeCols = 0, excludeFile =
         fileNameH, **kwargs)
         # Copy fileNameH to Ensemble in order to use it later
         time = os.listdir(self.caseFullPath)[0]
@@ -264,12 +264,12 @@ class BoundaryLayerProperties(BaseProperties):
         self.hLvls = np.genfromtxt(self.ensembleFolderPath + self.fileNameH)
         # Override skipCol to suit inflow property files
         # Columns to skip are 0: time; 1: time step
-        super(BoundaryLayerProperties, self).readPropertyData(fileNames = fileNames, skipCol = 2)
+        super(BoundaryLayerProfiles, self).readPropertyData(fileNames = fileNames, skipCol = 2)
 
 
     def calculatePropertyMean(self, startTime = None, stopTime = None, **kwargs):
         # Override axis to suit inflow property files
-        super(BoundaryLayerProperties, self).calculatePropertyMean(axis = 0, startTime = startTime, stopTime = stopTime, **kwargs)
+        super(BoundaryLayerProfiles, self).calculatePropertyMean(axis = 0, startTime = startTime, stopTime = stopTime, **kwargs)
 
 
 class TurbineOutputs(BaseProperties):
@@ -324,18 +324,15 @@ class TurbineOutputs(BaseProperties):
 
 
 class InflowBoundaryField(BaseProperties):
-    def __init__(self, caseName, caseDir = '.', boundaryDataFolder = 'boundaryData', avgFolder = 'Average', filePre = '', fileSub = '', **kwargs):
+    def __init__(self, caseName, caseDir = '.', boundaryDataFolder = 'boundaryData', avgFolder = 'Average', **kwargs):
         self.caseName, self.caseDir = caseName, caseDir
         self.caseFullPath = caseDir + '/' + caseName + '/' + boundaryDataFolder + '/'
-        # self.startTime, self.stopTime = startTime, stopTime
-        self.filePre, self.fileSub = filePre, fileSub
         self.inflowPatches = os.listdir(self.caseFullPath)
         # Try remove "Average" folder from collected patch names
         try:
             self.inflowPatches.remove(avgFolder)
         except ValueError:
             pass
-
 
         self.avgFolderPath = self.caseFullPath + avgFolder + '/'
         # Patch folder paths in Average folder
@@ -350,9 +347,13 @@ class InflowBoundaryField(BaseProperties):
                 pass
 
         self.propertyData, self.propertyDataMean = {}, {}
-        self.timesAll = self._readTimes(**kwargs)
+        # Exception for inheritance class DrivingPressureGradient
+        try:
+            self.timesAll, self.timesAllRaw = self._readTimes(**kwargs)
+        except NotADirectoryError:
+            pass
 
-        print('InflowBoundaryField object initialized')
+        print('{} InflowBoundaryField object initialized'.format(caseName))
 
 
     def _readTimes(self, remove = 'points', **kwargs):
@@ -362,10 +363,17 @@ class InflowBoundaryField(BaseProperties):
         except ValueError:
             pass
 
+        # Raw all times that are string and can be integer and float mixed
+        # Useful for locating time directories that can be integer
+        timesAllRaw = timesAll
+        # Numerical float all times and sort from low to high
         timesAll = np.array([float(i) for i in timesAll])
+        # Sort string all times by its float counterpart
+        timesAllRaw = [timeRaw for time, timeRaw in sorted(zip(timesAll, timesAllRaw))]
+        # Use Numpy sort() to sort float all times
         timesAll.sort()
 
-        return timesAll
+        return timesAll, timesAllRaw
 
 
     @timer
@@ -390,7 +398,7 @@ class InflowBoundaryField(BaseProperties):
 
         # Ensure tuple inputs and interpret "*" as all files
         # ensembleFolderPath is a dummy variable here
-        self.ensembleFolderPath = self.casePatchFullPaths[0] + str(self.timesAll[0]) + '/'
+        self.ensembleFolderPath = self.casePatchFullPaths[0] + self.timesAllRaw[0] + '/'
         self.fileNames = self._ensureTupleInput(fileNames)
         self.ensembleFolderPath = ''
         # Ensure same size as number of files specified
@@ -406,7 +414,7 @@ class InflowBoundaryField(BaseProperties):
             # Go through all patches
             for j in range(len(self.inflowPatches)):
                 print('\nReading {}'.format(self.fileNames[i] + ' ' + self.inflowPatches[j]))
-                fileNameFullPath = self.casePatchFullPaths[j] + str(self.timesAll[0]) + '/' + self.fileNames[i]
+                fileNameFullPath = self.casePatchFullPaths[j] + self.timesAllRaw[0] + '/' + self.fileNames[i]
                 propertyDictKey = self.fileNames[i] + '_' + self.inflowPatches[j]
                 # Initialize first index in the 3rd dimension
                 data = np.genfromtxt(fileNameFullPath, skip_header = skipRow[i], skip_footer = skipFooter[i], dtype = dtype)
@@ -414,7 +422,7 @@ class InflowBoundaryField(BaseProperties):
                 cnt, milestone = 0, 25
                 for k in range(sampleInterval, len(self.timesAll), sampleInterval):
                     # print(self.fileNames[i] + ' ' + self.inflowPatches[j] + ' ' + str(self.timesAll[k]))
-                    fileNameFullPath = self.casePatchFullPaths[j] + str(self.timesAll[k]) + '/' + self.fileNames[i]
+                    fileNameFullPath = self.casePatchFullPaths[j] + self.timesAllRaw[k] + '/' + self.fileNames[i]
                     dataPerTime = np.genfromtxt(fileNameFullPath, skip_header = skipRow[i], skip_footer = skipFooter[i], dtype = dtype)
                     data = np.dstack((data, dataPerTime))
                     # Gauge progress
@@ -457,7 +465,7 @@ class InflowBoundaryField(BaseProperties):
         timesAllTmp = self.timesAll.copy()
         self.timesAll = self.sampleTimes
         # Find selected times and start, stop indices from sampleTimes
-        self.timesSelected, _, _, iStart, iStop = self._selectTimes(startTime = startTime, stopTime = stopTime)
+        self.timesSelected, self.startTimeReal, self.stopTimeReal, iStart, iStop = self._selectTimes(startTime = startTime, stopTime = stopTime)
         # Switch timesAll back
         self.timesAll = timesAllTmp
         # Go through all properties
@@ -476,17 +484,23 @@ class InflowBoundaryField(BaseProperties):
             self.propertyDataMean[self.propertyKeys[i]] = propertyDotTime_sum/np.sum(self.timesSelected)
 
 
-
     @timer
     @jit(parallel = True)
-    def saveOpenFOAM_Format(self):
+    def writeMeanToOpenFOAM_Format(self):
+        # Go through inflow patches
         for i, patch in enumerate(self.inflowPatches):
+            # For each patch, go through (mean) properties
             for j in prange(len(self.propertyKeys)):
+                # Pick up only property corresponding current patch
                 if patch in self.propertyKeys[j]:
+                    # Get property name
                     propertyName = self.propertyKeys[j].replace('_' + patch, '')
+                    # Get mean property data
                     propertyDataMean = self.propertyDataMean[self.propertyKeys[j]]
+                    # Open file for writing
                     fid = open(self.avgFolderPatchPaths[i] + propertyName, 'w')
                     print('Writing {0} to {1}'.format(propertyName, self.avgFolderPatchPaths[i]))
+                    # Define dataType and average (placeholder) value
                     if propertyName in ('k', 'T', 'pd', 'nuSGS', 'kappat'):
                         dataType, average = 'scalar', '0'
                     else:
@@ -510,6 +524,7 @@ class InflowBoundaryField(BaseProperties):
                     fid.write('    object      values;\n')
                     fid.write('}\n')
                     fid.write('// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //\n\n')
+                    fid.write('// This inflow plane has been averaged from {0} s to {1} s\n'.format(self.startTimeReal, self.stopTimeReal))
                     fid.write('// Average\n')
                     fid.write(average)
                     fid.write('\n\n\n')
@@ -518,6 +533,7 @@ class InflowBoundaryField(BaseProperties):
                     fid.write('(\n')
                     # Write property data
                     for k in range(propertyDataMean.shape[0]):
+                        # If U, replace comma with nothing
                         if propertyName == 'U':
                             fid.write(str(tuple(propertyDataMean[k])).replace(',', ''))
                         else:
@@ -571,18 +587,18 @@ class InflowBoundaryField(BaseProperties):
 
 
 
-if __name__ is '__main__':
+if __name__ == '__main__':
     from PlottingTool import Plot2D
 
-    caseName = 'ABL_N_H'
+    caseName = 'ABL_N_L2'
     caseDir = '/media/yluan'
     fileNames = '*'
-    nTimeSample = 50
-    startTime, stopTime = None, 23000
+    nTimeSample = 1000
+    startTime, stopTime = 18000, 21000
     case = InflowBoundaryField(caseName = caseName, caseDir = caseDir)
     case.readPropertyData(fileNames = fileNames, nTimeSample = nTimeSample)
     case.calculatePropertyMean(startTime = startTime, stopTime = stopTime)
-    case.saveOpenFOAM_Format()
+    case.writeMeanToOpenFOAM_Format()
 
     # kSouth = case.propertyData['k_south']
     # uSouth = case.propertyData['U_south']
