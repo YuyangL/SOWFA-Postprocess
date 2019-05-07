@@ -1,4 +1,4 @@
-from numba import njit, jit
+from numba import njit, jit, prange
 import numpy as np
 import functools, time
 
@@ -169,10 +169,23 @@ def timer(func):
     return wrapper_timer
 
 
+@timer
+@jit(parallel = True)
+def sampleData(listData, sampleSize, replace = False):
+    # Ensure list
+    if isinstance(listData, np.ndarray):
+        listData = [listData]
+    elif isinstance(listData, tuple):
+        listData = list(listData)
 
+    # Get indices of the samples
+    sampleIdx = np.random.choice(np.arange(len(listData[0])), sampleSize, replace = replace)
+    # Go through all provided data
+    for i in prange(len(listData)):
+        listData[i] = listData[i][sampleIdx]
 
-# def interpolateField2D(X, Y, Xtar, Ytar):
-
+    print('\nData sampled to {0} with {1} replacement'.format(sampleSize, replace))
+    return listData
 
 
 

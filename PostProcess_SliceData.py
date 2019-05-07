@@ -576,14 +576,9 @@ class SliceProperties:
          [ -6.   0.   0.   0.  -6.   0.   0.   0.  12.]
          [  0.   0.   0.   0.   0.   0.   0.   0.   0.]]
         """
-        num_points = Sij.shape[0]
-        if not quadratic_only:
-            num_tensor_basis = 10
-        else:
-            num_tensor_basis = 4
-
-        T = np.zeros((num_points, num_tensor_basis, 3, 3))
-        for i in prange(num_points):
+        num_tensor_basis = 10 if not quadratic_only else 4
+        T = np.zeros((Sij.shape[0], num_tensor_basis, 3, 3))
+        for i in prange(Sij.shape[0]):
             sij = Sij[i, :, :]
             rij = Rij[i, :, :]
             T[i, 0, :, :] = sij
@@ -608,6 +603,7 @@ class SliceProperties:
 
         # Scale down to promote convergence
         if is_scale:
+            # Using tuple here gievs Numbe error
             scale_factor = [10, 100, 100, 100, 1000, 1000, 10000, 10000, 10000, 10000]
             for i in prange(num_tensor_basis):
                 T[:, i, :, :] /= scale_factor[i]

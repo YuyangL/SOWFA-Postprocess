@@ -1,9 +1,10 @@
+# cython: language_level = 3
 import numpy as np
 cimport numpy as np
 cimport cython
 from cython.parallel cimport prange
 from libc.stdio cimport printf
-from libc.math cimport max
+from libc.math cimport sqrt
 
 # Don't check for array bounds
 @cython.boundscheck(False)
@@ -23,7 +24,7 @@ cpdef tuple processAnisotropyTensor(np.ndarray[np.float_t, ndim = 3] vals3D):
     # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
     k = 0.5*(vals3D[:, :, 0] + vals3D[:, :, 3] + vals3D[:, :, 5])
     # Avoid FPE
-    k = max(k, 1e-8)
+    k[k < 1e-8] = 1e-8
     # Convert Rij to bij
     for i in range(6):
         vals3D[:, :, i] = vals3D[:, :, i]/(2.*k) - 1/3. if i in (0, 3, 5) else vals3D[:, :, i]/(2.*k)
@@ -85,13 +86,13 @@ cpdef tuple processAnisotropyTensor_Uninterpolated(np.ndarray[np.float_t, ndim =
     cdef double progress
 
     print('\nProcessing uninterpolated anisotropy tensors...')
-    # If vals2D was not anisotropic
+    # If vals2D was not anisotropic already
     if makeAnisotropic:
         # TKE
         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
         k = 0.5*(vals2D[:, 0] + vals2D[:, 3] + vals2D[:, 5])
         # Avoid FPE
-        k = max(k, 1e-8)
+        k[k < 1e-8] = 1e-8
         # Convert Rij to bij
         for i in range(6):
             vals2D[:, i] = vals2D[:, i]/(2.*k) - 1/3. if i in (0, 3, 5) else vals2D[:, i]/(2.*k)
@@ -101,7 +102,7 @@ cpdef tuple processAnisotropyTensor_Uninterpolated(np.ndarray[np.float_t, ndim =
         tensors = np.dstack((vals2D[:, 0], vals2D[:, 1], vals2D[:, 2],
                              vals2D[:, 1], vals2D[:, 3], vals2D[:, 4],
                              vals2D[:, 2], vals2D[:, 4], vals2D[:, 5]))
-
+        # Use tensor.shape[1] because Numpy dstack 1D array as 1 x N x 1
         tensors = tensors.reshape((tensors.shape[1], 9))
     else:
         tensors = vals2D
@@ -245,3 +246,35 @@ cdef np.ndarray[np.float_t, ndim = 2] make_realizable(np.ndarray[np.float_t, ndi
     return labels
 
 
+@cython.boundscheck(False)
+@cython.wraparound(False)
+@cython.cdivision(True)
+cpdef tuple evaluateInvariantBasisCoefficients(np.ndarray tb, np.ndarray bij, double cap = 100.):
+    cdef np.ndarray[np.float_t, ndim = 2] tb_p, g
+    cdef np.ndarray[np.float_t] rmse
+    cdef int p, verboseInterval, milestone
+    print('\nEvaluating invariant basis coefficients g by least squares fitting at each point...')
+    # Initialize tensor basis coefficients, nPoint x nBasis
+    g, rmse = np.empty((tb.shape[0], tb.shape[1])), np.empty(tb.shape[0])
+    # Gauge progress
+    verboseInterval, milestone = int(tb.shape[0]/10.), 0
+    # Go through each point
+    for p in range(tb.shape[0]):
+        # Do the same as above, just for each point
+        # Row being 9 components and column being nBasis
+        # For each point p, tb[p].T is 9 component x nBasis, bij[p] shape is (9,)
+        tb_p = tb[p].T
+        g[p] = np.linalg.lstsq(tb_p, bij[p], None)[0]
+        # TODO: couldn't get RMSE driectly from linalg.lstsq cuz my rank of tb[p] is 5 < 9?
+        rmse[p] = sqrt(np.mean(np.square(bij[p] - np.dot(tb_p, g[p]))))
+        # Gauge progress
+        if p%verboseInterval == 0:
+            print('{}%...'.format(milestone))
+            milestone += 10
+
+    # Advanced slicing is not support by nijt
+    # Cap extreme values
+    g[g > cap] = cap
+    g[g < -cap] = cap
+
+    return g, rmse

@@ -14,7 +14,7 @@ except ModuleNotFoundError:
 
 class FieldData:
     def __init__(self, fields = 'all', times = 'all', caseName = 'ABL_N_H', caseDir = '.', fileNamePre = '', fileNameSub
-    = '', cellCenters = ('ccx', 'ccy', 'ccz'), resultFolder = 'Result', fieldFolderName = 'Fields', save = True, saveProtocol = 3):
+    = '', cellCenters = ('ccx', 'ccy', 'ccz'), resultFolder = 'Result', fieldFolderName = 'Fields', save = True, saveProtocol = 4):
         self.fields = fields
         self.caseFullPath = caseDir + '/' + caseName + '/Fields/'
         self.fileNamePre, self.fileNameSub = fileNamePre, fileNameSub
@@ -96,37 +96,36 @@ class FieldData:
 
     @timer
     @jit(parallel = True)
-    def readFieldData(self, rotateXY = 0.):
+    def readFieldData(self):
+        """
+        Read field data specified by self.fields and self.times, data shape is nPoint (x nComponent (x nTime)).
+        E.g. scalar field with one time is nPoint x 0 x 0;
+        tensor field with one time is nPoint x nComponent x 0;
+        :return: fieldData dictionary
+        :rtype: dict(np.ndarray(nPoint (x nComponent (x nTime))))
+        """
         fieldData = {}
         # Go through each specified field
         for i in prange(len(self.fields)):
             field = self.fields[i]
+            print(' Reading {}...'.format(field))
             # Read the data of field in the 1st time directory
             fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[self.times[0]] + field)
             # If multiple times requested, read data and stack them in 3rd D
             if len(self.times) > 1:
                 for j in prange(1, len(self.times)):
-                    print(j)
                     fieldData_j = of.parse_internal_field(self.caseTimeFullPaths[self.times[j]] + field)
                     fieldData[field] = np.dstack((fieldData[field], fieldData_j))
 
+                # When multiple times, since a 3rd dimension is added and Numpy.dstack treats scalar fields of shape (nPoint,) as (1, nPoint),
+                # reshape scalar fields of shape (1, nPoint, nTime) back to (nPoint, 1, nTime)
+                fieldData[field] = fieldData[field].reshape((
+                    fieldData[field].shape[1],
+                    fieldData[field].shape[0],
+                    fieldData[field].shape[2]
+                )) if fieldData[field].shape[0] == 1 else fieldData[field]
 
-        # for field in self.fields:
-        #     # if time is None:
-        #     #     fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[self.times[0]] + field)
-        #     # else:
-        #     #     fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[str(time)] + field)
-        #
-        #     # Read the data of field in the 1st time directory
-        #     fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[self.times[0]] + field)
-        #     # If multiple times requested, read data and stack them in 3rd D
-        #     if len(self.times) > 1:
-        #         for i in prange(1, len(self.times)):
-        #             print(i)
-        #             fieldData_i = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + field)
-        #             fieldData[field] = np.dstack((fieldData[field], fieldData_i))
-
-        print('\n' + str(self.fields) + ' data read, if multiple times requested, data of different times are stacked in 3D')
+        print('\n{0} data read for {1} s. \nIf multiple times requested, data of different times are stacked in 3D'.format(self.fields, self.times))
         return fieldData
 
 
@@ -136,7 +135,7 @@ class FieldData:
         """
         Rotate one or more single/double spatial correlation scalar/tensor field/slice data in the x-y plane,
         doesn't work on rate of strain/rotation tensors
-        :param listData: Any (nPt x nComponent) or (nX x nY x nComponent) or (nX x nY x nZ x nComponent) data of interest, appended to a tuple/list.
+        :param listData: Any of (nPoint x nComponent) or (nX x nY x nComponent) or (nX x nY x nZ x nComponent) data of interest, appended to a tuple/list.
         If nComponent is 6, data is symmetric 3 x 3 double spatial correlation tensor field.
         If nComponent is 9, data is single/double spatial correlation tensor field depending on dependencies keyword
         :type listData: tuple/list([:, :]/[:, :, :]/[:, :, :, :])
@@ -144,10 +143,10 @@ class FieldData:
         :type rotateXY:
         :param rotateUnit:
         :type rotateUnit:
-        :param dependencies: Whether the component of data is dependent on single spatial correlation 'x' e.g. gradient,vector,
-        or double spatial correlation 'xx' e.g. double correlation.
-        Only used if nComponent is 9
-        :type dependencies: Str or list/tuple of 'x' or 'xx'. Default is ('xx',)
+        :param dependencies: Only used if nComponent is 9.
+        Whether the component of data is dependent on single spatial correlation 'x' e.g. gradient, vector;
+        or double spatial correlation 'xx' e.g. double correlation uu, d^2u/dx^2
+        :type dependencies: str or list/tuple of 'x' or 'xx'. Default is ('xx',)
         :return: listData_rot
         :rtype:
         """
@@ -248,7 +247,7 @@ class FieldData:
 
             return listDataRot_oldShapes
 
-        return __transform(listData, rotateXY, rotateUnit, dependencies)
+        return __transform(listData, rotateXY, dependencies)
 
 
     @timer
@@ -310,10 +309,9 @@ class FieldData:
         return xNew, yNew, zNew, valsNew
 
 
-    @staticmethod
     @timer
     @jit(parallel = True, fastmath = True)
-    def confineFieldDomain_Rotated(x, y, z, vals, boxL, boxW, boxH, boxO = (0, 0, 0), boxRot = 0, save = False, resultPath = '.', valsName = 'data', fileNameSub = 'Confined'):
+    def confineFieldDomain_Rotated(self, x, y, z, vals, boxL, boxW, boxH, boxO = (0, 0, 0), boxRot = 0, valsName = 'data', fileNameSub = 'Confined', saveToTime = 'last'):
         print('\nConfining field domain with rotated box...')
         # Create the bounding box
         box = path.Path(((boxO[0], boxO[1]),
@@ -352,10 +350,15 @@ class FieldData:
 
         xNew2, yNew2, zNew2, valsNew2 = np.array(xNew2), np.array(yNew2), np.array(zNew2), np.array(valsNew2)
         ccNew2 = np.vstack((xNew2, yNew2, zNew2)).T
-        if save:
-            pickle.dump(ccNew2, open(resultPath + '/cc_' + fileNameSub + '.p', 'wb'))
-            pickle.dump(valsNew2, open(resultPath + '/' + valsName + '_' + fileNameSub + '.p', 'wb'))
-            print('\n{0} and {1} saved at {2}'.format('cc_' + fileNameSub, valsName + '_' + fileNameSub, resultPath))
+        # Save ensemble field if requested
+        if self.save:
+            # Which time is this mean performed
+            saveToTime = str(self.times[-1]) if saveToTime == 'last' else str(saveToTime)
+            # Save confined cell centers
+            pickle.dump(ccNew2, open(self.resultPaths[saveToTime] + 'cc_' + fileNameSub + '.p', 'wb'), protocol = self.saveProtocol)
+            # Save confined field ensemble
+            pickle.dump(valsNew2, open(self.resultPaths[saveToTime] + valsName + '_' + fileNameSub + '.p', 'wb'), protocol = self.saveProtocol)
+            print('\n{0} and {1} saved at {2}'.format('cc_' + fileNameSub, valsName + '_' + fileNameSub, self.resultPaths[saveToTime]))
 
         return xNew2, yNew2, zNew2, ccNew2, valsNew2, box, flags
 
@@ -672,9 +675,9 @@ class FieldData:
         :rtype:
         """
         # Reshape U gradients to nPoint x 3 x 3 if necessary
-        gradU = gradU.reshape((gradU.shape[0], 3, 3)) if (len(gradU.shape) == 2 and gradU.shape[1] == 9) else gradU
+        gradU = gradU.reshape((gradU.shape[0], 3, 3)) if len(gradU.shape) == 2 and gradU.shape[1] == 9 else gradU
         # If either TKE or epsilon is None, no non-dimensionalization is done
-        if None in (tke, eps):
+        if  tke is None or eps is None:
             tke = np.ones(gradU.shape[0])
             eps = np.ones(gradU.shape[0])
 
@@ -708,19 +711,19 @@ class FieldData:
         for i in prange(gradU.shape[0]):
             Sij[i, :, :] -=  1/3.*np.eye(3)*np.trace(Sij[i, :, :])
 
-        # Save to pickle if requested
-        if self.save:
-            # Which time is this calculation performed
-            saveToTime = self.times[-1] if saveToTime == 'last' else saveToTime
-            # Save Sij and Rij
-            self.savePickleData(saveToTime, (Sij, Rij), ('Sij', 'Rij'))
+        # # TODO: save gives error to Numba
+        # # Save to pickle if requested
+        # if self.save:
+        #     # Which time is this calculation performed
+        #     saveToTime = self.times[-1] if saveToTime == 'last' else saveToTime
+        #     # Save Sij and Rij
+        #     self.savePickleData(saveToTime, (Sij, Rij), ('Sij', 'Rij'))
 
         return Sij, Rij
 
 
     @timer
-    @njit(parallel = True, fastmath = True)
-    def getInvarientBasesField(self, Sij, Rij, quadratic_only = False, is_scale = True, saveToTime = 'last'):
+    def getInvariantBasesField(self, Sij, Rij, quadratic_only = False, is_scale = True, saveToTime = 'last'):
         """
         From Ling et al. TBNN
         Given Sij and Rij, it calculates the tensor basis
@@ -747,50 +750,52 @@ class FieldData:
          [ -6.   0.   0.   0.  -6.   0.   0.   0.  12.]
          [  0.   0.   0.   0.   0.   0.   0.   0.   0.]]
         """
-        # If 3D flow, then 10 tensor bases
-        if not quadratic_only:
-            num_tensor_basis = 10
-        # Else if 2D flow, then 4 tensor bases
-        else:
-            num_tensor_basis = 4
+        @njit(parallel = True, fastmath = True)
+        def __getInvariantBasesField(Sij, Rij, quadratic_only, is_scale):
+            # If 3D flow, then 10 tensor bases; else if 2D flow, then 4 tensor bases
+            num_tensor_basis = 10 if not quadratic_only else 4
+            # Tensor bases is nPoint x nBasis x 3 x 3
+            tb = np.zeros((Sij.shape[0], num_tensor_basis, 3, 3))
+            # Go through each point
+            for i in prange(Sij.shape[0]):
+                sij = Sij[i, :, :]
+                rij = Rij[i, :, :]
+                tb[i, 0, :, :] = sij
+                tb[i, 1, :, :] = np.dot(sij, rij) - np.dot(rij, sij)
+                tb[i, 2, :, :] = np.dot(sij, sij) - 1./3.*np.eye(3)*np.trace(np.dot(sij, sij))
+                tb[i, 3, :, :] = np.dot(rij, rij) - 1./3.*np.eye(3)*np.trace(np.dot(rij, rij))
+                if not quadratic_only:
+                    tb[i, 4, :, :] = np.dot(rij, np.dot(sij, sij)) - np.dot(np.dot(sij, sij), rij)
+                    tb[i, 5, :, :] = np.dot(rij, np.dot(rij, sij)) \
+                                    + np.dot(sij, np.dot(rij, rij)) \
+                                    - 2./3.*np.eye(3)*np.trace(np.dot(sij, np.dot(rij, rij)))
+                    tb[i, 6, :, :] = np.dot(np.dot(rij, sij), np.dot(rij, rij)) - np.dot(np.dot(rij, rij), np.dot(sij, rij))
+                    tb[i, 7, :, :] = np.dot(np.dot(sij, rij), np.dot(sij, sij)) - np.dot(np.dot(sij, sij), np.dot(rij, sij))
+                    tb[i, 8, :, :] = np.dot(np.dot(rij, rij), np.dot(sij, sij)) \
+                                    + np.dot(np.dot(sij, sij), np.dot(rij, rij)) \
+                                    - 2./3.*np.eye(3)*np.trace(np.dot(np.dot(sij, sij), np.dot(rij, rij)))
+                    tb[i, 9, :, :] = np.dot(np.dot(rij, np.dot(sij, sij)), np.dot(rij, rij)) \
+                                    - np.dot(np.dot(rij, np.dot(rij, sij)), np.dot(sij, rij))
+                # Enforce zero trace for anisotropy for each basis
+                # TODO: Necessary?
+                for j in range(num_tensor_basis):
+                    tb[i, j, :, :] = tb[i, j, :, :] - 1./3.*np.eye(3)*np.trace(tb[i, j, :, :])
 
-        # Tensor bases is nPoint x nBasis x 3 x 3
-        tb = np.zeros((Sij.shape[0], num_tensor_basis, 3, 3))
-        # Go through each point
-        for i in prange(Sij.shape[0]):
-            sij = Sij[i, :, :]
-            rij = Rij[i, :, :]
-            tb[i, 0, :, :] = sij
-            tb[i, 1, :, :] = np.dot(sij, rij) - np.dot(rij, sij)
-            tb[i, 2, :, :] = np.dot(sij, sij) - 1./3.*np.eye(3)*np.trace(np.dot(sij, sij))
-            tb[i, 3, :, :] = np.dot(rij, rij) - 1./3.*np.eye(3)*np.trace(np.dot(rij, rij))
-            if not quadratic_only:
-                tb[i, 4, :, :] = np.dot(rij, np.dot(sij, sij)) - np.dot(np.dot(sij, sij), rij)
-                tb[i, 5, :, :] = np.dot(rij, np.dot(rij, sij)) \
-                                + np.dot(sij, np.dot(rij, rij)) \
-                                - 2./3.*np.eye(3)*np.trace(np.dot(sij, np.dot(rij, rij)))
-                tb[i, 6, :, :] = np.dot(np.dot(rij, sij), np.dot(rij, rij)) - np.dot(np.dot(rij, rij), np.dot(sij, rij))
-                tb[i, 7, :, :] = np.dot(np.dot(sij, rij), np.dot(sij, sij)) - np.dot(np.dot(sij, sij), np.dot(rij, sij))
-                tb[i, 8, :, :] = np.dot(np.dot(rij, rij), np.dot(sij, sij)) \
-                                + np.dot(np.dot(sij, sij), np.dot(rij, rij)) \
-                                - 2./3.*np.eye(3)*np.trace(np.dot(np.dot(sij, sij), np.dot(rij, rij)))
-                tb[i, 9, :, :] = np.dot(np.dot(rij, np.dot(sij, sij)), np.dot(rij, rij)) \
-                                - np.dot(np.dot(rij, np.dot(rij, sij)), np.dot(sij, rij))
-            # Enforce zero trace for anisotropy for each basis
-            # TODO: Necessary?
-            for j in range(num_tensor_basis):
-                tb[i, j, :, :] -= 1./3.*np.eye(3)*np.trace(tb[i, j, :, :])
+            # Scale down to promote convergence
+            if is_scale:
+                # Using tuple gives Numba error
+                scale_factor = [10, 100, 100, 100, 1000, 1000, 10000, 10000, 10000, 10000]
+                # Go through each basis
+                for i in prange(num_tensor_basis):
+                    tb[:, i, :, :] /= scale_factor[i]
 
-        # Scale down to promote convergence
-        if is_scale:
-            scale_factor = (10, 100, 100, 100, 1000, 1000, 10000, 10000, 10000, 10000)
-            # Go through each basis
-            for i in prange(num_tensor_basis):
-                tb[:, i, :, :] /= scale_factor[i]
+            # # Flatten tensor bases to nPoint x nBasis x 9
+            # tb = tb.reshape((tb.shape[0], tb.shape[1], 9))
+            return tb
 
-        # # Flatten tensor bases to nPoint x nBasis x 9
-        # tb = tb.reshape((tb.shape[0], tb.shape[1], 9))
+        tb = __getInvariantBasesField(Sij, Rij, quadratic_only, is_scale)
 
+        # # TODO: save gives error to Numba
         # # Save data if requested
         # if self.save:
         #     saveToTime = self.times[len(self.times)] if saveToTime == 'last' else saveToTime
@@ -798,29 +803,112 @@ class FieldData:
 
         return tb
 
-
-    @staticmethod
     @timer
-    @njit(fastmath = True)
-    def getInvariantBasisCoefficientsField(tb, bij):
-        # If tensor bases is 4D, i.e. nPoint x nBasis x 3 x 3, then reshape it to 3D, i.e. ~ x 9
+    @jit(parallel = True, fastmath = True)
+    def getAnisotropyTensorField(self, uuPrime2):
+        # Reshape u'u' to 2D, with nPoint x 6/9
+        shapeOld = uuPrime2.shape
+        # If u'u' is 4D, then assume first 2D are mesh grid and last 2D are 3 x 3 and reshape to nPoint x 9
+        if len(uuPrime2.shape) == 4:
+            uuPrime2 = uuPrime2.reshape((uuPrime2.shape[0]*uuPrime2[1], 9))
+        # Else if u'u' is 3D
+        elif len(uuPrime2.shape) == 3:
+            # If 3rd D has 3, then assume nPoint x 3 x 3 and reshape to nPoint x 9
+            if uuPrime2.shape[2] == 3:
+                uuPrime2 = uuPrime2.reshape((uuPrime2.shape[0], 9))
+            # Else if 3rd D has 6, then assume nX x nY x 6 and reshape to nPoint x 9
+            elif uuPrime2.shape[2] == 6:
+                uuPrime2 = uuPrime2.reshape((uuPrime2.shape[0]*uuPrime2.shape[1], 6))
+            # Else if 3rd D has 9, then assume nX x nY x 9 and rehsape to nPoint x 9
+            elif uuPrime2.shape[2] == 9:
+                uuPrime2 = uuPrime2.reshape((uuPrime2.shape[0]*uuPrime2.shape[1], 9))
+
+        # If u'u' is provided as a symmetric tensor
+        # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
+        # Otherwise, xx is '0', yy is '4', zz is '8'
+        xx, yy, zz = (0, 3, 5) if uuPrime2.shape[1] == 6 else (0, 4, 8)
+        # TKE
+        k = 0.5*(uuPrime2[:, xx] + uuPrime2[:, yy] + uuPrime2[:, zz])
+        # Avoid FPE
+        k[k < 1e-8] = 1e-8
+        # Convert u'u' to bij
+        bij = np.empty_like(uuPrime2)
+        for i in prange(uuPrime2.shape[1]):
+            bij[:, i] = uuPrime2[:, i]/(2.*k) - 1/3. if i in (xx, yy, zz) else uuPrime2[:, i]/(2.*k)
+
+        # # If u'u' is provided as symmetric tensor
+        # if uuPrime2.shape[1] == 6:
+        #     # Add each anisotropy tensor to each mesh grid location, in depth
+        #     # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
+        #     bij = np.dstack((uuPrime2[:, 0], uuPrime2[:, 1], uuPrime2[:, 2],
+        #                          uuPrime2[:, 1], uuPrime2[:, 3], uuPrime2[:, 4],
+        #                          uuPrime2[:, 2], uuPrime2[:, 4], uuPrime2[:, 5]))
+        #     # Use tensor.shape[1] because Numpy reshape 1D array as 1 x N x 1 before dstack
+        #     bij = bij.reshape((bij.shape[1], 9))
+        # # Else if u'u' is provided as a full tensor
+        # else:
+        #     bij = uuPrime2
+
+        # Reshape bij back to initial provide shape
+        bij = bij.reshape(shapeOld)
+
+        return bij
+
+
+    @timer
+    @jit(parallel = True, fastmath = True)
+    def evaluateInvariantBasisCoefficients(self, tb, bij, cap = 100., onegToRuleThemAll = False, saveToTime = 'last'):
+        # def __getInvariantBasisCoefficientsField(tb, bij, onegToRuleThemAll):
+        # If tensor bases is 4D, i.e. nPoint x nBasis x 3 x 3,
+        # then reshape it to 3D, i.e. nPoint x nBasis x 9
         tb  = tb.reshape((tb.shape[0], tb.shape[1], 9)) if len(tb.shape) == 4 else tb
-        # If bij is 3D, i.e. nPoint x 3 x 3, do the same thing
-        bij = bij.reshape((bij.shape[0], 9)) if len(bij.shape) == 3 else bij
-        # Initlialize tensor basis coefficients, nPoint x nBasis
-        g = np.zeros((tb.shape[0], tb.shape[1]))
-        # Go through each point
-        for p in prange(tb.shape[0]):
-            # Since, for each ij component, solving TB_ij^k*g^k = bij for x can result in a different gp,
+        # If bij is 3D, i.e. nPoint x 3 x 3 / nPoint x 1 x 3 x 3,
+        # do the same thing so bij is nPoint x 9
+        bij = bij.reshape((bij.shape[0], 9)) if len(bij.shape) in (3, 4) else bij
+        # If one set of 10 g to describe all points
+        if onegToRuleThemAll:
+            # Sum of all TB per point, so 0 point x nBasis x 9 i.e. nBasis x 9 (Numpy sum does dimension reduction)
+            tb_sum = np.sum(tb, axis = 0)
+            # Do the same for bij, so shape (9,)
+            bij_sum = np.sum(bij, axis = 0)
+            # Since, for each ij component, solving TB_ij^k*g^k = bij for g can result in a different g,
             # use least squares to solve the linear system of TB_ij^k*g^k = bij,
             # with row being 9 components and column being nBasis
-            # For each point p, tb[p].T is 9 component x nBasis, bij[p] shape is (9,)
-            g[p] = np.linalg.lstsq(tb[p].T, bij[p])
+            # Therefore, transpose TB first so TB.T is 9 component x nBasis, bij shape is (9,)
+            tb_sum_T = tb_sum.T
+            g = np.linalg.lstsq(tb_sum_T, bij_sum, rcond = None)[0]
+            rmse = np.sqrt(np.mean(np.square(bij_sum - np.dot(tb_sum_T, g))))
+        # Else if different 10 g for every point
+        else:
+            # Initialize tensor basis coefficients, nPoint x nBasis
+            g, rmse = np.empty((tb.shape[0], tb.shape[1])), np.empty(tb.shape[0])
+            # Go through each point
+            for p in prange(tb.shape[0]):
+                # Do the same as above, just for each point
+                # Row being 9 components and column being nBasis
+                # For each point p, tb[p].T is 9 component x nBasis, bij[p] shape is (9,)
+                tb_p = tb[p].T
+                g[p] = np.linalg.lstsq(tb_p, bij[p], rcond = None)[0]
+                # TODO: couldn't get RMSE driectly from linalg.lstsq cuz my rank of tb[p] is 5 < 9?
+                rmse[p] = np.sqrt(np.mean(np.square(bij[p] - np.dot(tb_p, g[p]))))
 
-        return g
+            # return g, rmse
+
+        # g, rmse = __getInvariantBasisCoefficientsField(tb, bij, onegToRuleThemAll)
+        # Advanced slicing is not support by nijt
+        # Cap extreme values
+        g[g > cap] = cap
+        g[g < -cap] = cap
+
+        # # TODO: save gives error to Numba
+        # # Save data if requested
+        # if self.save:
+        #     saveToTime = self.times[len(self.times)] if saveToTime == 'last' else saveToTime
+        #     self.savePickleData(saveToTime, g, 'g')
+
+        return g, rmse
 
 
-    @jit(parallel = True)
     def savePickleData(self, time, listData, fileNames = ('data',)):
         if isinstance(listData, np.ndarray):
             listData = (listData,)
@@ -842,6 +930,15 @@ class FieldData:
     # Numba prange doesn't support dict
     # @jit(parallel = True)
     def readPickleData(self, time, fileNames):
+        """
+        Read pickle data of one or more fields at one time and return them in a dictionary
+        :param time:
+        :type time:
+        :param fileNames:
+        :type fileNames:
+        :return:
+        :rtype:
+        """
         # Ensure loop-able
         if isinstance(fileNames, str):
             fileNames = (fileNames,)
