@@ -576,14 +576,9 @@ class SliceProperties:
          [ -6.   0.   0.   0.  -6.   0.   0.   0.  12.]
          [  0.   0.   0.   0.   0.   0.   0.   0.   0.]]
         """
-        num_points = Sij.shape[0]
-        if not quadratic_only:
-            num_tensor_basis = 10
-        else:
-            num_tensor_basis = 4
-
-        T = np.zeros((num_points, num_tensor_basis, 3, 3))
-        for i in prange(num_points):
+        num_tensor_basis = 10 if not quadratic_only else 4
+        T = np.zeros((Sij.shape[0], num_tensor_basis, 3, 3))
+        for i in prange(Sij.shape[0]):
             sij = Sij[i, :, :]
             rij = Rij[i, :, :]
             T[i, 0, :, :] = sij
@@ -608,6 +603,7 @@ class SliceProperties:
 
         # Scale down to promote convergence
         if is_scale:
+            # Using tuple here gievs Numbe error
             scale_factor = [10, 100, 100, 100, 1000, 1000, 10000, 10000, 10000, 10000]
             for i in prange(num_tensor_basis):
                 T[:, i, :, :] /= scale_factor[i]
@@ -626,7 +622,8 @@ class SliceProperties:
     @timer
     def rotateSpatialCorrelationTensors(listData, rotateXY = 0., rotateUnit = 'rad', dependencies = ('xx',)):
         """
-        Rotate one or more single/double spatial correlation tensor field/slice data in the x-y plane, doesn't work on rate of strain/rotation tensors
+        Rotate one or more single/double spatial correlation scalar/tensor field/slice data in the x-y plane,
+        doesn't work on rate of strain/rotation tensors
         :param listData: Any (nPt x nComponent) or (nX x nY x nComponent) or (nX x nY x nZ x nComponent) data of interest, appended to a tuple/list.
         If nComponent is 6, data is symmetric 3 x 3 double spatial correlation tensor field.
         If nComponent is 9, data is single/double spatial correlation tensor field depending on dependencies keyword
@@ -635,14 +632,13 @@ class SliceProperties:
         :type rotateXY:
         :param rotateUnit:
         :type rotateUnit:
-        :param dependencies: 'x' or 'xx'. Default is ('xx',)
-        Whether the component of data is dependent on single spatial correlation 'x' e.g. gradient, vector, or double spatial correlation 'xx' e.g. double correlation.
+        :param dependencies: Whether the component of data is dependent on single spatial correlation 'x' e.g. gradient,vector,
+        or double spatial correlation 'xx' e.g. double correlation.
         Only used if nComponent is 9
-        :type dependencies: str or tuple/list(str)
+        :type dependencies: Str or list/tuple of 'x' or 'xx'. Default is ('xx',)
         :return: listData_rot
         :rtype:
         """
-
         # Ensure list input since each listData[i] is modified to nPt x nComponent later
         listData = list((listData,)) if isinstance(listData, np.ndarray) else list(listData)
         # Ensure tuple input
@@ -651,10 +647,9 @@ class SliceProperties:
         dependencies *= len(listData) if len(dependencies) < len(listData) else 1
         # Ensure radian unit
         rotateXY *= np.pi/180 if rotateUnit != 'rad' else 1.
-
         # Reshape here screwed up njit :/
         @jit(parallel = True, fastmath = True)
-        def __transform(listData, rotateXY, rotateUnit, dependencies):
+        def __transform(listData, rotateXY, dependencies):
             # Copy listData (a list) that has original shapes as listData will be flattened to nPt x nComponent
             listDataRot_oldShapes = listData.copy()
             sinVal, cosVal = np.sin(rotateXY), np.cos(rotateXY)
@@ -738,6 +733,7 @@ class SliceProperties:
 
                 # Lastly, reshape transformed data i back to old shape while replacing old values with the transformed one
                 listDataRot_oldShapes[i] = listData_rot[i].reshape(np.array(listDataRot_oldShapes[i]).shape)
+
             return listDataRot_oldShapes
 
         return __transform(listData, rotateXY, rotateUnit, dependencies)

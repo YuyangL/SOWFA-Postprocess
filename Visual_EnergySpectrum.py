@@ -7,13 +7,12 @@ from Utilities import timer
 from numba import jit, prange
 import pickle
 from Utilities import readData
-import matplotlib.pyplot as plt
 
 
 """
 User Inputs
 """
-case = 'ABL_N_L2'
+case = 'ABL_N_H'  # 'Doekemeijer', 'ABL_N_L2'
 # caseDir = '/media/yluan/Toshiba External Drive/'
 caseDir = '/media/yluan/'
 # If slice time is 'auto', use the 1st time directory in slice folder
@@ -23,7 +22,7 @@ horizontalEii = True
 sliceFolder, resultFolder = 'Slices', 'Result'
 sliceName = 'U_hubHeight_Slice.raw'
 refDataFolder, refDataFormat = 'Churchfield', '.csv'
-# Cell size in x, y/z directions
+# Cell size in x, y/z directions, has to be a tuple
 cellSizes2D = (10., 10.)
 # Domain size, to normalize Kr wavenumber
 L = 3000.
@@ -166,7 +165,7 @@ print('\nFinished readSliceRawData in {:.4f} s'.format(t1 - t0))
 
 # Calculate 2-point (cross-)correlation and energy spectrum density and corresponding wave number
 t0 = time.time()
-RiiFft, Eii, RijFft, Eij, Kx, Ky, Kr, TKE = PPES.getPlanarEnergySpectrum(u2D, v2D, w2D, L = 3000., cellSizes2D = cellSizes2D)
+RiiFft, Eii, RijFft, Eij, Kx, Ky, Kr, TKE = PPES.getPlanarEnergySpectrum(u2D, v2D, w2D, L = L, cellSizes2D = cellSizes2D, horizontalEii = horizontalEii)
 Eii, Eij = abs(Eii), abs(Eij)
 t1 = time.time()
 print('\nFinished getPlanarEnergySpectrum in {:.4f} s'.format(t1 - t0))
@@ -220,7 +219,7 @@ for i in range(len(E)):
     plot = Plot2D(xList, yList, xLabel = xLabels, yLabel = yLabels[i], name = figNames[i], save = save, show = show, xLim = xLim, yLim = yLim, figDir = resultPath)
     plot.initializeFigure()
     plot.plotFigure(plotsLabel = plotsLabel)
-    plot.axes[0].fill_between((1/cellSizes2D[0], xLim[1]), yLim[0], yLim[1], alpha = fillAlpha, facecolor =
+    plot.axes[0].fill_between((1./cellSizes2D[0], xLim[1]), yLim[0], yLim[1], alpha = fillAlpha, facecolor =
     plot.gray, zorder = -1)
     plot.finalizeFigure(xyScale = ('log', 'log'))
 

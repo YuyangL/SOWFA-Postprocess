@@ -4,11 +4,11 @@ from Cython.Distutils import build_ext
 import numpy
 
 system = 'unix'  # 'windows', 'unix'
-fileName = 'PostProcess_EnergySpectrum'
-# fileName = 'PostProcess_AnisotropyTensor'
+# fileName = 'PostProcess_EnergySpectrum'
+fileName = 'PostProcess_AnisotropyTensor'
 
 """
-python setup.py build_ext --inplace
+python3 setup.py build_ext --inplace
 """
 
 if system == 'unix':
