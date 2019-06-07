@@ -114,7 +114,7 @@ class BaseFigure:
     def initializeFigure(self):
         self.latexify(fontSize = self.fontSize, figWidth = self.figWidth, subplots = self.subplots, figHeightMultiplier = self.figHeightMultiplier)
 
-        self.fig, self.axes = plt.subplots(self.subplots[0], self.subplots[1], num = self.name)
+        self.fig, self.axes = plt.subplots(self.subplots[0], self.subplots[1], num=self.name)
         self.axes = (self.axes,) if not isinstance(self.axes, np.ndarray) else self.axes
         print('\nFigure ' + self.name + ' initialized')
 

@@ -4,26 +4,27 @@ from Cython.Distutils import build_ext
 import numpy
 
 system = 'unix'  # 'windows', 'unix'
-# fileName = 'PostProcess_EnergySpectrum'
-fileName = 'PostProcess_AnisotropyTensor'
+# file_name = 'PostProcess_EnergySpectrum'
+# file_name = 'PostProcess_AnisotropyTensor'
+file_name = 'PostProcess_Tensor'
 
 """
 python3 setup.py build_ext --inplace
 """
 
 if system == 'unix':
-    ext_modules = [Extension(fileName,
-                            [fileName + '.pyx'],
+    ext_modules = [Extension(file_name,
+                            [file_name + '.pyx'],
                             libraries=["m"],  # Unix-like specific
                             extra_compile_args = ['-ffast-math', '-O3', '-fopenmp'],
                              extra_link_args = ['-fopenmp'])]
 else:
-    ext_modules = [Extension(fileName,
-                             [fileName + '.pyx'],
+    ext_modules = [Extension(file_name,
+                             [file_name + '.pyx'],
                              extra_compile_args = ['/openmp'],
                              extra_link_args = ['/openmp'])]
 
-setup(name = fileName,
+setup(name = file_name,
       cmdclass = {'build_ext': build_ext},
       ext_modules = ext_modules,
       include_dirs = [numpy.get_include()])

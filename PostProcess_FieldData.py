@@ -784,7 +784,7 @@ class FieldData:
             # Scale down to promote convergence
             if is_scale:
                 # Using tuple gives Numba error
-                scale_factor = [10, 100, 100, 100, 1000, 1000, 10000, 10000, 10000, 10000]
+                scale_factor = [10, 100, 100, 100, 1000, 1000, 10000, 10000, 10000, 100000]
                 # Go through each basis
                 for i in prange(num_tensor_basis):
                     tb[:, i, :, :] /= scale_factor[i]
@@ -810,7 +810,7 @@ class FieldData:
         shapeOld = uuPrime2.shape
         # If u'u' is 4D, then assume first 2D are mesh grid and last 2D are 3 x 3 and reshape to nPoint x 9
         if len(uuPrime2.shape) == 4:
-            uuPrime2 = uuPrime2.reshape((uuPrime2.shape[0]*uuPrime2[1], 9))
+            uuPrime2 = uuPrime2.reshape((uuPrime2.shape[0]*uuPrime2.shape[1], 9))
         # Else if u'u' is 3D
         elif len(uuPrime2.shape) == 3:
             # If 3rd D has 3, then assume nPoint x 3 x 3 and reshape to nPoint x 9
@@ -856,6 +856,7 @@ class FieldData:
 
 
     @timer
+    # TODO: prange has no effect here
     @jit(parallel = True, fastmath = True)
     def evaluateInvariantBasisCoefficients(self, tb, bij, cap = 100., onegToRuleThemAll = False, saveToTime = 'last'):
         # def __getInvariantBasisCoefficientsField(tb, bij, onegToRuleThemAll):
@@ -909,7 +910,7 @@ class FieldData:
         return g, rmse
 
 
-    def savePickleData(self, time, listData, fileNames = ('data',)):
+    def savePickleData(self, time, listData, fileNames=('data',)):
         if isinstance(listData, np.ndarray):
             listData = (listData,)
 
@@ -952,7 +953,11 @@ class FieldData:
             dataDict[fileNames[i]] = pickle.load(open(self.resultPaths[str(time)] + fileNames[i] + '.p', 'rb'),
                                                  encoding = encode)
 
-        print('\n{} read'.format(fileNames))
+        # If just one file read, then no need for a dictionary
+        if len(fileNames) == 1:
+            dataDict = dataDict[fileNames[0]]
+
+        print('\n{} read. If multiple files read, data is stored in dictionary'.format(fileNames))
         return dataDict
 
 

@@ -620,7 +620,7 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    def rotateSpatialCorrelationTensors(listData, rotateXY = 0., rotateUnit = 'rad', dependencies = ('xx',)):
+    def rotateSpatialCorrelationTensors(listData, rotateXY=0., rotateUnit='rad', dependencies=('xx',)):
         """
         Rotate one or more single/double spatial correlation scalar/tensor field/slice data in the x-y plane,
         doesn't work on rate of strain/rotation tensors
