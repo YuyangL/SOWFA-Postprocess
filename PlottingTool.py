@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from mpl_toolkits.axes_grid1.inset_locator import TransformedBbox, BboxPatch, BboxConnector
+from matplotlib.colors import SymLogNorm, LogNorm
+from matplotlib import ticker
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.axes_grid1 import make_axes_locatable, AxesGrid
 from mpl_toolkits.mplot3d import proj3d
@@ -8,9 +10,10 @@ import numpy as np
 from warnings import warn
 from Utilities import timer
 from numba import njit, jit, prange
+from scipy import ndimage
 
 class BaseFigure:
-    def __init__(self, listX, listY, name = 'UntitledFigure', fontSize = 8, xLabel = '$x$', yLabel = '$y$', figDir = './', show = True, save = True, equalAxis = False, xLim = (None,), yLim = (None,), figWidth = 'half', figHeightMultiplier = 1., subplots = (1, 1), colors = ('tableau10',)):
+    def __init__(self, listX, listY, name='UntitledFigure', fontSize=8, xLabel='$x$', yLabel='$y$', figDir='./', show=True, save=True, equalAxis=True, xLim=(None,), yLim=(None,), figWidth='half', figHeightMultiplier=1., subplots=(1, 1), colors=('tableau10',)):
         self.listX, self.listY = ((listX,), (listY,)) if isinstance(listX, np.ndarray) else (listX, listY)
         self.name, self.figDir, self.save, self.show = name, figDir, save, show
         if not self.show:
@@ -50,7 +53,7 @@ class BaseFigure:
 
 
     @staticmethod
-    def latexify(fig_width = None, fig_height = None, figWidth = 'half', linewidth = 1, fontSize = 8, subplots = (1, 1), figHeightMultiplier = 1.):
+    def latexify(fig_width=None, fig_height=None, figWidth='half', linewidth=1, fontSize=8, subplots=(1, 1), figHeightMultiplier=1.):
         """Set up matplotlib's RC params for LaTeX plotting.
         Call this before plotting a figure.
 
@@ -65,14 +68,19 @@ class BaseFigure:
         # computer.org/cms/Computer.org/Journal%20templates/transactions_art_guide.pdf
         if fig_width is None:
             if subplots[1] == 1:
-                fig_width = 3.39 if figWidth is 'half' else 6.9  # inches
+                if figWidth == '1/3':
+                    fig_width = 2.3
+                elif figWidth == 'half':
+                    fig_width = 3.39  # inches
+                else:
+                    fig_width = 6.9
             else:
                 fig_width = 6.9  # inches
 
         if fig_height is None:
             golden_mean = (np.sqrt(5) - 1.0)/2.0  # Aesthetic ratio
             # In case subplots option is not applicable e.g. normal Plot2D and you still want elongated height
-            fig_height = fig_width*golden_mean*figHeightMultiplier  # height in inches
+            fig_height = max(fig_width, 3.39)*golden_mean*figHeightMultiplier  # height in inches
             # fig_height *= (0.25 + (subplots[0] - 1)) if subplots[0] > 1 else 1
             fig_height *= subplots[0]
 
@@ -111,11 +119,11 @@ class BaseFigure:
             'text.antialiased':    True})
 
 
-    def initializeFigure(self):
-        self.latexify(fontSize = self.fontSize, figWidth = self.figWidth, subplots = self.subplots, figHeightMultiplier = self.figHeightMultiplier)
+    def initializeFigure(self, **kwargs):
+        self.latexify(fontSize=self.fontSize, figWidth=self.figWidth, subplots=self.subplots, figHeightMultiplier=self.figHeightMultiplier)
 
-        self.fig, self.axes = plt.subplots(self.subplots[0], self.subplots[1], num = self.name)
-        self.axes = (self.axes,) if not isinstance(self.axes, np.ndarray) else self.axes
+        self.fig, self.axes = plt.subplots(self.subplots[0], self.subplots[1], num=self.name, constrained_layout=True)
+        if not isinstance(self.axes, np.ndarray): self.axes = (self.axes,)
         print('\nFigure ' + self.name + ' initialized')
 
 
@@ -133,7 +141,7 @@ class BaseFigure:
             self.listX[0], self.listY[0] = np.meshgrid(self.listX[0], self.listY[0], sparse = False)
 
 
-    def finalizeFigure(self, xyScale = (None,), tightLayout = True, setXYlabel = (True, True), grid = True,
+    def finalizeFigure(self, xyScale = (None,), setXYlabel = (True, True), grid = True,
                        transparentBg = False, legLoc = 'best', legShow = True):
         if len(self.listX) > 1 and legShow:
             nCol = 2 if len(self.listX) > 3 else 1
@@ -148,7 +156,7 @@ class BaseFigure:
         if setXYlabel[1]:
             self.axes[0].set_ylabel(self.yLabel)
 
-        if self.equalAxis:
+        if self.equalAxis and xyScale[0] is None:
             # Only execute 2D equal axis if the figure is acutally 2D
             try:
                 self.viewAngles
@@ -163,9 +171,6 @@ class BaseFigure:
 
         if xyScale[0] is not None:
             self.axes[0].set_xscale(xyScale[0]), self.axes[0].set_yscale(xyScale[1])
-
-        if tightLayout:
-            plt.tight_layout()
 
         print('\nFigure ' + self.name + ' finalized')
         if self.save:
@@ -182,8 +187,54 @@ class BaseFigure:
             plt.close()
 
 
+class Plot2D_Image(BaseFigure):
+    def __init__(self, val, extent=None, zLabel='$z$', cmap='plasma', zlim=(None, None), rotate_img=True, figHeightMultiplier=1., **kwargs):
+        self.rotate_img = rotate_img
+        if rotate_img:
+            if len(val.shape) >= 3:
+                val = ndimage.rotate(val, 90)
+            else:
+                val = val.T
+
+        self.val = val
+        self.zlim, self.zlabel = zlim, zLabel
+        if self.zlim is None: self.zlim = (None, None)
+        self.cmap = cmap
+        self.extent = extent
+        super().__init__(listX=(None,), listY=(None,), figHeightMultiplier=figHeightMultiplier, **kwargs)
+
+
+    def plotFigure(self, origin='infer', norm=None, **kwargs):
+        if origin == 'infer':
+            if self.rotate_img and len(self.val.shape) == 2:
+                origin = 'lower'
+            else:
+                origin = 'upper'
+
+        self.plots = [None]*len(self.listX)
+        if norm in ('symlog', 'SymLog'):
+            norm=SymLogNorm(linthresh=0.03)
+        elif norm in ('log', 'Log'):
+            norm=LogNorm()
+        else:
+            norm=None
+
+        self.plots[0] = self.axes[0].imshow(self.val, origin=origin, aspect='equal', extent=self.extent, cmap=self.cmap, vmin=self.zlim[0], vmax=self.zlim[1], norm=norm)
+
+
+    def finalizeFigure(self, cbarOrientate='horizontal', showcb=True, cbticks=None, **kwargs):
+        if showcb:
+            cb = plt.colorbar(self.plots[0], ax=self.axes[0], orientation=cbarOrientate, extend='both', ticks=cbticks)
+            # cb.locator = ticker.MaxNLocator(nbins=25)
+            # # cb.ax.yaxis.set_major_locator(ticker.AutoLocator())
+            # cb.update_ticks()
+            cb.set_label(self.zlabel)
+
+        super().finalizeFigure(grid=False, **kwargs)
+
+
 class Plot2D(BaseFigure):
-    def __init__(self, listX, listY, z2D = (None,), type = 'infer', alpha = 0.75, zLabel = '$z$', cmap = 'plasma', gradientBg = False, gradientBgRange = (None, None), gradientBgDir = 'x', **kwargs):
+    def __init__(self, listX, listY, z2D=(None,), type='infer', alpha=0.75, zLabel='$z$', cmap='plasma', gradientBg=False, gradientBgRange=(None, None), gradientBgDir='x', **kwargs):
         self.z2D = z2D
         self.lines, self.markers = ("-", "--", "-.", ":")*5, ('o', 'D', 'v', '^', '<', '>', 's', '8', 'p')*3
         self.alpha, self.cmap = alpha, cmap
@@ -199,7 +250,7 @@ class Plot2D(BaseFigure):
             self.type = (type,)*len(listX) if isinstance(type, str) else type
 
 
-    def plotFigure(self, plotsLabel = (None,), contourLvl = 10):
+    def plotFigure(self, plotsLabel=(None,), contourLvl=10, zlims=(None, None)):
         # Gradient background, only for line and scatter plots
         if self.gradientBg and self.type[0] in ('line', 'scatter'):
             x2D, y2D = np.meshgrid(np.linspace(self.xLim[0], self.xLim[1], 3), np.linspace(self.yLim[0], self.yLim[1], 3))
@@ -212,25 +263,26 @@ class Plot2D(BaseFigure):
         self.plots = [None]*len(self.listX)
         for i in range(len(self.listX)):
             if self.type[i] == 'line':
-                self.plots[i] = self.axes[0].plot(self.listX[i], self.listY[i], ls = self.lines[i], label = str(self.plotsLabel[i]), color = self.colors[i], alpha = self.alpha)
+                self.plots[i] = self.axes[0].plot(self.listX[i], self.listY[i], ls=self.lines[i], label=str(self.plotsLabel[i]), color=self.colors[i], alpha=self.alpha)
             elif self.type[i] == 'scatter':
                 self.plots[i] = self.axes[0].scatter(self.listX[i], self.listY[i], lw = 0, label = str(self.plotsLabel[i]), alpha = self.alpha, color = self.colors[i], marker = self.markers[i])
             elif self.type[i] == 'contourf':
                 self._ensureMeshGrid()
-                self.plots[i] = self.axes[0].contourf(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both', antialiased = False)
+                self.plots[i] = self.axes[0].contourf(self.listX[i], self.listY[i], self.z2D, levels=contourLvl, cmap=self.cmap, extend='neither', antialiased=False, vmin=zlims[0], vmax=zlims[1])
             elif self.type[i] == 'contour':
                 self._ensureMeshGrid()
-                self.plots[i] = self.axes[0].contour(self.listX[i], self.listY[i], self.z2D, levels = contourLvl, cmap = self.cmap, extend = 'both')
+                self.plots[i] = self.axes[0].contour(self.listX[i], self.listY[i], self.z2D, levels=contourLvl, cmap=self.cmap, extend='neither',
+                                                     vmin=zlims[0], vmax=zlims[1])
             else:
                 warn("\nUnrecognized plot type! type must be one/list of ('infer', 'line', 'scatter', 'contourf', 'contour').\n", stacklevel = 2)
                 return
 
 
-    def finalizeFigure(self, cbarOrientate = 'horizontal', **kwargs):
-        if self.type in ('contourf', 'contour') and len(self.axes) == 1:
-            cb = plt.colorbar(self.plots[0], ax = self.axes[0], orientation = cbarOrientate)
+    def finalizeFigure(self, cbarOrientate='horizontal', **kwargs):
+        if self.type[0] in ('contourf', 'contour') and len(self.axes) == 1:
+            cb = plt.colorbar(self.plots[0], ax=self.axes[0], orientation=cbarOrientate)
             cb.set_label(self.zLabel)
-            super().finalizeFigure(grid = False, **kwargs)
+            super().finalizeFigure(grid=False, **kwargs)
         else:
             super().finalizeFigure(**kwargs)
 
@@ -264,7 +316,7 @@ class Plot2D_InsetZoom(Plot2D):
         return pp, p1, p2
 
 
-    def plotFigure(self, plotsLabel = (None,), contourLvl = 10):
+    def plotFigure(self, plotsLabel = (None,), contourLvl = 10, **kwargs):
         super().plotFigure(plotsLabel, contourLvl)
         for i in range(len(self.listX)):
             if self.type is 'line':
@@ -311,12 +363,46 @@ class Plot2D_InsetZoom(Plot2D):
             cb.set_label(self.zLabel)
             cb.ax.tick_params(axis = 'y', direction = 'out')
 
-        super().finalizeFigure(tightLayout = False, cbarOrientate = cbarOrientate, setXYlabel = setXYlabel, xyScale = xyScale, grid = False, **kwargs)
+        super().finalizeFigure(cbarOrientate = cbarOrientate, setXYlabel = setXYlabel, xyScale = xyScale, grid = False, **kwargs)
+
+
+class Plot2D_MultiAxes(Plot2D):
+    def __init__(self, listX, listY, listX2=None, listY2=None, x2Label=None, y2Label=None, **kwargs):
+        self.listX2, self.listY2 = listX2, listY2
+        # Ensure tuple
+        if isinstance(self.listX2, np.ndarray): self.listX2 = (self.listX2,)
+        if isinstance(self.listY2, np.ndarray): self.listX2 = (self.listY2,)
+        # Ensure x2 and y2 labels are the same length of provided x2 and y2 lists
+        if listX2 is not None and x2Label is None:
+            self.x2Label = ('X2',)*len(listX2)
+        else:
+            self.x2Label = x2Label
+
+        if listY2 is not None and y2Label is None:
+            self.y2Label = ('Y2',)*len(listY2)
+        else:
+            self.y2Label = y2Label
+
+        super(Plot2D_MultiAxes, self).__init__(listX=listX, listY=listY, **kwargs)
+
+
+    def initializeFigure(self, ymargin=0.75, xmargin=0.25, **kwargs):
+        super(Plot2D_MultiAxes, self).initializeFigure(**kwargs)
+
+        if self.listY2 is not None:
+            self.fig.subplots_adjust(right=ymargin)
+
+        if self.listX2 is not None:
+            self.fig.subplots_adjust(bottom=xmargin)
+
+
+    # def plotFigure(self, plotsLabel=(None,), **kwargs):
+
 
 
 class BaseFigure3D(BaseFigure):
-    def __init__(self, listX2D, listY2D, zLabel = '$z$', alpha = 1, viewAngles = (15, -115), zLim = (None,), cmap = 'plasma', cmapLabel = '$U$', grid = True, cbarOrientate = 'horizontal', **kwargs):
-        super(BaseFigure3D, self).__init__(listX = listX2D, listY = listY2D, **kwargs)
+    def __init__(self, listX2D, listY2D, zLabel='$z$', alpha=1, viewAngles=(15, -115), zLim=(None,), cmap='plasma', cmapLabel='$U$', grid=True, cbarOrientate='horizontal', **kwargs):
+        super(BaseFigure3D, self).__init__(listX=listX2D, listY=listY2D, **kwargs)
         # The name of listX and listY becomes listX2D and listY2D since they are 2D
         self.listX2D, self.listY2D = self.listX, self.listY
         self.zLabel, self.zLim = zLabel, zLim
@@ -325,11 +411,12 @@ class BaseFigure3D(BaseFigure):
         self.plot, self.cbarOrientate = None, cbarOrientate
 
 
-    def initializeFigure(self, figSize = (1, 1)):
+    def initializeFigure(self, figSize=(1, 1)):
         # Update Matplotlib rcparams
-        self.latexify(fontSize = self.fontSize, figWidth = self.figWidth, subplots = figSize)
+        self.latexify(fontSize = self.fontSize, figWidth = self.figWidth, subplots=figSize)
         self.fig = plt.figure(self.name)
         self.axes = (self.fig.gca(projection = '3d'),)
+        # self.axes = (self.fig.add_subplot(111, projection='3d'),)
 
 
     def plotFigure(self):
@@ -338,7 +425,7 @@ class BaseFigure3D(BaseFigure):
         self._ensureMeshGrid()
 
 
-    def finalizeFigure(self, fraction = 0.06, pad = 0.08, showCbar = True, reduceNtick = True, tightLayout = True,
+    def finalizeFigure(self, fraction = 0.06, pad = 0.08, showCbar = True, reduceNtick = True,
                        **kwargs):
         self.axes[0].set_zlabel(self.zLabel)
         self.axes[0].set_zlim(self.zLim)
@@ -463,8 +550,8 @@ class BaseFigure3D(BaseFigure):
 
 
 class PlotContourSlices3D(BaseFigure3D):
-    def __init__(self, contourX2D, contourY2D, listSlices2D, sliceOffsets, zDir = 'z', contourLvl = 10, gradientBg = True, equalAxis = False, **kwargs):
-        super(PlotContourSlices3D, self).__init__(listX2D = contourX2D, listY2D = contourY2D, equalAxis = equalAxis, **kwargs)
+    def __init__(self, contourX2D, contourY2D, listSlices2D, sliceOffsets, zDir='z', contourLvl=10, gradientBg=True, equalAxis=False, **kwargs):
+        super(PlotContourSlices3D, self).__init__(listX2D=contourX2D, listY2D=contourY2D, equalAxis=equalAxis, **kwargs)
 
         self.listSlices2D = (listSlices2D,) if isinstance(listSlices2D, np.ndarray) else listSlices2D
         self.sliceOffsets, self.zDir = iter(sliceOffsets), zDir
@@ -480,13 +567,13 @@ class PlotContourSlices3D(BaseFigure3D):
         #
         # if self.zLim[0] is None:
         #     self.zLim = (np.min(listSlices2D), np.max(listSlices2D))
-        _ = self.getSlicesLimits(listX2D = self.listX2D, listY2D = self.listY2D, listZ2D = self.listSlices2D)
+        _ = self.getSlicesLimits(listX2D=self.listX2D, listY2D=self.listY2D, listZ2D=self.listSlices2D)
         # self.sliceMin, self.sliceMax = self.zLim
         self.sliceMin, self.sliceMax = np.amin(listSlices2D), np.amax(listSlices2D)
         self.contourLvl, self.gradientBg = contourLvl, gradientBg
         # # Good initial view angle
         # self.viewAngles = (20, -115) if zDir is 'z' else (15, -60)
-        self.cbarOrientate = 'vertical' if zDir is 'z' else 'horizontal'
+        # self.cbarOrientate = 'vertical' if zDir is 'z' else 'horizontal'
 
 
     # def initializeFigure(self, figSize = (1, 1)):

@@ -15,10 +15,7 @@ class SliceProperties:
         self.caseFullPath += self.time + '/'
         # Add the selected time folder in result path if not existent already
         self.resultPath += self.time + '/'
-        try:
-            os.makedirs(self.resultPath)
-        except OSError:
-            pass
+        os.makedirs(self.resultPath, exist_ok=True)
 
         # Orientate x in the x-y plane in case of angled flow direction
         # Angle in rad and counter-clockwise
@@ -155,7 +152,7 @@ class SliceProperties:
             # Then go through the rest components and stack them in 3D
             for i in prange(vals.shape[1]):
                 # Each component is interpolated from the known locations pointsXZ to refined fields (x2D, z2D)
-                vals3D_i = griddata(knownPoints, vals[:, i].ravel(), (x2D, gridSecondCoor), method = interpMethod)
+                vals3D_i = griddata(knownPoints, vals[:, i].ravel(), (x2D, gridSecondCoor), method=interpMethod)
                 # vals3D = np.dstack((vals3D, vals3D_i))
                 vals3D[:, :, i] = vals3D_i
                 # Gauge progress
@@ -418,7 +415,11 @@ class SliceProperties:
         # <epsilon> = <epsilon_resolved> + <epsilon_SGS>,
         # <epsilon_resolved>/<epsilon_SGS> = 1/(1 + (<nu_SGS>/nu)),
         # where epsilon is the total turbulence dissipation rate (m^2/s^3); and <> is statistical averaging
-        epsilonMean = epsilonSGSmean/(1 - (1/(1 + nuSGSmean/nu)))
+
+        epsilonMean = epsilonSGSmean/(1. - (1./(1. + nuSGSmean/nu)))
+        # Avoid FPE
+        epsilonMean[epsilonMean==np.inf] = 1e10
+        epsilonMean[epsilonMean==-np.inf] = -1e10
 
         if save:
             pickle.dump(epsilonMean, open(resultPath + '/epsilonMean.p', 'wb'))
@@ -620,7 +621,7 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    def rotateSpatialCorrelationTensors(listData, rotateXY = 0., rotateUnit = 'rad', dependencies = ('xx',)):
+    def rotateSpatialCorrelationTensors(listData, rotateXY=0., rotateUnit='rad', dependencies=('xx',)):
         """
         Rotate one or more single/double spatial correlation scalar/tensor field/slice data in the x-y plane,
         doesn't work on rate of strain/rotation tensors

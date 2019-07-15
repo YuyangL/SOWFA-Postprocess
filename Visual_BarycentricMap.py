@@ -168,9 +168,9 @@ for i, sliceName in enumerate(case.sliceNames):
     rgbValsRot = ndimage.rotate(rgbVals, 90)
     figName = 'barycentric_' + sliceName
     if plotType in ('2D', '2d', 'all', 'All'):
-        baryMapSlice = BaseFigure((None,), (None,), name = figName, xLabel = xLabel,
-                                  yLabel = yLabel, save = save, show = show,
-                                        figDir = case.resultPath)
+        baryMapSlice = BaseFigure((None,), (None,), name=figName, xLabel=xLabel,
+                                  yLabel=yLabel, save=save, show=show,
+                                        figDir=case.resultPath)
         baryMapSlice.initializeFigure()
         # Real extent so that the axis have the correct AR
         extent = (np.min(r2D), np.max(r2D),
@@ -180,7 +180,7 @@ for i, sliceName in enumerate(case.sliceNames):
             (np.min(x2D), np.max(x2D),
                   np.min(y2D),
                   np.max(y2D))
-        baryMapSlice.axes[0].imshow(rgbValsRot, origin = 'upper', aspect = 'equal', extent = extent)
+        baryMapSlice.axes[0].imshow(rgbValsRot, origin='upper', aspect='equal', extent=extent)
         baryMapSlice.axes[0].set_xlabel(baryMapSlice.xLabel)
         baryMapSlice.axes[0].set_ylabel(baryMapSlice.yLabel)
         plt.tight_layout()
