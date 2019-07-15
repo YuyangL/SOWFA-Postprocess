@@ -7,22 +7,23 @@ import numpy as np
 cimport numpy as np
 from libc.stdio cimport printf
 from libc.math cimport sqrt
+from Utility import reverseOldGridShape
 
 cpdef tuple convertTensorTo2D(np.ndarray tensor, bint infer_stress=True):
     """
     Convert a tensor array from nD to 2D. The first (n - 1)D are always collapsed to 1 when infer_stress is disabled.
     When infer_stress is enabled, if last 2D shape is (3, 3), the first (n - 2)D are collapsed to 1 and last 2D collapsed to 9.
-    If 5D tensor, assume non-stress shape (n_x, n_y, n_z, n_extra, n_val), and stress shape (n_x, n_y, n_z, 3, 3).
-    If 4D tensor, assume non-stress shape (n_x, n_y, n_z, n_val], and stress shape (n_x, n_y, 3, 3).
-    If 3D tensor, assume non-stress shape (n_x, n_y, n_val), and stress shape (n_points, 3, 3).
+    If 5D tensor, assume non-stress shape (n_x, n_y, n_z, n_extra, n_features), and stress shape (n_x, n_y, n_z, 3, 3).
+    If 4D tensor, assume non-stress shape (n_x, n_y, n_z, n_features], and stress shape (n_x, n_y, 3, 3).
+    If 3D tensor, assume non-stress shape (n_x, n_y, n_features), and stress shape (n_points, 3, 3).
 
     :param tensor: Tensor to convert to 2D
-    :type tensor: np.ndarray
+    :type tensor: np.ndarray[grid x n_features]
     :param infer_stress: Whether to infer if given tensor is stress. If True and if last 2D shape is (3, 3), then tensor is assumed stress.
     :type infer_stress: bool, optional (default=True)
 
-    :return: 2D tensor of shape (n_points, n_val) and its original shape.
-    :rtype: (np.ndarray[:, :], tuple)
+    :return: 2D tensor of shape (n_points, n_features) and its original shape.
+    :rtype: (np.ndarray[n_points x n_features], tuple)
     """
     cdef tuple shape_old
     cdef np.ndarray[np.float_t, ndim=2] tensor_2d
@@ -54,12 +55,12 @@ cpdef tuple convertTensorTo2D(np.ndarray tensor, bint infer_stress=True):
     return tensor_2d, shape_old
 
 
-cpdef tuple processReynoldsStress(np.ndarray stress_tensor, bint make_anisotropic=True, int realization_iter=0, bint to_old_shape=True):
+cpdef tuple processReynoldsStress(np.ndarray stress_tensor, bint make_anisotropic=True, int realization_iter=0, bint to_old_grid_shape=True):
     """
     Calculate anisotropy tensor bij, its eigenvalues and eigenvectors from given nD Reynolds stress of any shape.
     If make_anisotropic is disabled, then given Reynolds stress is assumed anisotropic.
     If realization_iter > 0, then bij is made realizable by realization_iter iterations.
-    If to_old_shape is enabled, then bij, eigenvalues, and eigenvectors are converted to old grid shape.
+    If to_old_grid_shape is enabled, then bij, eigenvalues, and eigenvectors are converted to old grid shape.
 
     :param stress_tensor: Reynolds stress u_i'u_j' or anisotropy stress tensor bij.
     :type stress_tensor: 2D or more np.ndarray of dimension (1/2/3D grid) x (3, 3)/6/9 components
@@ -67,13 +68,13 @@ cpdef tuple processReynoldsStress(np.ndarray stress_tensor, bint make_anisotropi
     :type make_anisotropic: bool, optional (default=True)
     :param realization_iter: How many iterations to make bij realizable. If 0, then no iteration is done.
     :type realization_iter: int, optional (default=0)
-    :param to_old_shape: Whether to convert bij, eigenvalues, eigenvectors to old grid shape.
-    :type to_old_shape: bool, optional (default=True)
+    :param to_old_grid_shape: Whether to convert bij, eigenvalues, eigenvectors to old grid shape.
+    :type to_old_grid_shape: bool, optional (default=True)
 
     :return: Anisotropy tensor bij, eigenvalues, eigenvectors
     :rtype: (np.ndarray, np.ndarry, np.ndarray).
-    Dimensions are either n_points x 3 x 3, n_points x 3, n_points x 3 x 3
-    or old grid x 3 x 3, old grid x 3, old grid x 3 x 3
+    Dimensions are either (n_points x 3 x 3, n_points x 3, n_points x 3 x 3)
+    or (old grid x 3 x 3, old grid x 3, old grid x 3 x 3)
     """
 
     # If ndim is not provided but np.float_t is provided, 1D is assumed
@@ -134,7 +135,7 @@ cpdef tuple processReynoldsStress(np.ndarray stress_tensor, bint make_anisotropi
 
     for i in range(realization_iter):
         print('\nApplying realizability filter ' + str(i + 1))
-        bij = makeRealizable(bij)
+        bij = _makeRealizable(bij)
 
     # Reshape the 3rd D to 3x3 instead of 9
     # Now bij is 3D, with shape (n_points, 3, 3)
@@ -166,7 +167,7 @@ cpdef tuple processReynoldsStress(np.ndarray stress_tensor, bint make_anisotropi
     # Also reshape eigvec from n_points x 9 to old grid x 3 x 3 if requested
     # so that each col of the 3 x 3 matrix is an eigenvector corresponding to an eigenvalue
     eigvec = eigvec.reshape((bij.shape[0], 3, 3))
-    if to_old_shape:
+    if to_old_grid_shape:
         shape_old_eigval = shape_old_grid.copy()
         # [old grid, 3]
         shape_old_eigval.append(3)
@@ -183,7 +184,80 @@ cpdef tuple processReynoldsStress(np.ndarray stress_tensor, bint make_anisotropi
     return bij, eigval, eigvec
 
 
-cdef np.ndarray[np.float_t, ndim=2] makeRealizable(np.ndarray[np.float_t, ndim=2] labels):
+cpdef tuple getBarycentricMapData(np.ndarray eigval, bint optimize_cmap=True, double c_offset=0.65, double c_exp=5., bint to_old_grid_shape=False):
+    """
+    Get the Barycentric map coordinates and RGB values to visualize turbulent states based on given eigenvalues of the anisotropy tensor bij.
+    Method from Banerjee (2007).
+    If optimize_cmap is enabled, then the original Barycentric RGB is optimized to put more focus on turbulence inter-states.
+    Additionally, if optimize_cmap is enabled, c_offset and c_exp are used to transform the old RGB to the optimized one.
+    
+    :param eigval: Eigenvalues of anisotropy tensor of a number of points. 
+    The last dimension is assumed to store the three eigenvalues of a 3 x 3 bij. 
+    :type eigval: np.ndarray[:, ..., 3] 
+    :param optimize_cmap: Whether to optimize original Barycentric RGB map to a better one with more focus on turbulence inter-states.
+    :type optimize_cmap: bool, optional (default=True)
+    :param c_offset: If optimize_cmap is True, offset to shift the original RGB values. Recommended by Banerjee (2007) to be 0.65.
+    :type c_offset: float, optional (default=0.65)
+    :param c_exp: If optimize_cmap is True, exponent to power the shifted RGB values. Recommended by Banerjee (2007) to be 5.
+    :type c_exp: float, optional (default=5.)
+    :param to_old_grid_shape: Whether to convert RGB value array to old grid shape.
+    :type to_old_grid_shape: bool, optional (default=False)
+    
+    :return: Barycentric triangle x, y coordinates and map original/optimized RGB values.
+    :rtype: (np.ndarray[n_points, 2], np.ndarray[n_points, 3])
+    """
+    cdef np.ndarray[np.float_t] c1, c2, c3, x_bary, y_bary
+    cdef np.ndarray[np.float_t, ndim=2] xy_bary, rgb_bary_orig, rgb_bary
+    cdef int i
+    cdef double x1c, x2c, x3c, y1c, y2c, y3c
+    cdef tuple shape_old
+    
+    eigval, shape_old = convertTensorTo2D(eigval, infer_stress=False)
+    # Coordinates of the anisotropy tensor in the tensor basis {a1c, a2c, a3c}. From Banerjee (2007),
+    # C1c = lambda1 - lambda2,
+    # C2c = 2(lambda2 - lambda3),
+    # C3c = 3lambda3 + 1,
+    # shape (n_points,)
+    c1 = eigval[:, 0] - eigval[:, 1]
+    # Not used for coordinates, only for color maps
+    c2 = 2.*(eigval[:, 1] - eigval[:, 2])
+    c3 = 3.*eigval[:, 2] + 1.
+    # Corners of the barycentric triangle
+    # Can be random coordinates?
+    x1c, x2c, x3c = 1., 0., 1/2.
+    y1c, y2c, y3c = 0., 0., sqrt(3.)/2.
+    # x_bary, y_bary = c1*x1c + c2*x2c + c3*x3c, c1*y1c + c2*y2c + c3*y3c
+    x_bary, y_bary = c1 + 0.5*c3, y3c*c3
+    # Coordinates of the Barycentric triangle, 2 x n_points transposed to n_points x 2
+    xy_bary = np.transpose(np.vstack((x_bary, y_bary)))
+    # Original RGB values, 3 x n_points transposed to n_points x 3
+    rgb_bary_orig = np.transpose(np.vstack((c1, c2, c3)))
+    # For better barycentric map, use transformation on c1, c2, c3, as in Emory et al. (2014),
+    # ci_star = (ci + c_offset)^c_exp
+    if optimize_cmap:
+        # Improved RGB = [c1_star, c2_star, c3_star]
+        rgb_bary = np.empty_like(rgb_bary_orig)
+        # Each 3rd dim is an RGB array of the 2D grid
+        for i in range(3):
+            rgb_bary[:, i] = (rgb_bary_orig[:, i] + c_offset)**c_exp
+
+    else:
+         rgb_bary = rgb_bary_orig
+
+    # If reverse RGB from n_points x 3 to grid shape x 3
+    if to_old_grid_shape:
+        rgb_bary = reverseOldGridShape(rgb_bary, shape_old)
+
+    print('\nBarycentric map coordinates and RGB values obtained for ' + str(xy_bary.shape[0]) + ' points')
+    return xy_bary, rgb_bary
+
+
+
+
+# -----------------------------------------------------
+# Supporting Functions, Not Intended to Be Called From Python
+# -----------------------------------------------------
+cdef np.ndarray[np.float_t, ndim=2] _makeRealizable(np.ndarray[np.float_t, ndim=2] labels):
     """
     From Ling et al. (2016), see https://github.com/tbnn/tbnn.
     This function is specific to turbulence modeling.
@@ -254,65 +328,3 @@ cdef np.ndarray[np.float_t, ndim=2] makeRealizable(np.ndarray[np.float_t, ndim=2
             labels[i, 6] = A[0, 2]
 
     return labels
-
-
-cpdef tuple getBarycentricMapData(np.ndarray eigval, bint optimize_cmap=True, double c_offset=0.65, double c_exp=5.):
-    """
-    Get the Barycentric map coordinates and RGB values to visualize turbulent states based on given eigenvalues of the anisotropy tensor bij.
-    Method from Banerjee (2007).
-    If optimize_cmap is enabled, then the original Barycentric RGB is optimized to put more focus on turbulence inter-states.
-    Additionally, if optimize_cmap is enabled, c_offset and c_exp are used to transform the old RGB to the optimized one.
-    
-    :param eigval: Eigenvalues of anisotropy tensor of a number of points. 
-    The last dimension is assumed to store the three eigenvalues of a 3 x 3 bij. 
-    :type eigval: np.ndarray[:, ..., 3] 
-    :param optimize_cmap: Whether to optimize original Barycentric RGB map to a better one with more focus on turbulence inter-states.
-    :type optimize_cmap: bool, optional (default=True)
-    :param c_offset: If optimize_cmap is True, offset to shift the original RGB values. Recommended by Banerjee (2007) to be 0.65.
-    :type c_offset: float, optional (default=0.65)
-    :param c_exp: If optimize_cmap is True, exponent to power the shifted RGB values. Recommended by Banerjee (2007) to be 5.
-    :type c_exp: float, optional (default=5.)
-    
-    :return: Barycentric triangle x, y coordinates and map original/optimized RGB values.
-    :rtype: (np.ndarray[n_points, 2], np.ndarray[n_points, 3])
-    """
-    cdef np.ndarray[np.float_t] c1, c2, c3, x_bary, y_bary
-    cdef np.ndarray[np.float_t, ndim=2] xy_bary, rgb_bary_orig, rgb_bary
-    cdef int i
-    cdef double x1c, x2c, x3c, y1c, y2c, y3c
-    
-    eigval, _ = convertTensorTo2D(eigval, infer_stress=False)
-    # Coordinates of the anisotropy tensor in the tensor basis {a1c, a2c, a3c}. From Banerjee (2007),
-    # C1c = lambda1 - lambda2,
-    # C2c = 2(lambda2 - lambda3),
-    # C3c = 3lambda3 + 1,
-    # shape (n_points,)
-    c1 = eigval[:, 0] - eigval[:, 1]
-    # Not used for coordinates, only for color maps
-    c2 = 2*(eigval[:, 1] - eigval[:, 2])
-    c3 = 3*eigval[:, 2] + 1
-    # Corners of the barycentric triangle
-    # Can be random coordinates?
-    x1c, x2c, x3c = 1., 0., 1/2.
-    y1c, y2c, y3c = 0, 0, sqrt(3.)/2.
-    # x_bary, y_bary = c1*x1c + c2*x2c + c3*x3c, c1*y1c + c2*y2c + c3*y3c
-    x_bary, y_bary = c1 + 0.5*c3, y3c*c3
-    # Coordinates of the Barycentric triangle, 2 x n_points transposed to n_points x 2
-    xy_bary = np.transpose(np.vstack((x_bary, y_bary)))
-    # Original RGB values, 3 x n_points transposed to n_points x 3
-    rgb_bary_orig = np.transpose(np.vstack((c1, c2, c3)))
-    # For better barycentric map, use transformation on c1, c2, c3, as in Emory et al. (2014),
-    # ci_star = (ci + c_offset)^c_exp
-    if optimize_cmap:
-        # Improved RGB = [c1_star, c2_star, c3_star]
-        rgb_bary = np.empty_like(rgb_bary_orig)
-        # Each 3rd dim is an RGB array of the 2D grid
-        for i in range(3):
-            rgb_bary[:, i] = (rgb_bary_orig[:, i] + c_offset)**c_exp
-
-    else:
-         rgb_bary = rgb_bary_orig
-
-    print('\nBarycentric map coordinates and RGB values obtained for ' + str(xy_bary.shape[0]) + ' points')
-    return xy_bary, rgb_bary
-

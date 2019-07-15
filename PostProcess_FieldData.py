@@ -33,10 +33,7 @@ class FieldData:
                 # In the result directory, there are time directories
                 self.resultPaths[str(time)] = caseDir + '/' + caseName + '/' + fieldFolderName + '/' + resultFolder + '/' + str(time) + '/'
                 # Try to make the result directories, if not existent already
-                try:
-                    os.makedirs(self.resultPaths[str(time)])
-                except OSError:
-                    pass
+                os.makedirs(self.resultPaths[str(time)], exist_ok=True)
 
         # Else if only one time provided, time could be string or integer or float
         else:
@@ -66,6 +63,11 @@ class FieldData:
         # Convert str to list
         elif not isinstance(fields, (list, tuple)):
             self.fields = [fields]
+
+        # Indices
+        self.ij_uniq = [0, 1, 2, 4, 5, 8]
+        self.ii6, self.ii9 = [0, 3, 5], [0, 4, 8]
+        self.ij_6to9 = [0, 1, 2, 1, 3, 4, 2, 4, 5]
 
         print('\nFieldData object initialized')
 
@@ -247,7 +249,11 @@ class FieldData:
 
             return listDataRot_oldShapes
 
-        return __transform(listData, rotateXY, dependencies)
+        listDataRot_oldShapes = __transform(listData, rotateXY, dependencies)
+        if len(listDataRot_oldShapes) == 1:
+            listDataRot_oldShapes = listDataRot_oldShapes[0]
+
+        return listDataRot_oldShapes
 
 
     @timer
@@ -643,12 +649,16 @@ class FieldData:
 
     @timer
     @jit(fastmath = True)
-    def getMeanDissipationRateField(self, epsilonSGSmean, nuSGSmean, nu = 1e-5, saveToTime = 'last'):
+    def getMeanDissipationRateField(self, epsilonSGSmean, nuSGSmean, nu=1e-5, saveToTime = 'last'):
         # According to Eq 5.64 - Eq 5.68 of Sagaut (2006), for isotropic homogeneous turbulence,
         # <epsilon> = <epsilon_resolved> + <epsilon_SGS>,
         # <epsilon_resolved>/<epsilon_SGS> = 1/(1 + (<nu_SGS>/nu)),
         # where epsilon is the total turbulence dissipation rate (m^2/s^3); and <> is statistical averaging
+
         epsilonMean = epsilonSGSmean/(1. - (1./(1. + nuSGSmean/nu)))
+        # Avoid FPE
+        epsilonMean[epsilonMean == np.inf] = 1e10
+        epsilonMean[epsilonMean == -np.inf] = -1e10
         # Save to pickle if requested
         if self.save:
             # Which time is this mean performed
@@ -660,11 +670,11 @@ class FieldData:
 
     @timer
     @jit(parallel = True, fastmath = True)
-    def getStrainAndRotationRateTensorField(self, gradU, tke = None, eps = None, cap = 10., saveToTime = 'last'):
+    def getStrainAndRotationRateTensorField(self, grad_u, tke=None, eps=None, cap=10.):
         """
         From Ling et al. TBNN
-        :param gradU:
-        :type gradU:
+        :param grad_u:
+        :type grad_u:
         :param tke:
         :type tke:
         :param eps:
@@ -674,63 +684,64 @@ class FieldData:
         :return:
         :rtype:
         """
-        # Reshape U gradients to nPoint x 3 x 3 if necessary
-        gradU = gradU.reshape((gradU.shape[0], 3, 3)) if len(gradU.shape) == 2 and gradU.shape[1] == 9 else gradU
+
+        # Indices
+        ij_uniq = self.ij_uniq
+        ii6, ii9 = self.ii6, self.ii9
+        ij_6to9 = self.ij_6to9
         # If either TKE or epsilon is None, no non-dimensionalization is done
         if  tke is None or eps is None:
-            tke = np.ones(gradU.shape[0])
-            eps = np.ones(gradU.shape[0])
+            tke = np.ones(grad_u.shape[0])
+            eps = np.ones(grad_u.shape[0])
 
         # Flatten TKE and eps array
         tke = tke.ravel() if len(tke.shape) == 2 else tke
         eps = eps.ravel() if len(eps.shape) == 2 else eps
-        # Cap epsilon to 1e-8 to avoid FPE, also assuming no back-scattering
-        eps = np.maximum(eps, 1e-8)
+        # Cap epsilon to 1e-10 to avoid FPE, also assuming no back-scattering
+        eps = np.maximum(eps, 1e-10)
         # Non-dimensionalization coefficient for strain and rotation rate tensor
         tke_eps = tke/eps
         # Sij is strain rate tensor, Rij is rotation rate tensor
-        Sij = np.zeros((gradU.shape[0], 3, 3))
-        Rij = np.zeros((gradU.shape[0], 3, 3))
+        # Sij is symmetric tensor, thus 6 unique components, while Rij is anti-symmetric and 9 unique components
+        sij = np.empty((grad_u.shape[0], 6))
+        rij = np.empty((grad_u.shape[0], 9))
         # Go through each point
-        for i in prange(gradU.shape[0]):
-            # Basically Sij = 0.5TKE/epsilon*(gradU_i + gradU_j) that has 0 trace
-            Sij[i, :, :] = tke_eps[i]*0.5*(gradU[i, :, :] + np.transpose(gradU[i, :, :]))
-            # Basically Rij = 0.5TKE/epsilon*(gradU_i - gradU_j) that has 0 in the diagonal
-            Rij[i, :, :] = tke_eps[i]*0.5*(gradU[i, :, :] - np.transpose(gradU[i, :, :]))
+        for i in prange(grad_u.shape[0]):
+            grad_u_i = grad_u[i].reshape((3, 3)) if len(grad_u.shape) == 2 else grad_u[i]
+            # Basically Sij = 0.5TKE/epsilon*(grad_u_i + grad_u_j) that has 0 trace
+            sij_i = (tke_eps[i]*0.5*(grad_u_i + grad_u_i.T)).ravel()
+
+            # Basically Rij = 0.5TKE/epsilon*(grad_u_i - grad_u_j) that has 0 in the diagonal
+            rij_i = (tke_eps[i]*0.5*(grad_u_i - grad_u_i.T)).ravel()
+            sij[i] = sij_i[ij_uniq]
+            rij[i] = rij_i
 
         # Maximum and minimum
-        maxSij, maxRij = np.amax(Sij.ravel()), np.amax(Rij.ravel())
-        minSij, minRij = np.amin(Sij.ravel()), np.amin(Rij.ravel())
-        print(' Max of Sij is ' + str(maxSij) + ', and of Rij is ' + str(maxRij) + ' before capped to ' + str(cap))
-        print(' Min of Sij is ' + str(minSij) + ', and of Rij is ' + str(minRij)  + ' before capped to ' + str(-cap))
-        # TODO: Why caps?
-        Sij[Sij > cap], Rij[Rij > cap] = cap, cap
-        Sij[Sij < -cap], Rij[Rij < -cap] = -cap, -cap
-        # Because we enforced limits on Sij, we need to re-enforce trace of 0
+        maxsij, maxrij = np.amax(sij.ravel()), np.amax(rij.ravel())
+        minsij, minrij = np.amin(sij.ravel()), np.amin(rij.ravel())
+        print(' Max of Sij is ' + str(maxsij) + ', and of Rij is ' + str(maxrij) + ' capped to ' + str(cap))
+        print(' Min of Sij is ' + str(minsij) + ', and of Rij is ' + str(minrij)  + ' capped to ' + str(-cap))
+        sij[sij > cap], rij[rij > cap] = cap, cap
+        sij[sij < -cap], rij[rij < -cap] = -cap, -cap
+        # Because we enforced limits on Sij, we need to re-enforce trace of 0.
         # Go through each point
-        for i in prange(gradU.shape[0]):
-            Sij[i, :, :] -=  1/3.*np.eye(3)*np.trace(Sij[i, :, :])
+        if any((maxsij > cap, minsij < cap)):
+            for i in prange(grad_u.shape[0]):
+                # Recall Sij is symmetric and has 6 unique components
+                sij[i, ii6] -=  ((1/3.*np.eye(3)*np.trace(sij[i, ij_6to9].reshape((3, 3)))).ravel()[ii9])
 
-        # # TODO: save gives error to Numba
-        # # Save to pickle if requested
-        # if self.save:
-        #     # Which time is this calculation performed
-        #     saveToTime = self.times[-1] if saveToTime == 'last' else saveToTime
-        #     # Save Sij and Rij
-        #     self.savePickleData(saveToTime, (Sij, Rij), ('Sij', 'Rij'))
-
-        return Sij, Rij
+        return sij, rij
 
 
     @timer
-    def getInvariantBasesField(self, Sij, Rij, quadratic_only = False, is_scale = True, saveToTime = 'last'):
+    def getInvariantBasesField(self, sij, rij, quadratic_only=False, is_scale=True, zero_trace=False):
         """
         From Ling et al. TBNN
         Given Sij and Rij, it calculates the tensor basis
         :param Sij: normalized strain rate tensor
         :param Rij: normalized rotation rate tensor
         :param quadratic_only: True if only linear and quadratic terms are desired.  False if full basis is desired.
-        :return: T_flat: num_points X num_tensor_basis X 9 numpy array of tensor basis.
+        :return: T_flat: num_points X 6 X num_tensor_basis numpy array of tensor basis.
                         Ordering is 11, 12, 13, 21, 22, ...
         >>> A = np.zeros((1, 3, 3))
         >>> B = np.zeros((1, 3, 3))
@@ -750,62 +761,79 @@ class FieldData:
          [ -6.   0.   0.   0.  -6.   0.   0.   0.  12.]
          [  0.   0.   0.   0.   0.   0.   0.   0.   0.]]
         """
-        @njit(parallel = True, fastmath = True)
-        def __getInvariantBasesField(Sij, Rij, quadratic_only, is_scale):
+        @jit(parallel=True, fastmath=True)
+        def __getInvariantBasesField(sij, rij, quadratic_only, is_scale, zero_trace):
+            # Indices
+            ij_uniq = [0, 1, 2, 4, 5, 8]
+            ij_6to9 = [0, 1, 2, 1, 3, 4, 2, 4, 5]
+
             # If 3D flow, then 10 tensor bases; else if 2D flow, then 4 tensor bases
             num_tensor_basis = 10 if not quadratic_only else 4
             # Tensor bases is nPoint x nBasis x 3 x 3
-            tb = np.zeros((Sij.shape[0], num_tensor_basis, 3, 3))
+            # tb = np.zeros((Sij.shape[0], num_tensor_basis, 3, 3))
+            tb = np.empty((sij.shape[0], 6, num_tensor_basis))
             # Go through each point
-            for i in prange(Sij.shape[0]):
-                sij = Sij[i, :, :]
-                rij = Rij[i, :, :]
-                tb[i, 0, :, :] = sij
-                tb[i, 1, :, :] = np.dot(sij, rij) - np.dot(rij, sij)
-                tb[i, 2, :, :] = np.dot(sij, sij) - 1./3.*np.eye(3)*np.trace(np.dot(sij, sij))
-                tb[i, 3, :, :] = np.dot(rij, rij) - 1./3.*np.eye(3)*np.trace(np.dot(rij, rij))
+            for i in prange(sij.shape[0]):
+                # Sij only has 6 unique components, convert it to 9 using ij_6to9
+                sij_i = sij[i, ij_6to9].reshape((3, 3))
+                # Rij has 9 unique components already
+                rij_i = rij[i].reshape((3, 3))
+                # Convenient pre-computations
+                sijrij = sij_i @ rij_i
+                rijsij = rij_i @ sij_i
+                sijsij = sij_i @ sij_i
+                rijrij = rij_i @ rij_i
+                # 10 tensor bases for each point and each (unique) bij component
+                # 1: Sij
+                tb[i, :, 0] = sij_i.ravel()[ij_uniq]
+                # 2: SijRij - RijSij
+                tb[i, :, 1] = (sijrij - rijsij).ravel()[ij_uniq]
+                # 3: Sij^2 - 1/3I*tr(Sij^2)
+                tb[i, :, 2] = (sijsij - 1./3.*np.eye(3)*np.trace(sijsij)).ravel()[ij_uniq]
+                # 4: Rij^2 - 1/3I*tr(Rij^2)
+                tb[i, :, 3] = (rijrij - 1./3.*np.eye(3)*np.trace(rijrij)).ravel()[ij_uniq]
                 if not quadratic_only:
-                    tb[i, 4, :, :] = np.dot(rij, np.dot(sij, sij)) - np.dot(np.dot(sij, sij), rij)
-                    tb[i, 5, :, :] = np.dot(rij, np.dot(rij, sij)) \
-                                    + np.dot(sij, np.dot(rij, rij)) \
-                                    - 2./3.*np.eye(3)*np.trace(np.dot(sij, np.dot(rij, rij)))
-                    tb[i, 6, :, :] = np.dot(np.dot(rij, sij), np.dot(rij, rij)) - np.dot(np.dot(rij, rij), np.dot(sij, rij))
-                    tb[i, 7, :, :] = np.dot(np.dot(sij, rij), np.dot(sij, sij)) - np.dot(np.dot(sij, sij), np.dot(rij, sij))
-                    tb[i, 8, :, :] = np.dot(np.dot(rij, rij), np.dot(sij, sij)) \
-                                    + np.dot(np.dot(sij, sij), np.dot(rij, rij)) \
-                                    - 2./3.*np.eye(3)*np.trace(np.dot(np.dot(sij, sij), np.dot(rij, rij)))
-                    tb[i, 9, :, :] = np.dot(np.dot(rij, np.dot(sij, sij)), np.dot(rij, rij)) \
-                                    - np.dot(np.dot(rij, np.dot(rij, sij)), np.dot(sij, rij))
+                    # 5: RijSij^2 - Sij^2Rij
+                    tb[i, :, 4] = (rij_i @ sijsij - sij_i @ sijrij).ravel()[ij_uniq]
+                    # 6: Rij^2Sij + SijRij^2 - 2/3I*tr(SijRij^2)
+                    tb[i, :, 5] = (rij_i @ rijsij
+                                    + sij_i @ rijrij
+                                    - 2./3.*np.eye(3)*np.trace(sij_i @ rijrij)).ravel()[ij_uniq]
+                    # 7: RijSijRij^2 - Rij^2SijRij
+                    tb[i, :, 6] = (rijsij @ rijrij - rijrij @ sijrij).ravel()[ij_uniq]
+                    # 8: SijRijSij^2 - Sij^2RijSij
+                    tb[i, :, 7] = (sijrij @ sijsij - sijsij @ rijsij).ravel()[ij_uniq]
+                    # 9: Rij^2Sij^2 + Sij^2Rij^2 - 2/3I*tr(Sij^2Rij^2)
+                    tb[i, :, 8] = (rijrij @ sijsij
+                                    + sijsij @ rijrij
+                                    - 2./3.*np.eye(3)*np.trace(sijsij @ rijrij)).ravel()[ij_uniq]
+                    # 10: RijSij^2Rij^2 - Rij^2Sij^2Rij
+                    tb[i, :, 9] = ((rij_i @ sijsij) @ rijrij
+                                    - (rij_i @ rijsij) @ sijrij).ravel()[ij_uniq]
+
                 # Enforce zero trace for anisotropy for each basis
-                # TODO: Necessary?
-                for j in range(num_tensor_basis):
-                    tb[i, j, :, :] = tb[i, j, :, :] - 1./3.*np.eye(3)*np.trace(tb[i, j, :, :])
+                if zero_trace:
+                    for j in range(num_tensor_basis):
+                        # Recall tb is shape (n_samples, 6, n_bases)
+                        tb[i, :, j] -= (1./3.*np.eye(3)*np.trace(tb[i, ij_6to9, j].reshape((3, 3)))).ravel()[ij_uniq]
 
             # Scale down to promote convergence
             if is_scale:
                 # Using tuple gives Numba error
-                scale_factor = [10, 100, 100, 100, 1000, 1000, 10000, 10000, 10000, 100000]
+                scale_factor = [1, 10, 10, 10, 100, 100, 1000, 1000, 1000, 1000]
                 # Go through each basis
-                for i in prange(num_tensor_basis):
-                    tb[:, i, :, :] /= scale_factor[i]
+                for j in prange(1, num_tensor_basis):
+                    tb[:, :, j] /= scale_factor[j]
 
-            # # Flatten tensor bases to nPoint x nBasis x 9
-            # tb = tb.reshape((tb.shape[0], tb.shape[1], 9))
             return tb
 
-        tb = __getInvariantBasesField(Sij, Rij, quadratic_only, is_scale)
-
-        # # TODO: save gives error to Numba
-        # # Save data if requested
-        # if self.save:
-        #     saveToTime = self.times[len(self.times)] if saveToTime == 'last' else saveToTime
-        #     self.savePickleData(saveToTime, tb, 'tb')
+        tb = __getInvariantBasesField(sij, rij, quadratic_only, is_scale, zero_trace)
 
         return tb
 
     @timer
     @jit(parallel = True, fastmath = True)
-    def getAnisotropyTensorField(self, uuPrime2):
+    def getAnisotropyTensorField(self, uuPrime2, use_oldshape=True):
         # Reshape u'u' to 2D, with nPoint x 6/9
         shapeOld = uuPrime2.shape
         # If u'u' is 4D, then assume first 2D are mesh grid and last 2D are 3 x 3 and reshape to nPoint x 9
@@ -819,7 +847,7 @@ class FieldData:
             # Else if 3rd D has 6, then assume nX x nY x 6 and reshape to nPoint x 9
             elif uuPrime2.shape[2] == 6:
                 uuPrime2 = uuPrime2.reshape((uuPrime2.shape[0]*uuPrime2.shape[1], 6))
-            # Else if 3rd D has 9, then assume nX x nY x 9 and rehsape to nPoint x 9
+            # Else if 3rd D has 9, then assume nX x nY x 9 and reshape to nPoint x 9
             elif uuPrime2.shape[2] == 9:
                 uuPrime2 = uuPrime2.reshape((uuPrime2.shape[0]*uuPrime2.shape[1], 9))
 
@@ -830,27 +858,14 @@ class FieldData:
         # TKE
         k = 0.5*(uuPrime2[:, xx] + uuPrime2[:, yy] + uuPrime2[:, zz])
         # Avoid FPE
-        k[k < 1e-8] = 1e-8
+        k[k < 1e-10] = 1e-10
         # Convert u'u' to bij
         bij = np.empty_like(uuPrime2)
         for i in prange(uuPrime2.shape[1]):
             bij[:, i] = uuPrime2[:, i]/(2.*k) - 1/3. if i in (xx, yy, zz) else uuPrime2[:, i]/(2.*k)
 
-        # # If u'u' is provided as symmetric tensor
-        # if uuPrime2.shape[1] == 6:
-        #     # Add each anisotropy tensor to each mesh grid location, in depth
-        #     # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
-        #     bij = np.dstack((uuPrime2[:, 0], uuPrime2[:, 1], uuPrime2[:, 2],
-        #                          uuPrime2[:, 1], uuPrime2[:, 3], uuPrime2[:, 4],
-        #                          uuPrime2[:, 2], uuPrime2[:, 4], uuPrime2[:, 5]))
-        #     # Use tensor.shape[1] because Numpy reshape 1D array as 1 x N x 1 before dstack
-        #     bij = bij.reshape((bij.shape[1], 9))
-        # # Else if u'u' is provided as a full tensor
-        # else:
-        #     bij = uuPrime2
-
         # Reshape bij back to initial provide shape
-        bij = bij.reshape(shapeOld)
+        if bij.shape != shapeOld and use_oldshape: bij = bij.reshape(shapeOld)
 
         return bij
 
