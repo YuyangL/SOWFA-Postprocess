@@ -48,7 +48,7 @@ confineBox = ((800, 1800, 800, 1800, 0, 405),)  # (None,), ((xmin, xmax, ymin, y
 # Orientation of x-axis in x-y plane, in case of angled flow direction
 # Only used for values decomposition and confineBox
 # Angle in rad and counter-clockwise
-xOrientate = 6/np.pi  # FIXME: this right?
+xOrientate = np.pi/6.  # FIXME: this right?
 # Turbine radius, only used for confineBox
 r = 63
 # For calculating total <epsilon> only

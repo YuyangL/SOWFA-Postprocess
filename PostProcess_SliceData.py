@@ -409,17 +409,18 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    @jit(parallel = True, fastmath = True)
-    def calcSliceMeanDissipationRate(epsilonSGSmean, nuSGSmean, nu = 1e-5, save = False, resultPath = '.'):
+    @jit(parallel=True, fastmath=True)
+    def calcSliceMeanDissipationRate(epsilonSGSmean, nuSGSmean, nu=1e-5, save=False, resultPath='.'):
+        # FIXME: DEPRECATED
         # According to Eq 5.64 - Eq 5.68 of Sagaut (2006), for isotropic homogeneous turbulence,
         # <epsilon> = <epsilon_resolved> + <epsilon_SGS>,
-        # <epsilon_resolved>/<epsilon_SGS> = 1/(1 + (<nu_SGS>/nu)),
+        # <epsilon_resolved>/<epsilon_SGS> = 1/(1 + <nu_SGS>/nu),
         # where epsilon is the total turbulence dissipation rate (m^2/s^3); and <> is statistical averaging
 
         epsilonMean = epsilonSGSmean/(1. - (1./(1. + nuSGSmean/nu)))
         # Avoid FPE
-        epsilonMean[epsilonMean==np.inf] = 1e10
-        epsilonMean[epsilonMean==-np.inf] = -1e10
+        epsilonMean[epsilonMean == np.inf] = 1e10
+        epsilonMean[epsilonMean == -np.inf] = -1e10
 
         if save:
             pickle.dump(epsilonMean, open(resultPath + '/epsilonMean.p', 'wb'))

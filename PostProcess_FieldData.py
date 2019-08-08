@@ -133,7 +133,8 @@ class FieldData:
 
     @staticmethod
     @timer
-    def rotateSpatialCorrelationTensors(listData, rotateXY = 0., rotateUnit = 'rad', dependencies = ('xx',)):
+    def rotateSpatialCorrelationTensors(listData, rotateXY=0., rotateUnit='rad', dependencies=('xx',)):
+        # FIXME: DEPRECATED
         """
         Rotate one or more single/double spatial correlation scalar/tensor field/slice data in the x-y plane,
         doesn't work on rate of strain/rotation tensors
@@ -161,7 +162,7 @@ class FieldData:
         # Ensure radian unit
         rotateXY *= np.pi/180 if rotateUnit != 'rad' else 1.
         # Reshape here screwed up njit :/
-        @jit(parallel = True, fastmath = True)
+        @jit(parallel=True, fastmath=True)
         def __transform(listData, rotateXY, dependencies):
             # Copy listData (a list) that has original shapes as listData will be flattened to nPt x nComponent
             listDataRot_oldShapes = listData.copy()
@@ -267,7 +268,7 @@ class FieldData:
                 ccz = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + self.cellCenters[2])
                 cc = np.vstack((ccx, ccy, ccz)).T
                 if self.save:
-                    self.savePickleData(self.times[i], cc, fileNames = 'cc')
+                    self.savePickleData(self.times[i], cc, fileNames = 'CC')
 
                 break
             except:
@@ -316,8 +317,8 @@ class FieldData:
 
 
     @timer
-    @jit(parallel = True, fastmath = True)
-    def confineFieldDomain_Rotated(self, x, y, z, vals, boxL, boxW, boxH, boxO = (0, 0, 0), boxRot = 0, valsName = 'data', fileNameSub = 'Confined', saveToTime = 'last'):
+    @jit(parallel=True, fastmath=True)
+    def confineFieldDomain_Rotated(self, x, y, z, vals, boxL, boxW, boxH, boxO=(0, 0, 0), boxRot=0, valsName='data', fileNameSub='Confined', saveToTime='last'):
         print('\nConfining field domain with rotated box...')
         # Create the bounding box
         box = path.Path(((boxO[0], boxO[1]),
@@ -361,10 +362,10 @@ class FieldData:
             # Which time is this mean performed
             saveToTime = str(self.times[-1]) if saveToTime == 'last' else str(saveToTime)
             # Save confined cell centers
-            pickle.dump(ccNew2, open(self.resultPaths[saveToTime] + 'cc_' + fileNameSub + '.p', 'wb'), protocol = self.saveProtocol)
+            pickle.dump(ccNew2, open(self.resultPaths[saveToTime] + 'CC_' + fileNameSub + '.p', 'wb'), protocol = self.saveProtocol)
             # Save confined field ensemble
             pickle.dump(valsNew2, open(self.resultPaths[saveToTime] + valsName + '_' + fileNameSub + '.p', 'wb'), protocol = self.saveProtocol)
-            print('\n{0} and {1} saved at {2}'.format('cc_' + fileNameSub, valsName + '_' + fileNameSub, self.resultPaths[saveToTime]))
+            print('\n{0} and {1} saved at {2}'.format('CC_' + fileNameSub, valsName + '_' + fileNameSub, self.resultPaths[saveToTime]))
 
         return xNew2, yNew2, zNew2, ccNew2, valsNew2, box, flags
 
@@ -650,6 +651,7 @@ class FieldData:
     @timer
     @jit(fastmath = True)
     def getMeanDissipationRateField(self, epsilonSGSmean, nuSGSmean, nu=1e-5, saveToTime = 'last'):
+        # FIXME: DEPRECATED
         # According to Eq 5.64 - Eq 5.68 of Sagaut (2006), for isotropic homogeneous turbulence,
         # <epsilon> = <epsilon_resolved> + <epsilon_SGS>,
         # <epsilon_resolved>/<epsilon_SGS> = 1/(1 + (<nu_SGS>/nu)),
@@ -694,11 +696,8 @@ class FieldData:
             tke = np.ones(grad_u.shape[0])
             eps = np.ones(grad_u.shape[0])
 
-        # Flatten TKE and eps array
-        tke = tke.ravel() if len(tke.shape) == 2 else tke
-        eps = eps.ravel() if len(eps.shape) == 2 else eps
         # Cap epsilon to 1e-10 to avoid FPE, also assuming no back-scattering
-        eps = np.maximum(eps, 1e-10)
+        eps[eps == 0.] = 1e-10
         # Non-dimensionalization coefficient for strain and rotation rate tensor
         tke_eps = tke/eps
         # Sij is strain rate tensor, Rij is rotation rate tensor
@@ -966,7 +965,7 @@ class FieldData:
         # Go through each file
         for i in prange(len(fileNames)):
             dataDict[fileNames[i]] = pickle.load(open(self.resultPaths[str(time)] + fileNames[i] + '.p', 'rb'),
-                                                 encoding = encode)
+                                                 encoding=encode)
 
         # If just one file read, then no need for a dictionary
         if len(fileNames) == 1:
