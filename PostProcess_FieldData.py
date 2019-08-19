@@ -700,17 +700,17 @@ class FieldData:
         eps[eps == 0.] = 1e-10
         # Non-dimensionalization coefficient for strain and rotation rate tensor
         tke_eps = tke/eps
-        # Sij is strain rate tensor, Rij is rotation rate tensor
-        # Sij is symmetric tensor, thus 6 unique components, while Rij is anti-symmetric and 9 unique components
+        # sij is strain rate tensor, rij is rotation rate tensor
+        # sij is symmetric tensor, thus 6 unique components, while rij is anti-symmetric and 9 unique components
         sij = np.empty((grad_u.shape[0], 6))
         rij = np.empty((grad_u.shape[0], 9))
         # Go through each point
         for i in prange(grad_u.shape[0]):
             grad_u_i = grad_u[i].reshape((3, 3)) if len(grad_u.shape) == 2 else grad_u[i]
-            # Basically Sij = 0.5TKE/epsilon*(grad_u_i + grad_u_j) that has 0 trace
+            # Basically sij = 0.5TKE/epsilon*(grad_u_i + grad_u_j) that has 0 trace
             sij_i = (tke_eps[i]*0.5*(grad_u_i + grad_u_i.T)).ravel()
 
-            # Basically Rij = 0.5TKE/epsilon*(grad_u_i - grad_u_j) that has 0 in the diagonal
+            # Basically rij = 0.5TKE/epsilon*(grad_u_i - grad_u_j) that has 0 in the diagonal
             rij_i = (tke_eps[i]*0.5*(grad_u_i - grad_u_i.T)).ravel()
             sij[i] = sij_i[ij_uniq]
             rij[i] = rij_i
@@ -718,15 +718,15 @@ class FieldData:
         # Maximum and minimum
         maxsij, maxrij = np.amax(sij.ravel()), np.amax(rij.ravel())
         minsij, minrij = np.amin(sij.ravel()), np.amin(rij.ravel())
-        print(' Max of Sij is ' + str(maxsij) + ', and of Rij is ' + str(maxrij) + ' capped to ' + str(cap))
-        print(' Min of Sij is ' + str(minsij) + ', and of Rij is ' + str(minrij)  + ' capped to ' + str(-cap))
+        print(' Max of sij is ' + str(maxsij) + ', and of rij is ' + str(maxrij) + ' capped to ' + str(cap))
+        print(' Min of sij is ' + str(minsij) + ', and of rij is ' + str(minrij)  + ' capped to ' + str(-cap))
         sij[sij > cap], rij[rij > cap] = cap, cap
         sij[sij < -cap], rij[rij < -cap] = -cap, -cap
-        # Because we enforced limits on Sij, we need to re-enforce trace of 0.
+        # Because we enforced limits on sij, we need to re-enforce trace of 0.
         # Go through each point
         if any((maxsij > cap, minsij < cap)):
             for i in prange(grad_u.shape[0]):
-                # Recall Sij is symmetric and has 6 unique components
+                # Recall sij is symmetric and has 6 unique components
                 sij[i, ii6] -=  ((1/3.*np.eye(3)*np.trace(sij[i, ij_6to9].reshape((3, 3)))).ravel()[ii9])
 
         return sij, rij
@@ -736,9 +736,9 @@ class FieldData:
     def getInvariantBasesField(self, sij, rij, quadratic_only=False, is_scale=True, zero_trace=False):
         """
         From Ling et al. TBNN
-        Given Sij and Rij, it calculates the tensor basis
-        :param Sij: normalized strain rate tensor
-        :param Rij: normalized rotation rate tensor
+        Given sij and rij, it calculates the tensor basis
+        :param sij: normalized strain rate tensor
+        :param rij: normalized rotation rate tensor
         :param quadratic_only: True if only linear and quadratic terms are desired.  False if full basis is desired.
         :return: T_flat: num_points X 6 X num_tensor_basis numpy array of tensor basis.
                         Ordering is 11, 12, 13, 21, 22, ...
@@ -769,13 +769,13 @@ class FieldData:
             # If 3D flow, then 10 tensor bases; else if 2D flow, then 4 tensor bases
             num_tensor_basis = 10 if not quadratic_only else 4
             # Tensor bases is nPoint x nBasis x 3 x 3
-            # tb = np.zeros((Sij.shape[0], num_tensor_basis, 3, 3))
+            # tb = np.zeros((sij.shape[0], num_tensor_basis, 3, 3))
             tb = np.empty((sij.shape[0], 6, num_tensor_basis))
             # Go through each point
             for i in prange(sij.shape[0]):
-                # Sij only has 6 unique components, convert it to 9 using ij_6to9
+                # sij only has 6 unique components, convert it to 9 using ij_6to9
                 sij_i = sij[i, ij_6to9].reshape((3, 3))
-                # Rij has 9 unique components already
+                # rij has 9 unique components already
                 rij_i = rij[i].reshape((3, 3))
                 # Convenient pre-computations
                 sijrij = sij_i @ rij_i
@@ -783,30 +783,30 @@ class FieldData:
                 sijsij = sij_i @ sij_i
                 rijrij = rij_i @ rij_i
                 # 10 tensor bases for each point and each (unique) bij component
-                # 1: Sij
+                # 1: sij
                 tb[i, :, 0] = sij_i.ravel()[ij_uniq]
                 # 2: SijRij - RijSij
                 tb[i, :, 1] = (sijrij - rijsij).ravel()[ij_uniq]
-                # 3: Sij^2 - 1/3I*tr(Sij^2)
+                # 3: sij^2 - 1/3I*tr(sij^2)
                 tb[i, :, 2] = (sijsij - 1./3.*np.eye(3)*np.trace(sijsij)).ravel()[ij_uniq]
-                # 4: Rij^2 - 1/3I*tr(Rij^2)
+                # 4: rij^2 - 1/3I*tr(rij^2)
                 tb[i, :, 3] = (rijrij - 1./3.*np.eye(3)*np.trace(rijrij)).ravel()[ij_uniq]
                 if not quadratic_only:
-                    # 5: RijSij^2 - Sij^2Rij
+                    # 5: RijSij^2 - sij^2Rij
                     tb[i, :, 4] = (rij_i @ sijsij - sij_i @ sijrij).ravel()[ij_uniq]
-                    # 6: Rij^2Sij + SijRij^2 - 2/3I*tr(SijRij^2)
+                    # 6: rij^2Sij + SijRij^2 - 2/3I*tr(SijRij^2)
                     tb[i, :, 5] = (rij_i @ rijsij
                                     + sij_i @ rijrij
                                     - 2./3.*np.eye(3)*np.trace(sij_i @ rijrij)).ravel()[ij_uniq]
-                    # 7: RijSijRij^2 - Rij^2SijRij
+                    # 7: RijSijRij^2 - rij^2SijRij
                     tb[i, :, 6] = (rijsij @ rijrij - rijrij @ sijrij).ravel()[ij_uniq]
-                    # 8: SijRijSij^2 - Sij^2RijSij
+                    # 8: SijRijSij^2 - sij^2RijSij
                     tb[i, :, 7] = (sijrij @ sijsij - sijsij @ rijsij).ravel()[ij_uniq]
-                    # 9: Rij^2Sij^2 + Sij^2Rij^2 - 2/3I*tr(Sij^2Rij^2)
+                    # 9: rij^2Sij^2 + sij^2Rij^2 - 2/3I*tr(sij^2Rij^2)
                     tb[i, :, 8] = (rijrij @ sijsij
                                     + sijsij @ rijrij
                                     - 2./3.*np.eye(3)*np.trace(sijsij @ rijrij)).ravel()[ij_uniq]
-                    # 10: RijSij^2Rij^2 - Rij^2Sij^2Rij
+                    # 10: RijSij^2Rij^2 - rij^2Sij^2Rij
                     tb[i, :, 9] = ((rij_i @ sijsij) @ rijrij
                                     - (rij_i @ rijsij) @ sijrij).ravel()[ij_uniq]
 
@@ -829,6 +829,71 @@ class FieldData:
         tb = __getInvariantBasesField(sij, rij, quadratic_only, is_scale, zero_trace)
 
         return tb
+
+    @timer
+    # Numba is unable to determine "self" type
+    @jit(parallel=True, fastmath=True)
+    def calcScalarBasis(self, sij, rij, is_train=False, cap=100.0, is_scale=True):
+        """
+        Given the non-dimensionalized mean strain rate and mean rotation rate tensors sij and rij,
+        this returns a set of normalized scalar invariants
+        :param sij: k/eps * 0.5 * (du_i/dx_j + du_j/dx_i)
+        :param rij: k/eps * 0.5 * (du_i/dx_j - du_j/dx_i)
+        :param is_train: Determines whether normalization constants should be reset
+                        --True if it is training, False if it is test set
+        :param cap: Caps the max value of the invariants after first normalization pass
+        :return: invariants: The num_points X num_scalar_invariants numpy matrix of scalar invariants
+        >>> A = np.zeros((1, 3, 3))
+        >>> B = np.zeros((1, 3, 3))
+        >>> A[0, :, :] = np.eye(3) * 2.0
+        >>> B[0, 1, 0] = 1.0
+        >>> B[0, 0, 1] = -1.0
+        >>> tdp = TurbulenceKEpsDataProcessor()
+        >>> tdp.mu = 0
+        >>> tdp.std = 0
+        >>> scalar_basis = tdp.calc_scalar_basis(A, B, is_scale=False)
+        >>> print scalar_basis
+        [[ 12.  -2.  24.  -4.  -8.]]
+        """
+        if is_train:
+            self.mu = None
+            self.std = None
+            
+        num_points = sij.shape[0]
+        num_invariants = 5
+        invariants = np.zeros((num_points, num_invariants))
+        for i in prange(num_points):
+            invariants[i, 0] = np.trace(np.dot(sij[i, :, :], sij[i, :, :]))
+            invariants[i, 1] = np.trace(np.dot(rij[i, :, :], rij[i, :, :]))
+            invariants[i, 2] = np.trace(np.dot(sij[i, :, :], np.dot(sij[i, :, :], sij[i, :, :])))
+            invariants[i, 3] = np.trace(np.dot(rij[i, :, :], np.dot(rij[i, :, :], sij[i, :, :])))
+            invariants[i, 4] = np.trace(np.dot(np.dot(rij[i, :, :], rij[i, :, :]), np.dot(sij[i, :, :], sij[i, :, :])))
+
+        # Renormalize invariants using mean and standard deviation:
+        if is_scale:
+            if self.mu is None or self.std is None:
+                is_train = True
+
+            if is_train:
+                self.mu = np.zeros((num_invariants, 2))
+                self.std = np.zeros((num_invariants, 2))
+                self.mu[:, 0] = np.mean(invariants, axis=0)
+                self.std[:, 0] = np.std(invariants, axis=0)
+
+            invariants = (invariants - self.mu[:, 0])/self.std[:, 0]
+            maxInvariants, minInvariants = np.amax(invariants), np.amin(invariants)
+            print(' Max of scaled scalar basis is {}'.format(maxInvariants))
+            print(' Max of scaled scalar basis is {}'.format(minInvariants))
+            # Why cap?????
+            invariants[invariants > cap] = cap  # Cap max magnitude
+            invariants[invariants < -cap] = -cap
+            invariants = invariants*self.std[:, 0] + self.mu[:, 0]
+            if is_train:
+                self.mu[:, 1] = np.mean(invariants, axis=0)
+                self.std[:, 1] = np.std(invariants, axis=0)
+
+            invariants = (invariants - self.mu[:, 1])/self.std[:, 1]  # Renormalize a second time after capping
+        return invariants, self.mu, self.std
 
     @timer
     @jit(parallel = True, fastmath = True)

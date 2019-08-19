@@ -9,11 +9,11 @@ from mpl_toolkits.mplot3d import proj3d
 import numpy as np
 from warnings import warn
 from Utilities import timer
-from numba import njit, jit, prange
 from scipy import ndimage
 from matplotlib.patches import Circle, PathPatch
 import mpl_toolkits.mplot3d.art3d as art3d
 from copy import copy
+import matplotlib.cm
 
 class BaseFigure:
     def __init__(self, list_x, list_y, name='UntitledFigure', fontsize=8, xlabel='$x$', ylabel='$y$', figdir='./', 
@@ -238,7 +238,7 @@ class Plot2D(BaseFigure):
         self.val = val
         # Ensure there's an entry for both vmin and vmax
         self.val_lim = val_lim if val_lim is not None else (None, None)
-        self.lines, self.markers = ("-", "--", "-.", ":")*5, ('o', 'D', 's', 'x', 'v', '^', '<', '>', 's', '8', 'p')*3
+        self.lines, self.markers = ("-", "--", "-.", ":")*5, ('o', 'D', 's', 'v', '^', '<', '>', 's', '8', 'p')*3
         self.alpha, self.cmap = alpha, cmap
         self.val_label = val_label
         # Gradient background related variables
@@ -267,7 +267,8 @@ class Plot2D(BaseFigure):
         super(Plot2D, self).initializeFigure(**kwargs)
 
 
-    def plotFigure(self, linelabel=None, showmarker=False, contour_lvl=20, **kwargs):
+    def plotFigure(self, linelabel=None, showmarker=False, contour_lvl=20, markercolors=None, **kwargs):
+        self.markercolors = (markercolors,)*self.narr if isinstance(markercolors, np.ndarray) else markercolors
         self.showmarker, self.contour_lvl = showmarker, contour_lvl
         # Gradient background, only for line and scatter plots
         if self.grad_bg and self.plot_type[0] in ('line', 'scatter'):
@@ -282,14 +283,25 @@ class Plot2D(BaseFigure):
         for i in range(self.narr):
             if self.plot_type[i] == 'line':
                 if not showmarker:
-                    self.plots[i] = self.axes.plot(self.list_x[i], self.list_y[i], ls=self.lines[i], label=str(self.linelabel[i]), color=self.colors[i], alpha=self.alpha)
+                    self.plots[i] = self.axes.plot(self.list_x[i], self.list_y[i], ls=self.lines[i],
+                                                   label=str(self.linelabel[i]), color=self.colors[i],
+                                                   alpha=self.alpha)
+
                 else:
                     self.plots[i] = self.axes.plot(self.list_x[i], self.list_y[i], ls=self.lines[i],
-                                                   label=str(self.linelabel[i]), color=self.colors[i], alpha=self.alpha, 
+                                                   label=str(self.linelabel[i]), color=self.colors[i],
+                                                   alpha=self.alpha,
                                                    marker=self.markers[i])
                     
             elif self.plot_type[i] == 'scatter':
-                self.plots[i] = self.axes.scatter(self.list_x[i], self.list_y[i], lw=0, label=str(self.linelabel[i]), alpha=self.alpha, color=self.colors[i], marker=self.markers[i])
+                if self.markercolors is None:
+                    self.plots[i] = self.axes.scatter(self.list_x[i], self.list_y[i], lw=0, s=10,
+                                                      label=str(self.linelabel[i]), alpha=self.alpha, color=self.colors[i], marker=self.markers[i])
+                else:
+                    self.plots[i] = self.axes.scatter(self.list_x[i], self.list_y[i], lw=0, s=10,
+                                                      label=str(self.linelabel[i]), alpha=self.alpha,
+                                                      c=self.markercolors[i], marker=self.markers[i])
+
             elif self.plot_type[i] == 'contourf':
                 self._ensureMeshGrid()
                 self.plots[i] = self.axes.contourf(self.list_x[i], self.list_y[i], self.val, levels=contour_lvl, cmap=self.cmap, extend='both', vmin=self.val_lim[0], vmax=self.val_lim[1])
@@ -301,9 +313,8 @@ class Plot2D(BaseFigure):
                 warn("\nUnrecognized plot plot_type! plot_type must be one/list of ('infer', 'line', 'scatter', 'contourf', 'contour').\n", stacklevel=2)
                 return
 
-
     def finalizeFigure(self, cbar_orient='horizontal', showcb=True, cbticks=None, **kwargs):
-        if self.plot_type[0] in ('contourf', 'contour'):
+        if self.plot_type[0] in ('contourf', 'contour') or (showcb and self.markercolors is not None):
             cb = plt.colorbar(self.plots[0], ax=self.axes, orientation=cbar_orient, extend='both', ticks=cbticks)
             cb.set_label(self.val_label)
             super().finalizeFigure(grid=False, **kwargs)
@@ -945,6 +956,9 @@ class PlotImageSlices3D(BaseFigure3D):
         # self.zlim = (np.min(list_z), np.max(list_z)) if self.zlim[0] is None else self.zlim
         _ = self._getSlicesLimits(list_x=self.list_x, list_y=self.list_y, list_z=self.list_z)
 
+    def initializeFigure(self, constrained_layout=False, **kwargs):
+        super(PlotImageSlices3D, self).initializeFigure(constrained_layout=constrained_layout, **kwargs)
+
     @timer
     def plotFigure(self):
         print('\nPlotting {}...'.format(self.name))
@@ -958,8 +972,8 @@ class PlotImageSlices3D(BaseFigure3D):
                 print(' {0}%... '.format(milestone))
                 milestone += 33
             
-    def finalizeFigure(self, **kwargs):
-        super(PlotImageSlices3D, self).finalizeFigure(show_cbar=False, **kwargs)
+    def finalizeFigure(self, tight_layout=True, **kwargs):
+        super(PlotImageSlices3D, self).finalizeFigure(show_cbar=False, tight_layout=tight_layout, **kwargs)
             
     
     
