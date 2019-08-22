@@ -418,9 +418,7 @@ class Plot2D_MultiAxes(Plot2D):
         self.plot_type2 = (plot_type2,)*self.narr2 if isinstance(plot_type2, str) else plot_type2
             
         # Ensure ax2 labels are the same length of provided x2 and y2 lists
-        if isinstance(ax2label, str):
-            self.ax2label = (ax2label,)*self.narr2
-            
+        self.ax2label = (ax2label,)*self.narr2 if isinstance(ax2label, str) else ax2label
         self.x2lim = x2lim
         self.y2lim = y2lim
 
@@ -454,7 +452,7 @@ class Plot2D_MultiAxes(Plot2D):
                 self.axes2[i].xaxis.set_ticks_position("bottom")
                 self.axes2[i].xaxis.set_label_position("bottom")
                 # Offset the twin axis below the host
-                self.axes2[i].spines['bottom'].set_position(('axes', -0.1*(i + 1)))
+                self.axes2[i].spines['bottom'].set_position(('axes', -0.3*(i + 1)))
             # Else if new axes are y
             else:
                 self.axes2[i] = self.axes.twinx()
@@ -495,12 +493,12 @@ class Plot2D_MultiAxes(Plot2D):
                 self.plots2[i] = self.axes2[i].fill_between(self.list_x2[i], 0, self.list_y2[i], alpha=1, facecolor=(160/255., 160/255., 160/255.),
                                                      interpolate=False)
             elif self.plot_type2[i] == 'line':
-                # If show markers in line plots
+                # If don't show markers in line plots
                 if not self.showmarker:
                     self.plots2[i], = self.axes2[i].plot(self.list_x2[i], self.list_y2[i],
                                                         ls=self.lines[i + self.narr], label=str(self.linelabel2[i]),
                                                         color=self.colors[i + self.narr], alpha=self.alpha)
-                # Else if don't show markers in line plot
+                # Else if show markers in line plot
                 else:
                     self.plots2[i], = self.axes2[i].plot(self.list_x2[i], self.list_y2[i],
                                                         ls=self.lines[i + self.narr], label=str(self.linelabel2[i]),
@@ -508,8 +506,8 @@ class Plot2D_MultiAxes(Plot2D):
                                                         marker=self.markers[i + self.narr])
                     
                     
-    def finalizeFigure(self, **kwargs):
-        super(Plot2D_MultiAxes, self).finalizeFigure(tight_layout=True, **kwargs)
+    def finalizeFigure(self, tight_layout=True, **kwargs):
+        super(Plot2D_MultiAxes, self).finalizeFigure(tight_layout=tight_layout, **kwargs)
 
 
 class Plot3D(BaseFigure):
