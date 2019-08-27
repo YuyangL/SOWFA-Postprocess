@@ -63,7 +63,7 @@ class BaseFigure:
         return colors, gray
 
 
-    def _latexify(self, fig_width=None, fig_height=None, figspan='half', linewidth=1, fontsize=8, subplots=(1, 1), figheight_multiplier=1.,
+    def _latexify(self, fig_width=None, fig_height=None, figspan='half', linewidth=0.8, fontsize=8, subplots=(1, 1), figheight_multiplier=1.,
                   **kwargs):
         """Set up matplotlib's RC params for LaTeX plotting.
         Call this before plotting a figure.

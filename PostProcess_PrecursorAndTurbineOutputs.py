@@ -27,7 +27,6 @@ class BaseProperties:
 
         print('\n{0} initialized'.format(caseName))
 
-
     def _ensureTupleInput(self, input):
         inputTuple = (input,) if isinstance(input, (str, np.ndarray, int)) else input
         # If input[0] is '*' or 'all', get all file names
@@ -37,7 +36,6 @@ class BaseProperties:
             inputTuple = tuple([f for f in os.listdir(self.ensembleFolderPath) if not f.startswith('.')])
 
         return inputTuple
-
 
     def _readTimes(self, noRepeat = True, **kwargs):
         fileNames = os.listdir(self.ensembleFolderPath)
@@ -58,8 +56,6 @@ class BaseProperties:
 
         return timesAll
 
-
-    @jit(parallel = True)
     def _mergeTimeDirectories(self, trimOverlapTime = True, timeKw = 'ime', forceRemerge = False, excludeFile = None):
         # [DEPRECATED]
         # @jit
@@ -181,7 +177,6 @@ class BaseProperties:
 
         print("\nMerged time directories for " + str(self.caseName) + " files are stored at:\n " + str(self.ensembleFolderPath))
 
-
     def _selectTimes(self, startTime = None, stopTime = None):
         startTime = self.timesAll[0] if startTime is None else startTime
         stopTime = self.timesAll[len(self.timesAll)] if stopTime is None else stopTime
@@ -196,8 +191,6 @@ class BaseProperties:
         # print('\nTime and index information extracted for ' + str(startTimeReal) + ' s - ' + str(stopTimeReal) + ' s')
         return timesSelected, startTimeReal, stopTimeReal, iStart, iStop
 
-
-    @jit(parallel = True)
     def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 0, skipFooter = 0):
         self.fileNames = self._ensureTupleInput(fileNames)
         skipRow = (skipRow,)*len(self.fileNames) if isinstance(skipRow, int) else skipRow
@@ -216,9 +209,6 @@ class BaseProperties:
 
         print('\n' + str(self.fileNames) + ' read')
 
-
-    # prange has to run with parallel = True
-    @jit(parallel = True, fastmath = True)
     def calculatePropertyMean(self, axis = 1, startTime = None, stopTime = None):
         self.timesSelected, _, _, iStart, iStop = self._selectTimes(startTime = startTime, stopTime = stopTime)
         for i in prange(len(self.fileNames)):
@@ -283,7 +273,6 @@ class TurbineOutputs(BaseProperties):
 
 
     @timer
-    @jit(parallel = True, fastmath = True)
     def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 'infer', verbose = True, turbInfo = ('infer',)):
         fileNames = self._ensureTupleInput(fileNames)
         globalQuantities = (
@@ -355,7 +344,6 @@ class InflowBoundaryField(BaseProperties):
 
         print('{} InflowBoundaryField object initialized'.format(caseName))
 
-
     def _readTimes(self, remove = 'points', **kwargs):
         timesAll = os.listdir(self.casePatchFullPaths[0])
         try:
@@ -375,9 +363,7 @@ class InflowBoundaryField(BaseProperties):
 
         return timesAll, timesAllRaw
 
-
     @timer
-    # Parallel doesn't work here due to decode?
     def readPropertyData(self, fileNames = ('*',), skipRow = 22, skipFooter = 1, nTimeSample = -1, lstrPrecision = 12, rstrPrecision = 20):
         def __trimBracketCharacters(data):
             # Get left and right column of U
@@ -459,7 +445,6 @@ class InflowBoundaryField(BaseProperties):
 
 
     @timer
-    @jit(parallel = True, fastmath = True)
     def calculatePropertyMean(self, startTime = None, stopTime = None, **kwargs):
         # timesAll in _selectTimes() should be sampleTimes in this case, thus temporarily change timesAll to sampleTimes
         timesAllTmp = self.timesAll.copy()
@@ -485,7 +470,6 @@ class InflowBoundaryField(BaseProperties):
 
 
     @timer
-    @jit(parallel = True)
     def writeMeanToOpenFOAM_Format(self):
         # Go through inflow patches
         for i, patch in enumerate(self.inflowPatches):
