@@ -3,8 +3,8 @@ import numpy as np
 from warnings import warn
 import Ofpp as of
 import random
-from numba import njit, jit, prange
-from Utilities import timer
+from numba import njit, prange
+from Utility import timer, deprecated
 from matplotlib import path
 from scipy.interpolate import griddata, Rbf
 try:
@@ -13,46 +13,42 @@ except ModuleNotFoundError:
     import pickle
 
 class FieldData:
-    def __init__(self, fields = 'all', times = 'all', caseName = 'ABL_N_H', caseDir = '.', fileNamePre = '', fileNameSub
-    = '', cellCenters = ('ccx', 'ccy', 'ccz'), resultFolder = 'Result', fieldFolderName = 'Fields', save = True, saveProtocol = 4):
+    def __init__(self, fields='*', times='*', casename='ABL_N_H', casedir='.', filenames_pre='', filenames_sub='', 
+                 cc=('ccx', 'ccy', 'ccz'), result_folder='Result', field_foldername='Fields', save=True, save_protocol=4):
         self.fields = fields
-        self.caseFullPath = caseDir + '/' + caseName + '/Fields/'
-        self.fileNamePre, self.fileNameSub = fileNamePre, fileNameSub
-        self.cellCenters = cellCenters
-        self.caseTimeFullPaths, self.resultPaths = {}, {}
+        self.case_fullpath = casedir + '/' + casename + '/' + field_foldername + '/'
+        self.filenames_pre, self.filenames_sub = filenames_pre, filenames_sub
+        self.cc = cc
+        self.case_time_fullpaths, self.result_paths = {}, {}
         # Save result as pickle and based on protocol pyVer
-        self.save, self.saveProtocol = save, saveProtocol
+        self.save, self.save_protocol = save, save_protocol
         # If times in list/tuple or all times requested
         if isinstance(times, (list, tuple)) or times in ('*', 'all', 'All'):
             # If all times, try remove the result folder from found directories
-            self.times = self._readTimes(removes = resultFolder)[1] if times in ('*', 'all', 'All') else self.times
-                
+            if times in ('*', 'all', 'All'): self.times = self._readTimes(removes=result_folder)[1]
             # Go through all provided times, time could be string or integer and/or float
             for time in self.times:
-                self.caseTimeFullPaths[str(time)] = self.caseFullPath + str(time) + '/'
+                self.case_time_fullpaths[str(time)] = self.case_fullpath + str(time) + '/'
                 # In the result directory, there are time directories
-                self.resultPaths[str(time)] = caseDir + '/' + caseName + '/' + fieldFolderName + '/' + resultFolder + '/' + str(time) + '/'
+                self.result_paths[str(time)] = casedir + '/' + casename + '/' + field_foldername + '/' + result_folder + '/' + str(time) + '/'
                 # Try to make the result directories, if not existent already
-                os.makedirs(self.resultPaths[str(time)], exist_ok=True)
+                os.makedirs(self.result_paths[str(time)], exist_ok=True)
 
         # Else if only one time provided, time could be string or integer or float
         else:
-            self.caseTimeFullPaths[str(times)] = self.caseFullPath + str(times) + '/'
+            self.case_time_fullpaths[str(times)] = self.case_fullpath + str(times) + '/'
             # Make sure times is in list(str)
             self.times = [str(times)]
-            self.resultPaths[str(times)] = caseDir + '/' + caseName + '/Fields/' + resultFolder + '/' + str(times) + '/'
-            try:
-                os.makedirs(self.resultPaths[str(times)])
-            except OSError:
-                pass
+            self.result_paths[str(times)] = casedir + '/' + casename + '/Fields/' + result_folder + '/' + str(times) + '/'
+            os.makedirs(self.result_paths[str(times)], exist_ok=True)
 
         # If fields is 'all'/'All'/'*'
         # Get a random time directory in order to collect fields
-        _, self.caseTimeFullPathsRand = random.choice(list(self.caseTimeFullPaths.items()))
+        _, self.case_time_fullpaths_rand = random.choice(list(self.case_time_fullpaths.items()))
         if fields in ('all', 'All', '*'):
-            self.fields = os.listdir(self.caseTimeFullPathsRand)
+            self.fields = os.listdir(self.case_time_fullpaths_rand)
             # Remove cellCenter fields from this list
-            self.fields = [val for _, val in enumerate(self.fields) if val not in cellCenters]
+            self.fields = [val for _, val in enumerate(self.fields) if val not in cc]
             # Try removing uniform folder if it exists
             try:
                 self.fields.remove('uniform')
@@ -68,80 +64,76 @@ class FieldData:
         self.ij_uniq = [0, 1, 2, 4, 5, 8]
         self.ii6, self.ii9 = [0, 3, 5], [0, 4, 8]
         self.ij_6to9 = [0, 1, 2, 1, 3, 4, 2, 4, 5]
-
         print('\nFieldData object initialized')
 
-
-    def _readTimes(self, removes = ('Result',)):
-        timesAll = os.listdir(self.caseFullPath)
+    def _readTimes(self, removes=('Result',)):
+        times_all = os.listdir(self.case_fullpath)
         # Ensure tuple so it can be looped
-        removes = (removes,) if isinstance(removes, str) else removes
+        if isinstance(removes, str): removes = (removes,)
         # Remove strings on request
         for remove in removes:
             try:
-                timesAll.remove(remove)
+                times_all.remove(remove)
             except ValueError:
                 pass
 
         # Raw all times that are string and can be integer and float mixed
         # Useful for locating time directories that can be integer
-        timesAllRaw = timesAll
+        times_all_raw = times_all
         # Numerical float all times and sort from low to high
-        timesAll = np.array([float(i) for i in timesAll])
+        times_all = np.array([float(i) for i in times_all])
         # Sort string all times by its float counterpart
-        timesAllRaw = [timeRaw for time, timeRaw in sorted(zip(timesAll, timesAllRaw))]
+        times_all_raw = [time_raw for time, time_raw in sorted(zip(times_all, times_all_raw))]
         # Use Numpy sort() to sort float all times
-        timesAll.sort()
+        times_all.sort()
 
-        return timesAll, timesAllRaw
-
+        return times_all, times_all_raw
 
     @timer
-    @jit(parallel = True)
     def readFieldData(self):
         """
         Read field data specified by self.fields and self.times, data shape is nPoint (x nComponent (x nTime)).
         E.g. scalar field with one time is nPoint x 0 x 0;
         tensor field with one time is nPoint x nComponent x 0;
-        :return: fieldData dictionary
+        :return: field_data dictionary
         :rtype: dict(np.ndarray(nPoint (x nComponent (x nTime))))
         """
-        fieldData = {}
+        field_data = {}
         # Go through each specified field
-        for i in prange(len(self.fields)):
+        for i in range(len(self.fields)):
             field = self.fields[i]
             print(' Reading {}...'.format(field))
             # Read the data of field in the 1st time directory
-            fieldData[field] = of.parse_internal_field(self.caseTimeFullPaths[self.times[0]] + field)
+            field_data[field] = of.parse_internal_field(self.case_time_fullpaths[self.times[0]] + field)
             # If multiple times requested, read data and stack them in 3rd D
             if len(self.times) > 1:
-                for j in prange(1, len(self.times)):
-                    fieldData_j = of.parse_internal_field(self.caseTimeFullPaths[self.times[j]] + field)
-                    fieldData[field] = np.dstack((fieldData[field], fieldData_j))
+                for j in range(1, len(self.times)):
+                    field_data_j = of.parse_internal_field(self.case_time_fullpaths[self.times[j]] + field)
+                    field_data[field] = np.dstack((field_data[field], field_data_j))
 
                 # When multiple times, since a 3rd dimension is added and Numpy.dstack treats scalar fields of shape (nPoint,) as (1, nPoint),
                 # reshape scalar fields of shape (1, nPoint, nTime) back to (nPoint, 1, nTime)
-                fieldData[field] = fieldData[field].reshape((
-                    fieldData[field].shape[1],
-                    fieldData[field].shape[0],
-                    fieldData[field].shape[2]
-                )) if fieldData[field].shape[0] == 1 else fieldData[field]
+                field_data[field] = field_data[field].reshape((
+                    field_data[field].shape[1],
+                    field_data[field].shape[0],
+                    field_data[field].shape[2]
+                )) if field_data[field].shape[0] == 1 else field_data[field]
 
         print('\n{0} data read for {1} s. \nIf multiple times requested, data of different times are stacked in 3D'.format(self.fields, self.times))
-        return fieldData
+        return field_data
 
-
+    @deprecated
     @staticmethod
     @timer
-    def rotateSpatialCorrelationTensors(listData, rotateXY=0., rotateUnit='rad', dependencies=('xx',)):
+    def rotateSpatialCorrelationTensors(list_data, rotateXY=0., rotateUnit='rad', dependencies=('xx',)):
         # FIXME: DEPRECATED
         """
         Rotate one or more single/double spatial correlation scalar/tensor field/slice data in the x-y plane,
         doesn't work on rate of strain/rotation tensors
-        :param listData: Any of (nPoint x nComponent) or (nX x nY x nComponent) or (nX x nY x nZ x nComponent) data of interest, appended to a tuple/list.
+        :param list_data: Any of (nPoint x nComponent) or (nX x nY x nComponent) or (nX x nY x nZ x nComponent) data of interest, appended to a tuple/list.
         If nComponent is 6, data is symmetric 3 x 3 double spatial correlation tensor field.
         If nComponent is 9, data is single/double spatial correlation tensor field depending on dependencies keyword
-        :type listData: tuple/list([:, :]/[:, :, :]/[:, :, :, :])
+        :type list_data: tuple/list([:, :]/[:, :, :]/[:, :, :, :])
         :param rotateXY:
         :type rotateXY:
         :param rotateUnit:
@@ -153,64 +145,63 @@ class FieldData:
         :return: listData_rot
         :rtype:
         """
-        # Ensure list input since each listData[i] is modified to nPt x nComponent later
-        listData = list((listData,)) if isinstance(listData, np.ndarray) else list(listData)
+        # Ensure list input since each list_data[i] is modified to nPt x nComponent later
+        list_data = list((list_data,)) if isinstance(list_data, np.ndarray) else list(list_data)
         # Ensure tuple input
         dependencies = (dependencies,) if isinstance(dependencies, str) else dependencies
         # Ensure dependencies has the same entries as the number of data provided
-        dependencies *= len(listData) if len(dependencies) < len(listData) else 1
+        dependencies *= len(list_data) if len(dependencies) < len(list_data) else 1
         # Ensure radian unit
         rotateXY *= np.pi/180 if rotateUnit != 'rad' else 1.
         # Reshape here screwed up njit :/
-        @jit(parallel=True, fastmath=True)
-        def __transform(listData, rotateXY, dependencies):
-            # Copy listData (a list) that has original shapes as listData will be flattened to nPt x nComponent
-            listDataRot_oldShapes = listData.copy()
+        def __transform(list_data, rotateXY, dependencies):
+            # Copy list_data (a list) that has original shapes as list_data will be flattened to nPt x nComponent
+            listDataRot_oldShapes = list_data.copy()
             sinVal, cosVal = np.sin(rotateXY), np.cos(rotateXY)
-            # Go through every data in listData and flatten to nPt x nComponent if necessary
-            for i in prange(len(listData)):
+            # Go through every data in list_data and flatten to nPt x nComponent if necessary
+            for i in range(len(list_data)):
                 # # Ensure Numpy array
-                # listData[i] = np.array(listData[i])
+                # list_data[i] = np.array(list_data[i])
                 # Flatten data from 3D to 2D
-                if len(listData[i].shape) >= 3:
+                if len(list_data[i].shape) >= 3:
                     # Go through 2nd D to (last - 1) D
                     nRow = 1
-                    for j in range(len(listData[i].shape) - 1):
-                        nRow *= listData[i].shape[j]
+                    for j in range(len(list_data[i].shape) - 1):
+                        nRow *= list_data[i].shape[j]
 
                     # Flatten data to nPt x nComponent
-                    nComponent = listData[i].shape[len(listData[i].shape) - 1]
-                    listData[i] = listData[i].reshape((nRow, nComponent))
+                    nComponent = list_data[i].shape[len(list_data[i].shape) - 1]
+                    list_data[i] = list_data[i].reshape((nRow, nComponent))
 
-            # Create a copy so listData values remain unchanged during the transformation, listData[i] is nPt x nComponent now
-            listData_rot = listData.copy()
+            # Create a copy so list_data values remain unchanged during the transformation, list_data[i] is nPt x nComponent now
+            listData_rot = list_data.copy()
             # Go through all provided data and perform transformation
-            for i in prange(len(listData)):
+            for i in range(len(list_data)):
                 # Number of component is the last D
-                nComponent = listData[i].shape[len(listData[i].shape) - 1]
+                nComponent = list_data[i].shape[len(list_data[i].shape) - 1]
                 # If nComponent is 3, i.e. x, y, z or data is single spatial correlation with 9 components
                 if nComponent == 3 or (nComponent == 9 and dependencies[i] == 'x'):
                     # x_rot becomes x*cos + y*sin
-                    x_rot = listData[i][:, 0]*cosVal + listData[i][:,
+                    x_rot = list_data[i][:, 0]*cosVal + list_data[i][:,
                                                        1]*sinVal
                     # y_rot becomes -x*sin + y*cos
-                    y_rot = -listData[i][:, 0]*sinVal + listData[i][:,
+                    y_rot = -list_data[i][:, 0]*sinVal + list_data[i][:,
                                                         1]*cosVal
                     # z_rot doesn't change
-                    z_rot = listData[i][:, 2]
+                    z_rot = list_data[i][:, 2]
                     listData_rot[i][:, 0], listData_rot[i][:, 1], listData_rot[i][:, 2] = x_rot, y_rot, z_rot
                     # If 9 components with single spatial correlation, e.g.gradient tensor, do it for 2nd row and 3rd row
                     if nComponent == 9:
-                        x_rot2 = listData[i][:, 3]*cosVal + listData[i][:,
+                        x_rot2 = list_data[i][:, 3]*cosVal + list_data[i][:,
                                                             4]*sinVal
-                        y_rot2 = -listData[i][:, 3]*sinVal + listData[i][:,
+                        y_rot2 = -list_data[i][:, 3]*sinVal + list_data[i][:,
                                                              4]*cosVal
-                        z_rot2 = listData[i][:, 5]
-                        x_rot3 = listData[i][:, 6]*cosVal + listData[i][:,
+                        z_rot2 = list_data[i][:, 5]
+                        x_rot3 = list_data[i][:, 6]*cosVal + list_data[i][:,
                                                             7]*sinVal
-                        y_rot3 = -listData[i][:, 6]*sinVal + listData[i][:,
+                        y_rot3 = -list_data[i][:, 6]*sinVal + list_data[i][:,
                                                              7]*cosVal
-                        z_rot3 = listData[i][:, 8]
+                        z_rot3 = list_data[i][:, 8]
                         listData_rot[i][:, 3], listData_rot[i][:, 4], listData_rot[i][:, 5] = x_rot2, y_rot2, z_rot2
                         listData_rot[i][:, 6], listData_rot[i][:, 7], listData_rot[i][:, 8] = x_rot3, y_rot3, z_rot3
 
@@ -219,9 +210,9 @@ class FieldData:
                     # If 6 components and double spatial correlation, i.e.xx, xy, xz, yy, yz, zz
                     # or 9 components and double spatial correlation, i.e. xx, xy, xz, yx, yy, yz, zx, zy, zz
                     if dependencies[i] == 'xx':
-                        xx, xy, xz = listData[i][:, 0], listData[i][:, 1], listData[i][:, 2]
-                        yy, yz = listData[i][:, 3], listData[i][:, 4]
-                        zz = listData[i][:, 5]
+                        xx, xy, xz = list_data[i][:, 0], list_data[i][:, 1], list_data[i][:, 2]
+                        yy, yz = list_data[i][:, 3], list_data[i][:, 4]
+                        zz = list_data[i][:, 5]
                         # xx_rot becomes x_rot*x_rot = xx*cos^2 + 2xy*sin*cos + yy*sin^2
                         xx_rot = xx*cosVal**2 + 2*xy*sinVal*cosVal + yy*sinVal**2
                         # xy_rot becomes x_rot*y_rot = xy*cos^2 + yy*sin*cos - xx*sin*cos -xy*sin^2
@@ -250,25 +241,24 @@ class FieldData:
 
             return listDataRot_oldShapes
 
-        listDataRot_oldShapes = __transform(listData, rotateXY, dependencies)
+        listDataRot_oldShapes = __transform(list_data, rotateXY, dependencies)
         if len(listDataRot_oldShapes) == 1:
             listDataRot_oldShapes = listDataRot_oldShapes[0]
 
         return listDataRot_oldShapes
-
 
     @timer
     def readCellCenterCoordinates(self):
         ccx, ccy, ccz, cc = [], [], [], []
         for i in range(len(self.times)):
             try:
-                # cellCenters has to be in the order of x, y, z
-                ccx = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + self.cellCenters[0])
-                ccy = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + self.cellCenters[1])
-                ccz = of.parse_internal_field(self.caseTimeFullPaths[self.times[i]] + self.cellCenters[2])
+                # cc has to be in the order of x, y, z
+                ccx = of.parse_internal_field(self.case_time_fullpaths[self.times[i]] + self.cc[0])
+                ccy = of.parse_internal_field(self.case_time_fullpaths[self.times[i]] + self.cc[1])
+                ccz = of.parse_internal_field(self.case_time_fullpaths[self.times[i]] + self.cc[2])
                 cc = np.vstack((ccx, ccy, ccz)).T
                 if self.save:
-                    self.savePickleData(self.times[i], cc, fileNames = 'CC')
+                    self.savePickleData(self.times[i], cc, filenames = 'CC')
 
                 break
             except:
@@ -276,77 +266,74 @@ class FieldData:
 
         if ccx is None:
             warn('\nCell centers not found! They have to be stored in at least one of {}'.format(self.times),
-                 stacklevel
-            = 2)
+                 stacklevel=2)
 
         return ccx, ccy, ccz, cc
 
-
     @staticmethod
     @timer
-    @njit(parallel = True)
-    def confineFieldDomain(x, y, z, vals, bndX = (None, None), bndY = (None, None), bndZ = (None, None), planarRot = 0):
-        # assert isinstance(bndX, (list, tuple))
-        # assert isinstance(bndY, (list, tuple))
-        # assert isinstance(bndZ, (list, tuple))
+    @njit(parallel=True)
+    def confineFieldDomain(x, y, z, vals, bnd_x=(None, None), bnd_y=(None, None), bnd_z=(None, None), rot_z=0.):
+        # assert isinstance(bnd_x, (list, tuple))
+        # assert isinstance(bnd_y, (list, tuple))
+        # assert isinstance(bnd_z, (list, tuple))
         # Change all None to either min or max values of the domain
         for i in prange(2):
             # For the lower bound
             if i == 0:
-                bndX[i] = np.min(x) if bndX[i] is None else bndX[i]
-                bndY[i] = np.min(y) if bndY[i] is None else bndY[i]
-                bndZ[i] = np.min(z) if bndZ[i] is None else bndZ[i]
+                bnd_x[i] = np.min(x) if bnd_x[i] is None else bnd_x[i]
+                bnd_y[i] = np.min(y) if bnd_y[i] is None else bnd_y[i]
+                bnd_z[i] = np.min(z) if bnd_z[i] is None else bnd_z[i]
             # For the upper bound
             else:
-                bndX[i] = np.max(x) if bndX[i] is None else bndX[i]
-                bndY[i] = np.max(y) if bndY[i] is None else bndY[i]
-                bndZ[i] = np.max(z) if bndZ[i] is None else bndZ[i]
+                bnd_x[i] = np.max(x) if bnd_x[i] is None else bnd_x[i]
+                bnd_y[i] = np.max(y) if bnd_y[i] is None else bnd_y[i]
+                bnd_z[i] = np.max(z) if bnd_z[i] is None else bnd_z[i]
 
         # for xVal, yVal, zVal, val in zip(x, y, z, vals):
-        xNew, yNew, zNew, valsNew = [], [], [], []
+        xnew, ynew, znew, valsnew = [], [], [], []
         for i in prange(len(x)):
-            if x[i] >= bndX[0] and x[i] <= bndX[1] \
-                and y[i] >= bndY[0] and y[i] <= bndY[1] \
-                and z[i] >= bndZ[0] and z[i] <= bndZ[1]:
-                xNew.append(x[i])
-                yNew.append(y[i])
-                zNew.append(z[i])
-                valsNew.append(vals[i])
+            if x[i] >= bnd_x[0] and x[i] <= bnd_x[1] \
+                and y[i] >= bnd_y[0] and y[i] <= bnd_y[1] \
+                and z[i] >= bnd_z[0] and z[i] <= bnd_z[1]:
+                xnew.append(x[i])
+                ynew.append(y[i])
+                znew.append(z[i])
+                valsnew.append(vals[i])
 
-        return xNew, yNew, zNew, valsNew
-
+        return xnew, ynew, znew, valsnew
 
     @timer
-    @jit(parallel=True, fastmath=True)
-    def confineFieldDomain_Rotated(self, x, y, z, vals, boxL, boxW, boxH, boxO=(0, 0, 0), boxRot=0, valsName='data', fileNameSub='Confined', saveToTime='last'):
+    def confineFieldDomain_Rotated(self, x, y, z, vals, box_l, box_w, box_h, box_orig=(0., 0., 0.), rot_z=0., 
+                                   vals_name='data', filenames_sub='Confined', saveto_time='last'):
         print('\nConfining field domain with rotated box...')
         # Create the bounding box
-        box = path.Path(((boxO[0], boxO[1]),
-                         (boxL*np.cos(boxRot) + boxO[0], boxL*np.sin(boxRot) + boxO[1]),
-                         (boxL*np.cos(boxRot) + boxO[0] - boxW*np.sin(boxRot), boxL*np.sin(boxRot) + boxO[1] + boxW*np.cos(boxRot)),
-                         (boxO[0] - boxW*np.sin(boxRot), boxO[1] + boxW*np.cos(boxRot)),
-                         (boxO[0], boxO[1])))
+        box = path.Path(((box_orig[0], box_orig[1]),
+                         (box_l*np.cos(rot_z) + box_orig[0], box_l*np.sin(rot_z) + box_orig[1]),
+                         (box_l*np.cos(rot_z) + box_orig[0] - box_w*np.sin(rot_z), box_l*np.sin(rot_z) + box_orig[1] + box_w*np.cos(rot_z)),
+                         (box_orig[0] - box_w*np.sin(rot_z), box_orig[1] + box_w*np.cos(rot_z)),
+                         (box_orig[0], box_orig[1])))
         # First confine within z range
-        xNew, yNew, zNew, valsNew = [], [], [], []
+        xnew, ynew, znew, valsnew = [], [], [], []
         cnt, milestone = 0, 25
-        for i in prange(len(x)):
-            if z[i] < boxH + boxO[2] and z[i] > boxO[2]:
-                xNew.append(x[i])
-                yNew.append(y[i])
-                zNew.append(z[i])
-                valsNew.append(vals[i])
+        for i in range(len(x)):
+            if z[i] < box_h + box_orig[2] and z[i] > box_orig[2]:
+                xnew.append(x[i])
+                ynew.append(y[i])
+                znew.append(z[i])
+                valsnew.append(vals[i])
 
         # Then confine within x and y range
-        xy = (np.vstack((xNew, yNew))).T
+        xy = (np.vstack((xnew, ynew))).T
         # Bool flags
         flags = box.contains_points(xy)
-        xNew2, yNew2, zNew2, valsNew2 = [], [], [], []
-        for i in prange(len(flags)):
+        xnew2, ynew2, znew2, valsnew2 = [], [], [], []
+        for i in range(len(flags)):
             if flags[i]:
-                xNew2.append(xNew[i])
-                yNew2.append(yNew[i])
-                zNew2.append(zNew[i])
-                valsNew2.append(valsNew[i])
+                xnew2.append(xnew[i])
+                ynew2.append(ynew[i])
+                znew2.append(znew[i])
+                valsnew2.append(valsnew[i])
 
             # Gauge progress
             cnt += 1
@@ -355,24 +342,23 @@ class FieldData:
                 print(' ' + str(milestone) + '%...', end = '')
                 milestone += 25
 
-        xNew2, yNew2, zNew2, valsNew2 = np.array(xNew2), np.array(yNew2), np.array(zNew2), np.array(valsNew2)
-        ccNew2 = np.vstack((xNew2, yNew2, zNew2)).T
+        xnew2, ynew2, znew2, valsnew2 = np.array(xnew2), np.array(ynew2), np.array(znew2), np.array(valsnew2)
+        ccnew2 = np.vstack((xnew2, ynew2, znew2)).T
         # Save ensemble field if requested
         if self.save:
             # Which time is this mean performed
-            saveToTime = str(self.times[-1]) if saveToTime == 'last' else str(saveToTime)
+            saveto_time = str(self.times[-1]) if saveto_time == 'last' else str(saveto_time)
             # Save confined cell centers
-            pickle.dump(ccNew2, open(self.resultPaths[saveToTime] + 'CC_' + fileNameSub + '.p', 'wb'), protocol = self.saveProtocol)
+            pickle.dump(ccnew2, open(self.result_paths[saveto_time] + 'CC_' + filenames_sub + '.p', 'wb'), protocol=self.save_protocol)
             # Save confined field ensemble
-            pickle.dump(valsNew2, open(self.resultPaths[saveToTime] + valsName + '_' + fileNameSub + '.p', 'wb'), protocol = self.saveProtocol)
-            print('\n{0} and {1} saved at {2}'.format('CC_' + fileNameSub, valsName + '_' + fileNameSub, self.resultPaths[saveToTime]))
+            pickle.dump(valsnew2, open(self.result_paths[saveto_time] + vals_name + '_' + filenames_sub + '.p', 'wb'), protocol=self.save_protocol)
+            print('\n{0} and {1} saved at {2}'.format('CC_' + filenames_sub, vals_name + '_' + filenames_sub, self.result_paths[saveto_time]))
 
-        return xNew2, yNew2, zNew2, ccNew2, valsNew2, box, flags
+        return xnew2, ynew2, znew2, ccnew2, valsnew2, box, flags
 
-
+    @deprecated
     @staticmethod
     @timer
-    @jit(parallel = True, fastmath = True)
     def interpolateFieldData(x, y, z, vals, precisionX = 1500j, precisionY = 1500j, precisionZ = 500j, interpMethod = 'linear'):
         print('\nInterpolating field data...')
         # Bound the coordinates to be interpolated in case data wasn't available in those borders
@@ -451,10 +437,9 @@ class FieldData:
 
         return x3D, y3D, z3D, valsND
 
-
+    @deprecated
     @staticmethod
     @timer
-    @jit(parallel = True, fastmath = True)
     def interpolateFieldData_RBF(x, y, z, vals, precisionX = 1500j, precisionY = 1500j, precisionZ = 500j,
                              function = 'linear'):
         print('\nInterpolating field data...')
@@ -512,7 +497,7 @@ class FieldData:
 
         return x3D, y3D, z3D, valsND
 
-
+    @deprecated
     # Only for uniform mesh
     def getUniformMeshInformation(self, ccx, ccy, ccz):
         from Utilities import getArrayStepping
@@ -560,8 +545,8 @@ class FieldData:
         print('\nMesh info retrieved')
         return meshSize, cellSizeMin, ccx3D, ccy3D, ccz3D
 
-
-    def convertScalarFieldToMeshGrid(self, scalarField, meshSize = None):
+    @deprecated
+    def convertScalarFieldToMeshGrid(self, scalarField, meshSize=None):
         scalarField = np.array(scalarField)
         if len(scalarField.shape) > 2:
             warn('\nProvided scalarField can only have two dimensions or less! Not converting to mesh grid!\n', 
@@ -582,75 +567,72 @@ class FieldData:
     def createTemporalMeanFields(self):
         if isinstance(self.times, (float, int)):
             warn('\nOnly one time provided, no temporal mean is calculated!\n', stacklevel = 2)
-            fieldData = self.readFieldData()
-            return fieldData
+            field_data = self.readFieldData()
+            return field_data
 
-        fieldDataMean = {}
+        field_data_mean = {}
         for field in self.fields:
-            iTime = 0
+            itime = 0
             # First mean is first time itself
-            fieldDataMean[field] = of.parse_internal_field(self.caseTimeFullPaths[self.times[iTime]] + field)
-            while iTime < (len(self.times) - 1):
-                fieldDataTime = of.parse_internal_field(self.caseTimeFullPaths[self.times[iTime + 1]] + field)
-                fieldDataMean[field] += fieldDataTime
-                iTime += 1
+            field_data_mean[field] = of.parse_internal_field(self.case_time_fullpaths[self.times[itime]] + field)
+            while itime < (len(self.times) - 1):
+                field_data_time = of.parse_internal_field(self.case_time_fullpaths[self.times[itime + 1]] + field)
+                field_data_mean[field] += field_data_time
+                itime += 1
 
-            fieldDataMean[field] /= len(self.times)
+            field_data_mean[field] /= len(self.times)
 
         print('\nMean field data created')
-        return fieldDataMean
+        return field_data_mean
 
-
-    def decomposedFields(self, vectorField2D):
+    def decomposedFields(self, vectorfield):
         # Decompose the vector field into x, y, z, and xy components
-        vectorField2D = np.array(vectorField2D)
-        if len(vectorField2D.shape) != 2:
+        vectorfield = np.array(vectorfield)
+        if len(vectorfield.shape) != 2:
             warn('\nThe shape of the vectorField has to be two dimensions. Do not provide mesh grid data! No '
                  'decomposition is done!\n',
-                 stacklevel = 2)
-            return vectorField2D
+                 stacklevel=2)
+            return vectorfield
 
-        if vectorField2D.shape[0] == 3:
-            vectorField2D = vectorField2D.T
+        if vectorfield.shape[0] == 3:
+            vectorfield = vectorfield.T
 
-        fieldX2D, fieldY2D, fieldZ2D, fieldHor2D = \
-            np.zeros((vectorField2D.shape[0], 1)), \
-            np.zeros((vectorField2D.shape[0], 1)), \
-            np.zeros((vectorField2D.shape[0], 1)), \
-            np.zeros((vectorField2D.shape[0], 1))
-        for i, row in enumerate(vectorField2D):
-            fieldX2D[i], fieldY2D[i], fieldZ2D[i] = row[0], row[1], row[2]
-            fieldHor2D[i] = np.sqrt(row[0]**2 + row[1]**2)
+        field_x, field_y, field_z, field_xy = \
+            np.zeros((vectorfield.shape[0], 1)), \
+            np.zeros((vectorfield.shape[0], 1)), \
+            np.zeros((vectorfield.shape[0], 1)), \
+            np.zeros((vectorfield.shape[0], 1))
+        for i, row in enumerate(vectorfield):
+            field_x[i], field_y[i], field_z[i] = row[0], row[1], row[2]
+            field_xy[i] = np.sqrt(row[0]**2 + row[1]**2)
 
         print('\nDecomposed vector field to horizontal and vertical components')
-        return fieldX2D, fieldY2D, fieldZ2D, fieldHor2D
+        return field_x, field_y, field_z, field_xy
     
-
-    def getPlanerFluctuations(self, fieldHor3D, fieldZ3D):
-        fieldHor3D, fieldZ3D = np.array(fieldHor3D), np.array(fieldZ3D)
-        if (len(fieldHor3D.shape) != 3) or (len(fieldZ3D.shape) != 3):
-            warn('\nfieldHor3D and fieldZ3D have to have three indices in the order of [iX, iY, iZ]! Not creating '
+    def getPlanerFluctuations(self, field_xy, field_z):
+        field_xy, field_z = np.array(field_xy), np.array(field_z)
+        if (len(field_xy.shape) != 3) or (len(field_z.shape) != 3):
+            warn('\nfield_xy and field_z have to have three indices in the order of [iX, iY, iZ]! Not creating '
                  'spatial '
                  'mean '
-                 'fields!\n', stacklevel = 2)
-            return fieldHor3D, fieldZ3D
+                 'fields!\n', stacklevel=2)
+            return field_xy, field_z
         
-        fieldHorMean, fieldZmean = \
-            np.zeros((fieldHor3D.shape[2], 1)), np.zeros((fieldZ3D.shape[2], 1))
-        fieldHorRes3D, fieldZres3D = fieldHor3D, fieldZ3D
-        for i in range(fieldHor3D.shape[2]):
-            fieldHorMean[i] = fieldHor3D[:, :, i].mean()
-            fieldZmean[i] = fieldZ3D[:, :, i].mean()
-            fieldHorRes3D[:, :, i] -= fieldHorMean[i]
-            fieldZres3D[:, :, i] -= fieldZmean[i]
+        field_xy_mean, field_z_mean = \
+            np.zeros((field_xy.shape[2], 1)), np.zeros((field_z.shape[2], 1))
+        field_xy_fluc, field_z_fluc = field_xy.copy(), field_z.copy()
+        for i in range(field_xy.shape[2]):
+            field_xy_mean[i] = field_xy[:, :, i].mean()
+            field_z_mean[i] = field_z[:, :, i].mean()
+            field_xy_fluc[:, :, i] -= field_xy_mean[i]
+            field_z_fluc[:, :, i] -= field_z_mean[i]
 
         print('\nFinished planer fluctuation fields calculation')
-        return fieldHorRes3D, fieldZres3D, fieldHorMean, fieldZmean
+        return field_xy_fluc, field_z_fluc, field_xy_mean, field_z_mean
             
-
+    @deprecated
     @timer
-    @jit(fastmath = True)
-    def getMeanDissipationRateField(self, epsilonSGSmean, nuSGSmean, nu=1e-5, saveToTime = 'last'):
+    def getMeanDissipationRateField(self, epsilonSGSmean, nuSGSmean, nu=1e-5, saveto_time='last'):
         # FIXME: DEPRECATED
         # According to Eq 5.64 - Eq 5.68 of Sagaut (2006), for isotropic homogeneous turbulence,
         # <epsilon> = <epsilon_resolved> + <epsilon_SGS>,
@@ -664,14 +646,12 @@ class FieldData:
         # Save to pickle if requested
         if self.save:
             # Which time is this mean performed
-            saveToTime = str(self.times[-1]) if saveToTime == 'last' else str(saveToTime)
-            self.savePickleData(saveToTime, epsilonMean, 'epsilonMean')
+            saveto_time = str(self.times[-1]) if saveto_time == 'last' else str(saveto_time)
+            self.savePickleData(saveto_time, epsilonMean, 'epsilonMean')
             
         return epsilonMean
 
-
     @timer
-    @jit(parallel = True, fastmath = True)
     def getStrainAndRotationRateTensorField(self, grad_u, tke=None, eps=None, cap=10.):
         """
         From Ling et al. TBNN
@@ -731,7 +711,6 @@ class FieldData:
 
         return sij, rij
 
-
     @timer
     def getInvariantBasesField(self, sij, rij, quadratic_only=False, is_scale=True, zero_trace=False):
         """
@@ -760,7 +739,6 @@ class FieldData:
          [ -6.   0.   0.   0.  -6.   0.   0.   0.  12.]
          [  0.   0.   0.   0.   0.   0.   0.   0.   0.]]
         """
-        @jit(parallel=True, fastmath=True)
         def __getInvariantBasesField(sij, rij, quadratic_only, is_scale, zero_trace):
             # Indices
             ij_uniq = [0, 1, 2, 4, 5, 8]
@@ -831,8 +809,6 @@ class FieldData:
         return tb
 
     @timer
-    # Numba is unable to determine "self" type
-    @jit(parallel=True, fastmath=True)
     def calcScalarBasis(self, sij, rij, is_train=False, cap=100.0, is_scale=True):
         """
         Given the non-dimensionalized mean strain rate and mean rotation rate tensors sij and rij,
@@ -896,48 +872,45 @@ class FieldData:
         return invariants, self.mu, self.std
 
     @timer
-    @jit(parallel = True, fastmath = True)
-    def getAnisotropyTensorField(self, uuPrime2, use_oldshape=True):
+    def getAnisotropyTensorField(self, stress, use_oldshape=True):
         # Reshape u'u' to 2D, with nPoint x 6/9
-        shapeOld = uuPrime2.shape
+        shape_old = stress.shape
         # If u'u' is 4D, then assume first 2D are mesh grid and last 2D are 3 x 3 and reshape to nPoint x 9
-        if len(uuPrime2.shape) == 4:
-            uuPrime2 = uuPrime2.reshape((uuPrime2.shape[0]*uuPrime2.shape[1], 9))
+        if len(stress.shape) == 4:
+            stress = stress.reshape((stress.shape[0]*stress.shape[1], 9))
         # Else if u'u' is 3D
-        elif len(uuPrime2.shape) == 3:
+        elif len(stress.shape) == 3:
             # If 3rd D has 3, then assume nPoint x 3 x 3 and reshape to nPoint x 9
-            if uuPrime2.shape[2] == 3:
-                uuPrime2 = uuPrime2.reshape((uuPrime2.shape[0], 9))
+            if stress.shape[2] == 3:
+                stress = stress.reshape((stress.shape[0], 9))
             # Else if 3rd D has 6, then assume nX x nY x 6 and reshape to nPoint x 9
-            elif uuPrime2.shape[2] == 6:
-                uuPrime2 = uuPrime2.reshape((uuPrime2.shape[0]*uuPrime2.shape[1], 6))
+            elif stress.shape[2] == 6:
+                stress = stress.reshape((stress.shape[0]*stress.shape[1], 6))
             # Else if 3rd D has 9, then assume nX x nY x 9 and reshape to nPoint x 9
-            elif uuPrime2.shape[2] == 9:
-                uuPrime2 = uuPrime2.reshape((uuPrime2.shape[0]*uuPrime2.shape[1], 9))
+            elif stress.shape[2] == 9:
+                stress = stress.reshape((stress.shape[0]*stress.shape[1], 9))
 
         # If u'u' is provided as a symmetric tensor
         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
         # Otherwise, xx is '0', yy is '4', zz is '8'
-        xx, yy, zz = (0, 3, 5) if uuPrime2.shape[1] == 6 else (0, 4, 8)
+        xx, yy, zz = (0, 3, 5) if stress.shape[1] == 6 else (0, 4, 8)
         # TKE
-        k = 0.5*(uuPrime2[:, xx] + uuPrime2[:, yy] + uuPrime2[:, zz])
+        k = 0.5*(stress[:, xx] + stress[:, yy] + stress[:, zz])
         # Avoid FPE
         k[k < 1e-10] = 1e-10
         # Convert u'u' to bij
-        bij = np.empty_like(uuPrime2)
-        for i in prange(uuPrime2.shape[1]):
-            bij[:, i] = uuPrime2[:, i]/(2.*k) - 1/3. if i in (xx, yy, zz) else uuPrime2[:, i]/(2.*k)
+        bij = np.empty_like(stress)
+        for i in prange(stress.shape[1]):
+            bij[:, i] = stress[:, i]/(2.*k) - 1/3. if i in (xx, yy, zz) else stress[:, i]/(2.*k)
 
         # Reshape bij back to initial provide shape
-        if bij.shape != shapeOld and use_oldshape: bij = bij.reshape(shapeOld)
+        if bij.shape != shape_old and use_oldshape: bij = bij.reshape(shape_old)
 
         return bij
 
-
+    @deprecated
     @timer
-    # TODO: prange has no effect here
-    @jit(parallel = True, fastmath = True)
-    def evaluateInvariantBasisCoefficients(self, tb, bij, cap = 100., onegToRuleThemAll = False, saveToTime = 'last'):
+    def evaluateInvariantBasisCoefficients(self, tb, bij, cap=100., onegToRuleThemAll=False, saveto_time='last'):
         # def __getInvariantBasisCoefficientsField(tb, bij, onegToRuleThemAll):
         # If tensor bases is 4D, i.e. nPoint x nBasis x 3 x 3,
         # then reshape it to 3D, i.e. nPoint x nBasis x 9
@@ -983,65 +956,59 @@ class FieldData:
         # # TODO: save gives error to Numba
         # # Save data if requested
         # if self.save:
-        #     saveToTime = self.times[len(self.times)] if saveToTime == 'last' else saveToTime
-        #     self.savePickleData(saveToTime, g, 'g')
+        #     saveto_time = self.times[len(self.times)] if saveto_time == 'last' else saveto_time
+        #     self.savePickleData(saveto_time, g, 'g')
 
         return g, rmse
 
+    def savePickleData(self, time, list_data, filenames=('data',)):
+        if isinstance(list_data, np.ndarray):
+            list_data = (list_data,)
 
-    def savePickleData(self, time, listData, fileNames=('data',)):
-        if isinstance(listData, np.ndarray):
-            listData = (listData,)
+        if isinstance(filenames, str):
+            filenames = (filenames,)
 
-        if isinstance(fileNames, str):
-            fileNames = (fileNames,)
+        if len(filenames) != len(list_data):
+            filenames = ['data' + str(i) for i in range(len(list_data))]
+            warn('\nInsufficient filenames provided! Using default filenames...', stacklevel=2)
 
-        if len(fileNames) != len(listData):
-            fileNames = ['data' + str(i) for i in range(len(listData))]
-            warn('\nInsufficient fileNames provided! Using default fileNames...', stacklevel = 2)
+        for i in range(len(list_data)):
+            pickle.dump(list_data[i], open(self.result_paths[str(time)] + '/' + filenames[i] + '.p', 'wb'),
+                        protocol=self.save_protocol)
 
-        for i in prange(len(listData)):
-            pickle.dump(listData[i], open(self.resultPaths[str(time)] + '/' + fileNames[i] + '.p', 'wb'),
-                        protocol = self.saveProtocol)
+        print('\n{0} saved at {1}'.format(filenames, self.result_paths[str(time)]))
 
-        print('\n{0} saved at {1}'.format(fileNames, self.resultPaths[str(time)]))
-
-
-    # Numba prange doesn't support dict
-    # @jit(parallel = True)
-    def readPickleData(self, time, fileNames):
+    def readPickleData(self, time, filenames):
         """
         Read pickle data of one or more fields at one time and return them in a dictionary
         :param time:
         :type time:
-        :param fileNames:
-        :type fileNames:
+        :param filenames:
+        :type filenames:
         :return:
         :rtype:
         """
         # Ensure loop-able
-        if isinstance(fileNames, str):
-            fileNames = (fileNames,)
+        if isinstance(filenames, str):
+            filenames = (filenames,)
 
         # Encoding = 'latin1' is required for unpickling Numpy arrays pickled by Python 2
-        encode = 'ASCII' if self.saveProtocol >= 3 else 'latin1'
-
+        encode = 'ASCII' if self.save_protocol >= 3 else 'latin1'
         dataDict = {}
         # Go through each file
-        for i in prange(len(fileNames)):
-            dataDict[fileNames[i]] = pickle.load(open(self.resultPaths[str(time)] + fileNames[i] + '.p', 'rb'),
+        for i in range(len(filenames)):
+            dataDict[filenames[i]] = pickle.load(open(self.result_paths[str(time)] + filenames[i] + '.p', 'rb'),
                                                  encoding=encode)
 
         # If just one file read, then no need for a dictionary
-        if len(fileNames) == 1:
-            dataDict = dataDict[fileNames[0]]
+        if len(filenames) == 1:
+            dataDict = dataDict[filenames[0]]
 
-        print('\n{} read. If multiple files read, data is stored in dictionary'.format(fileNames))
+        print('\n{} read. If multiple files read, data is stored in dictionary'.format(filenames))
         return dataDict
 
-
-    # [DEPRECATED]
-    def createSliceData(self, fieldData, baseCoordinate = (0, 0, 90), normalVector = (0, 0, 1)):
+    @deprecated
+    def createSliceData(self, field_data, baseCoordinate = (0, 0, 90), normalVector = (0, 0, 1)):
         from Utilities import takeClosest
         # Only support horizontal or vertical slices
         # meshSize has to be in the order of x, y, z
@@ -1107,7 +1074,7 @@ class FieldData:
                 iCells = np.hstack((iCells, iCellsNext))
                 iPlane += 1
 
-        fieldDataSlice = np.take(fieldData, indices = iCells, axis = 0)
+        fieldDataSlice = np.take(field_data, indices = iCells, axis = 0)
         ccSlice = np.take(cc, indices = iCells, axis = 0)
 
         # Dimension of the slice, (size in diagonal, size in vertical)
@@ -1120,12 +1087,12 @@ class FieldData:
 
 
 if __name__ == '__main__':
-    caseName = 'ALM_N_H_OneTurb'
-    caseDir = '/media/yluan'
+    casename = 'ALM_N_H_OneTurb'
+    casedir = '/media/yluan'
     fields = 'grad_UAvg'
     time = '24995.0788025'
 
-    case = FieldData(fields = fields, times = time, caseName = caseName, caseDir = caseDir)
+    case = FieldData(fields = fields, times = time, casename = casename, casedir = casedir)
     data = case.readFieldData()
 
 

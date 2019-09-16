@@ -8,12 +8,13 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable, AxesGrid
 from mpl_toolkits.mplot3d import proj3d
 import numpy as np
 from warnings import warn
-from Utilities import timer
+from Utility import timer
 from scipy import ndimage
 from matplotlib.patches import Circle, PathPatch
-import mpl_toolkits.mplot3d.art3d as art3d
 from copy import copy
 import matplotlib.cm
+from mpl_toolkits.mplot3d import art3d
+
 
 class BaseFigure:
     def __init__(self, list_x, list_y, name='UntitledFigure', fontsize=8, xlabel='$x$', ylabel='$y$', figdir='./', 
@@ -704,7 +705,7 @@ class BaseFigure3D(BaseFigure):
         super(BaseFigure3D, self).plotFigure()
         self._ensureMeshGrid()
 
-    def finalizeFigure(self, fraction=0.06, pad=0.08, show_cbar=True, reduce_nticks=True, grid=True, show_zlabel=True,
+    def finalizeFigure(self, fraction=0.06, pad=0.08, show_cbar=True, reduce_nticks=True, grid=True, show_zlabel=True, show_ticks=(True, True, True),
                        **kwargs):
         if show_zlabel: self.axes.set_zlabel(self.zlabel)
         if self.zlim is not None: self.axes.set_zlim(self.zlim)
@@ -742,6 +743,15 @@ class BaseFigure3D(BaseFigure):
             if self.xlim is not None: self.axes.set_xticks(np.linspace(self.xlim[0], self.xlim[1], 3))
             if self.ylim is not None: self.axes.set_yticks(np.linspace(self.ylim[0], self.ylim[1], 3))
             if self.zlim is not None: self.axes.set_zticks(np.linspace(self.zlim[0], self.zlim[1], 3))
+
+        for i, check in enumerate(show_ticks):
+            if not check:
+                if i == 0:
+                    self.axes.set_xticklabels([])
+                elif i == 1:
+                    self.axes.set_yticklabels([])
+                else:
+                    self.axes.set_zticklabels([])
 
         # # Strictly equal axis of all three axis
         # _, _, _, _, _, _ = self.get3D_AxesLimits(self.axes)
@@ -848,11 +858,8 @@ class PlotContourSlices3D(BaseFigure3D):
         # self.viewangle = (20, -115) if zdir is 'val' else (15, -60)
         # self.cbar_orient = 'vertical' if zdir is 'val' else 'horizontal'
 
-    # def initializeFigure(self, figSize = (1, 1)):
-    #     # If zdir is 'val', then the figure height is twice width, else, figure width is twice height
-    #     # figSize = (2.75, 1) if self.zdir is 'val' else (1, 2)
-    #
-    #     super().initializeFigure(figSize = figSize)
+    def initializeFigure(self, constrained_layout=True, **kwargs):
+        super(PlotContourSlices3D, self).initializeFigure(constrained_layout=constrained_layout, **kwargs)
 
     def plotFigure(self, contour_lvl=20, **kwargs):
         super(PlotContourSlices3D, self).plotFigure()
@@ -880,12 +887,12 @@ class PlotContourSlices3D(BaseFigure3D):
             else:
                 x, y, z = self.list_x[i], self.list_y[i], slice
 
-            # # "levels" makes sure all slices are in same cmap range
-            # self.plot = self.axes.contourf(x, y, z, zdir=self.zdir,
-            #                                offset=next(self.slice_offsets), alpha=self.alpha, cmap=self.cmap, levels=np.linspace(self.val_lim[0], self.val_lim[1], contour_lvl))
-            self.plot = self.axes.plot_surface(np.ones_like(y)*(-i), y, z, rstride=1, cstride=1, facecolors=plt.cm.plasma(x), shade=False)
+            # "levels" makes sure all slices are in same cmap range
+            self.plot = self.axes.contourf(x, y, z, zdir=self.zdir,
+                                           offset=next(self.slice_offsets), alpha=self.alpha, cmap=self.cmap, levels=np.linspace(self.val_lim[0], self.val_lim[1], contour_lvl))
+            # self.plot = self.axes.plot_surface(np.ones_like(y)*(-i), y, z, rstride=1, cstride=1, facecolors=plt.cm.plasma(x), shade=False)
 
-    def finalizeFigure(self, **kwargs):
+    def finalizeFigure(self, tight_layout=False, show_ticks=(False, False, True), show_xylabel=(False, False), **kwargs):
         # Custom color bar location in the figure
         (fraction, pad) = (0.046, 0.04) if self.zdir is 'val' else (0.06, 0.08)
         # if self.zdir is 'val':
@@ -897,7 +904,7 @@ class PlotContourSlices3D(BaseFigure3D):
         # else:
         #     ar = abs((self.zlim[1] - self.zlim[0])/(self.xlim[1] - self.xlim[0]))
         #     pbaspect = (1, 1, ar)
-        super(PlotContourSlices3D, self).finalizeFigure(fraction=fraction, pad=pad, **kwargs)
+        super(PlotContourSlices3D, self).finalizeFigure(fraction=fraction, pad=pad, tight_layout=tight_layout, show_ticks=show_ticks, show_xylabel=show_xylabel, **kwargs)
 
 
 class PlotSurfaceSlices3D(BaseFigure3D):
@@ -920,7 +927,7 @@ class PlotSurfaceSlices3D(BaseFigure3D):
         self.plot = self.cmapval
 
     @timer
-    def plotFigure(self):
+    def plotFigure(self, **kwargs):
         for i, slice in enumerate(self.list_val):
             print('\nPlotting ' + self.name + ' slice ' + str(i) + '...')
             fcolor = self.cmapval.to_rgba(slice)
@@ -972,10 +979,94 @@ class PlotImageSlices3D(BaseFigure3D):
             
     def finalizeFigure(self, tight_layout=True, **kwargs):
         super(PlotImageSlices3D, self).finalizeFigure(show_cbar=False, tight_layout=tight_layout, **kwargs)
-            
+
+
+def rotation_matrix(d):
+    """
+    Calculates a rotation matrix given a vector d. The direction of d
+    corresponds to the rotation axis. The length of d corresponds to
+    the sin of the angle of rotation.
+
+    Variant of: http://mail.scipy.org/pipermail/numpy-discussion/2009-March/040806.html
+    """
+    sin_angle = np.linalg.norm(d)
+
+    if sin_angle == 0:
+        return np.identity(3)
+
+    d /= sin_angle
+
+    eye = np.eye(3)
+    ddt = np.outer(d, d)
+    skew = np.array([[    0,  d[2],  -d[1]],
+                     [-d[2],     0,  d[0]],
+                     [d[1], -d[0],    0]], dtype=np.float64)
+
+    M = ddt + np.sqrt(1 - sin_angle**2) * (eye - ddt) + sin_angle * skew
+    return M
+
+
+def pathpatch_2d_to_3d(pathpatch, z=0, normal='z'):
+    """
+    Transforms a 2D Patch to a 3D patch using the given normal vector.
+
+    The patch is projected into they XY plane, rotated about the origin
+    and finally translated by z.
+    """
+    if type(normal) is str: #Translate strings to normal vectors
+        index = "xyz".index(normal)
+        normal = np.roll((1.0,0,0), index)
+
+    normal /= np.linalg.norm(normal) #Make sure the vector is normalised
+
+    path = pathpatch.get_path() #Get the path and the associated transform
+    trans = pathpatch.get_patch_transform()
+
+    path = trans.transform_path(path) #Apply the transform
+
+    pathpatch.__class__ = art3d.PathPatch3D #Change the class
+    pathpatch._code3d = path.codes #Copy the codes
+    pathpatch._facecolor3d = pathpatch.get_facecolor #Get the face color
+
+    verts = path.vertices #Get the vertices in 2D
+
+    d = np.cross(normal, (0, 0, 1)) #Obtain the rotation vector
+    M = rotation_matrix(d) #Get the rotation matrix
+
+    pathpatch._segment3d = np.array([np.dot(M, (x, y, 0)) + (0, 0, z) for x, y in verts])
+
+
+def pathpatch_translate(pathpatch, delta):
+    """
+    Translates the 3D pathpatch by the amount delta.
+    """
+    pathpatch._segment3d += delta
+
     
-    
-        
+def plotTurbineLocations(plot_object, slice_orient='horizontal', horslice_offsets=None, turb_borders=None, turb_centers_frontview=None,
+                         turb_normal=(0.8660254037844, 0.5, 0.)):
+    if slice_orient == 'horizontal':
+        for i in range(len(horslice_offsets)):
+            plot_object.axes.plot([turb_borders[0][0], turb_borders[0][2]],
+                                      [turb_borders[0][1], turb_borders[0][3]],
+                                      zs=horslice_offsets[i], alpha=0.5, color=(0.25, 0.25, 0.25),
+                                      # Very important to set a super larger value
+                                      zorder=500 + i*500)
+
+    else:
+        patch = Circle((0., 0.), 63., alpha=0.5, fill=False, edgecolor=(0.25, 0.25, 0.25), zorder=100)
+        patches = []
+        for i in range(plot_object.narr):
+            patches.append(copy(patch))
+
+        patches = iter(patches)
+        # Go through every vertical slice
+        for i in range(plot_object.narr):
+            p = next(patches)
+            plot_object.axes.add_patch(p)
+            pathpatch_2d_to_3d(p, z=0, normal=turb_normal)
+            pathpatch_translate(p, turb_centers_frontview[i])
+
         
 
         
@@ -1037,27 +1128,43 @@ if __name__ == '__main__':
     # art3d.pathpatch_2d_to_3d(p2, z=5, zdir="z")
     # ax.plot_surface(x, y, z/2., rstride=1, cstride=1, facecolors=plt.cm.viridis(data), shade=False)
 
-    c1 = np.linspace(1000, 2000, 100)
-    c2 = np.linspace(1500, 1800, 100)
-    c1mesh, c2mesh = np.meshgrid(c1, c2)
-    val1mesh = np.random.rand(100, 100)
-    val2mesh = 3.*np.random.rand(100, 100)
-
-    # myplot = Plot3D_WindFarmSlices((c1mesh,)*2, (c2mesh,)*2, (val1mesh, val2mesh),
-    #                                case='OneTurb', offsets=(15, 105),
-    #                                offset_lim=(0, 200),
-    #                                turblocs=(1234, 1600), val_lim=None,
-    #                                slicenames=('hub', 'apex'),
-    #                                show=True, save=False,
-    #                                equalaxis=True)
+    # c1 = np.linspace(1000, 2000, 100)
+    # c2 = np.linspace(1500, 1800, 100)
+    # c1mesh, c2mesh = np.meshgrid(c1, c2)
+    # val1mesh = np.random.rand(100, 100)
+    # val2mesh = 3.*np.random.rand(100, 100)
+    #
+    # # myplot = Plot3D_WindFarmSlices((c1mesh,)*2, (c2mesh,)*2, (val1mesh, val2mesh),
+    # #                                case='OneTurb', offsets=(15, 105),
+    # #                                offset_lim=(0, 200),
+    # #                                turblocs=(1234, 1600), val_lim=None,
+    # #                                slicenames=('hub', 'apex'),
+    # #                                show=True, save=False,
+    # #                                equalaxis=True)
+    # # myplot.initializeFigure()
+    # # myplot.plotFigure()
+    # # myplot.finalizeFigure()
+    #
+    # myplot = PlotContourSlices3D((c1mesh,)*2, (c2mesh,)*2, (val1mesh, val2mesh), (0, 10), val_lim=(0.5, 1), zdir='x', show=True, save=False)
     # myplot.initializeFigure()
     # myplot.plotFigure()
     # myplot.finalizeFigure()
-    
-    myplot = PlotContourSlices3D((c1mesh,)*2, (c2mesh,)*2, (val1mesh, val2mesh), (0, 10), val_lim=(0.5, 1), zdir='x', show=True, save=False)
-    myplot.initializeFigure()
-    myplot.plotFigure()
-    myplot.finalizeFigure()
+
+    import matplotlib.pyplot as plt
+
+    fig = plt.figure('bla', constrained_layout=True)
+    ax = fig.add_subplot(111, projection='3d')
+    p = Circle((0, 0), 63)
+    ax.add_patch(p)
+    pathpatch_2d_to_3d(p, z=0, normal=(0.866, 0.5, 0))
+    pathpatch_translate(p, (1200, 1400, 90))
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel('z')
+    ax.set_xlim((1000, 2000))
+    ax.set_ylim((1200, 1800))
+    ax.set_zlim((0, 216))
+
 
 
 

@@ -1,494 +1,439 @@
 import os
 import numpy as np
 from warnings import warn
-from Utilities import timer
-from numba import njit, jit, prange
+from Utility import timer
 import shutil
 
 class BaseProperties:
-    def __init__(self, caseName, caseDir = '.', filePre = '', fileSub = '', ensembleFolderName = 'Ensemble', resultFolder = 'Result', timeCols = 'infer', timeKw = 'ime', forceRemerge = False, **kwargs):
-        self.caseName, self.caseDir = caseName, caseDir
-        self.caseFullPath = caseDir + '/' + caseName + '/'
-        # self.startTime, self.stopTime = startTime, stopTime
-        self.filePre, self.fileSub = filePre, fileSub
+    def __init__(self, casename, casedir='.', filename_pre='', filename_sub='', ensemblefolder_name='Ensemble', result_folder='Result', timecols='infer', time_kw='ime', force_remerge=False, **kwargs):
+        self.casename, self.casedir = casename, casedir
+        self.case_fullpath = casedir + '/' + casename + '/'
+        self.filename_pre, self.filename_sub = filename_pre, filename_sub
         # Check if result folder is made
-        self.resultDir = self.caseFullPath + resultFolder + '/'
-        try:
-            os.makedirs(self.resultDir)
-        except OSError:
-            pass
-
-        self.ensembleFolderPath = self.caseFullPath + ensembleFolderName + '/'
-        self.timeCols = (timeCols,) if isinstance(timeCols, int) else timeCols
-        self._mergeTimeDirectories(timeKw = timeKw, forceRemerge = forceRemerge, **kwargs)
-        self.timesAll = self._readTimes(**kwargs)
-        # self.timesSelected, self.startTimeReal, self.stopTimeReal, self.iStart, self.iStop = self._selectTimes(startTime = startTime, stopTime = stopTime)
-        self.propertyData, self.fileNames = {}, []
-
-        print('\n{0} initialized'.format(caseName))
+        self.result_dir = self.case_fullpath + result_folder + '/'
+        os.makedirs(self.result_dir, exist_ok=True)
+        self.ensemble_folderpath = self.case_fullpath + ensemblefolder_name + '/'
+        self.timecols = (timecols,) if isinstance(timecols, int) else timecols
+        self._mergeTimeDirectories(time_kw=time_kw, force_remerge=force_remerge, **kwargs)
+        self.times_all = self._readTimes(**kwargs)
+        self.data, self.filenames = {}, []
 
     def _ensureTupleInput(self, input):
-        inputTuple = (input,) if isinstance(input, (str, np.ndarray, int)) else input
+        input_tuple = (input,) if isinstance(input, (str, np.ndarray, int)) else input
         # If input[0] is '*' or 'all', get all file names
-        # inputTuple = os.listdir(self.ensembleFolderPath) if inputTuple[0] in ('*', 'all') else inputTuple
-        if inputTuple[0] in ('*', 'all'):
+        # input_tuple = os.listdir(self.ensemble_folderpath) if input_tuple[0] in ('*', 'all') else input_tuple
+        if input_tuple[0] in ('*', 'all'):
             # Ignore hidden files
-            inputTuple = tuple([f for f in os.listdir(self.ensembleFolderPath) if not f.startswith('.')])
+            input_tuple = tuple([f for f in os.listdir(self.ensemble_folderpath) if not f.startswith('.')])
 
-        return inputTuple
+        return input_tuple
 
-    def _readTimes(self, noRepeat = True, **kwargs):
-        fileNames = os.listdir(self.ensembleFolderPath)
+    def _readTimes(self, norepeat=True, **kwargs):
+        filenames = os.listdir(self.ensemble_folderpath)
         # In case of file e.g. hLevelsCell that doesn't incl. times
         try:
-            timesAll = np.genfromtxt(self.ensembleFolderPath + '/' + fileNames[0])[:, self.timeCols[0]]
+            times_all = np.genfromtxt(self.ensemble_folderpath + '/' + filenames[0])[:, self.timecols[0]]
         except IndexError:
-            timesAll = np.genfromtxt(self.ensembleFolderPath + '/' + fileNames[1])[:, self.timeCols[0]]
-        # # In case of inflow profile
-        # try:
-        #     timesAll = np.genfromtxt(self.ensembleFolderPath + self.filePre + 'U_mean' + self.fileSub)[:, self.timeCols]
-        # # In case of turbineOutput
-        # except IOError:
-        #     timesAll = np.genfromtxt(self.ensembleFolderPath + self.filePre + 'Cl' + self.fileSub)[:, self.timeCols]
+            times_all = np.genfromtxt(self.ensemble_folderpath + '/' + filenames[1])[:, self.timecols[0]]
+            
+        if norepeat:
+            times_all = np.unique(times_all)
 
-        if noRepeat:
-            timesAll = np.unique(timesAll)
+        return times_all
 
-        return timesAll
-
-    def _mergeTimeDirectories(self, trimOverlapTime = True, timeKw = 'ime', forceRemerge = False, excludeFile = None):
-        # [DEPRECATED]
-        # @jit
-        # def takeClosestIdx(lists, vals):
-        #     (lists, vals) = (iter(lists), iter(vals)) if not isinstance(lists, Iterator) else (lists, vals)
-        #     idxs = []
-        #     while any(True for _ in lists):
-        #         idx = np.searchsorted(next(lists), next(vals))
-        #         idxs.append(idx)
-        #
-        #     return idxs
-
-        def numberStringToFloat(str):
+    def _mergeTimeDirectories(self, trim_overlaptime=True, time_kw='ime', force_remerge=False, excl_files=None):
+        def __numberStringToFloat(str):
             return float(str)
 
         # Check whether the directory is made
         try:
-            os.makedirs(self.ensembleFolderPath)
+            os.makedirs(self.ensemble_folderpath)
         except OSError:
             # If folder not empty, abort
-            if os.listdir(self.ensembleFolderPath) and not forceRemerge:
-                print('\n{0} files already exist'.format(self.ensembleFolderPath))
+            if os.listdir(self.ensemble_folderpath) and not force_remerge:
+                print('\n{0} files already exist'.format(self.ensemble_folderpath))
                 return
 
         # Available time directories (excluding Ensemble and Result) and file names
-        timeDirs = os.listdir(self.caseFullPath)[:-2]
+        timedirs = os.listdir(self.case_fullpath)[:-2]
         # Sort the time directories
-        timeDirs.sort(key = numberStringToFloat)
-        fileNames = os.listdir(self.caseFullPath + timeDirs[0])
-        # In case excludeFile is provided, remove it from fileNames
-        if excludeFile is not None:
-            excludeFile = self._ensureTupleInput(excludeFile)
-            for i in prange(len(excludeFile)):
+        timedirs.sort(key=__numberStringToFloat)
+        filenames = os.listdir(self.case_fullpath + timedirs[0])
+        # In case excl_files is provided, remove it from filenames
+        if excl_files is not None:
+            excl_files = self._ensureTupleInput(excl_files)
+            for i in range(len(excl_files)):
                 try:
-                    fileNames.remove(excludeFile[i])
+                    filenames.remove(excl_files[i])
                 except ValueError:
-                    warn('\n' + self.caseName + ' does not have ' + excludeFile[i] + ' to exclude!', stacklevel = 2)
+                    warn('\n' + self.casename + ' does not have ' + excl_files[i] + ' to exclude!', stacklevel=2)
                     pass
 
         # Initialize ensemble files
-        fileEnsembles = {}
-        for i in prange(len(fileNames)):
-            fileEnsembles[fileNames[i]] = open(self.ensembleFolderPath + fileNames[i], "w")
-        # for fileName in fileNames:
-        #     fileEnsembles[fileName] = open(self.ensembleFolderPath + fileName, "w")
+        file_ensembles = {}
+        for i in range(len(filenames)):
+            file_ensembles[filenames[i]] = open(self.ensemble_folderpath + filenames[i], "w")
 
-        # self.timeCols = (self.timeCols,) if isinstance(self.timeCols, int) else self.timeCols
-
-        if self.timeCols == 'infer':
-            self.timeCols = []
-            for fileName in fileNames:
-                with open(self.caseFullPath + timeDirs[0] + '/' + fileName, 'r') as file:
+        if self.timecols == 'infer':
+            self.timecols = []
+            for filename in filenames:
+                with open(self.case_fullpath + timedirs[0] + '/' + filename, 'r') as file:
                     header = (file.readline()).split()
-                    self.timeCols.append(header.index(list(filter(lambda kw: timeKw in kw, header))[0]))
+                    self.timecols.append(header.index(list(filter(lambda kw: time_kw in kw, header))[0]))
         else:
-            self.timeCols *= len(fileNames)
+            self.timecols *= len(filenames)
 
         # Go through time folders and append files to ensemble
         # Excluding Ensemble folder
-        for i in range(len(timeDirs)):
+        for i in range(len(timedirs)):
             # If trim overlapped time and not in last time directory
-            if trimOverlapTime and i < len(timeDirs) - 1:
-                knownTimeCols, times, iTrim = {}, {}, {}
+            if trim_overlaptime and i < len(timedirs) - 1:
+                knowntime_cols, times, itrim = {}, {}, {}
                 # Go through all time columns of each file in order
-                for j in range(len(self.timeCols)):
+                for j in range(len(self.timecols)):
                     # Retrieve list of time and trim index information for jth file in ith time directory
                     # After each retrieval, add this time column to known time column dictionary as key
                     # and corresponding file name as value
-                    if str(self.timeCols[j]) not in knownTimeCols.keys():
+                    if str(self.timecols[j]) not in knowntime_cols.keys():
                         try:
-                            times[fileNames[j]] = np.genfromtxt(self.caseFullPath + timeDirs[i] + '/' + fileNames[j])[:, self.timeCols[j]]
+                            times[filenames[j]] = np.genfromtxt(self.case_fullpath + timedirs[i] + '/' + filenames[j])[:, self.timecols[j]]
                         # In case the last line wasn't written properly,
                         # which means the simulation was probably aborted, discard the last line
                         except ValueError:
-                            times[fileNames[j]] = np.genfromtxt(self.caseFullPath + timeDirs[i] + '/' + fileNames[j], skip_footer = 1)[:, self.timeCols[j]]
+                            times[filenames[j]] = np.genfromtxt(self.case_fullpath + timedirs[i] + '/' + filenames[j], skip_footer = 1)[:, self.timecols[j]]
 
                         # Index at which trim should start for this file
-                        iTrim[fileNames[j]] = np.searchsorted(times[fileNames[j]], np.float_(timeDirs[i + 1]))
+                        itrim[filenames[j]] = np.searchsorted(times[filenames[j]], np.float_(timedirs[i + 1]))
                         # Add this time column to known time column list
-                        knownTimeCols[str(self.timeCols[j])] = fileNames[j]
+                        knowntime_cols[str(self.timecols[j])] = filenames[j]
 
                     # If current time column already exists in remembered dictionary,
                     # then skip it and retrieve the file name the last time it had this number of time column
                     else:
-                        times[fileNames[j]] = times[knownTimeCols[str(self.timeCols[j])]]
-                        iTrim[fileNames[j]] = iTrim[knownTimeCols[str(self.timeCols[j])]]
+                        times[filenames[j]] = times[knowntime_cols[str(self.timecols[j])]]
+                        itrim[filenames[j]] = itrim[knowntime_cols[str(self.timecols[j])]]
 
             # Go through each file in this time directory
-            for fileName in fileNames:
+            for filename in filenames:
                 # If trim overlapped time and not last time directory and trim is indeed needed
-                # print(i, len(timeDirs) - 1)
-                # print(iTrim[fileName], len(times[fileName]) - 1)
-                if trimOverlapTime and i < len(timeDirs) - 1 and iTrim[fileName] < (len(times[fileName]) - 1):
-                    with open(self.caseFullPath + timeDirs[i] + '/' + fileName, 'r') as file:
-                        # Filter out empty lines before iTrim indices can be mapped
+                if trim_overlaptime and i < len(timedirs) - 1 and itrim[filename] < (len(times[filename]) - 1):
+                    with open(self.case_fullpath + timedirs[i] + '/' + filename, 'r') as file:
+                        # Filter out empty lines before itrim indices can be mapped
                         lines = list(filter(None, (line.rstrip() for line in file)))
-
-                    # for line in lines:
-                    #     lines = filter(None, )
-
-                    # print(f'\nTrimming overlapped time and adding {fileName} from {timeDirs[i]} to Ensemble...')
-                    print('\nTrimming overlapped time and adding {0} from {1} to Ensemble...'.format(
-                            fileName, timeDirs[i]))
+                        
+                    print('\nTrimming overlapped time and adding {0} from {1} to Ensemble...'.format(filename, timedirs[i]))
                     # Writelines support writing a 1D list, since lines is 2D,
                     # join each row with "\n"
                     # Note: the header of 2nd file onward will still be written in ensemble,
                     # just that when reading file into array using numpy, the headers should automatically be ignored
                     # since it starts with "#"
-                    # Write the 1st line as empty new line so that the 1st line of lines is not on the same line as last line of fileEnsembles
-                    fileEnsembles[fileName].writelines("\n")
-                    fileEnsembles[fileName].writelines("\n".join(lines[:iTrim[fileName] + 1]))
+                    # Write the 1st line as empty new line so that the 1st line of lines is not on the same line as last line of file_ensembles
+                    file_ensembles[filename].writelines("\n")
+                    file_ensembles[filename].writelines("\n".join(lines[:itrim[filename] + 1]))
                 # Otherwise, append this file directly to Ensemble
                 else:
-                    # print(f'\nAdding {fileName} from {timeDirs[i]} to Ensemble...')
-                    print('\nAdding {0} from {1} to Ensemble...'.format(fileName, timeDirs[i]))
+                    print('\nAdding {0} from {1} to Ensemble...'.format(filename, timedirs[i]))
                     # Again, write the 1st line as empty new line to avoid 1st line of next file being on the same line of old file
-                    fileEnsembles[fileName].writelines("\n")
-                    fileEnsembles[fileName].write(open(self.caseFullPath + timeDirs[i] + '/' + fileName).read())
+                    file_ensembles[filename].writelines("\n")
+                    file_ensembles[filename].write(open(self.case_fullpath + timedirs[i] + '/' + filename).read())
 
-        print("\nMerged time directories for " + str(self.caseName) + " files are stored at:\n " + str(self.ensembleFolderPath))
+        print("\nMerged time directories for " + str(self.casename) + " files are stored at:\n " + str(self.ensemble_folderpath))
 
-    def _selectTimes(self, startTime = None, stopTime = None):
-        startTime = self.timesAll[0] if startTime is None else startTime
-        stopTime = self.timesAll[len(self.timesAll)] if stopTime is None else stopTime
+    def _selectTimes(self, starttime=None, stoptime=None):
+        starttime = self.times_all[0] if starttime is None else starttime
+        stoptime = self.times_all[len(self.times_all)] if stoptime is None else stoptime
         # Bisection left to find actual starting and ending time and their indices
-        (iStart, iStop) = np.searchsorted(self.timesAll, (startTime, stopTime))
-        # If stopTime larger than any time, iStop = len(timesAll)
-        iStop = min(iStop, len(self.timesAll) - 1)
-        startTimeReal, stopTimeReal = self.timesAll[iStart], self.timesAll[iStop]
+        (istart, istop) = np.searchsorted(self.times_all, (starttime, stoptime))
+        # If stoptime larger than any time, istop = len(times_all)
+        istop = min(istop, len(self.times_all) - 1)
+        starttime_real, stoptime_real = self.times_all[istart], self.times_all[istop]
+        times_selected = self.times_all[istart:istop]
 
-        timesSelected = self.timesAll[iStart:iStop]
+        return times_selected, starttime_real, stoptime_real, istart, istop
 
-        # print('\nTime and index information extracted for ' + str(startTimeReal) + ' s - ' + str(stopTimeReal) + ' s')
-        return timesSelected, startTimeReal, stopTimeReal, iStart, iStop
+    def readPropertyData(self, filenames=('*',), skiprow=0, skipcol=0, skipfooter=0):
+        self.filenames = self._ensureTupleInput(filenames)
+        if isinstance(skiprow, int): skiprow = (skiprow,)*len(self.filenames)
+        if isinstance(skipcol, int): skipcol = (skipcol,)*len(self.filenames)
+        if isinstance(skipfooter, int): skipfooter = (skipfooter,)*len(self.filenames)
 
-    def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 0, skipFooter = 0):
-        self.fileNames = self._ensureTupleInput(fileNames)
-        skipRow = (skipRow,)*len(self.fileNames) if isinstance(skipRow, int) else skipRow
-        skipCol = (skipCol,)*len(self.fileNames) if isinstance(skipCol, int) else skipCol
-        skipFooter = (skipFooter,)*len(self.fileNames) if isinstance(skipFooter, int) else skipFooter
-
-        for i in prange(len(self.fileNames)):
+        for i in range(len(self.filenames)):
             # Data dictionary of specified property(s) of all times
-            self.propertyData[self.fileNames[i]] = \
-                np.genfromtxt(self.ensembleFolderPath + self.filePre + self.fileNames[i] + self.fileSub, skip_footer = skipFooter[i])[skipRow[i]:,
-                skipCol[i]:]
-        # for fileName in self.fileNames:
-        #     # Data dictionary of specified property(s) of all times
-        #     self.propertyData[fileName] = \
-        #         np.genfromtxt(self.ensembleFolderPath + self.filePre + fileName + self.fileSub)[next(skipRow):, next(skipCol):]
+            self.data[self.filenames[i]] = \
+                np.genfromtxt(self.ensemble_folderpath + self.filename_pre + self.filenames[i] + self.filename_sub, 
+                              skip_footer=skipfooter[i])[skiprow[i]:, skipcol[i]:]
 
-        print('\n' + str(self.fileNames) + ' read')
+        print('\n' + str(self.filenames) + ' read')
 
-    def calculatePropertyMean(self, axis = 1, startTime = None, stopTime = None):
-        self.timesSelected, _, _, iStart, iStop = self._selectTimes(startTime = startTime, stopTime = stopTime)
-        for i in prange(len(self.fileNames)):
-            self.propertyData[self.fileNames[i] + '_mean'] = np.mean(self.propertyData[self.fileNames[i]][
-                                                                     iStart:iStop],
-                                                                  axis = axis)
-        # for fileName in self.fileNames:
-        #     self.propertyData[fileName + '_mean'] = np.mean(self.propertyData[fileName][iStart:iStop], axis = axis)
+    def calculatePropertyMean(self, axis=1, starttime=None, stoptime=None):
+        self.times_selected, _, _, istart, istop = self._selectTimes(starttime=starttime, stoptime=stoptime)
+        for i in range(len(self.filenames)):
+            self.data[self.filenames[i] + '_mean'] = np.mean(self.data[self.filenames[i]][istart:istop], 
+                                                             axis=axis)
+        
+        print('\nTemporal average calculated for {} from {:.4f} s - {:.4f} s'.format(self.filenames, self.times_selected[0], self.times_selected[-1]))
 
-        # print(f'\nTemporal average calculated for {self.fileNames} from {self.timesSelected[0]} s - {self.timesSelected[-1]} s')
-        print('\nTemporal average calculated for {} from {:.4f} s - {:.4f} s'.format(self.fileNames,
-                                                                                   self.timesSelected[0], self.timesSelected[-1]))
-
-
-    def trimInvalidCharacters(self, fileNames, invalidChars):
-        fileNames = self._ensureTupleInput(fileNames)
-        invalidChars = (invalidChars,) if isinstance(invalidChars, str) else invalidChars
-
-        for fileName in fileNames:
-            with open(self.ensembleFolderPath + fileName, 'r') as f:
+    def trimInvalidCharacters(self, filenames, invalid_chars):
+        filenames = self._ensureTupleInput(filenames)
+        if isinstance(invalid_chars, str): invalid_chars = (invalid_chars,)
+        for filename in filenames:
+            with open(self.ensemble_folderpath + filename, 'r') as f:
                 lst = [line.rstrip('\n \t') for line in f]
 
-            for invalidChar in invalidChars:
-                lst = [string.replace(invalidChar, '') for string in lst]
+            for invalid_char in invalid_chars:
+                lst = [string.replace(invalid_char, '') for string in lst]
 
-            with open(self.ensembleFolderPath + fileName, "w") as f:
+            with open(self.ensemble_folderpath + filename, "w") as f:
                 f.writelines('\n'.join(lst))
 
 
-
 class BoundaryLayerProfiles(BaseProperties):
-    def __init__(self, caseName, fileNameH = 'hLevelsCell', blFolder = 'ABL', **kwargs):
-        self.fileNameH = fileNameH
-        super(BoundaryLayerProfiles, self).__init__(caseName = caseName + '/' + blFolder, timeCols = 0, excludeFile =
-        fileNameH, **kwargs)
-        # Copy fileNameH to Ensemble in order to use it later
-        time = os.listdir(self.caseFullPath)[0]
-        shutil.copy2(self.caseFullPath + time + '/' + fileNameH, self.ensembleFolderPath)
+    def __init__(self, casename, height_filename='hLevelsCell', bl_folder='ABL', **kwargs):
+        self.height_filename = height_filename
+        super(BoundaryLayerProfiles, self).__init__(casename = casename + '/' + bl_folder, timecols = 0, excl_files =
+        height_filename, **kwargs)
+        # Copy height_filename to Ensemble in order to use it later
+        time = os.listdir(self.case_fullpath)[0]
+        shutil.copy2(self.case_fullpath + time + '/' + height_filename, self.ensemble_folderpath)
 
 
-    def readPropertyData(self, fileNames = ('*'), **kwargs):
+    def readPropertyData(self, filenames = ('*'), **kwargs):
         # Read height levels
-        self.hLvls = np.genfromtxt(self.ensembleFolderPath + self.fileNameH)
-        # Override skipCol to suit inflow property files
+        self.hLvls = np.genfromtxt(self.ensemble_folderpath + self.height_filename)
+        # Override skipcol to suit inflow property files
         # Columns to skip are 0: time; 1: time step
-        super(BoundaryLayerProfiles, self).readPropertyData(fileNames = fileNames, skipCol = 2)
+        super(BoundaryLayerProfiles, self).readPropertyData(filenames = filenames, skipcol = 2)
 
 
-    def calculatePropertyMean(self, startTime = None, stopTime = None, **kwargs):
+    def calculatePropertyMean(self, starttime = None, stoptime = None, **kwargs):
         # Override axis to suit inflow property files
-        super(BoundaryLayerProfiles, self).calculatePropertyMean(axis = 0, startTime = startTime, stopTime = stopTime, **kwargs)
+        super(BoundaryLayerProfiles, self).calculatePropertyMean(axis = 0, starttime = starttime, stoptime = stoptime, **kwargs)
 
 
 class TurbineOutputs(BaseProperties):
-    def __init__(self, caseName, dataFolder = 'turbineOutput', globalQuantities = ('powerRotor', 'rotSpeed', 'thrust',
+    def __init__(self, casename, dataFolder = 'turbineOutput', globalQuantities = ('powerRotor', 'rotSpeed', 'thrust',
                                                                       'torqueRotor',
                                                        'torqueGen', 'azimuth', 'nacYaw', 'pitch'), **kwargs):
         self.globalQuantities = globalQuantities
-        super(TurbineOutputs, self).__init__(caseName + '/' + dataFolder, **kwargs)
+        super(TurbineOutputs, self).__init__(casename + '/' + dataFolder, **kwargs)
 
         self.nTurb, self.nBlade = 0, 0
 
 
     @timer
-    def readPropertyData(self, fileNames = ('*',), skipRow = 0, skipCol = 'infer', verbose = True, turbInfo = ('infer',)):
-        fileNames = self._ensureTupleInput(fileNames)
+    def readPropertyData(self, filenames = ('*',), skiprow = 0, skipcol = 'infer', verbose = True, turbInfo = ('infer',)):
+        filenames = self._ensureTupleInput(filenames)
         globalQuantities = (
         'powerRotor', 'rotSpeed', 'thrust', 'torqueRotor', 'torqueGen', 'azimuth', 'nacYaw', 'pitch', 'powerGenerator')
-        if skipCol is 'infer':
-            skipCol = []
-            for file in fileNames:
+        if skipcol is 'infer':
+            skipcol = []
+            for file in filenames:
                 if file in globalQuantities:
-                    skipCol.append(3)
+                    skipcol.append(3)
                 else:
-                    skipCol.append(4)
+                    skipcol.append(4)
 
-        super(TurbineOutputs, self).readPropertyData(fileNames = fileNames, skipRow = skipRow, skipCol = skipCol)
+        super(TurbineOutputs, self).readPropertyData(filenames = filenames, skiprow = skiprow, skipcol = skipcol)
 
         if turbInfo[0] is 'infer':
-            turbInfo = np.genfromtxt(self.ensembleFolderPath + self.filePre + 'Cl' + self.fileSub)[skipRow:, :2]
+            turbInfo = np.genfromtxt(self.ensemble_folderpath + self.filename_pre + 'Cl' + self.filename_sub)[skiprow:, :2]
 
         # Number of turbines and blades
         (self.nTurb, self.nBlade) = (int(np.max(turbInfo[:, 0]) + 1), int(np.max(turbInfo[:, 1]) + 1))
 
-        fileNamesOld, self.fileNames = self.fileNames, list(self.fileNames)
-        for fileName in fileNamesOld:
+        fileNamesOld, self.filenames = self.filenames, list(self.filenames)
+        for filename in fileNamesOld:
             for i in range(self.nTurb):
-                if fileName not in globalQuantities:
+                if filename not in globalQuantities:
                     for j in range(self.nBlade):
-                        newFileName = fileName + '_Turb' + str(i) + '_Bld' + str(j)
-                        self.propertyData[newFileName] = self.propertyData[fileName][(i*self.nBlade + j)::(self.nTurb*self.nBlade), :]
-                        self.fileNames.append(newFileName)
+                        newFileName = filename + '_Turb' + str(i) + '_Bld' + str(j)
+                        self.data[newFileName] = self.data[filename][(i*self.nBlade + j)::(self.nTurb*self.nBlade), :]
+                        self.filenames.append(newFileName)
 
                 else:
-                    newFileName = fileName + '_Turb' + str(i)
-                    self.propertyData[newFileName] = self.propertyData[fileName][i::self.nTurb]
-                    self.fileNames.append(newFileName)
+                    newFileName = filename + '_Turb' + str(i)
+                    self.data[newFileName] = self.data[filename][i::self.nTurb]
+                    self.filenames.append(newFileName)
 
         if verbose:
-            print('\n' + str(self.fileNames) + ' read')
+            print('\n' + str(self.filenames) + ' read')
 
 
 
 class InflowBoundaryField(BaseProperties):
-    def __init__(self, caseName, caseDir = '.', boundaryDataFolder = 'boundaryData', avgFolder = 'Average', **kwargs):
-        self.caseName, self.caseDir = caseName, caseDir
-        self.caseFullPath = caseDir + '/' + caseName + '/' + boundaryDataFolder + '/'
-        self.inflowPatches = os.listdir(self.caseFullPath)
+    def __init__(self, casename, casedir='.', boundarydata_folder='boundaryData', avg_folder='Average', **kwargs):
+        self.casename, self.casedir = casename, casedir
+        self.case_fullpath = casedir + '/' + casename + '/' + boundarydata_folder + '/'
+        self.inflow_patches = os.listdir(self.case_fullpath)
         # Try remove "Average" folder from collected patch names
         try:
-            self.inflowPatches.remove(avgFolder)
+            self.inflow_patches.remove(avg_folder)
         except ValueError:
             pass
 
-        self.avgFolderPath = self.caseFullPath + avgFolder + '/'
+        self.avg_folder_path = self.case_fullpath + avg_folder + '/'
         # Patch folder paths in Average folder
-        self.avgFolderPatchPaths, self.casePatchFullPaths = [], []
-        for patch in self.inflowPatches:
-            self.avgFolderPatchPaths.append(self.avgFolderPath + patch + '/')
-            self.casePatchFullPaths.append(self.caseFullPath + patch + '/')
+        self.avg_folder_patchpaths, self.case_patchfullpath = [], []
+        for patch in self.inflow_patches:
+            self.avg_folder_patchpaths.append(self.avg_folder_path + patch + '/')
+            self.case_patchfullpath.append(self.case_fullpath + patch + '/')
             # Try making Average folder and its subfolder, if not already
-            try:
-                os.makedirs(self.avgFolderPath + patch + '/')
-            except OSError:
-                pass
+            os.makedirs(self.avg_folder_path + patch + '/', exist_ok=True)
 
-        self.propertyData, self.propertyDataMean = {}, {}
+        self.data, self.data_mean = {}, {}
         # Exception for inheritance class DrivingPressureGradient
         try:
-            self.timesAll, self.timesAllRaw = self._readTimes(**kwargs)
+            self.times_all, self.times_all_raw = self._readTimes(**kwargs)
         except NotADirectoryError:
             pass
 
-        print('{} InflowBoundaryField object initialized'.format(caseName))
+        print('{} InflowBoundaryField object initialized'.format(casename))
 
-    def _readTimes(self, remove = 'points', **kwargs):
-        timesAll = os.listdir(self.casePatchFullPaths[0])
+    def _readTimes(self, remove='points', **kwargs):
+        times_all = os.listdir(self.case_patchfullpath[0])
         try:
-            timesAll.remove(remove)
+            times_all.remove(remove)
         except ValueError:
             pass
 
         # Raw all times that are string and can be integer and float mixed
         # Useful for locating time directories that can be integer
-        timesAllRaw = timesAll
+        times_all_raw = times_all
         # Numerical float all times and sort from low to high
-        timesAll = np.array([float(i) for i in timesAll])
+        times_all = np.array([float(i) for i in times_all])
         # Sort string all times by its float counterpart
-        timesAllRaw = [timeRaw for time, timeRaw in sorted(zip(timesAll, timesAllRaw))]
+        times_all_raw = [time_raw for time, time_raw in sorted(zip(times_all, times_all_raw))]
         # Use Numpy sort() to sort float all times
-        timesAll.sort()
+        times_all.sort()
 
-        return timesAll, timesAllRaw
+        return times_all, times_all_raw
 
     @timer
-    def readPropertyData(self, fileNames = ('*',), skipRow = 22, skipFooter = 1, nTimeSample = -1, lstrPrecision = 12, rstrPrecision = 20):
+    def readPropertyData(self, filenames=('*',), skiprow=22, skipfooter=1, n_timesample=-1, lstr_precision=12, rstr_precision=20):
         def __trimBracketCharacters(data):
             # Get left and right column of U
-            dataCol0, dataCol1, dataCol2 = data['f0'], data['f1'], data['f2']
+            datacol0, datacol1, datacol2 = data['f0'], data['f1'], data['f2']
             # New corrected data
-            dataNew = np.empty((data.shape[0], 3, data.shape[2]))
+            data_new = np.empty((data.shape[0], 3, data.shape[2]))
             # Go through each point then each time
             for l in range(data.shape[0]):
                 # print(l)
                 for m in range(data.shape[2]):
-                    newVal0, newVal2 = dataCol0[l, 0, m].decode('utf-8'), dataCol2[l, 0, m].decode('utf-8')
-                    dataNew[l, 0, m] = float(newVal0.lstrip('('))
-                    dataNew[l, 1, m] = dataCol1[l, 0, m]
+                    newval0, newval2 = datacol0[l, 0, m].decode('utf-8'), datacol2[l, 0, m].decode('utf-8')
+                    data_new[l, 0, m] = float(newval0.lstrip('('))
+                    data_new[l, 1, m] = datacol1[l, 0, m]
                     # Right column doesn't need to strip ) since precision limit was 10 and not enough to reach ")"
-                    dataNew[l, 2, m] = float(newVal2.rstrip(')'))
+                    data_new[l, 2, m] = float(newval2.rstrip(')'))
 
-            return dataNew
+            return data_new
 
         # Ensure tuple inputs and interpret "*" as all files
-        # ensembleFolderPath is a dummy variable here
-        self.ensembleFolderPath = self.casePatchFullPaths[0] + self.timesAllRaw[0] + '/'
-        self.fileNames = self._ensureTupleInput(fileNames)
-        self.ensembleFolderPath = ''
+        # ensemble_folderpath is a dummy variable here
+        self.ensemble_folderpath = self.case_patchfullpath[0] + self.times_all_raw[0] + '/'
+        self.filenames = self._ensureTupleInput(filenames)
+        self.ensemble_folderpath = ''
         # Ensure same size as number of files specified
-        skipRow = (skipRow,)*len(self.fileNames) if isinstance(skipRow, int) else skipRow
-        skipFooter = (skipFooter,)*len(self.fileNames) if isinstance(skipFooter, int) else skipFooter
-        # If nTimeSample is -1 or sample interval < 1.5, then use all times
-        sampleInterval = 1 if nTimeSample == -1 or nTimeSample > len(self.timesAll)/1.5 else int(np.ceil(len(self.timesAll))/nTimeSample)
-        self.sampleTimes = [self.timesAll[0]] if sampleInterval > 1 else self.timesAll
+        skiprow = (skiprow,)*len(self.filenames) if isinstance(skiprow, int) else skiprow
+        skipfooter = (skipfooter,)*len(self.filenames) if isinstance(skipfooter, int) else skipfooter
+        # If n_timesample is -1 or sample interval < 1.5, then use all times
+        sample_interval = 1 if n_timesample == -1 or n_timesample > len(self.times_all)/1.5 else int(np.ceil(len(self.times_all))/n_timesample)
+        self.sample_times = [self.times_all[0]] if sample_interval > 1 else self.times_all
         # Go through all specified properties
-        for i in range(len(self.fileNames)):
-            # String dtype for left and right column of U so that "(12345" can be read, precision is lstrPrecision and rstrPrecision
-            dtype = ('|S' + str(lstrPrecision), float, '|S' + str(rstrPrecision)) if self.fileNames[i] == 'U' else float
+        for i in range(len(self.filenames)):
+            # String dtype for left and right column of U so that "(12345" can be read, precision is lstr_precision and rstr_precision
+            dtype = ('|S' + str(lstr_precision), float, '|S' + str(rstr_precision)) if self.filenames[i] == 'U' else float
             # Go through all patches
-            for j in range(len(self.inflowPatches)):
-                print('\nReading {}'.format(self.fileNames[i] + ' ' + self.inflowPatches[j]))
-                fileNameFullPath = self.casePatchFullPaths[j] + self.timesAllRaw[0] + '/' + self.fileNames[i]
-                propertyDictKey = self.fileNames[i] + '_' + self.inflowPatches[j]
+            for j in range(len(self.inflow_patches)):
+                print('\nReading {}'.format(self.filenames[i] + ' ' + self.inflow_patches[j]))
+                filename_fullpath = self.case_patchfullpath[j] + self.times_all_raw[0] + '/' + self.filenames[i]
+                property_dictkey = self.filenames[i] + '_' + self.inflow_patches[j]
                 # Initialize first index in the 3rd dimension
-                data = np.genfromtxt(fileNameFullPath, skip_header = skipRow[i], skip_footer = skipFooter[i], dtype = dtype)
+                data = np.genfromtxt(filename_fullpath, skip_header=skiprow[i], skip_footer=skipfooter[i], dtype=dtype)
                 # Then go through all times from 2nd time onward
                 cnt, milestone = 0, 25
-                for k in range(sampleInterval, len(self.timesAll), sampleInterval):
-                    # print(self.fileNames[i] + ' ' + self.inflowPatches[j] + ' ' + str(self.timesAll[k]))
-                    fileNameFullPath = self.casePatchFullPaths[j] + self.timesAllRaw[k] + '/' + self.fileNames[i]
-                    dataPerTime = np.genfromtxt(fileNameFullPath, skip_header = skipRow[i], skip_footer = skipFooter[i], dtype = dtype)
-                    data = np.dstack((data, dataPerTime))
+                for k in range(sample_interval, len(self.times_all), sample_interval):
+                    # print(self.filenames[i] + ' ' + self.inflow_patches[j] + ' ' + str(self.times_all[k]))
+                    filename_fullpath = self.case_patchfullpath[j] + self.times_all_raw[k] + '/' + self.filenames[i]
+                    data_pertime = np.genfromtxt(filename_fullpath, skip_header=skiprow[i], skip_footer=skipfooter[i], dtype=dtype)
+                    data = np.dstack((data, data_pertime))
                     # Gauge progress
-                    cnt += sampleInterval
-                    progress = cnt/(len(self.timesAll) + 1)*100.
+                    cnt += sample_interval
+                    progress = cnt/(len(self.times_all) + 1)*100.
                     if progress >= milestone:
-                        print(' ' + str(milestone) + '%...', end = '')
+                        print(' ' + str(milestone) + '%...', end='')
                         milestone += 25
 
                 # Some postprocessing after reading and dstacking data per time
                 data = data.reshape((data.shape[1], data.shape[0], data.shape[2]))
                 # If file is U, then strip "(" and ")"
-                if self.fileNames[i] == 'U':
-                    dataNew = __trimBracketCharacters(data)
+                if self.filenames[i] == 'U':
+                    data_new = __trimBracketCharacters(data)
                 else:
-                    dataNew = data
+                    data_new = data
 
                 # Finally, the property data
-                self.propertyData[propertyDictKey] = dataNew
+                self.data[property_dictkey] = data_new
 
         # Collect sample times
-        self.sampleTimes = np.empty(dataNew.shape[2])
+        self.sample_times = np.empty(data_new.shape[2])
         i = 0
-        for k in range(0, len(self.timesAll), sampleInterval):
-            self.sampleTimes[i] = self.timesAll[k]
+        for k in range(0, len(self.times_all), sample_interval):
+            self.sample_times[i] = self.times_all[k]
             i += 1
 
         # Collect all property keys
-        self.propertyKeys = tuple(self.propertyData.keys())
+        self.property_keys = tuple(self.data.keys())
         # Numpy array treatment
-        self.sampleTimes = np.array(self.sampleTimes)
-
-        print('\n' + str(self.fileNames) + ' read')
-
+        self.sample_times = np.array(self.sample_times)
+        print('\n' + str(self.filenames) + ' read')
 
     @timer
-    def calculatePropertyMean(self, startTime = None, stopTime = None, **kwargs):
-        # timesAll in _selectTimes() should be sampleTimes in this case, thus temporarily change timesAll to sampleTimes
-        timesAllTmp = self.timesAll.copy()
-        self.timesAll = self.sampleTimes
-        # Find selected times and start, stop indices from sampleTimes
-        self.timesSelected, self.startTimeReal, self.stopTimeReal, iStart, iStop = self._selectTimes(startTime = startTime, stopTime = stopTime)
-        # Switch timesAll back
-        self.timesAll = timesAllTmp
+    def calculatePropertyMean(self, starttime=None, stoptime=None, **kwargs):
+        # times_all in _selectTimes() should be sample_times in this case, thus temporarily change times_all to sample_times
+        times_all_tmp = self.times_all.copy()
+        self.times_all = self.sample_times
+        # Find selected times and start, stop indices from sample_times
+        self.times_selected, self.starttime_real, self.stoptime_real, istart, istop = self._selectTimes(starttime=starttime, stoptime=stoptime)
+        # Switch times_all back
+        self.times_all = times_all_tmp
         # Go through all properties
-        for i in range(len(self.propertyKeys)):
-            # print(i)
+        for i in range(len(self.property_keys)):
             # Selected property data at selected times
-            propertySelected = self.propertyData[self.propertyKeys[i]][:, :, iStart:(iStop + 1)]
+            propert_selected = self.data[self.property_keys[i]][:, :, istart:(istop + 1)]
             # Property mean is sum(property_j*time_j)/sum(times)
-            propertyDotTime_sum = 0.
-            for j in prange(len(self.timesSelected)):
-                # print(j)
-                propertyDotTime = np.multiply(propertySelected[:, :, j], self.timesSelected[j])
-                propertyDotTime_sum += propertyDotTime
+            property_dot_time_sum = 0.
+            for j in range(len(self.times_selected)):
+                property_dot_time = np.multiply(propert_selected[:, :, j], self.times_selected[j])
+                property_dot_time_sum += property_dot_time
 
             # Store in dictionary
-            self.propertyDataMean[self.propertyKeys[i]] = propertyDotTime_sum/np.sum(self.timesSelected)
-
+            self.data_mean[self.property_keys[i]] = property_dot_time_sum/np.sum(self.times_selected)
 
     @timer
-    def writeMeanToOpenFOAM_Format(self):
+    def formatMeanDataToOpenFOAM(self):
         # Go through inflow patches
-        for i, patch in enumerate(self.inflowPatches):
+        for i, patch in enumerate(self.inflow_patches):
+            # Create time folders
+            timefolder0 = self.avg_folder_patchpaths[i] + '0/'
+            timefolder10000 = self.avg_folder_patchpaths[i] + '10000/'
+            os.makedirs(timefolder0, exist_ok=True)
+            os.makedirs(timefolder10000, exist_ok=True)
             # For each patch, go through (mean) properties
-            for j in prange(len(self.propertyKeys)):
+            for j in range(len(self.property_keys)):
                 # Pick up only property corresponding current patch
-                if patch in self.propertyKeys[j]:
+                if patch in self.property_keys[j]:
                     # Get property name
-                    propertyName = self.propertyKeys[j].replace('_' + patch, '')
+                    property_name = self.property_keys[j].replace('_' + patch, '')
                     # Get mean property data
-                    propertyDataMean = self.propertyDataMean[self.propertyKeys[j]]
+                    data_mean = self.data_mean[self.property_keys[j]]
                     # Open file for writing
-                    fid = open(self.avgFolderPatchPaths[i] + propertyName, 'w')
-                    print('Writing {0} to {1}'.format(propertyName, self.avgFolderPatchPaths[i]))
-                    # Define dataType and average (placeholder) value
-                    if propertyName in ('k', 'T', 'pd', 'nuSGS', 'kappat'):
-                        dataType, average = 'scalar', '0'
+                    fid = open(timefolder0 + property_name, 'w')
+                    print('Writing {0} to {1}'.format(property_name, timefolder0))
+                    # Define datatype and average (placeholder) value
+                    if property_name in ('k', 'T', 'pd', 'nuSGS', 'kappat'):
+                        datatype, average = 'scalar', '0'
                     else:
-                        dataType, average = 'vector', '(0 0 0)'
+                        datatype, average = 'vector', '(0 0 0)'
 
                     # Write the file header
                     fid.write('/*--------------------------------*- C++ -*----------------------------------*\\\n')
@@ -503,128 +448,89 @@ class InflowBoundaryField(BaseProperties):
                     fid.write('    version     2.0;\n')
                     fid.write('    format      ascii;\n')
                     fid.write('    class       ')
-                    fid.write(dataType)
+                    fid.write(datatype)
                     fid.write('AverageField;\n')
                     fid.write('    object      values;\n')
                     fid.write('}\n')
                     fid.write('// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //\n\n')
-                    fid.write('// This inflow plane has been averaged from {0} s to {1} s\n'.format(self.startTimeReal, self.stopTimeReal))
+                    fid.write('// This inflow plane has been averaged from {0} s to {1} s\n'.format(self.starttime_real, self.stoptime_real))
                     fid.write('// Average\n')
                     fid.write(average)
                     fid.write('\n\n\n')
-                    fid.write(str(propertyDataMean.shape[0]))
+                    fid.write(str(data_mean.shape[0]))
                     fid.write('\n')
                     fid.write('(\n')
                     # Write property data
-                    for k in range(propertyDataMean.shape[0]):
+                    for k in range(data_mean.shape[0]):
                         # If U, replace comma with nothing
-                        if propertyName == 'U':
-                            fid.write(str(tuple(propertyDataMean[k])).replace(',', ''))
+                        if property_name == 'U':
+                            fid.write(str(tuple(data_mean[k])).replace(',', ''))
                         else:
-                            fid.write(str(propertyDataMean[k, 0]))
+                            fid.write(str(data_mean[k, 0]))
 
                         fid.write('\n')
                     fid.write(')')
                     fid.close()
+                    # Also copy files to 10000 time directory
+                    print('\nCopying {} to {}'.format(property_name, timefolder10000))
+                    shutil.copy(timefolder0 + property_name, timefolder10000)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        print("\nDon't forget to copy 'points' to {patch}/ folder too!")
 
 if __name__ == '__main__':
     from PlottingTool import Plot2D
 
-    caseName = 'ABL_N_L2'
-    caseDir = '/media/yluan'
-    fileNames = '*'
-    nTimeSample = 1000
-    startTime, stopTime = 18000, 21000
-    case = InflowBoundaryField(caseName = caseName, caseDir = caseDir)
-    case.readPropertyData(fileNames = fileNames, nTimeSample = nTimeSample)
-    case.calculatePropertyMean(startTime = startTime, stopTime = stopTime)
-    case.writeMeanToOpenFOAM_Format()
+    casename = 'ABL_N_H'
+    casedir = '/media/yluan'
+    filenames = '*'
+    n_timesample = 1000
+    starttime, stoptime = 20000, 25000
+    case = InflowBoundaryField(casename=casename, casedir=casedir)
+    case.readPropertyData(filenames=filenames, n_timesample=n_timesample)
+    case.calculatePropertyMean(starttime=starttime, stoptime=stoptime)
+    case.formatMeanDataToOpenFOAM()
 
-    # kSouth = case.propertyData['k_south']
-    # uSouth = case.propertyData['U_south']
-
-
+    # kSouth = case.data['k_south']
+    # uSouth = case.data['U_south']
 
 
 
 
-    # caseName = 'ALM_N_H_ParTurb'
-    # fileNames = 'Cd'
+
+
+    # casename = 'ALM_N_H_ParTurb'
+    # filenames = 'Cd'
     # startTime1 = 20000
     # stopTime1 = 22000
     # frameSkip = 182#28
     #
-    # turb = TurbineOutputs(caseName = caseName, caseDir = '/media/yluan/Toshiba External Drive')
+    # turb = TurbineOutputs(casename = casename, casedir = '/media/yluan/Toshiba External Drive')
     #
-    # turb.readPropertyData(fileNames = fileNames)
+    # turb.readPropertyData(filenames = filenames)
     #
-    # turb.calculatePropertyMean(startTime = startTime1, stopTime = stopTime1)
+    # turb.calculatePropertyMean(starttime = startTime1, stoptime = stopTime1)
     #
-    # listX1 = (turb.timesSelected[::frameSkip],)*3
-    # listY1 = (turb.propertyData[fileNames + '_Turb0_Bld0_mean'][::frameSkip],
-    #          turb.propertyData[fileNames + '_Turb0_Bld1_mean'][::frameSkip],
-    #          turb.propertyData[fileNames + '_Turb0_Bld2_mean'][::frameSkip])
-    # listY2 = (turb.propertyData[fileNames + '_Turb1_Bld0_mean'][::frameSkip],
-    #           turb.propertyData[fileNames + '_Turb1_Bld1_mean'][::frameSkip],
-    #           turb.propertyData[fileNames + '_Turb1_Bld2_mean'][::frameSkip])
+    # listX1 = (turb.times_selected[::frameSkip],)*3
+    # listY1 = (turb.data[filenames + '_Turb0_Bld0_mean'][::frameSkip],
+    #          turb.data[filenames + '_Turb0_Bld1_mean'][::frameSkip],
+    #          turb.data[filenames + '_Turb0_Bld2_mean'][::frameSkip])
+    # listY2 = (turb.data[filenames + '_Turb1_Bld0_mean'][::frameSkip],
+    #           turb.data[filenames + '_Turb1_Bld1_mean'][::frameSkip],
+    #           turb.data[filenames + '_Turb1_Bld2_mean'][::frameSkip])
     #
     # startTime2 = 21000
     # stopTime2 = 22000
-    # turb.calculatePropertyMean(startTime = startTime2, stopTime = stopTime2)
+    # turb.calculatePropertyMean(starttime = startTime2, stoptime = stopTime2)
     #
-    # listX2 = (turb.timesSelected[::frameSkip],)*3
-    # listY3 = (turb.propertyData[fileNames + '_Turb0_Bld0_mean'][::frameSkip],
-    #           turb.propertyData[fileNames + '_Turb0_Bld1_mean'][::frameSkip],
-    #           turb.propertyData[fileNames + '_Turb0_Bld2_mean'][::frameSkip])
-    # listY4 = (turb.propertyData[fileNames + '_Turb1_Bld0_mean'][::frameSkip],
-    #           turb.propertyData[fileNames + '_Turb1_Bld1_mean'][::frameSkip],
-    #           turb.propertyData[fileNames + '_Turb1_Bld2_mean'][::frameSkip])
+    # listX2 = (turb.times_selected[::frameSkip],)*3
+    # listY3 = (turb.data[filenames + '_Turb0_Bld0_mean'][::frameSkip],
+    #           turb.data[filenames + '_Turb0_Bld1_mean'][::frameSkip],
+    #           turb.data[filenames + '_Turb0_Bld2_mean'][::frameSkip])
+    # listY4 = (turb.data[filenames + '_Turb1_Bld0_mean'][::frameSkip],
+    #           turb.data[filenames + '_Turb1_Bld1_mean'][::frameSkip],
+    #           turb.data[filenames + '_Turb1_Bld2_mean'][::frameSkip])
     #
-    # figDir = '/media/yluan/Toshiba External Drive/' + caseName + '/turbineOutput/Result'
+    # figDir = '/media/yluan/Toshiba External Drive/' + casename + '/turbineOutput/Result'
     #
     # # Custom colors
     # colors, _ = Plot2D.setColors()
@@ -636,14 +542,14 @@ if __name__ == '__main__':
     #
     # show = False
     #
-    # clPlot = Plot2D(listY1, listX1, save = True, name = 'Turb0_' + fileNames  + '1', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]', figDir = figDir, xLim = yLim, yLim = xLim1, figWidth = 'half', figHeightMultiplier = 2., show = show, colors = colors[:3][:], gradientBg = True, gradientBgRange = (startTime1, 21800), gradientBgDir = 'y')
+    # clPlot = Plot2D(listY1, listX1, save = True, name = 'Turb0_' + filenames  + '1', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]', figDir = figDir, xLim = yLim, yLim = xLim1, figWidth = 'half', figHeightMultiplier = 2., show = show, colors = colors[:3][:], gradientBg = True, gradientBgRange = (startTime1, 21800), gradientBgDir = 'y')
     # clPlot.initializeFigure()
     #
     # clPlot.plotFigure(plotsLabel = plotsLabel)
     #
     # clPlot.finalizeFigure(transparentBg = transparentBg)
     #
-    # # clPlot2 = Plot2D(listX1, listY2, save = True, name = 'Turb1_' + fileNames  + '1', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]', figDir = figDir, xLim = xLim1, yLim = yLim, figWidth = 'full', show = show, colors = colors[3:6][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
+    # # clPlot2 = Plot2D(listX1, listY2, save = True, name = 'Turb1_' + filenames  + '1', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]', figDir = figDir, xLim = xLim1, yLim = yLim, figWidth = 'full', show = show, colors = colors[3:6][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
     # # clPlot2.initializeFigure()
     # # clPlot2.plotFigure(plotsLabel = plotsLabel)
     # # clPlot2.finalizeFigure(transparentBg = transparentBg)
@@ -657,7 +563,7 @@ if __name__ == '__main__':
     # #
     # # show = True
     # #
-    # # clPlot = Plot2D(listX2, listY3, save = True, name = 'Turb0_' + fileNames + '2', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]',
+    # # clPlot = Plot2D(listX2, listY3, save = True, name = 'Turb0_' + filenames + '2', xLabel = 'Time [s]', yLabel = r'$C_d$ [-]',
     # #                 figDir = figDir, xLim = xLim2, yLim = yLim, figWidth = 'full', show = show, colors = colors[:3][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
     # # clPlot.initializeFigure()
     # #
@@ -665,7 +571,7 @@ if __name__ == '__main__':
     # #
     # # clPlot.finalizeFigure(transparentBg = transparentBg)
     # #
-    # # clPlot2 = Plot2D(listX2, listY4, save = True, name = 'Turb1_' + fileNames + '2', xLabel = 'Time [s]',
+    # # clPlot2 = Plot2D(listX2, listY4, save = True, name = 'Turb1_' + filenames + '2', xLabel = 'Time [s]',
     # #                  yLabel = r'$C_d$ [-]', figDir = figDir, xLim = xLim2, yLim = yLim, figWidth = 'full', show = show, colors = colors[3:6][:], gradientBg = True, gradientBgRange = (startTime1, 21800))
     # # clPlot2.initializeFigure()
     # # clPlot2.plotFigure(plotsLabel = plotsLabel)

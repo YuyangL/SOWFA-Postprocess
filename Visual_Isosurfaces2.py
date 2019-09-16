@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import numpy as np
-from PostProcess_FieldData import FieldData
+from FieldData import FieldData
 import time as t
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
