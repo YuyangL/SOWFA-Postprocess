@@ -1,5 +1,5 @@
 import numpy as np
-from PostProcess_PrecursorAndTurbineOutputs import BaseProperties
+from PrecursorAndTurbineOutputs import BaseProperties
 from PlottingTool import Plot2D
 from numba import prange
 

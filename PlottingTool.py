@@ -729,15 +729,15 @@ class BaseFigure3D(BaseFigure):
                 ar_zx = abs((self.zlim[1] - self.zlim[0])/(self.xlim[1] - self.xlim[0]))
                 ar_yx = abs((self.ylim[1] - self.ylim[0])/(self.xlim[1] - self.xlim[0]))
 
-                # Constrain AR from getting too large
-                ar_yx, ar_zx = np.min((ar_yx, 2)), np.min((ar_zx, 2))
+                # # Constrain AR from getting too large
+                # ar_yx, ar_zx = np.min((ar_yx, 2)), np.min((ar_zx, 2))
                 # Axes aspect ratio doesn't really work properly
                 self.axes.pbaspect = (1, ar_yx, ar_zx)
                 # auto_scale_xyz is not preferable since it does it by setting a cubic box
                 # scaling = np.array([getattr(self.axes, 'get_{}lim'.format(dim))() for dim in 'xyz'])
                 # self.axes.auto_scale_xyz(*[[np.min(scaling), np.max(scaling)]]*3)
             except AttributeError:
-                warn('\nTo set custom aspect ratio of the 3D plot, you need modification of the source code axes3d.py. The aspect ratio might be incorrect for ' + self.name + '\n', stacklevel = 2)
+                warn('\nTo set custom aspect ratio of the 3D plot, you need modification of the source code axes3d.py. The aspect ratio might be incorrect for ' + self.name + '\n', stacklevel=2)
 
         if reduce_nticks:
             if self.xlim is not None: self.axes.set_xticks(np.linspace(self.xlim[0], self.xlim[1], 3))
@@ -851,7 +851,8 @@ class PlotContourSlices3D(BaseFigure3D):
         #     self.zlim = (np.min(list_val), np.max(list_val))
         # _ = self._getSlicesLimits(list_x=self.list_x, list_y=self.list_y, list_z=self.list_val)
         # self.slicemin, self.slicemax = self.zlim
-        self.slicemin, self.slicemax = np.amin(list_val), np.amax(list_val)
+        self.slicemin = min([min(val.ravel()) for val in list_val])
+        self.slicemax = max([max(val.ravel()) for val in list_val])
         self.val_lim = (self.slicemin, self.slicemax) if val_lim is None else val_lim
         self.grad_bg = grad_bg
         # # Good initial view angle
@@ -1046,26 +1047,31 @@ def pathpatch_translate(pathpatch, delta):
 def plotTurbineLocations(plot_object, slice_orient='horizontal', horslice_offsets=None, turb_borders=None, turb_centers_frontview=None,
                          turb_normal=(0.8660254037844, 0.5, 0.)):
     if slice_orient == 'horizontal':
+        # Go through every horizontal slice
         for i in range(len(horslice_offsets)):
-            plot_object.axes.plot([turb_borders[0][0], turb_borders[0][2]],
-                                      [turb_borders[0][1], turb_borders[0][3]],
-                                      zs=horslice_offsets[i], alpha=0.5, color=(0.25, 0.25, 0.25),
-                                      # Very important to set a super larger value
-                                      zorder=500 + i*500)
+            # Go through every turbine from turb_borders
+            for j in range(len(turb_borders)):
+                plot_object.axes.plot([turb_borders[j][0], turb_borders[j][2]],
+                                          [turb_borders[j][1], turb_borders[j][3]],
+                                          zs=horslice_offsets[i], alpha=0.5, color=(0.25, 0.25, 0.25),
+                                          # Very important to set a super larger value
+                                          zorder=500 + i*500)
 
     else:
         patch = Circle((0., 0.), 63., alpha=0.5, fill=False, edgecolor=(0.25, 0.25, 0.25), zorder=100)
         patches = []
-        for i in range(plot_object.narr):
+        for i in range(len(turb_centers_frontview)):
             patches.append(copy(patch))
 
         patches = iter(patches)
-        # Go through every vertical slice
-        for i in range(plot_object.narr):
+        # Go through every vertical slice and every turbine
+        for i in range(len(turb_centers_frontview)):
             p = next(patches)
             plot_object.axes.add_patch(p)
             pathpatch_2d_to_3d(p, z=0, normal=turb_normal)
             pathpatch_translate(p, turb_centers_frontview[i])
+
+        del patch, patches
 
         
 

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 # from warnings import warn
-from PostProcess_PrecursorAndTurbineOutputs import InflowProfiles, BoundaryLayerProperties
+from PrecursorAndTurbineOutputs import InflowProfiles, BoundaryLayerProperties
 from PlottingTool import Plot2D
 from Utilities import readData
 from numba import prange

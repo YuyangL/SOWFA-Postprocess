@@ -13,9 +13,9 @@ import os
 """
 User Inputs
 """
-caseDir = 'J:'
-# caseDir = '/media/yluan/Toshiba External Drive/'
-caseName = 'ALM_N_H_ParTurb'
+casedir = 'J:'
+# casedir = '/media/yluan/Toshiba External Drive/'
+casename = 'ALM_N_H_ParTurb'
 times = '22000.0918025'
 fields = 'Q'
 # Target number of cells after interpolation
@@ -26,18 +26,18 @@ targetRes = 1000000  # 'min', <int>
 interpMethod = 'linear'
 pickleName = 'turb0'
 # Force to recalculate values even if pickle results exist?
-forceRecalc = False  # [CAUTION]
+force_recalc = False  # [CAUTION]
 
 # Initialize the case
-case = FieldData(fields = fields, times = times, caseName = caseName, caseDir = caseDir)
+case = FieldData(fields=fields, times=times, casename=casename, casedir=casedir)
 # Go through all specified time directories
 for time in case.times:
     # Check if pickle results saved for this pickleName and fields
     # If so, use pickle results
-    resultNames = os.listdir(case.resultPath[time])
-    usePickle = True if pickleName + '_' + fields + '3D.p' in resultNames else False
+    resultnames = os.listdir(case.result_paths[time])
+    use_pickle = True if pickleName + '_' + fields + '3D.p' in resultnames else False
     # If no pickle results stored, then run the whole process
-    if not usePickle or forceRecalc:
+    if not use_pickle or force_recalc:
         # [BUG]
         # The keyword for symmetric tensor in parse_data_nonuniform() of field_parser.py of Ofpp should be 'symmTensor'
         # instead of 'symmtensor'
@@ -53,7 +53,7 @@ for time in case.times:
         # 1D upstream upwind turbine, length is 13D, width is 0.5D, height is 1D above hub height
         # Box counter-clockwise rotation in x-y plane
         boxRot = np.pi/6.
-        if caseName == 'ALM_N_H_ParTurb':
+        if casename == 'ALM_N_H_ParTurb':
             # For northern turbine a.k.a. turb1 in ALM_N_H_ParTurb
             if pickleName == 'turb1':
                 # Origin
@@ -63,7 +63,7 @@ for time in case.times:
                 boxO = (1103.464, 1052.821 - 2.5, 0)
 
             boxL, boxW, boxH = 6*126, 63 + 2.5*2, 216
-        elif caseName == 'ALM_N_H':
+        elif casename == 'ALM_N_H':
             boxO= (1008.964, 1216.5 - 2.5, 0)
             boxL, boxW, boxH = 1638, 63 + 2.5*2, 216
 
@@ -86,10 +86,10 @@ for time in case.times:
         #                                                         function = interpMethod)
 
         print('\nDumping results')
-        pickle.dump(ccx3D, open(case.resultPath[time] + pickleName + '_ccx3D.p', 'wb'))
-        pickle.dump(ccy3D, open(case.resultPath[time] + pickleName + '_ccy3D.p', 'wb'))
-        pickle.dump(ccz3D, open(case.resultPath[time] + pickleName + '_ccz3D.p', 'wb'))
-        pickle.dump(data3D, open(case.resultPath[time] + pickleName + '_' + fields + '3D.p', 'wb'))
+        pickle.dump(ccx3D, open(case.result_path[time] + pickleName + '_ccx3D.p', 'wb'))
+        pickle.dump(ccy3D, open(case.result_path[time] + pickleName + '_ccy3D.p', 'wb'))
+        pickle.dump(ccz3D, open(case.result_path[time] + pickleName + '_ccz3D.p', 'wb'))
+        pickle.dump(data3D, open(case.result_path[time] + pickleName + '_' + fields + '3D.p', 'wb'))
 
 
         """

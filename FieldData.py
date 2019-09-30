@@ -13,7 +13,7 @@ except ModuleNotFoundError:
     import pickle
 
 class FieldData:
-    def __init__(self, fields='*', times='*', casename='ABL_N_H', casedir='.', filenames_pre='', filenames_sub='', 
+    def __init__(self, fields='*', times='latestTime', casename='ABL_N_H', casedir='.', filenames_pre='', filenames_sub='',
                  cc=('ccx', 'ccy', 'ccz'), result_folder='Result', field_foldername='Fields', save=True, save_protocol=4):
         self.fields = fields
         self.case_fullpath = casedir + '/' + casename + '/' + field_foldername + '/'
@@ -23,9 +23,11 @@ class FieldData:
         # Save result as pickle and based on protocol pyVer
         self.save, self.save_protocol = save, save_protocol
         # If times in list/tuple or all times requested
-        if isinstance(times, (list, tuple)) or times in ('*', 'all', 'All'):
+        if isinstance(times, (list, tuple)) or times in ('*', 'all', 'All', 'latestTime'):
             # If all times, try remove the result folder from found directories
-            if times in ('*', 'all', 'All'): self.times = self._readTimes(removes=result_folder)[1]
+            if times in ('*', 'all', 'All', 'latestTime'): self.times = self._readTimes(removes=result_folder)[1]
+            if times == 'latestTime' and not isinstance(self.times, str): self.times = self.times[-1]
+            if isinstance(self.times, str): self.times = [self.times]
             # Go through all provided times, time could be string or integer and/or float
             for time in self.times:
                 self.case_time_fullpaths[str(time)] = self.case_fullpath + str(time) + '/'
@@ -122,9 +124,9 @@ class FieldData:
         print('\n{0} data read for {1} s. \nIf multiple times requested, data of different times are stacked in 3D'.format(self.fields, self.times))
         return field_data
 
-    @deprecated
     @staticmethod
     @timer
+    @deprecated
     def rotateSpatialCorrelationTensors(list_data, rotateXY=0., rotateUnit='rad', dependencies=('xx',)):
         # FIXME: DEPRECATED
         """
@@ -356,9 +358,9 @@ class FieldData:
 
         return xnew2, ynew2, znew2, ccnew2, valsnew2, box, flags
 
-    @deprecated
     @staticmethod
     @timer
+    @deprecated
     def interpolateFieldData(x, y, z, vals, precisionX = 1500j, precisionY = 1500j, precisionZ = 500j, interpMethod = 'linear'):
         print('\nInterpolating field data...')
         # Bound the coordinates to be interpolated in case data wasn't available in those borders
@@ -437,9 +439,9 @@ class FieldData:
 
         return x3D, y3D, z3D, valsND
 
-    @deprecated
     @staticmethod
     @timer
+    @deprecated
     def interpolateFieldData_RBF(x, y, z, vals, precisionX = 1500j, precisionY = 1500j, precisionZ = 500j,
                              function = 'linear'):
         print('\nInterpolating field data...')
@@ -630,8 +632,8 @@ class FieldData:
         print('\nFinished planer fluctuation fields calculation')
         return field_xy_fluc, field_z_fluc, field_xy_mean, field_z_mean
             
-    @deprecated
     @timer
+    @deprecated
     def getMeanDissipationRateField(self, epsilonSGSmean, nuSGSmean, nu=1e-5, saveto_time='last'):
         # FIXME: DEPRECATED
         # According to Eq 5.64 - Eq 5.68 of Sagaut (2006), for isotropic homogeneous turbulence,
@@ -908,8 +910,8 @@ class FieldData:
 
         return bij
 
-    @deprecated
     @timer
+    @deprecated
     def evaluateInvariantBasisCoefficients(self, tb, bij, cap=100., onegToRuleThemAll=False, saveto_time='last'):
         # def __getInvariantBasisCoefficientsField(tb, bij, onegToRuleThemAll):
         # If tensor bases is 4D, i.e. nPoint x nBasis x 3 x 3,
@@ -994,18 +996,18 @@ class FieldData:
 
         # Encoding = 'latin1' is required for unpickling Numpy arrays pickled by Python 2
         encode = 'ASCII' if self.save_protocol >= 3 else 'latin1'
-        dataDict = {}
+        datadict = {}
         # Go through each file
         for i in range(len(filenames)):
-            dataDict[filenames[i]] = pickle.load(open(self.result_paths[str(time)] + filenames[i] + '.p', 'rb'),
+            datadict[filenames[i]] = pickle.load(open(self.result_paths[str(time)] + filenames[i] + '.p', 'rb'),
                                                  encoding=encode)
 
         # If just one file read, then no need for a dictionary
         if len(filenames) == 1:
-            dataDict = dataDict[filenames[0]]
+            datadict = datadict[filenames[0]]
 
         print('\n{} read. If multiple files read, data is stored in dictionary'.format(filenames))
-        return dataDict
+        return datadict
 
     @deprecated
     def createSliceData(self, field_data, baseCoordinate = (0, 0, 90), normalVector = (0, 0, 1)):

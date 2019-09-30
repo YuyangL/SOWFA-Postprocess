@@ -1,5 +1,5 @@
 import numpy as np
-from Utility import timer
+from Utility import timer, deprecated
 from numba import njit
 from scipy.interpolate import griddata
 import os
@@ -109,6 +109,12 @@ class SliceProperties:
         precision_z *= 1j
         # Bound the coordinates to be interpolated in case data wasn't available in those borders
         bnd = (1, 1)
+        # print("xmin = {}, xmax = {}".format(x.min(), x.max()))
+        # print("confinebox[0] = {}, confinebox[1] = {}".format(confinebox[0], confinebox[1]))
+        # print("ymin = {}, ymax = {}".format(y.min(), y.max()))
+        # print("confinebox[2] = {}, confinebox[3] = {}".format(confinebox[2], confinebox[3]))
+        # print("zmin = {}, zmax = {}".format(z.min(), z.max()))
+        # print("confinebox[4] = {}, confinebox[5] = {}".format(confinebox[4], confinebox[5]))
         bnd_xtarget = (x.min()*bnd[0], x.max()*bnd[1]) if confinebox is None else (confinebox[0], confinebox[1])
         bnd_ytarget = (y.min()*bnd[0], y.max()*bnd[1]) if confinebox is None else (confinebox[2], confinebox[3])
         bnd_ztarget = (z.min()*bnd[0], z.max()*bnd[1]) if confinebox is None else (confinebox[4], confinebox[5])
@@ -124,7 +130,7 @@ class SliceProperties:
             # In case the vertical slice is at a negative angle,
             # i.e. when x goes from low to high, y goes from high to low,
             # flip y2d from low to high to high to low
-            y2d = np.flipud(y2d) if ((x[0] - x[1])*(y[0] - y[1])) < 0 else y2d
+            y2d = np.flipud(y2d) if ((x[0] - x[1])*(y[0] - y[1])) < 0. else y2d
         # Else if slice is horizontal
         else:
             known_pts = np.vstack((x, y)).T
@@ -142,14 +148,15 @@ class SliceProperties:
         milestone = 33
         # If vals is 2D
         if len(vals.shape) == 2:
+            # print("Min x = {}, max = {}".format(min(x2d.ravel()), max(x2d.ravel())))
+            # print("Min coor2 = {}, max = {}".format(min(grid_coor2.ravel()), max(grid_coor2.ravel())))
             # Initialize nRow x nCol x nComponent array vals3d by interpolating first component of the values, x, or xx
             vals3d = np.empty((x2d.shape[0], x2d.shape[1], vals.shape[1]))
             # Then go through the rest components and stack them in 3D
             for i in range(vals.shape[1]):
                 # Each component is interpolated from the known locations pointsXZ to refined fields (x2d, z2d)
-                vals3d_i = griddata(known_pts, vals[:, i].ravel(), (x2d, grid_coor2), method=interp_method)
+                vals3d[:, :, i] = griddata(known_pts, vals[:, i], (x2d, grid_coor2), method=interp_method)
                 # vals3d = np.dstack((vals3d, vals3d_i))
-                vals3d[:, :, i] = vals3d_i
                 # Gauge progress
                 progress = (i + 1)/vals.shape[1]*100.
                 if progress >= milestone:
@@ -160,7 +167,7 @@ class SliceProperties:
         else:
             vals3d = np.empty((x2d.shape[0], x2d.shape[1], vals.shape[2]))
             for i in range(vals.shape[2]):
-                vals3d_i = griddata(known_pts, vals[:, :, i].ravel(), (x2d, grid_coor2), method = interp_method)
+                vals3d_i = griddata(known_pts, vals[:, :, i].ravel(), (x2d, grid_coor2), method=interp_method)
                 vals3d[:, :, i] = vals3d_i
                 progress = (i + 1)/vals.shape[2]*100.
                 if progress >= milestone:
@@ -175,8 +182,8 @@ class SliceProperties:
         #     else:
         #         vals3d['0'] =
 
-        x2d, y2d, z2d = np.nan_to_num(x2d), np.nan_to_num(y2d), np.nan_to_num(z2d)
-        vals3d = np.nan_to_num(vals3d)
+        # x2d, y2d, z2d = np.nan_to_num(x2d), np.nan_to_num(y2d), np.nan_to_num(z2d)
+        # vals3d = np.nan_to_num(vals3d)
 
         return x2d, y2d, z2d, vals3d
 
@@ -184,6 +191,7 @@ class SliceProperties:
     # [DEPRECATED] Refer to interpolateDecomposedSliceData_Fast()
     @staticmethod
     @timer
+    @deprecated
     def interpolateDecomposedSliceData(x, y, z, vals, slice_orient = 'vertical', rot_z = 0, precision_x = 1500j, precision_y = 1500j,
                           precision_z = 500j, interp_method = 'cubic'):
         # Bound the coordinates to be interpolated in case data wasn't available in those borders

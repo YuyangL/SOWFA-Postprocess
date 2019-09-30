@@ -29,14 +29,14 @@ User Inputs
 """
 time = 'latestTime'  #'23243.2156219'
 casedir = '/media/yluan'
-# casename = 'ALM_N_H_OneTurb'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URANS/N_H_OneTurb'  # 'ALM_N_H_ParTurb'
-casename = 'RANS/N_H_OneTurb_Simple_Blend2'
+casename = 'ALM_N_H_OneTurb'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URANS/N_H_OneTurb'  # 'ALM_N_H_ParTurb'
+# casename = 'RANS/N_H_OneTurb_Simple_ABL'
 # properties = ('kResolved', 'kSGSmean')
-# properties = ('kSGSmean',)
-properties = ('epsilon',)
-slicenames = ('oneDupstreamTurbine', 'rotorPlane', 'oneDdownstreamTurbine')
-slicenames = ('threeDdownstreamTurbine', 'fiveDdownstreamTurbine', 'sevenDdownstreamTurbine')
-# slicenames = ('hubHeight', 'quarterDaboveHub', 'turbineApexHeight')
+properties = ('kSGSmean',)
+# properties = ('k',)
+# slicenames = ('oneDupstreamTurbine', 'rotorPlane', 'oneDdownstreamTurbine')
+# slicenames = ('threeDdownstreamTurbine', 'fiveDdownstreamTurbine', 'sevenDdownstreamTurbine')
+slicenames = ('hubHeight', 'quarterDaboveHub', 'turbineApexHeight')
 # slicenames = ('groundHeight', 'hubHeight', 'turbineApex')
 # Subscript for the slice names
 slicenames_sub = 'Slice'
@@ -45,12 +45,6 @@ horslice_offsets = (90., 121.5, 153.)
 horslice_offsets2 = ((90., 90.), (121.5, 121.5), (153., 153.))
 
 result_folder = 'Result'
-# Confine the region of interest, list grows with number of slices
-# (800, 1800, 800, 1800, 0, 405) good for rotor plane slice
-# (600, 2000, 600, 2000, 0, 405) good for hubHeight slice
-# (800, 2200, 800, 2200, 0, 405) good for along wind slice
-# Overriden in Process User Inputs
-confinebox = ((800, 1800, 800, 1800, 0, 405),)  # (None,), ((xmin, xmax, ymin, ymax, zmin, zmax),)
 # Orientation of x-axis in x-y plane, in case of angled flow direction
 # Only used for values decomposition and confinebox
 # Angle in rad and counter-clockwise
@@ -67,7 +61,7 @@ Plot Settings
 # Which type(s) of plot to make
 plot_type = '3D'  # '2D', '3D', 'all'
 # Total number cells intended to plot via interpolation
-target_meshsize = 5e5
+target_meshsize = 1e5
 interp_method = 'linear'
 # Number of contours, only for 2D plots or 3D horizontal slice plots
 contour_lvl = 200
@@ -91,6 +85,9 @@ if 'OneTurb' in casename:
         if 'three' in slicenames[0]:
             confinebox = confinebox2
             turb_centers_frontview = turb_centers_frontview[3:]
+        else:
+            turb_centers_frontview = turb_centers_frontview[:3]
+
     # For horizontal slices
     elif 'hubHeight' in slicenames[0] or 'groundHeight' in slicenames[0]:
         # Confinement for z doesn't matter since the slices are horizontal
@@ -98,17 +95,26 @@ if 'OneTurb' in casename:
         turb_borders, turb_centers_frontview, confinebox, _ = OneTurb('hor')
 
 elif 'ParTurb' in casename:
-    if slicenames[0] == 'rotorPlane':
-        confinebox = ((1023.583 + r/2, 1212.583 - r/2, 1115.821 + r/2,
-                       1443.179 - r/2,
-                       0,
-                       216 - r/2),
-                      (1132.702, 1321.702, 1178.821, 1506.179, 0, 216),
-                      (1350.94, 1539.94, 1304.821, 1632.179, 0, 216),
-                      (1569.179, 1758.179, 1430.821, 1758.179, 0, 216))
-    elif slicenames[0] in ('groundHeight', 'hubHeight'):
-        # Confinement for z doesn't matter since the slices are horizontal
-        confinebox = ((700, 2300, 700, 2300, 0, 216),)*len(slicenames)
+    if 'oneDupstream' in slicenames[0] or 'threeDdownstream' in slicenames[0]:
+        # Read coor info from database
+        turb_borders, turb_centers_frontview, confinebox, confinebox2 = ParTurb('vert')
+        if 'threeDdownstream' in slicenames[0]:
+            confinebox = confinebox2
+            turb_centers_frontview = turb_centers_frontview[6:]
+        else:
+            turb_centers_frontview = turb_centers_frontview[:6]
+
+    elif 'hubHeight' in slicenames[0] or 'groundHeight' in slicenames[0]:
+        turb_borders, turb_centers_frontview, confinebox, _ = ParTurb('hor')
+
+else:
+    turb_borders = ((99999,)*4,)
+    turb_centers_frontview = ((99999,)*3,)*6
+    confinebox = confinebox2 = [[5., 2995., 5., 2995., 5., 995.]]*10
+
+
+
+confinebox = confinebox2 = [[5., 2995., 5., 2995., 5., 995.]]*10
 
 # Automatic view_angle and figure settings, only for 3D plots
 if 'oneDupstream' in slicenames[0] or 'threeDdownstream' in slicenames[0]:
@@ -132,16 +138,17 @@ elif plot_type in ('all', 'All', '*'):
 if 'U' in properties[0]:
     val_lim = (0, 12)
     val_lim_z = (-2, 2)
-    val_label = [r'$\langle U_{hor} \rangle$ [m/s]', r'$\langle w \rangle$ [m/s]']
+    val_label = [r'$\langle U_\mathrm{hor} \rangle$ [m/s]', r'$\langle w \rangle$ [m/s]']
 elif 'k' in properties[0]:
-    val_lim = None #(0., 2.5)
+    val_lim = (0., 0.11)
     val_lim_z = None
     if 'Resolved' in properties[0]:
-        val_label = (r'$k_\rm{Resolved}$ [m$^2$/s$^2$]',) if len(properties) == 1 else (r'$k$ [m$^2$/s$^2$]',)
+        val_label = (r'$\langle k_\mathrm{resolved} \rangle$ [m$^2$/s$^2$]',) if len(properties) == 1 else (r'$\langle k \rangle$ [m$^2$/s$^2$]',)
     elif 'SGS' in properties[0]:
-        val_label = (r'$k_\rm{SGS}$ [m$^2$/s$^2$]',)
+        val_label = (r'$\langle k_\mathrm{SGS} \rangle$ [m$^2$/s$^2$]',)
     else:
         val_label = (r'$k$ [m$^2$/s$^2$]',)
+
 elif 'uuPrime2' in properties[0] or 'R' in properties[0]:
     val_lim = (-0.5, 2/3.)
     val_lim_z = None
@@ -151,7 +158,13 @@ elif 'uuPrime2' in properties[0] or 'R' in properties[0]:
 elif "epsilon" in properties[0]:
     val_lim = None
     val_lim_z = None
-    val_label = ('$\epsilon$ [m$^2$/s$^3$]',)
+    if 'SGS' in properties[0]:
+        val_label = (r'$\langle \epsilon_{\mathrm{SGS}} \rangle$ [m$^2$/s$^3$]',) if 'mean' in properties[0] else (r'$\epsilon_{\mathrm{SGS}}$ [m$^2$/s$^3$]',)
+    elif 'Resolved' in properties[0]:
+        val_label = (r'$\langle \epsilon_{\mathrm{resolved}} \rangle$ [m$^2$/s$^3$]',)
+    else:
+        val_label = ('$\epsilon$ [m$^2$/s$^3$]',)
+
 else:
     val_lim = None
     val_lim_z = None
@@ -308,33 +321,35 @@ if plot_type in ('3D', 'all'):
 
     plot3d.initializeFigure(constrained_layout=True)
     plot3d.plotFigure(contour_lvl=contour_lvl)
-    if case.slices_orient[slicename] == 'horizontal':
-        for i in range(len(horslice_offsets)):
-            plot3d.axes.plot([turb_borders[0][0], turb_borders[0][2]], [turb_borders[0][1], turb_borders[0][3]], zs=horslice_offsets2[i], alpha=0.5, color=(0.25, 0.25, 0.25),
-                             # Very important to set a super larger value
-                             zorder=200 + i*200)
-    else:
-        for i in range(len(list_x2d)):
-            p = next(patches)
-            plot3d.axes.add_patch(p)
-            pathpatch_2d_to_3d(p, z=0, normal=(0.8660254037844, 0.5, 0.))
-            pathpatch_translate(p, turb_centers_frontview[i])
+    if casename not in ('ABL_N_H', 'ABL_N_L'):
+        if case.slices_orient[slicename] == 'horizontal':
+            for i in range(len(horslice_offsets)):
+                plot3d.axes.plot([turb_borders[0][0], turb_borders[0][2]], [turb_borders[0][1], turb_borders[0][3]], zs=horslice_offsets2[i], alpha=0.5, color=(0.25, 0.25, 0.25),
+                                 # Very important to set a super larger value
+                                 zorder=500 + i*500)
+        else:
+            for i in range(len(list_x2d)):
+                p = next(patches)
+                plot3d.axes.add_patch(p)
+                pathpatch_2d_to_3d(p, z=0, normal=(0.8660254037844, 0.5, 0.))
+                pathpatch_translate(p, turb_centers_frontview[i])
 
     plot3d.finalizeFigure(tight_layout=False, show_ticks=show_ticks, show_xylabel=show_xylabel, show_zlabel=show_zlabel)
     # For Uz or any other z component
     if list_val3d_z[0] is not None:
         plot3d_z.initializeFigure()
         plot3d_z.plotFigure(contour_lvl=contour_lvl)
-        if case.slices_orient[slicename] == 'horizontal':
-            for i in range(len(horslice_offsets)):
-                plot3d_z.axes.plot([turb_borders[0][0], turb_borders[0][2]], [turb_borders[0][1], turb_borders[0][3]],
-                                 zs=horslice_offsets2[i], alpha=0.5, color=(0.25, 0.25, 0.25), zorder=200 + i*200)
-        else:
-            for i in range(len(list_x2d)):
-                p = next(patches)
-                plot3d_z.axes.add_patch(p)
-                pathpatch_2d_to_3d(p, z=0, normal=(0.8660254037844, 0.5, 0.))
-                pathpatch_translate(p, turb_centers_frontview[i])
+        if casename not in ('ABL_N_H', 'ABL_N_L'):
+            if case.slices_orient[slicename] == 'horizontal':
+                for i in range(len(horslice_offsets)):
+                    plot3d_z.axes.plot([turb_borders[0][0], turb_borders[0][2]], [turb_borders[0][1], turb_borders[0][3]],
+                                     zs=horslice_offsets2[i], alpha=0.5, color=(0.25, 0.25, 0.25), zorder=500 + i*500)
+            else:
+                for i in range(len(list_x2d)):
+                    p = next(patches)
+                    plot3d_z.axes.add_patch(p)
+                    pathpatch_2d_to_3d(p, z=0, normal=(0.8660254037844, 0.5, 0.))
+                    pathpatch_translate(p, turb_centers_frontview[i])
 
         plot3d_z.finalizeFigure(show_ticks=show_ticks, show_xylabel=show_xylabel, show_zlabel=show_zlabel)
 

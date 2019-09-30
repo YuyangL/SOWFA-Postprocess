@@ -147,7 +147,7 @@ class BaseProperties:
         # If stoptime larger than any time, istop = len(times_all)
         istop = min(istop, len(self.times_all) - 1)
         starttime_real, stoptime_real = self.times_all[istart], self.times_all[istop]
-        times_selected = self.times_all[istart:istop]
+        times_selected = self.times_all[istart:istop + 1]
 
         return times_selected, starttime_real, stoptime_real, istart, istop
 
@@ -190,61 +190,58 @@ class BaseProperties:
 class BoundaryLayerProfiles(BaseProperties):
     def __init__(self, casename, height_filename='hLevelsCell', bl_folder='ABL', **kwargs):
         self.height_filename = height_filename
-        super(BoundaryLayerProfiles, self).__init__(casename = casename + '/' + bl_folder, timecols = 0, excl_files =
-        height_filename, **kwargs)
+        super(BoundaryLayerProfiles, self).__init__(casename=casename + '/' + bl_folder, timecols=0, excl_files=height_filename, **kwargs)
         # Copy height_filename to Ensemble in order to use it later
         time = os.listdir(self.case_fullpath)[0]
         shutil.copy2(self.case_fullpath + time + '/' + height_filename, self.ensemble_folderpath)
 
-
-    def readPropertyData(self, filenames = ('*'), **kwargs):
+    def readPropertyData(self, filenames=('*',), **kwargs):
         # Read height levels
         self.hLvls = np.genfromtxt(self.ensemble_folderpath + self.height_filename)
         # Override skipcol to suit inflow property files
         # Columns to skip are 0: time; 1: time step
-        super(BoundaryLayerProfiles, self).readPropertyData(filenames = filenames, skipcol = 2)
+        super(BoundaryLayerProfiles, self).readPropertyData(filenames=filenames, skipcol=2)
 
 
-    def calculatePropertyMean(self, starttime = None, stoptime = None, **kwargs):
+    def calculatePropertyMean(self, starttime=None, stoptime=None, **kwargs):
         # Override axis to suit inflow property files
         super(BoundaryLayerProfiles, self).calculatePropertyMean(axis = 0, starttime = starttime, stoptime = stoptime, **kwargs)
 
 
 class TurbineOutputs(BaseProperties):
-    def __init__(self, casename, dataFolder = 'turbineOutput', globalQuantities = ('powerRotor', 'rotSpeed', 'thrust',
+    def __init__(self, casename, datafolder='turbineOutput', global_quantities=('powerRotor', 'rotSpeed', 'thrust',
                                                                       'torqueRotor',
                                                        'torqueGen', 'azimuth', 'nacYaw', 'pitch'), **kwargs):
-        self.globalQuantities = globalQuantities
-        super(TurbineOutputs, self).__init__(casename + '/' + dataFolder, **kwargs)
+        self.global_quantities = global_quantities
+        super(TurbineOutputs, self).__init__(casename + '/' + datafolder, **kwargs)
 
         self.nTurb, self.nBlade = 0, 0
 
-
     @timer
-    def readPropertyData(self, filenames = ('*',), skiprow = 0, skipcol = 'infer', verbose = True, turbInfo = ('infer',)):
+    def readPropertyData(self, filenames=('*',), skiprow=0, skipcol='infer', verbose=True, turbinfo=('infer',)):
         filenames = self._ensureTupleInput(filenames)
-        globalQuantities = (
+        global_quantities = (
         'powerRotor', 'rotSpeed', 'thrust', 'torqueRotor', 'torqueGen', 'azimuth', 'nacYaw', 'pitch', 'powerGenerator')
         if skipcol is 'infer':
             skipcol = []
             for file in filenames:
-                if file in globalQuantities:
+                if file in global_quantities:
                     skipcol.append(3)
                 else:
                     skipcol.append(4)
 
-        super(TurbineOutputs, self).readPropertyData(filenames = filenames, skiprow = skiprow, skipcol = skipcol)
+        super(TurbineOutputs, self).readPropertyData(filenames=filenames, skiprow=skiprow, skipcol=skipcol)
 
-        if turbInfo[0] is 'infer':
-            turbInfo = np.genfromtxt(self.ensemble_folderpath + self.filename_pre + 'Cl' + self.filename_sub)[skiprow:, :2]
+        if turbinfo[0] is 'infer':
+            turbinfo = np.genfromtxt(self.ensemble_folderpath + self.filename_pre + 'Cl' + self.filename_sub)[skiprow:, :2]
 
         # Number of turbines and blades
-        (self.nTurb, self.nBlade) = (int(np.max(turbInfo[:, 0]) + 1), int(np.max(turbInfo[:, 1]) + 1))
+        (self.nTurb, self.nBlade) = (int(np.max(turbinfo[:, 0]) + 1), int(np.max(turbinfo[:, 1]) + 1))
 
         fileNamesOld, self.filenames = self.filenames, list(self.filenames)
         for filename in fileNamesOld:
             for i in range(self.nTurb):
-                if filename not in globalQuantities:
+                if filename not in global_quantities:
                     for j in range(self.nBlade):
                         newFileName = filename + '_Turb' + str(i) + '_Bld' + str(j)
                         self.data[newFileName] = self.data[filename][(i*self.nBlade + j)::(self.nTurb*self.nBlade), :]
@@ -257,7 +254,6 @@ class TurbineOutputs(BaseProperties):
 
         if verbose:
             print('\n' + str(self.filenames) + ' read')
-
 
 
 class InflowBoundaryField(BaseProperties):
@@ -401,13 +397,18 @@ class InflowBoundaryField(BaseProperties):
             # Selected property data at selected times
             propert_selected = self.data[self.property_keys[i]][:, :, istart:(istop + 1)]
             # Property mean is sum(property_j*time_j)/sum(times)
-            property_dot_time_sum = 0.
-            for j in range(len(self.times_selected)):
-                property_dot_time = np.multiply(propert_selected[:, :, j], self.times_selected[j])
-                property_dot_time_sum += property_dot_time
+            property_dot_dt_sum, dt_sum = 0., 0.
+            for j in range(1, len(self.times_selected)):
+                # For subsequent times, dt = t_j - t_j-1
+                dt = self.times_selected[j] - self.times_selected[j - 1]
+                # Linear interpolation between each value point
+                property_dot_dt = (propert_selected[:, :, j - 1] + propert_selected[:, :, j])/2.*dt
+
+                property_dot_dt_sum += property_dot_dt
+                dt_sum += dt
 
             # Store in dictionary
-            self.data_mean[self.property_keys[i]] = property_dot_time_sum/np.sum(self.times_selected)
+            self.data_mean[self.property_keys[i]] = property_dot_dt_sum/dt_sum
 
     @timer
     def formatMeanDataToOpenFOAM(self):
@@ -415,9 +416,9 @@ class InflowBoundaryField(BaseProperties):
         for i, patch in enumerate(self.inflow_patches):
             # Create time folders
             timefolder0 = self.avg_folder_patchpaths[i] + '0/'
-            timefolder10000 = self.avg_folder_patchpaths[i] + '10000/'
+            timefolder100000 = self.avg_folder_patchpaths[i] + '100000/'
             os.makedirs(timefolder0, exist_ok=True)
-            os.makedirs(timefolder10000, exist_ok=True)
+            os.makedirs(timefolder100000, exist_ok=True)
             # For each patch, go through (mean) properties
             for j in range(len(self.property_keys)):
                 # Pick up only property corresponding current patch
@@ -430,7 +431,7 @@ class InflowBoundaryField(BaseProperties):
                     fid = open(timefolder0 + property_name, 'w')
                     print('Writing {0} to {1}'.format(property_name, timefolder0))
                     # Define datatype and average (placeholder) value
-                    if property_name in ('k', 'T', 'pd', 'nuSGS', 'kappat'):
+                    if property_name in ('k', 'T', 'pd', 'nuSGS', 'kappat', 'epsilon'):
                         datatype, average = 'scalar', '0'
                     else:
                         datatype, average = 'vector', '(0 0 0)'
@@ -472,20 +473,19 @@ class InflowBoundaryField(BaseProperties):
                     fid.write(')')
                     fid.close()
                     # Also copy files to 10000 time directory
-                    print('\nCopying {} to {}'.format(property_name, timefolder10000))
-                    shutil.copy(timefolder0 + property_name, timefolder10000)
+                    print('\nCopying {} to {}'.format(property_name, timefolder100000))
+                    shutil.copy(timefolder0 + property_name, timefolder100000)
 
         print("\nDon't forget to copy 'points' to {patch}/ folder too!")
 
 if __name__ == '__main__':
-    from PlottingTool import Plot2D
-
     casename = 'ABL_N_H'
     casedir = '/media/yluan'
+    boundarydata_folder = 'boundaryData'  # 'boundaryData', 'boundaryData_epsilon'
     filenames = '*'
     n_timesample = 1000
-    starttime, stoptime = 20000, 25000
-    case = InflowBoundaryField(casename=casename, casedir=casedir)
+    starttime, stoptime = 19000, 26000
+    case = InflowBoundaryField(casename=casename, casedir=casedir, boundarydata_folder=boundarydata_folder)
     case.readPropertyData(filenames=filenames, n_timesample=n_timesample)
     case.calculatePropertyMean(starttime=starttime, stoptime=stoptime)
     case.formatMeanDataToOpenFOAM()
