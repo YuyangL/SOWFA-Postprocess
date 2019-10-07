@@ -279,28 +279,28 @@ class Plot2D(BaseFigure):
 
         super().plotFigure(**kwargs)
 
-        self.linelabel = np.arange(1, len(self.list_x) + 1) if linelabel is None else linelabel
+        self.linelabel = np.arange(1, len(self.list_x) + 1, dtype=str) if linelabel is None else linelabel
         self.plots = [None]*self.narr
         for i in range(self.narr):
             if self.plot_type[i] == 'line':
                 if not showmarker:
                     self.plots[i] = self.axes.plot(self.list_x[i], self.list_y[i], ls=self.lines[i],
-                                                   label=str(self.linelabel[i]), color=self.colors[i],
+                                                   label=self.linelabel[i], color=self.colors[i],
                                                    alpha=self.alpha)
 
                 else:
                     self.plots[i] = self.axes.plot(self.list_x[i], self.list_y[i], ls=self.lines[i],
-                                                   label=str(self.linelabel[i]), color=self.colors[i],
+                                                   label=self.linelabel[i], color=self.colors[i],
                                                    alpha=self.alpha,
                                                    marker=self.markers[i])
                     
             elif self.plot_type[i] == 'scatter':
                 if self.markercolors is None:
                     self.plots[i] = self.axes.scatter(self.list_x[i], self.list_y[i], lw=0, s=10,
-                                                      label=str(self.linelabel[i]), alpha=self.alpha, color=self.colors[i], marker=self.markers[i])
+                                                      label=self.linelabel[i], alpha=self.alpha, color=self.colors[i], marker=self.markers[i])
                 else:
                     self.plots[i] = self.axes.scatter(self.list_x[i], self.list_y[i], lw=0, s=10,
-                                                      label=str(self.linelabel[i]), alpha=self.alpha,
+                                                      label=self.linelabel[i], alpha=self.alpha,
                                                       c=self.markercolors[i], marker=self.markers[i])
 
             elif self.plot_type[i] == 'contourf':

@@ -5,7 +5,8 @@ from Utility import timer
 import shutil
 
 class BaseProperties:
-    def __init__(self, casename, casedir='.', filename_pre='', filename_sub='', ensemblefolder_name='Ensemble', result_folder='Result', timecols='infer', time_kw='ime', force_remerge=False, **kwargs):
+    def __init__(self, casename, casedir='.', filename_pre='', filename_sub='', ensemblefolder_name='Ensemble', result_folder='Result', timecols='infer', time_kw='ime', force_remerge=False,
+                 debug=False, **kwargs):
         self.casename, self.casedir = casename, casedir
         self.case_fullpath = casedir + '/' + casename + '/'
         self.filename_pre, self.filename_sub = filename_pre, filename_sub
@@ -17,6 +18,7 @@ class BaseProperties:
         self._mergeTimeDirectories(time_kw=time_kw, force_remerge=force_remerge, **kwargs)
         self.times_all = self._readTimes(**kwargs)
         self.data, self.filenames = {}, []
+        self.debug = debug
 
     def _ensureTupleInput(self, input):
         input_tuple = (input,) if isinstance(input, (str, np.ndarray, int)) else input
@@ -257,7 +259,7 @@ class TurbineOutputs(BaseProperties):
 
 
 class InflowBoundaryField(BaseProperties):
-    def __init__(self, casename, casedir='.', boundarydata_folder='boundaryData', avg_folder='Average', **kwargs):
+    def __init__(self, casename, casedir='.', boundarydata_folder='boundaryData', avg_folder='Average', debug=False, **kwargs):
         self.casename, self.casedir = casename, casedir
         self.case_fullpath = casedir + '/' + casename + '/' + boundarydata_folder + '/'
         self.inflow_patches = os.listdir(self.case_fullpath)
@@ -283,6 +285,7 @@ class InflowBoundaryField(BaseProperties):
         except NotADirectoryError:
             pass
 
+        self.debug = debug
         print('{} InflowBoundaryField object initialized'.format(casename))
 
     def _readTimes(self, remove='points', **kwargs):
@@ -304,25 +307,26 @@ class InflowBoundaryField(BaseProperties):
 
         return times_all, times_all_raw
 
+    @staticmethod
+    def _trimBracketCharacters(data):
+        # Get left and right column of U
+        datacol0, datacol1, datacol2 = data['f0'], data['f1'], data['f2']
+        # New corrected data
+        data_new = np.empty((data.shape[0], 3, data.shape[2]))
+        # Go through each point then each time
+        for l in range(data.shape[0]):
+            # print(l)
+            for m in range(data.shape[2]):
+                newval0, newval2 = datacol0[l, 0, m].decode('utf-8'), datacol2[l, 0, m].decode('utf-8')
+                data_new[l, 0, m] = float(newval0.lstrip('('))
+                data_new[l, 1, m] = datacol1[l, 0, m]
+                # Right column doesn't need to strip ) since precision limit was 10 and not enough to reach ")"
+                data_new[l, 2, m] = float(newval2.rstrip(')'))
+
+        return data_new
+
     @timer
     def readPropertyData(self, filenames=('*',), skiprow=22, skipfooter=1, n_timesample=-1, lstr_precision=12, rstr_precision=20):
-        def __trimBracketCharacters(data):
-            # Get left and right column of U
-            datacol0, datacol1, datacol2 = data['f0'], data['f1'], data['f2']
-            # New corrected data
-            data_new = np.empty((data.shape[0], 3, data.shape[2]))
-            # Go through each point then each time
-            for l in range(data.shape[0]):
-                # print(l)
-                for m in range(data.shape[2]):
-                    newval0, newval2 = datacol0[l, 0, m].decode('utf-8'), datacol2[l, 0, m].decode('utf-8')
-                    data_new[l, 0, m] = float(newval0.lstrip('('))
-                    data_new[l, 1, m] = datacol1[l, 0, m]
-                    # Right column doesn't need to strip ) since precision limit was 10 and not enough to reach ")"
-                    data_new[l, 2, m] = float(newval2.rstrip(')'))
-
-            return data_new
-
         # Ensure tuple inputs and interpret "*" as all files
         # ensemble_folderpath is a dummy variable here
         self.ensemble_folderpath = self.case_patchfullpath[0] + self.times_all_raw[0] + '/'
@@ -363,7 +367,7 @@ class InflowBoundaryField(BaseProperties):
                 data = data.reshape((data.shape[1], data.shape[0], data.shape[2]))
                 # If file is U, then strip "(" and ")"
                 if self.filenames[i] == 'U':
-                    data_new = __trimBracketCharacters(data)
+                    data_new = self._trimBracketCharacters(data)
                 else:
                     data_new = data
 
@@ -383,8 +387,27 @@ class InflowBoundaryField(BaseProperties):
         self.sample_times = np.array(self.sample_times)
         print('\n' + str(self.filenames) + ' read')
 
+    def _readPoints(self, points_name='points', skiprow=18, skipfooter=1, lstr_precision=12, rstr_precision=20):
+        self.points_name = points_name
+        dtype = ('|S' + str(lstr_precision), float, '|S' + str(rstr_precision))
+        self.points = {}
+        # Go through all patches
+        for i in range(len(self.inflow_patches)):
+            print('\nReading {}'.format(self.points_name + ' ' + self.inflow_patches[i]))
+            filename_fullpath = self.case_patchfullpath[i] + '/' + self.points_name
+            points_dictkey = self.points_name + '_' + self.inflow_patches[i]
+            points = np.genfromtxt(filename_fullpath, skip_header=skiprow, skip_footer=skipfooter, dtype=dtype)
+            # Strip "(" and ")".
+            # Reshaping points to 3D as _trimBracketCharacters take data of shape (n_points, 1, n_times)
+            points_new = self._trimBracketCharacters(points.reshape((points.shape[0], 1, 1)))
+            self.points[points_dictkey] = points_new[..., 0]
+
     @timer
-    def calculatePropertyMean(self, starttime=None, stoptime=None, **kwargs):
+    def calculatePropertyMean(self, starttime=None, stoptime=None, get_tke_total=True, get_horizontal_mean=True, **kwargs):
+        self.get_tke_total = get_tke_total
+        self.get_horizontal_mean = get_horizontal_mean
+        # Read points coordinates of each patch if also computing horizontal mean on top of temporal averaging
+        if get_horizontal_mean: self._readPoints()
         # times_all in _selectTimes() should be sample_times in this case, thus temporarily change times_all to sample_times
         times_all_tmp = self.times_all.copy()
         self.times_all = self.sample_times
@@ -392,26 +415,90 @@ class InflowBoundaryField(BaseProperties):
         self.times_selected, self.starttime_real, self.stoptime_real, istart, istop = self._selectTimes(starttime=starttime, stoptime=stoptime)
         # Switch times_all back
         self.times_all = times_all_tmp
-        # Go through all properties
+        # Go through all properties and every patch
         for i in range(len(self.property_keys)):
             # Selected property data at selected times
-            propert_selected = self.data[self.property_keys[i]][:, :, istart:(istop + 1)]
+            property_selected = self.data[self.property_keys[i]][:, :, istart:(istop + 1)]
+            calc_tke_resolved = True if get_tke_total and 'U' in self.property_keys[i] else False
+            # Keep in mind which patch current property lies in
+            current_patch = self.property_keys[i].split('_')[1]
             # Property mean is sum(property_j*time_j)/sum(times)
             property_dot_dt_sum, dt_sum = 0., 0.
+            tke_resolved_dot_dt_sum, dt_sum_tke_resolved = 0., 0.
             for j in range(1, len(self.times_selected)):
                 # For subsequent times, dt = t_j - t_j-1
                 dt = self.times_selected[j] - self.times_selected[j - 1]
                 # Linear interpolation between each value point
-                property_dot_dt = (propert_selected[:, :, j - 1] + propert_selected[:, :, j])/2.*dt
+                property_interp = (property_selected[:, :, j - 1] + property_selected[:, :, j])/2.
+                property_dot_dt = property_interp*dt
 
                 property_dot_dt_sum += property_dot_dt
                 dt_sum += dt
+                # In case current property is U and total mean TKE is asked,
+                # calculate it from U' = U - <U>, TKE_resolved = 0.5U'U'
+                # <TKE_resolved> = 0.5<U'U'>
+                if calc_tke_resolved:
+                    # <U> at current time correlation stage
+                    u_mean_stage = property_dot_dt_sum/dt_sum
+                    # U'U', instantaneous
+                    uuprime2 = (property_interp - u_mean_stage)**2.
+                    if self.debug: print("Instantaneous resolved TKE = {}".format(0.5*uuprime2))
+                    # sum(TKE_resolved*dt)
+                    tke_resolved_dot_dt_sum += 0.5*np.sum(uuprime2, axis=1, keepdims=True)*dt
+                    # sum(dt)
+                    dt_sum_tke_resolved = dt_sum
 
             # Store in dictionary
             self.data_mean[self.property_keys[i]] = property_dot_dt_sum/dt_sum
+            if calc_tke_resolved: self.data_mean['kResolved_' + current_patch] = tke_resolved_dot_dt_sum/dt_sum_tke_resolved
+            # If also perform horizontal averaging
+            if get_horizontal_mean:
+                # To get horizontal mean, sort z and get its sorted index
+                idx_sorted = np.argsort(self.points[self.points_name + '_' + current_patch][:, 2])
+                # Index to sort relevant arrays back to original order
+                idx_revertsort = np.argsort(idx_sorted)
+                # Sorted point coordinates of current patch
+                points_sorted = self.points[self.points_name + '_' + current_patch][idx_sorted]
+                # Then sort current property at current patch with this sorted index
+                data_mean_sorted = self.data_mean[self.property_keys[i]][idx_sorted]
+                # Do the same if resolved TKE is calculated
+                if calc_tke_resolved: k_mean_sorted = self.data_mean['kResolved_' + current_patch][idx_sorted]
+                n_points_per_lvl = len(points_sorted[points_sorted[:, 2] == points_sorted[0, 2]])
+                # Go through every height level and do averaging
+                ih = 0
+                while ih < len(idx_sorted) - 1:
+                    data_mean_sorted[ih:ih + n_points_per_lvl] = np.mean(data_mean_sorted[ih:ih + n_points_per_lvl], axis=0)
+                    if calc_tke_resolved: k_mean_sorted[ih:ih + n_points_per_lvl] = np.mean(k_mean_sorted[ih:ih + n_points_per_lvl], axis=0)
+                    ih += n_points_per_lvl
+
+                # Sort sorted arrays back to original order
+                self.data_mean[self.property_keys[i]] = data_mean_sorted[idx_revertsort]
+                if calc_tke_resolved: self.data_mean['kResolved_' + current_patch] = k_mean_sorted[idx_revertsort]
+
+        if self.debug and get_horizontal_mean:
+            self.data_mean_sorted = data_mean_sorted
+            self.points_sorted = points_sorted
+
+        # If accumulated time of TKE resolved is not 0, add it to the existing key called "k", a.k.a. SGS TKE
+        if get_tke_total:
+            # data_mean_keys has the addition of "kResolved_{patch}" that will merge with "k_{patch}"
+            self.data_mean_keys = list(self.data_mean.keys())
+            # Go through properties to find mean resolved TKE of a patch
+            for i in range(len(self.data_mean_keys)):
+                if 'kResolved' in self.data_mean_keys[i]:
+                    # Go through properties again to find mean SGS TKE of the same patch
+                    for j in range(len(self.data_mean_keys)):
+                        if 'k' in self.data_mean_keys[j] \
+                            and 'kResolved' not in self.data_mean_keys[j] \
+                            and self.data_mean_keys[j].split('_')[1] == self.data_mean_keys[i].split('_')[1]:
+                            # data_mean_keys[j] is called k_{patch}
+                            # data_mean_keys[i] is called kResolved_{patch}
+                            self.data_mean[self.data_mean_keys[j]] += self.data_mean[self.data_mean_keys[i]]
+                            print("Mean total TKE has been calculated for {}".format(self.data_mean_keys[j]))
+                            break
 
     @timer
-    def formatMeanDataToOpenFOAM(self):
+    def formatMeanDataToOpenFOAM(self, ke_relaxfactor=1.):
         # Go through inflow patches
         for i, patch in enumerate(self.inflow_patches):
             # Create time folders
@@ -427,6 +514,7 @@ class InflowBoundaryField(BaseProperties):
                     property_name = self.property_keys[j].replace('_' + patch, '')
                     # Get mean property data
                     data_mean = self.data_mean[self.property_keys[j]]
+                    if property_name in ('k', 'epsilon'): data_mean *= ke_relaxfactor
                     # Open file for writing
                     fid = open(timefolder0 + property_name, 'w')
                     print('Writing {0} to {1}'.format(property_name, timefolder0))
@@ -455,6 +543,10 @@ class InflowBoundaryField(BaseProperties):
                     fid.write('}\n')
                     fid.write('// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //\n\n')
                     fid.write('// This inflow plane has been averaged from {0} s to {1} s\n'.format(self.starttime_real, self.stoptime_real))
+                    if ke_relaxfactor < 1. and property_name in ('k', 'epsilon'): fid.write('// and relaxed to {} of full magnitude for time-varying inflow BC\n'.format(ke_relaxfactor))
+                    if property_name == 'k' and self.get_tke_total: fid.write('// This is total TKE\n')
+                    if self.get_horizontal_mean: fid.write('// Both temporal and horizontal averaging is done\n')
+                    fid.write('// Min: {}, max: {}, mean: {}\n'.format(np.min(data_mean, axis=0), np.max(data_mean, axis=0), np.mean(data_mean, axis=0)))
                     fid.write('// Average\n')
                     fid.write(average)
                     fid.write('\n\n\n')
@@ -470,25 +562,62 @@ class InflowBoundaryField(BaseProperties):
                             fid.write(str(data_mean[k, 0]))
 
                         fid.write('\n')
+
                     fid.write(')')
                     fid.close()
-                    # Also copy files to 10000 time directory
-                    print('\nCopying {} to {}'.format(property_name, timefolder100000))
-                    shutil.copy(timefolder0 + property_name, timefolder100000)
+                    # # Also copy files to 10000 time directory
+                    # print('\nCopying {} to {}'.format(property_name, timefolder100000))
+                    # shutil.copy(timefolder0 + property_name, timefolder100000)
 
         print("\nDon't forget to copy 'points' to {patch}/ folder too!")
 
 if __name__ == '__main__':
     casename = 'ABL_N_H'
     casedir = '/media/yluan'
-    boundarydata_folder = 'boundaryData'  # 'boundaryData', 'boundaryData_epsilon'
+    boundarydata_folder = 'boundaryData_epsilonTotal'  # 'boundaryData', 'boundaryData_epsilonTotal'
     filenames = '*'
     n_timesample = 1000
-    starttime, stoptime = 19000, 26000
-    case = InflowBoundaryField(casename=casename, casedir=casedir, boundarydata_folder=boundarydata_folder)
+    starttime, stoptime = 20000, 25000
+    case = InflowBoundaryField(casename=casename, casedir=casedir, boundarydata_folder=boundarydata_folder, debug=True)
+    case._readPoints()
     case.readPropertyData(filenames=filenames, n_timesample=n_timesample)
-    case.calculatePropertyMean(starttime=starttime, stoptime=stoptime)
-    case.formatMeanDataToOpenFOAM()
+    case.calculatePropertyMean(starttime=starttime, stoptime=stoptime, get_tke_total=True)
+    case.formatMeanDataToOpenFOAM(ke_relaxfactor=1)
+
+    from PlottingTool import Plot2D
+    idx_sorted = np.argsort(case.points['points_south'][:, 2])
+    points_sorted = case.points['points_south'][:, 2][idx_sorted]/750.
+    idx_sorted2 = np.argsort(case.points['points_west'][:, 2])
+    points_sorted2 = case.points['points_west'][:, 2][idx_sorted2]/750.
+    for name in case.filenames:
+        if name == 'k':
+            xlabel = r'$\langle k_{\mathrm{SGS}} \rangle$ [m$^2$/s$^2$]'
+        elif name == 'U':
+            xlabel = r'$\langle U \rangle$ [m/s]'
+        elif name == 'T':
+            xlabel = r'$\langle T \rangle$ [K]'
+        elif name == 'epsilon':
+            xlabel = r'$\langle \epsilon \rangle$ [m$^2$/s$^3$]'
+
+        data_sorted = case.data_mean[name + '_south'][idx_sorted]
+        data_sorted2 = case.data_mean[name + '_west'][idx_sorted2]
+        xlim = (min(min(data_sorted.ravel()), min(data_sorted2.ravel())) - 0.1*min(data_sorted.ravel()),
+                max(max(data_sorted.ravel()), max(data_sorted2.ravel())) + 0.1*max(data_sorted.ravel()))
+        # Use magnitude
+        if name == 'U':
+            data_sorted = np.sqrt(data_sorted[:, 0]**2 + data_sorted[:, 1]**2 + data_sorted[:, 2]**2)
+            data_sorted2 = np.sqrt(data_sorted2[:, 0]**2 + data_sorted2[:, 1]**2 + data_sorted2[:, 2]**2)
+
+        listx = (data_sorted, data_sorted2)
+        listy = (points_sorted, points_sorted2)
+
+        myplot = Plot2D(listx, listy, plot_type='infer',
+                        show=False, save=True, name=name, xlabel=xlabel, ylabel=r'$\frac{z}{z_i}$ [-]',
+                        figdir=case.avg_folder_path, figwidth='1/3', xlim=xlim)
+        myplot.initializeFigure()
+        myplot.plotFigure(linelabel=('South', 'West'))
+        myplot.axes.fill_between(xlim, 27/750., 153/750., alpha=0.25)
+        myplot.finalizeFigure()
 
     # kSouth = case.data['k_south']
     # uSouth = case.data['U_south']
