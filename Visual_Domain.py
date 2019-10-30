@@ -9,7 +9,7 @@ case = 'both'  # 'ParTurb' 'Offset'
 domainSize = (3000, 3000, 1000)
 origin = (0, 0, 0)
 
-figDir = 'R:/'
+figDir = '/media/yluan'
 name = 'ProbesFront'
 figWidth = 'half'
 xLabel = r'$x$ [m]'
@@ -21,8 +21,8 @@ viewAngle = (15, -150)
 show, save = True, True
 
 @njit
-def generateFrameCoordinates(origin = (0, 0, 0), frameSize = (3000, 3000, 1000), rotation = 0):
-    extent = frameSize
+def generateFrameCoordinates(origin=(0, 0, 0), frame_size=(3000, 3000, 1000), rotation=0):
+    extent = frame_size
     # Bottom and then upper frame
     xs, ys, zs = [origin[0]], [origin[1]], [origin[2]]
     for i in range(2):
@@ -55,22 +55,22 @@ def generateFrameCoordinates(origin = (0, 0, 0), frameSize = (3000, 3000, 1000),
 
 
 # Domain frame
-xDomain, yDomain, zDomain = generateFrameCoordinates(frameSize = domainSize, rotation = 0)
+xdomain, ydomain, zdomain = generateFrameCoordinates(frame_size=domainSize, rotation=0)
 
 if case is 'both':
     # Parallel turbine inner refinement frame
-    xRefine1, yRefine1, zRefine1 = generateFrameCoordinates(origin = (1120.344, 771.583, 0), frameSize = (882, 882, 279), rotation = np.pi/6)
+    xRefine1, yRefine1, zRefine1 = generateFrameCoordinates(origin = (1120.344, 771.583, 0), frame_size = (882, 882, 279), rotation = np.pi/6)
 
     # Parallel turbine outer refinement frame
-    xRefine2, yRefine2, zRefine2 = generateFrameCoordinates(origin = (1074.225, 599.464, 0), frameSize = (1134, 1134, 405), rotation = np.pi/6)
+    xRefine2, yRefine2, zRefine2 = generateFrameCoordinates(origin = (1074.225, 599.464, 0), frame_size = (1134, 1134, 405), rotation = np.pi/6)
 
     # Offset turbine inner refinement frame
     xRefine3, yRefine3, zRefine3 = generateFrameCoordinates(origin = (994.344, 989.821, 0),
-                                                            frameSize = (1764, 378, 279), rotation = np.pi/6)
+                                                            frame_size = (1764, 378, 279), rotation = np.pi/6)
 
     # Offset turbine outer refinement frame
     xRefine4, yRefine4, zRefine4 = generateFrameCoordinates(origin = (948.225, 817.702, 0),
-                                                            frameSize = (1890, 630, 405), rotation = np.pi/6)
+                                                            frame_size = (1890, 630, 405), rotation = np.pi/6)
 
     """
     Probes
@@ -122,7 +122,7 @@ if case is 'both':
     framePlot.initializeFigure()
 
     # # Whole domain
-    # framePlot.axes[0].plot(xDomain, yDomain, zDomain, zorder = 10., linestyle = ':', color = framePlot.colors[2], alpha = alpha - 0.25)
+    # framePlot.axes[0].plot(xdomain, ydomain, zdomain, zorder = 10., linestyle = ':', color = framePlot.colors[2], alpha = alpha - 0.25)
 
     framePlot.axes[0].scatter(southTurbProbes[:, 0], southTurbProbes[:, 1], southTurbProbes[:, 2], label = 'Probes ParTurb', c = framePlot.colors[0], linewidths = 0, zorder = 1.2, depthshade = scatterDepthShade, s = markerSize)
     framePlot.axes[0].scatter(offsetTurbsProbes[:, 0], offsetTurbsProbes[:, 1], offsetTurbsProbes[:, 2], label = 'Probes SeqTurb', c = framePlot.colors[1], linewidths = 0, zorder = 2.2, depthshade = scatterDepthShade, s = markerSize)

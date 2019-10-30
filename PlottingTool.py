@@ -192,7 +192,7 @@ class BaseFigure:
 
 
 class Plot2D_Image(BaseFigure):
-    def __init__(self, val, extent=None, val_label='$z$', cmap='plasma', val_lim=None, rotate_img=True, **kwargs):
+    def __init__(self, val, extent=None, val_label='$z$', cmap='plasma', val_lim=None, rotate_img=True, alpha=1., **kwargs):
         self.rotate_img = rotate_img
         if rotate_img:
             val = ndimage.rotate(val, 90) if len(val.shape) >= 3 else val.T
@@ -203,6 +203,7 @@ class Plot2D_Image(BaseFigure):
         self.val_lim = (None, None) if val_lim is None else val_lim  
         self.cmap = cmap
         self.extent = extent
+        self.alpha = alpha
         super().__init__(list_x=(None,), list_y=(None,), **kwargs)
         
         
@@ -221,7 +222,7 @@ class Plot2D_Image(BaseFigure):
         else:
             self.norm=None
             
-        self.plots = self.axes.imshow(self.val, origin=self.origin, aspect='equal', extent=self.extent, cmap=self.cmap, vmin=self.val_lim[0], vmax=self.val_lim[1], norm=self.norm)
+        self.plots = self.axes.imshow(self.val, origin=self.origin, aspect='equal', extent=self.extent, cmap=self.cmap, vmin=self.val_lim[0], vmax=self.val_lim[1], norm=self.norm, alpha=self.alpha)
 
 
     def finalizeFigure(self, cbar_orient='horizontal', showcb=True, cbticks=None, **kwargs):

@@ -714,7 +714,7 @@ class FieldData:
         return sij, rij
 
     @timer
-    def getInvariantBasesField(self, sij, rij, quadratic_only=False, is_scale=True, zero_trace=False):
+    def getInvariantBasesField(self, sij, rij, quadratic_only=False, is_scale=False, zero_trace=False):
         """
         From Ling et al. TBNN
         Given sij and rij, it calculates the tensor basis
@@ -801,7 +801,7 @@ class FieldData:
                 # Using tuple gives Numba error
                 scale_factor = [1, 10, 10, 10, 100, 100, 1000, 1000, 1000, 1000]
                 # Go through each basis
-                for j in prange(1, num_tensor_basis):
+                for j in range(1, num_tensor_basis):
                     tb[:, :, j] /= scale_factor[j]
 
             return tb

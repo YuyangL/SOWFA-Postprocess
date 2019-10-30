@@ -29,11 +29,10 @@ User Inputs
 """
 time = 'latestTime'  #'23243.2156219'
 casedir = '/media/yluan'
-casename = 'ALM_N_H_OneTurb'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URANS/N_H_OneTurb'  # 'ALM_N_H_ParTurb'
-# casename = 'RANS/N_H_OneTurb_Simple_ABL'
+# casename = 'RANS/N_H_OneTurb_LowZ_Rwall2'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URANS/N_H_OneTurb'  # 'ALM_N_H_ParTurb'
+casename = 'ALM_N_H_OneTurb'
 # properties = ('kResolved', 'kSGSmean')
-properties = ('kSGSmean',)
-# properties = ('k',)
+properties = ('UAvg',)
 # slicenames = ('oneDupstreamTurbine', 'rotorPlane', 'oneDdownstreamTurbine')
 # slicenames = ('threeDdownstreamTurbine', 'fiveDdownstreamTurbine', 'sevenDdownstreamTurbine')
 slicenames = ('hubHeight', 'quarterDaboveHub', 'turbineApexHeight')
@@ -43,7 +42,6 @@ slicenames_sub = 'Slice'
 # Height of the horizontal slices, only used for 3D horizontal slices plot
 horslice_offsets = (90., 121.5, 153.)
 horslice_offsets2 = ((90., 90.), (121.5, 121.5), (153., 153.))
-
 result_folder = 'Result'
 # Orientation of x-axis in x-y plane, in case of angled flow direction
 # Only used for values decomposition and confinebox
@@ -112,9 +110,8 @@ else:
     turb_centers_frontview = ((99999,)*3,)*6
     confinebox = confinebox2 = [[5., 2995., 5., 2995., 5., 995.]]*10
 
-
-
-confinebox = confinebox2 = [[5., 2995., 5., 2995., 5., 995.]]*10
+# If you don't want confinement
+# confinebox = confinebox2 = [[5., 2995., 5., 2995., 5., 995.]]*10
 
 # Automatic view_angle and figure settings, only for 3D plots
 if 'oneDupstream' in slicenames[0] or 'threeDdownstream' in slicenames[0]:
@@ -140,14 +137,14 @@ if 'U' in properties[0]:
     val_lim_z = (-2, 2)
     val_label = [r'$\langle U_\mathrm{hor} \rangle$ [m/s]', r'$\langle w \rangle$ [m/s]']
 elif 'k' in properties[0]:
-    val_lim = (0., 0.11)
+    val_lim = (0, 2.5)
     val_lim_z = None
     if 'Resolved' in properties[0]:
         val_label = (r'$\langle k_\mathrm{resolved} \rangle$ [m$^2$/s$^2$]',) if len(properties) == 1 else (r'$\langle k \rangle$ [m$^2$/s$^2$]',)
     elif 'SGS' in properties[0]:
         val_label = (r'$\langle k_\mathrm{SGS} \rangle$ [m$^2$/s$^2$]',)
     else:
-        val_label = (r'$k$ [m$^2$/s$^2$]',)
+        val_label = (r'$\langle k \rangle$ [m$^2$/s$^2$]',)
 
 elif 'uuPrime2' in properties[0] or 'R' in properties[0]:
     val_lim = (-0.5, 2/3.)
@@ -163,7 +160,12 @@ elif "epsilon" in properties[0]:
     elif 'Resolved' in properties[0]:
         val_label = (r'$\langle \epsilon_{\mathrm{resolved}} \rangle$ [m$^2$/s$^3$]',)
     else:
-        val_label = ('$\epsilon$ [m$^2$/s$^3$]',)
+        val_label = (r'$\langle \epsilon \rangle$ [m$^2$/s$^3$]',)
+
+elif 'G' in properties[0]:
+    val_lim = (-0.05, 0.17)
+    val_lim_z = None
+    val_label = (r'$\langle P_k \rangle$ [m$^2$/s$^3$]',)
 
 else:
     val_lim = None

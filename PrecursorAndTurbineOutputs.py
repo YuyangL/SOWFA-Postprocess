@@ -574,14 +574,51 @@ class InflowBoundaryField(BaseProperties):
 if __name__ == '__main__':
     casename = 'ABL_N_H'
     casedir = '/media/yluan'
-    boundarydata_folder = 'boundaryData_epsilonTotal'  # 'boundaryData', 'boundaryData_epsilonTotal'
-    filenames = '*'
+    boundarydata_folder = 'boundaryData_epsilon'  # 'boundaryData', 'boundaryData_epsilonTotal'
+    filenames = "*"
+    smooth_k = False
     n_timesample = 1000
     starttime, stoptime = 20000, 25000
     case = InflowBoundaryField(casename=casename, casedir=casedir, boundarydata_folder=boundarydata_folder, debug=True)
     case._readPoints()
     case.readPropertyData(filenames=filenames, n_timesample=n_timesample)
     case.calculatePropertyMean(starttime=starttime, stoptime=stoptime, get_tke_total=True)
+    if smooth_k:
+        idx_sorted_south = np.argsort(case.points['points_south'][:, 2])
+        idx_revertsort_south = np.argsort(idx_sorted_south)
+        points_sorted_south = case.points['points_south'][idx_sorted_south]
+        idx_sorted_west = np.argsort(case.points['points_west'][:, 2])
+        idx_revertsort_west = np.argsort(idx_sorted_west)
+        points_sorted_west = case.points['points_west'][idx_sorted_west]
+        k_south_sorted = case.data_mean['k_south'][idx_sorted_south]
+        k_west_sorted = case.data_mean['k_west'][idx_sorted_west]
+
+        kmin_south_i = np.where(k_south_sorted == min(k_south_sorted))[0][0]
+        z_kmin_south = points_sorted_south[:, 2][kmin_south_i]
+        kmin_west_i = np.where(k_west_sorted == min(k_west_sorted))[0][0]
+        z_kmin_west = points_sorted_west[:, 2][kmin_west_i]
+        zmax_south = zmax_west = 1000.
+
+        z_uniq_south = np.unique(points_sorted_south[:, 2])
+        z_uniq_west = np.unique(points_sorted_west[:, 2])
+        z_uniq_south = z_uniq_south[z_uniq_south >= z_kmin_south]
+        z_uniq_west = z_uniq_west[z_uniq_west >= z_kmin_west - 10.]
+
+        kdiff_south = k_south_sorted[-1] - k_south_sorted[kmin_south_i]
+        kdiff_west = k_west_sorted[-1] - k_west_sorted[kmin_west_i - 300]
+        dk_south = kdiff_south/len(z_uniq_south)
+        dk_west = kdiff_west/len(z_uniq_west)
+        for i in range(kmin_south_i + 300, len(k_south_sorted) - 300):
+            # if k_south_sorted[i] > k_south_sorted[-1]: k_south_sorted[i] = k_south_sorted[-1]
+            k_south_sorted[i:i + 300] = k_south_sorted[i - 300] + dk_south
+
+        for i in range(kmin_west_i, len(k_west_sorted) - 300):
+            # if k_west_sorted[i] > k_west_sorted[-1]: k_west_sorted[i] = k_west_sorted[-1]
+            k_west_sorted[i:i + 300] = k_west_sorted[i - 300] + dk_west
+
+        case.data_mean['k_south'] = k_south_sorted[idx_revertsort_south]
+        case.data_mean['k_west'] = k_west_sorted[idx_revertsort_west]
+
     case.formatMeanDataToOpenFOAM(ke_relaxfactor=1)
 
     from PlottingTool import Plot2D
@@ -591,13 +628,13 @@ if __name__ == '__main__':
     points_sorted2 = case.points['points_west'][:, 2][idx_sorted2]/750.
     for name in case.filenames:
         if name == 'k':
-            xlabel = r'$\langle k_{\mathrm{SGS}} \rangle$ [m$^2$/s$^2$]'
+            xlabel = r'$\langle k \rangle$ [m$^2$/s$^2$]'
         elif name == 'U':
             xlabel = r'$\langle U \rangle$ [m/s]'
         elif name == 'T':
             xlabel = r'$\langle T \rangle$ [K]'
         elif name == 'epsilon':
-            xlabel = r'$\langle \epsilon \rangle$ [m$^2$/s$^3$]'
+            xlabel = r'$\langle \epsilon_{\mathrm{SGS}} \rangle$ [m$^2$/s$^3$]'
 
         data_sorted = case.data_mean[name + '_south'][idx_sorted]
         data_sorted2 = case.data_mean[name + '_west'][idx_sorted2]
@@ -618,6 +655,38 @@ if __name__ == '__main__':
         myplot.plotFigure(linelabel=('South', 'West'))
         myplot.axes.fill_between(xlim, 27/750., 153/750., alpha=0.25)
         myplot.finalizeFigure()
+
+    kappa = .4
+    uref = 8.
+    zref = 90.
+    z0 = .2
+    cmu = 0.03
+    ustar = kappa*uref/np.log((zref + z0)/z0)
+    u = ustar/kappa*np.log((case.points['points_south'][:, 2][idx_sorted] + z0)/z0)
+    k = ustar**2/np.sqrt(cmu)
+    epsilon = ustar**3/kappa/(case.points['points_south'][:, 2][idx_sorted] + z0)
+
+    ulim = (min(u) - 0.1*min(u),
+            max(u) + 0.1*max(u))
+    epslim = (min(epsilon) - 0.1*min(epsilon),
+            max(epsilon) + 0.1*max(epsilon))
+    myplot = Plot2D(u, points_sorted, plot_type='infer',
+                    show=False, save=True, name='U_atmBC', xlabel='U [m/s]', ylabel="z/zi [-]",  # r'$\frac{z}{z_i}$ [-]',
+                    figdir=case.avg_folder_path, figwidth='1/3', xlim=ulim)
+    myplot.initializeFigure()
+    myplot.plotFigure()  # linelabel=('South', 'West'))
+    myplot.axes.fill_between(xlim, 27/750., 153/750., alpha=0.25)
+    myplot.finalizeFigure()
+
+    myplot = Plot2D(epsilon, points_sorted, plot_type='infer',
+                    show=False, save=True, name='epsilon_atmBC', xlabel='\epsilon [m2/s3]', ylabel=r'$\frac{z}{z_i}$ [-]',
+                    figdir=case.avg_folder_path, figwidth='1/3', xlim=epslim)
+    myplot.initializeFigure()
+    myplot.plotFigure()
+    myplot.axes.fill_between(xlim, 27/750., 153/750., alpha=0.25)
+    myplot.finalizeFigure()
+
+
 
     # kSouth = case.data['k_south']
     # uSouth = case.data['U_south']
