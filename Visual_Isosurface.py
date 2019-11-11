@@ -17,7 +17,7 @@ from mayavi.api import Engine
 # mlab.show()
 
 
-from PostProcess_FieldData import FieldData
+from FieldData import FieldData
 import numpy as np
 # from math import sqrt
 

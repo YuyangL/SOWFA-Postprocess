@@ -1,160 +1,162 @@
 import numpy as np
-from Utilities import timer
-from numba import jit, njit, prange
+from Utility import timer, deprecated
+from numba import njit
 from scipy.interpolate import griddata
 import os
 import PostProcess_AnisotropyTensor
 
 class SliceProperties:
-    def __init__(self, time = 'latest', caseDir = '/media/yluan/Toshiba External Drive', caseName = 'ALM_N_H_ParTurb', caseSubfolder = 'Slices', resultFolder = 'Result', xOrientate = 0):
-        self.caseFullPath = caseDir + '/' + caseName + '/' + caseSubfolder + '/'
-        self.resultPath = self.caseFullPath + resultFolder + '/'
-        # If time is 'latest', find it automatically, excluding the result folder
-        self.time = os.listdir(self.caseFullPath)[-2] if time is 'latest' else str(time)
+    def __init__(self, time='latestTime', casedir='/media/yluan/Toshiba External Drive', casename='ALM_N_H_ParTurb', slice_folder='Slices', result_folder='Result', rot_z=0.):
+        self.case_fullpath = casedir + '/' + casename + '/' + slice_folder + '/'
+        self.result_path = self.case_fullpath + result_folder + '/'
+        os.makedirs(self.result_path, exist_ok=True)
+        # If time is 'latestTime', find it automatically
+        if 'latest' in time:
+            # Excl. "Result" folder string
+            times = [float(time) if '.' in time else int(time) for time in os.listdir(self.case_fullpath)[:-1]]
+            self.time = str(max(times))
+        else:
+            self.time = str(time)
+            
         # Update case full path to include time folder as well
-        self.caseFullPath += self.time + '/'
+        self.case_fullpath += self.time + '/'
         # Add the selected time folder in result path if not existent already
-        self.resultPath += self.time + '/'
-        os.makedirs(self.resultPath, exist_ok=True)
-
-        # Orientate x in the x-y plane in case of angled flow direction
-        # Angle in rad and counter-clockwise
-        self.xOrientate = xOrientate
-
+        self.result_path += self.time + '/'
+        os.makedirs(self.result_path, exist_ok=True)
+        # Orientate around z axis in case of angled flow direction
+        # Angle in rad and counter-clockwise, automatic unit detection
+        self.rot_z = rot_z if rot_z > 0.5*np.pi else rot_z/180.*np.pi
 
     @timer
-    # Numba prange doesn't support dict
-    # @jit(parallel = True, fastmath = True)
-    def readSlices(self, propertyNames = ('U',), sliceNames = ('alongWind',), sliceNamesSub = 'Slice', skipCol = 3, skipRow = 0, fileExt = 'raw'):
-        # First 3 columns are x, y, z, thus skipCol = 3
-        # skipRow unnecessary since np.genfromtxt trim any header with # at front
-        # self.sliceNames need to mutable
-        # self.sliceNames = list((sliceNames,)) if isinstance(sliceNames, str) else list(sliceNames)
-        sliceNames = (sliceNames,) if isinstance(sliceNames, str) else sliceNames
-        self.propertyNames = (propertyNames,) if isinstance(propertyNames, str) else propertyNames
-        # Combine propertyName with sliceNames and Subscript to form the full file names
-        # Don't know why I had to copy it...
-        # self.sliceNames = ['placeholder']*len(sliceNames)*len(propertyNames)
-        self.sliceNames = []
-        for propertyName in self.propertyNames:
-            for sliceName in sliceNames:
-                self.sliceNames.append(propertyName + '_' + sliceName)
+    def readSlices(self, properties=('U',), slicenames=('alongWind',), slicenames_sub='Slice', skipcol=3, skiprow=0, file_ext='raw'):
+        # First 3 columns are x, y, z, thus skipcol = 3
+        # skiprow unnecessary since np.genfromtxt trim any header with # at front
+        slicenames = (slicenames,) if isinstance(slicenames, str) else slicenames
+        self.properties = (properties,) if isinstance(properties, str) else properties
+        # Combine property with slicenames and subscript to form the full file names
+        self.slicenames = []
+        for property in self.properties:
+            for slicename in slicenames:
+                self.slicenames.append(property + '_' + slicename)
 
-        self.slicesVal, self.slicesOrientate, self.slicesCoor = {}, {}, {}
+        self.slices_val, self.slices_orient, self.slices_coor = {}, {}, {}
         # Go through all specified slices
         # and append coordinates,, slice type (vertical or horizontal), and slice values each to dictionaries
         # Keys are slice names
-        for sliceName in self.sliceNames:
-            vals = np.genfromtxt(self.caseFullPath + sliceName + '_' + sliceNamesSub + '.' + fileExt)
+        for slicename in self.slicenames:
+            vals = np.genfromtxt(self.case_fullpath + slicename + '_' + slicenames_sub + '.' + file_ext)
             # If max(z) - min(z) < 1 then it's assumed horizontal
             # partition('.') removes anything after '.'
             # fileName.partition('.')[0]
-            self.slicesOrientate[sliceName] = 'vertical' if (vals[skipRow:, 2]).max() - (
-                vals[skipRow:, 2]).min() > 1. else 'horizontal'
+            self.slices_orient[slicename] = 'vertical' if (vals[skiprow:, 2].max()
+            - vals[skiprow:, 2].min() > 1.) else 'horizontal'
             # # If interpolation enabled
-            # if interpMethod not in ('none', 'None'):
+            # if interp_method not in ('none', 'None'):
             #     print('\nInterpolation enabled')
             #     # X2D, Y2D, Z2D, vals2D dictionary after interpolation
-            #     slicesX[fileName.partition('.')[0]], slicesY[fileName.partition('.')[0]], slicesZ[fileName.partition('.')[0]], slicesVal[fileName.partition('.')[0]] = \
-            #         self.interpolateSliceData(vals[skipRow:, 0], vals[skipRow:, 1], vals[skipRow:, 2], vals[skipRow:, skipCol:], sliceOrientate = slicesOrientate[fileName.partition('.')[0]], precisionX = precision[0], precisionY = precision[1], precisionZ = precision[2], interpMethod = interpMethod)
+            #     slicesX[fileName.partition('.')[0]], slicesY[fileName.partition('.')[0]], slicesZ[fileName.partition('.')[0]], slices_val[fileName.partition('.')[0]] = \
+            #         self.interpolateSliceData(vals[skiprow:, 0], vals[skiprow:, 1], vals[skiprow:, 2], vals[skiprow:, skipcol:], slice_orient = slices_orient[fileName.partition('.')[0]], precision_x = precision[0], precision_y = precision[1], precision_z = precision[2], interp_method = interp_method)
             #
             # else:
             # X, Y, Z coordinate dictionary without interpolation
-            self.slicesCoor[sliceName] = vals[skipRow:, :skipCol]
+            self.slices_coor[slicename] = vals[skiprow:, :skipcol]
             # Vals dictionary without interpolation
-            self.slicesVal[sliceName] = vals[skipRow:, skipCol:]
+            self.slices_val[slicename] = vals[skiprow:, skipcol:]
 
-        print('\n' + str(self.sliceNames) + ' read')
-        # return slicesCoor, slicesOrientate, slicesVal
-
+        print('\n' + str(self.slicenames) + ' read')
+        # return slices_coor, slices_orient, slices_val
 
     @staticmethod
     @timer
-    @jit(parallel = True, fastmath = True)
-    def interpolateDecomposedSliceData_Fast(x, y, z, vals, sliceOrientate = 'vertical', targetCells = 1e4,
-                                            xOrientate = \
-        0, interpMethod = 'nearest', confineBox = (None,)):
-        # confineBox[4:6] will be ignored if slice is horizontal
+    def interpolateDecomposedSliceData_Fast(x, y, z, vals, slice_orient='vertical', target_meshsize=1e4,
+                                            rot_z=0, interp_method='nearest', confinebox=None):
+        # confinebox[4:6] will be ignored if slice is horizontal
         # Automatically determine best x, y, z precision
         # If no confine region specified
-        if confineBox[0] is None:
+        if confinebox is None:
             lx = np.max(x) - np.min(x)
             # If vertical slice, ly doesn't contribute to slice interpolation, thus 0
-            ly = np.max(y) - np.min(y) if sliceOrientate == 'horizontal' else 0
+            ly = np.max(y) - np.min(y) if slice_orient == 'horizontal' else 0
             # If horizontal slice, z length should be about 0
-            lz = np.max(z) - np.min(z) if sliceOrientate == 'vertical' else 0
+            lz = np.max(z) - np.min(z) if slice_orient == 'vertical' else 0
         else:
-            lx = confineBox[1] - confineBox[0]
-            ly = confineBox[3] - confineBox[2] if sliceOrientate == 'horizontal' else 0
-            lz = confineBox[5] - confineBox[4] if sliceOrientate == 'vertical' else \
-                0
+            lx = confinebox[1] - confinebox[0]
+            ly = confinebox[3] - confinebox[2] if slice_orient == 'horizontal' else 0
+            lz = confinebox[5] - confinebox[4] if slice_orient == 'vertical' else 0
 
         # Sum of all "contributing" lengths, as scaler
         lxyz = lx + ly + lz
         # Weight of each precision, minimum 0.001
         xratio = np.max((lx/lxyz, 0.001))
-        # For vertical slices, the resolution for x is the same as y, i.e. targetCells is shared between x and z only
-        yratio = np.max((ly/lxyz, 0.001)) if sliceOrientate == 'horizontal' else 1.
+        # For vertical slices, the resolution for x is the same as y, i.e. target_meshsize is shared between x and z only
+        yratio = np.max((ly/lxyz, 0.001)) if slice_orient == 'horizontal' else 1.
         # If horizontal slice, z cell is aimed at 1
         # zratio = 1 effectively removes the impact of z on horizontal slice resolutions
-        zratio = np.max((lz/lxyz, 0.001)) if sliceOrientate == 'vertical' else 1.
+        zratio = np.max((lz/lxyz, 0.001)) if slice_orient == 'vertical' else 1.
         # Base precision
-        # Using xratio*base*(yratio*base or zratio*base) = targetCells
-        precisionBase = targetCells/(xratio*yratio*zratio)
-        # If horizontal slice, targetCells is shared between x and y only
-        precisionBase = precisionBase**(1/2.)
+        # Using xratio*base*(yratio*base or zratio*base) = target_meshsize
+        precision_base = target_meshsize/(xratio*yratio*zratio)
+        # If horizontal slice, target_meshsize is shared between x and y only
+        precision_base = precision_base**(1/2.)
         # Derived precision, take ceiling
-        precisionX = int(np.ceil(xratio*precisionBase))
-        # If vertical slice, precisionY is the same as precisionX
-        precisionY = int(np.ceil(yratio*precisionBase)) if sliceOrientate == 'horizontal' else precisionX
-        precisionZ = int(np.ceil(zratio*precisionBase)) if sliceOrientate == 'vertical' else 1
-        print('\nInterpolating slice with precision ({0}, {1}, {2})...'.format(precisionX, precisionY, precisionZ))
-        precisionX *= 1j
-        precisionY *= 1j
-        precisionZ *= 1j
+        precision_x = int(np.ceil(xratio*precision_base))
+        # If vertical slice, precision_y is the same as precision_x
+        precision_y = int(np.ceil(yratio*precision_base)) if slice_orient == 'horizontal' else precision_x
+        precision_z = int(np.ceil(zratio*precision_base)) if slice_orient == 'vertical' else 1
+        print('\nInterpolating slice with precision ({0}, {1}, {2})...'.format(precision_x, precision_y, precision_z))
+        precision_x *= 1j
+        precision_y *= 1j
+        precision_z *= 1j
         # Bound the coordinates to be interpolated in case data wasn't available in those borders
         bnd = (1, 1)
-        bnd_xTarget = (x.min()*bnd[0], x.max()*bnd[1]) if confineBox[0] is None else confineBox[0], confineBox[1]
-        bnd_yTarget = (y.min()*bnd[0], y.max()*bnd[1]) if confineBox[0] is None else confineBox[2], confineBox[3]
-        bnd_zTarget = (z.min()*bnd[0], z.max()*bnd[1]) if confineBox[0] is None else confineBox[4], confineBox[5]
+        # print("xmin = {}, xmax = {}".format(x.min(), x.max()))
+        # print("confinebox[0] = {}, confinebox[1] = {}".format(confinebox[0], confinebox[1]))
+        # print("ymin = {}, ymax = {}".format(y.min(), y.max()))
+        # print("confinebox[2] = {}, confinebox[3] = {}".format(confinebox[2], confinebox[3]))
+        # print("zmin = {}, zmax = {}".format(z.min(), z.max()))
+        # print("confinebox[4] = {}, confinebox[5] = {}".format(confinebox[4], confinebox[5]))
+        bnd_xtarget = (x.min()*bnd[0], x.max()*bnd[1]) if confinebox is None else (confinebox[0], confinebox[1])
+        bnd_ytarget = (y.min()*bnd[0], y.max()*bnd[1]) if confinebox is None else (confinebox[2], confinebox[3])
+        bnd_ztarget = (z.min()*bnd[0], z.max()*bnd[1]) if confinebox is None else (confinebox[4], confinebox[5])
         # If vertical slice
-        if sliceOrientate == 'vertical':
+        if slice_orient == 'vertical':
             # Known x and z coordinates, to be interpolated later
-            knownPoints = np.vstack((x, z)).T
+            known_pts = np.vstack((x, z)).T
             # Interpolate x and z according to precisions
-            x2D, z2D = np.mgrid[bnd_xTarget[0]:bnd_xTarget[1]:precisionX, bnd_zTarget[0]:bnd_zTarget[1]:precisionZ]
+            x2d, z2d = np.mgrid[bnd_xtarget[0]:bnd_xtarget[1]:precision_x, bnd_ztarget[0]:bnd_ztarget[1]:precision_z]
             # Then interpolate y in the same fashion of x
             # Thus the same precision as x
-            y2D, _ = np.mgrid[bnd_yTarget[0]:bnd_yTarget[1]:precisionX, bnd_zTarget[0]:bnd_zTarget[1]:precisionZ]
+            y2d, _ = np.mgrid[bnd_ytarget[0]:bnd_ytarget[1]:precision_x, bnd_ztarget[0]:bnd_ztarget[1]:precision_z]
             # In case the vertical slice is at a negative angle,
             # i.e. when x goes from low to high, y goes from high to low,
-            # flip y2D from low to high to high to low
-            y2D = np.flipud(y2D) if x[0] > x[1] else y2D
+            # flip y2d from low to high to high to low
+            y2d = np.flipud(y2d) if ((x[0] - x[1])*(y[0] - y[1])) < 0. else y2d
         # Else if slice is horizontal
         else:
-            knownPoints = np.vstack((x, y)).T
-            x2D, y2D = np.mgrid[bnd_xTarget[0]:bnd_xTarget[1]:precisionX, bnd_yTarget[0]:bnd_yTarget[1]:precisionY]
-            # For horizontal slice, z is constant, thus not affected by confineBox
-            # Also z2D is like y2D, thus same precision as y
-            _, z2D = np.mgrid[bnd_xTarget[0]:bnd_xTarget[1]:precisionX, z.min()*bnd[0]:z.max()*bnd[1]:precisionY]
+            known_pts = np.vstack((x, y)).T
+            x2d, y2d = np.mgrid[bnd_xtarget[0]:bnd_xtarget[1]:precision_x, bnd_ytarget[0]:bnd_ytarget[1]:precision_y]
+            # For horizontal slice, z is constant, thus not affected by confinebox
+            # Also z2d is like y2d, thus same precision as y
+            _, z2d = np.mgrid[bnd_xtarget[0]:bnd_xtarget[1]:precision_x, z.min()*bnd[0]:z.max()*bnd[1]:precision_y]
 
         # Decompose the vector/tensor of slice values
         # If vector, order is x, y, z
         # If symmetric tensor, order is xx, xy, xz, yy, yz, zz
         # Second axis to interpolate is z if vertical slice otherwise y fo horizontal slices
-        gridSecondCoor = z2D if sliceOrientate == 'vertical' else y2D
+        grid_coor2 = z2d if slice_orient == 'vertical' else y2d
         # For gauging progress
         milestone = 33
         # If vals is 2D
         if len(vals.shape) == 2:
-            # Initialize nRow x nCol x nComponent array vals3D by interpolating first component of the values, x, or xx
-            vals3D = np.empty((x2D.shape[0], x2D.shape[1], vals.shape[1]))
+            # print("Min x = {}, max = {}".format(min(x2d.ravel()), max(x2d.ravel())))
+            # print("Min coor2 = {}, max = {}".format(min(grid_coor2.ravel()), max(grid_coor2.ravel())))
+            # Initialize nRow x nCol x nComponent array vals3d by interpolating first component of the values, x, or xx
+            vals3d = np.empty((x2d.shape[0], x2d.shape[1], vals.shape[1]))
             # Then go through the rest components and stack them in 3D
-            for i in prange(vals.shape[1]):
-                # Each component is interpolated from the known locations pointsXZ to refined fields (x2D, z2D)
-                vals3D_i = griddata(knownPoints, vals[:, i].ravel(), (x2D, gridSecondCoor), method=interpMethod)
-                # vals3D = np.dstack((vals3D, vals3D_i))
-                vals3D[:, :, i] = vals3D_i
+            for i in range(vals.shape[1]):
+                # Each component is interpolated from the known locations pointsXZ to refined fields (x2d, z2d)
+                vals3d[:, :, i] = griddata(known_pts, vals[:, i], (x2d, grid_coor2), method=interp_method)
+                # vals3d = np.dstack((vals3d, vals3d_i))
                 # Gauge progress
                 progress = (i + 1)/vals.shape[1]*100.
                 if progress >= milestone:
@@ -163,91 +165,91 @@ class SliceProperties:
 
         # Else if vals is 3D
         else:
-            vals3D = np.empty((x2D.shape[0], x2D.shape[1], vals.shape[2]))
-            for i in prange(vals.shape[2]):
-                vals3D_i = griddata(knownPoints, vals[:, :, i].ravel(), (x2D, gridSecondCoor), method = interpMethod)
-                vals3D[:, :, i] = vals3D_i
+            vals3d = np.empty((x2d.shape[0], x2d.shape[1], vals.shape[2]))
+            for i in range(vals.shape[2]):
+                vals3d_i = griddata(known_pts, vals[:, :, i].ravel(), (x2d, grid_coor2), method=interp_method)
+                vals3d[:, :, i] = vals3d_i
                 progress = (i + 1)/vals.shape[2]*100.
                 if progress >= milestone:
                     print(' {0}%... '.format(milestone))
                     milestone += 33
 
-        # if xOrientate != 0:
+        # if rot_z != 0:
         #     # If vector, x, y, z
         #     if vals.shape[1] == 3:
-        #         vals3D['0'] = vals3D['0']*np.cos(xOrientate) + vals3D['1']*np.sin(xOrientate)
-        #         vals3D['1'] = -vals3D['0']*np.sin(xOrientate) + vals3D['1']*np.cos(xOrientate)
+        #         vals3d['0'] = vals3d['0']*np.cos(rot_z) + vals3d['1']*np.sin(rot_z)
+        #         vals3d['1'] = -vals3d['0']*np.sin(rot_z) + vals3d['1']*np.cos(rot_z)
         #     else:
-        #         vals3D['0'] =
+        #         vals3d['0'] =
 
-        x2D, y2D, z2D = np.nan_to_num(x2D), np.nan_to_num(y2D), np.nan_to_num(z2D)
-        vals3D = np.nan_to_num(vals3D)
+        # x2d, y2d, z2d = np.nan_to_num(x2d), np.nan_to_num(y2d), np.nan_to_num(z2d)
+        # vals3d = np.nan_to_num(vals3d)
 
-        return x2D, y2D, z2D, vals3D
+        return x2d, y2d, z2d, vals3d
 
 
     # [DEPRECATED] Refer to interpolateDecomposedSliceData_Fast()
     @staticmethod
     @timer
-    @jit(parallel = True, fastmath = True)
-    def interpolateDecomposedSliceData(x, y, z, vals, sliceOrientate = 'vertical', xOrientate = 0, precisionX = 1500j, precisionY = 1500j,
-                          precisionZ = 500j, interpMethod = 'cubic'):
+    @deprecated
+    def interpolateDecomposedSliceData(x, y, z, vals, slice_orient = 'vertical', rot_z = 0, precision_x = 1500j, precision_y = 1500j,
+                          precision_z = 500j, interp_method = 'cubic'):
         # Bound the coordinates to be interpolated in case data wasn't available in those borders
         bnd = (1.00001, 0.99999)
-        if sliceOrientate is 'vertical':
+        if slice_orient is 'vertical':
             # Known x and z coordinates, to be interpolated later
-            knownPoints = np.vstack((x, z)).T
+            known_pts = np.vstack((x, z)).T
             # Interpolate x and z according to precisions
-            x2D, z2D = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precisionX, z.min()*bnd[0]:z.max()*bnd[1]:precisionZ]
+            x2d, z2d = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precision_x, z.min()*bnd[0]:z.max()*bnd[1]:precision_z]
             # Then interpolate y in the same fashion of x
-            y2D, _ = np.mgrid[y.min()*bnd[0]:y.max()*bnd[1]:precisionY, z.min()*bnd[0]:z.max()*bnd[1]:precisionZ]
+            y2d, _ = np.mgrid[y.min()*bnd[0]:y.max()*bnd[1]:precision_y, z.min()*bnd[0]:z.max()*bnd[1]:precision_z]
             # In case the vertical slice is at a negative angle,
             # i.e. when x goes from low to high, y goes from high to low,
-            # flip y2D from low to high to high to low
-            y2D = np.flipud(y2D) if x[0] > x[1] else y2D
+            # flip y2d from low to high to high to low
+            y2d = np.flipud(y2d) if x[0] > x[1] else y2d
         else:
-            knownPoints = np.vstack((x, y)).T
-            x2D, y2D = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precisionX, y.min()*bnd[0]:y.max()*bnd[1]:precisionY]
-            _, z2D = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precisionX, z.min()*bnd[0]:z.max()*bnd[1]:precisionZ]
+            known_pts = np.vstack((x, y)).T
+            x2d, y2d = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precision_x, y.min()*bnd[0]:y.max()*bnd[1]:precision_y]
+            _, z2d = np.mgrid[x.min()*bnd[0]:x.max()*bnd[1]:precision_x, z.min()*bnd[0]:z.max()*bnd[1]:precision_z]
 
         # Decompose the vector/tensor of slice values
         # If vector, order is x, y, z
         # If symmetric tensor, order is xx, xy, xz, yy, yz, zz
         valsDecomp = {}
         for i in range(vals.shape[1]):
-            if sliceOrientate is 'vertical':
-                # Each component is interpolated from the known locations pointsXZ to refined fields (x2D, z2D)
-                valsDecomp[str(i)] = griddata(knownPoints, vals[:, i].ravel(), (x2D, z2D), method = interpMethod)
+            if slice_orient is 'vertical':
+                # Each component is interpolated from the known locations pointsXZ to refined fields (x2d, z2d)
+                valsDecomp[str(i)] = griddata(known_pts, vals[:, i].ravel(), (x2d, z2d), method = interp_method)
             else:
-                valsDecomp[str(i)] = griddata(knownPoints, vals[:, i].ravel(), (x2D, y2D), method = interpMethod)
+                valsDecomp[str(i)] = griddata(known_pts, vals[:, i].ravel(), (x2d, y2d), method = interp_method)
 
-        # if xOrientate != 0:
+        # if rot_z != 0:
         #     # If vector, x, y, z
         #     if vals.shape[1] == 3:
-        #         valsDecomp['0'] = valsDecomp['0']*np.cos(xOrientate) + valsDecomp['1']*np.sin(xOrientate)
-        #         valsDecomp['1'] = -valsDecomp['0']*np.sin(xOrientate) + valsDecomp['1']*np.cos(xOrientate)
+        #         valsDecomp['0'] = valsDecomp['0']*np.cos(rot_z) + valsDecomp['1']*np.sin(rot_z)
+        #         valsDecomp['1'] = -valsDecomp['0']*np.sin(rot_z) + valsDecomp['1']*np.cos(rot_z)
         #     else:
         #         valsDecomp['0'] =
 
-        return x2D, y2D, z2D, valsDecomp
+        return x2d, y2d, z2d, valsDecomp
 
 
     @staticmethod
     @timer
-    @njit(parallel = True, fastmath = True)
-    def processAnisotropyTensor_Fast(vals3D):
+    @njit(parallel=True, fastmath=True)
+    def processAnisotropyTensor_Fast(vals3d):
         # TKE in the interpolated mesh
         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
-        k = 0.5*(vals3D[:, :, 0] + vals3D[:, :, 3] + vals3D[:, :, 5])
+        k = 0.5*(vals3d[:, :, 0] + vals3d[:, :, 3] + vals3d[:, :, 5])
         # Convert Rij to bij
-        for i in prange(6):
-            vals3D[:, :, i] = vals3D[:, :, i]/(2.*k) - 1/3. if i in (0, 3, 5) else vals3D[:, :, i]/(2.*k)
+        for i in range(6):
+            vals3d[:, :, i] = vals3d[:, :, i]/(2.*k) - 1/3. if i in (0, 3, 5) else vals3d[:, :, i]/(2.*k)
 
         # Add each anisotropy tensor to each mesh grid location, in depth
         # tensors is 3D with z being b11, b12, b13, b21, b22, b23...
-        tensors = np.dstack((vals3D[:, :, 0], vals3D[:, :, 1], vals3D[:, :, 2],
-                             vals3D[:, :, 1], vals3D[:, :, 3], vals3D[:, :, 4],
-                             vals3D[:, :, 2], vals3D[:, :, 4], vals3D[:, :, 5]))
+        tensors = np.dstack((vals3d[:, :, 0], vals3d[:, :, 1], vals3d[:, :, 2],
+                             vals3d[:, :, 1], vals3d[:, :, 3], vals3d[:, :, 4],
+                             vals3d[:, :, 2], vals3d[:, :, 4], vals3d[:, :, 5]))
         # Reshape the z dir to 3x3 instead of 9x1
         # Now tensors is 4D, with x, y being mesh grid, z1, z2 being the 3x3 tensor at (x, y)
         tensors = tensors.reshape((tensors.shape[0], tensors.shape[1], 3, 3))
@@ -276,13 +278,13 @@ class SliceProperties:
         # Remove the first row since it was dummy
         eigValsGrid = np.reshape(eigValsGrid[1:], (tensors.shape[0], tensors.shape[1], 3))
 
-        return vals3D, tensors, eigValsGrid
+        return vals3d, tensors, eigValsGrid
 
 
     # [DEPRECATED] Refer to PostProcess_AnisotropyTensor
     @staticmethod
     @timer
-    @njit(parallel = True, fastmath = True)
+    @njit(parallel=True, fastmath=True)
     def processAnisotropyTensor_Uninterpolated(vals2D):
         # TKE
         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
@@ -333,7 +335,6 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    @jit(parallel = True, fastmath = True)
     def processAnisotropyTensor(valsDecomp):
         # TKE in the interpolated mesh
         # xx is '0', xy is '1', xz is '2', yy is '3', yz is '4', zz is '5'
@@ -370,7 +371,6 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    # @njit(parallel = True, fastmath = True)
     def getBarycentricMapCoordinates(eigValsGrid, c_offset = 0.65, c_exp = 5.):
         # Coordinates of the anisotropy tensor in the tensor basis {a1c, a2c, a3c}. From Banerjee (2007),
         # C1c = lambda1 - lambda2,
@@ -393,7 +393,7 @@ class SliceProperties:
         # Improved RGB = [c1_star, c2_star, c3_star]
         rgbValsNew = np.empty((c1.shape[0], c1.shape[1], 3))
         # Each 3rd dim is an RGB array of the 2D grid
-        for i in prange(3):
+        for i in range(3):
             rgbValsNew[:, :, i] = (rgbVals[:, :, i] + c_offset)**c_exp
 
         return xBary, yBary, rgbValsNew
@@ -401,7 +401,6 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    @jit
     def mergeHorizontalComponents(valsDecomp):
         valsDecomp['hor'] = np.sqrt(valsDecomp['0']**2 + valsDecomp['1']**2)
         return valsDecomp
@@ -409,8 +408,7 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    @jit(parallel=True, fastmath=True)
-    def calcSliceMeanDissipationRate(epsilonSGSmean, nuSGSmean, nu=1e-5, save=False, resultPath='.'):
+    def calcSliceMeanDissipationRate(epsilonSGSmean, nuSGSmean, nu=1e-5, save=False, result_path='.'):
         # FIXME: DEPRECATED
         # According to Eq 5.64 - Eq 5.68 of Sagaut (2006), for isotropic homogeneous turbulence,
         # <epsilon> = <epsilon_resolved> + <epsilon_SGS>,
@@ -423,16 +421,14 @@ class SliceProperties:
         epsilonMean[epsilonMean == -np.inf] = -1e10
 
         if save:
-            pickle.dump(epsilonMean, open(resultPath + '/epsilonMean.p', 'wb'))
-            print('\nepsilonMean saved at {0}'.format(resultPath))
+            pickle.dump(epsilonMean, open(result_path + '/epsilonMean.p', 'wb'))
+            print('\nepsilonMean saved at {0}'.format(result_path))
 
         return epsilonMean
 
 
     @staticmethod
     @timer
-    # Advanced slicing not supported by njit, e.g. Sij[Sij > cap] - ...
-    @jit(parallel = True, fastmath = True)
     def calcSliceSijAndRij(grad_u, tke, eps, cap = 7.):
         """
         Calculates the non-dimonsionalized strain rate and rotation rate tensors.  Normalizes by k and eps:
@@ -460,7 +456,7 @@ class SliceProperties:
         tke_eps = tke/eps
         Sij = np.zeros((num_points, 3, 3))
         Rij = np.zeros((num_points, 3, 3))
-        for i in prange(num_points):
+        for i in range(num_points):
             Sij[i, :, :] = tke_eps[i]*0.5*(grad_u[i, :, :] + np.transpose(grad_u[i, :, :]))
             Rij[i, :, :] = tke_eps[i]*0.5*(grad_u[i, :, :] - np.transpose(grad_u[i, :, :]))
 
@@ -475,7 +471,7 @@ class SliceProperties:
         Rij[Rij < -cap] = -cap
 
         # Because we enforced limits on maximum Sij values, we need to re-enforce trace of 0
-        for i in prange(num_points):
+        for i in range(num_points):
             Sij[i, :, :] = Sij[i, :, :] - 1/3.*np.eye(3)*np.trace(Sij[i, :, :])
 
         return Sij, Rij
@@ -483,8 +479,6 @@ class SliceProperties:
     
     @staticmethod
     @timer
-    # Numba is unable to determine "self" type
-    @jit(parallel = True, fastmath = True)
     def calcSliceScalarBasis(Sij, Rij, is_train = False, cap = 2.0, is_scale = True, mean = None, std = None):
         """
         Given the non-dimensionalized mean strain rate and mean rotation rate tensors Sij and Rij,
@@ -513,7 +507,7 @@ class SliceProperties:
         num_points = Sij.shape[0]
         num_invariants = 5
         invariants = np.zeros((num_points, num_invariants))
-        for i in prange(num_points):
+        for i in range(num_points):
             invariants[i, 0] = np.trace(np.dot(Sij[i, :, :], Sij[i, :, :]))
             invariants[i, 1] = np.trace(np.dot(Rij[i, :, :], Rij[i, :, :]))
             invariants[i, 2] = np.trace(np.dot(Sij[i, :, :], np.dot(Sij[i, :, :], Sij[i, :, :])))
@@ -550,7 +544,7 @@ class SliceProperties:
 
     @staticmethod
     @timer
-    @njit(parallel = True, fastmath = True)
+    @njit(parallel=True, fastmath=True)
     def calcSliceTensorBasis(Sij, Rij, quadratic_only = False, is_scale = True):
         """
         Given non-dimsionalized Sij and Rij, it calculates the tensor basis
@@ -580,7 +574,7 @@ class SliceProperties:
         """
         num_tensor_basis = 10 if not quadratic_only else 4
         T = np.zeros((Sij.shape[0], num_tensor_basis, 3, 3))
-        for i in prange(Sij.shape[0]):
+        for i in range(Sij.shape[0]):
             sij = Sij[i, :, :]
             rij = Rij[i, :, :]
             T[i, 0, :, :] = sij
@@ -607,12 +601,12 @@ class SliceProperties:
         if is_scale:
             # Using tuple here gievs Numbe error
             scale_factor = [10, 100, 100, 100, 1000, 1000, 10000, 10000, 10000, 10000]
-            for i in prange(num_tensor_basis):
+            for i in range(num_tensor_basis):
                 T[:, i, :, :] /= scale_factor[i]
 
         # Flatten:
         # T_flat = np.zeros((num_points, num_tensor_basis, 9))
-        # for i in prange(3):
+        # for i in range(3):
         #     for j in range(3):
         #         T_flat[:, :, 3*i+j] = T[:, :, i, j]
         T_flat = T.reshape((T.shape[0], T.shape[1], 9))
@@ -650,13 +644,12 @@ class SliceProperties:
         # Ensure radian unit
         rotateXY *= np.pi/180 if rotateUnit != 'rad' else 1.
         # Reshape here screwed up njit :/
-        @jit(parallel = True, fastmath = True)
         def __transform(listData, rotateXY, dependencies):
             # Copy listData (a list) that has original shapes as listData will be flattened to nPt x nComponent
             listDataRot_oldShapes = listData.copy()
             sinVal, cosVal = np.sin(rotateXY), np.cos(rotateXY)
             # Go through every data in listData and flatten to nPt x nComponent if necessary
-            for i in prange(len(listData)):
+            for i in range(len(listData)):
                 # # Ensure Numpy array
                 # listData[i] = np.array(listData[i])
                 # Flatten data from 3D to 2D
@@ -673,7 +666,7 @@ class SliceProperties:
             # Create a copy so listData values remain unchanged during the transformation, listData[i] is nPt x nComponent now
             listData_rot = listData.copy()
             # Go through all provided data and perform transformation
-            for i in prange(len(listData)):
+            for i in range(len(listData)):
                 # Number of component is the last D
                 nComponent = listData[i].shape[len(listData[i].shape) - 1]
                 # If nComponent is 3, i.e. x, y, z or data is single spatial correlation with 9 components
@@ -773,34 +766,34 @@ if __name__ is '__main__':
     User Inputs
     """
     time = 'latest'
-    caseDir = 'J:'
-    caseDir = '/media/yluan/1'
-    caseName = 'ALM_N_H_ParTurb'
-    propertyName = 'uuPrime2'
-    sliceNames = 'alongWindRotorOne'
+    casedir = 'J:'
+    casedir = '/media/yluan/1'
+    casename = 'ALM_N_H_ParTurb'
+    property = 'uuPrime2'
+    slicenames = 'alongWindRotorOne'
     # Orientation of x-axis in x-y plane, in case of angled flow direction
     # Only used for values decomposition
     # Angle in rad and counter-clockwise
-    xOrientate = 6/np.pi
-    precisionX, precisionY, precisionZ = 1000j, 1000j, 333j
-    interpMethod = 'nearest'
+    rot_z = 6/np.pi
+    precision_x, precision_y, precision_z = 1000j, 1000j, 333j
+    interp_method = 'nearest'
     plot = 'bary'
 
-    case = SliceProperties(time = time, caseDir = caseDir, caseName = caseName, xOrientate = xOrientate)
+    case = SliceProperties(time = time, casedir = casedir, casename = casename, rot_z = rot_z)
 
-    case.readSlices(propertyName = propertyName, sliceNames = sliceNames)
+    case.readSlices(property = property, slicenames = slicenames)
 
-    for sliceName in case.sliceNames:
+    for slicename in case.slicenames:
         """
         Process Uninterpolated Anisotropy Tensor
         """
-        vals2D = case.slicesVal[sliceName]
-        # x2D, y2D, z2D, vals3D = \
-        #     case.interpolateDecomposedSliceData_Fast(case.slicesCoor[sliceName][:, 0], case.slicesCoor[sliceName][:, 1], case.slicesCoor[sliceName][:, 2], case.slicesVal[sliceName], sliceOrientate = case.slicesOrientate[sliceName], xOrientate = case.xOrientate, precisionX = precisionX, precisionY = precisionY, precisionZ = precisionZ, interpMethod = interpMethod)
+        vals2D = case.slices_val[slicename]
+        # x2d, y2d, z2d, vals3d = \
+        #     case.interpolateDecomposedSliceData_Fast(case.slices_coor[slicename][:, 0], case.slices_coor[slicename][:, 1], case.slices_coor[slicename][:, 2], case.slices_val[slicename], slice_orient = case.slice_orient[slicename], rot_z = case.rot_z, precision_x = precision_x, precision_y = precision_y, precision_z = precision_z, interp_method = interp_method)
 
         # Another implementation of processAnisotropyTensor() in Cython
         t0 = t.time()
-        # vals3D, tensors, eigValsGrid = PostProcess_AnisotropyTensor.processAnisotropyTensor(vals3D)
+        # vals3d, tensors, eigValsGrid = PostProcess_AnisotropyTensor.processAnisotropyTensor(vals3d)
         # In each eigenvector 3 x 3 matrix, 1 col is a vector
         vals2D, tensors, eigValsGrid, eigVecsGrid = PostProcess_AnisotropyTensor.processAnisotropyTensor_Uninterpolated(vals2D, realizeIter = 0)
         t1 = t.time()
@@ -816,19 +809,19 @@ if __name__ is '__main__':
         if plot == 'bary':
             xBary, yBary, rgbVals = case.getBarycentricMapCoordinates(eigValsGrid)
 
-            x2D, y2D, z2D, rgbVals = \
-                case.interpolateDecomposedSliceData_Fast(case.slicesCoor[sliceName][:, 0], case.slicesCoor[sliceName][:, 1], case.slicesCoor[sliceName][:, 2], rgbVals, sliceOrientate =
-                                                         case.slicesOrientate[sliceName], xOrientate = case.xOrientate,
-                                                         precisionX = precisionX, precisionY =
-                                                         precisionY, precisionZ = precisionZ, interpMethod = interpMethod)
+            x2d, y2d, z2d, rgbVals = \
+                case.interpolateDecomposedSliceData_Fast(case.slices_coor[slicename][:, 0], case.slices_coor[slicename][:, 1], case.slices_coor[slicename][:, 2], rgbVals, slice_orient =
+                                                         case.slice_orient[slicename], rot_z = case.rot_z,
+                                                         precision_x = precision_x, precision_y =
+                                                         precision_y, precision_z = precision_z, interp_method = interp_method)
 
         elif plot == 'quiver':
-            x2D, y2D, z2D, eigVecs3D = \
-                case.interpolateDecomposedSliceData_Fast(case.slicesCoor[sliceName][:, 0], case.slicesCoor[sliceName][:, 1],
-                                                         case.slicesCoor[sliceName][:, 2], eigVecsGrid[:, :, :, 0], sliceOrientate =
-                                                         case.slicesOrientate[sliceName], xOrientate = case.xOrientate,
-                                                         precisionX = precisionX, precisionY =
-                                                         precisionY, precisionZ = precisionZ, interpMethod = interpMethod)
+            x2d, y2d, z2d, eigVecs3D = \
+                case.interpolateDecomposedSliceData_Fast(case.slices_coor[slicename][:, 0], case.slices_coor[slicename][:, 1],
+                                                         case.slices_coor[slicename][:, 2], eigVecsGrid[:, :, :, 0], slice_orient =
+                                                         case.slice_orient[slicename], rot_z = case.rot_z,
+                                                         precision_x = precision_x, precision_y =
+                                                         precision_y, precision_z = precision_z, interp_method = interp_method)
 
 
         """
@@ -836,10 +829,10 @@ if __name__ is '__main__':
         """
         if plot == 'bary':
             print('\nDumping values...')
-            pickle.dump(tensors, open(case.resultPath + sliceName + '_rgbVals.p', 'wb'))
-            pickle.dump(x2D, open(case.resultPath + sliceName + '_x2D.p', 'wb'))
-            pickle.dump(y2D, open(case.resultPath + sliceName + '_y2D.p', 'wb'))
-            pickle.dump(z2D, open(case.resultPath + sliceName + '_z2D.p', 'wb'))
+            pickle.dump(tensors, open(case.result_path + slicename + '_rgbVals.p', 'wb'))
+            pickle.dump(x2d, open(case.result_path + slicename + '_x2D.p', 'wb'))
+            pickle.dump(y2d, open(case.result_path + slicename + '_y2D.p', 'wb'))
+            pickle.dump(z2d, open(case.result_path + slicename + '_z2D.p', 'wb'))
 
             # # Custom RGB colormap, with only red, green, and blue
             # colors = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
@@ -859,7 +852,7 @@ if __name__ is '__main__':
             # fig.colorbar(im, ax = ax, extend = 'both')
             plt.savefig('R:/bary.png', dpi = 1000)
 
-            # baryPlot = PlotSurfaceSlices3D(x2D, y2D, z2D, (0,), show = True, name = 'bary', figDir = 'R:', save = True)
+            # baryPlot = PlotSurfaceSlices3D(x2d, y2d, z2d, (0,), show = True, name = 'bary', figDir = 'R:', save = True)
             # baryPlot.cmapLim = (0, 1)
             # baryPlot.cmapNorm = rgbVals
             # # baryPlot.cmapVals = plt.cm.ScalarMappable(norm = rgbVals, cmap = None)
@@ -867,7 +860,7 @@ if __name__ is '__main__':
             # # baryPlot.cmapVals.set_array([])
             # baryPlot.plot = baryPlot.cmapVals
             # baryPlot.initializeFigure()
-            # baryPlot.axes[0].plot_surface(x2D, y2D, z2D, cstride = 1, rstride = 1, facecolors = rgbVals, vmin = 0, vmax = 1, shade = False)
+            # baryPlot.axes[0].plot_surface(x2d, y2d, z2d, cstride = 1, rstride = 1, facecolors = rgbVals, vmin = 0, vmax = 1, shade = False)
             # baryPlot.finalizeFigure()
             #
             #
@@ -875,10 +868,10 @@ if __name__ is '__main__':
             #
             #
             # print('\nDumping values...')
-            # pickle.dump(tensors, open(case.resultPath + sliceName + '_tensors.p', 'wb'))
-            # pickle.dump(case.slicesCoor[sliceName][:, 0], open(case.resultPath + sliceName + '_x.p', 'wb'))
-            # pickle.dump(case.slicesCoor[sliceName][:, 1], open(case.resultPath + sliceName + '_y.p', 'wb'))
-            # pickle.dump(case.slicesCoor[sliceName][:, 2], open(case.resultPath + sliceName + '_z.p', 'wb'))
+            # pickle.dump(tensors, open(case.result_path + slicename + '_tensors.p', 'wb'))
+            # pickle.dump(case.slices_coor[slicename][:, 0], open(case.result_path + slicename + '_x.p', 'wb'))
+            # pickle.dump(case.slices_coor[slicename][:, 1], open(case.result_path + slicename + '_y.p', 'wb'))
+            # pickle.dump(case.slices_coor[slicename][:, 2], open(case.result_path + slicename + '_z.p', 'wb'))
             #
             # print('\nExecuting RGB_barycentric_colors_clean...')
             # import RBG_barycentric_colors_clean
@@ -890,5 +883,5 @@ if __name__ is '__main__':
         elif plot == 'quiver':
             fig = plt.figure()
             ax = fig.gca(projection = '3d')
-            ax.quiver(x2D, y2D, z2D, eigVecs3D[:, :, 0], eigVecs3D[:, :, 1], eigVecs3D[:, :, 2], length = 0.1, normalize = False)
+            ax.quiver(x2d, y2d, z2d, eigVecs3D[:, :, 0], eigVecs3D[:, :, 1], eigVecs3D[:, :, 2], length = 0.1, normalize = False)
 

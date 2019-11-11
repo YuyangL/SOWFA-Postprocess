@@ -13,7 +13,7 @@ except ModuleNotFoundError:
 
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
-import PostProcess_SliceData as PPSD
+import SliceData as PPSD
 
 """
 User Inputs

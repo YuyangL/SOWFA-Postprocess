@@ -1,4 +1,4 @@
-from PostProcess_PrecursorAndTurbineOutputs import TurbineOutputs
+from PrecursorAndTurbineOutputs import TurbineOutputs
 from PlottingTool import Plot2D
 import numpy as np
 import matplotlib.pyplot as plt

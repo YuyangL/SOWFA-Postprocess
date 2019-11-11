@@ -1,28 +1,27 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
-from numba import jit, njit
-from Utilities import timer
+from numba import njit
 from PlottingTool import BaseFigure3D
 
 case = 'both'  # 'ParTurb' 'Offset'
 domainSize = (3000, 3000, 1000)
 origin = (0, 0, 0)
 
-figDir = 'R:/'
+figdir = '/media/yluan'
 name = 'ProbesFront'
-figWidth = 'half'
-xLabel = r'$x$ [m]'
-yLabel = r'$y$ [m]'
-zLabel = r'$z$ [m]'
+figwidth = 'half'
+xlabel = r'$x$ [m]'
+ylabel = r'$y$ [m]'
+zlabel = r'$z$ [m]'
 legLoc, alpha = 'upper center', 0.5
-markerSize, scatterDepthShade = 10, True
-viewAngle = (15, -150)
-show, save = True, True
+markersize, scatter_depthshade = 10, True
+viewangle = (15, -150)
+show, save = False, True
 
 @njit
-def generateFrameCoordinates(origin = (0, 0, 0), frameSize = (3000, 3000, 1000), rotation = 0):
-    extent = frameSize
+def generateFrameCoordinates(origin=(0, 0, 0), frame_size=(3000, 3000, 1000), rotation=0):
+    extent = frame_size
     # Bottom and then upper frame
     xs, ys, zs = [origin[0]], [origin[1]], [origin[2]]
     for i in range(2):
@@ -55,22 +54,22 @@ def generateFrameCoordinates(origin = (0, 0, 0), frameSize = (3000, 3000, 1000),
 
 
 # Domain frame
-xDomain, yDomain, zDomain = generateFrameCoordinates(frameSize = domainSize, rotation = 0)
+xdomain, ydomain, zdomain = generateFrameCoordinates(frame_size=domainSize, rotation=0)
 
-if case is 'both':
+if case == 'both':
     # Parallel turbine inner refinement frame
-    xRefine1, yRefine1, zRefine1 = generateFrameCoordinates(origin = (1120.344, 771.583, 0), frameSize = (882, 882, 279), rotation = np.pi/6)
+    xrefine1, yrefine1, zrefine1 = generateFrameCoordinates(origin=(1120.344, 771.583, 0), frame_size=(882, 882, 279), rotation=np.pi/6)
 
     # Parallel turbine outer refinement frame
-    xRefine2, yRefine2, zRefine2 = generateFrameCoordinates(origin = (1074.225, 599.464, 0), frameSize = (1134, 1134, 405), rotation = np.pi/6)
+    xrefine2, yrefine2, zrefine2 = generateFrameCoordinates(origin=(1074.225, 599.464, 0), frame_size=(1134, 1134, 405), rotation=np.pi/6)
 
     # Offset turbine inner refinement frame
-    xRefine3, yRefine3, zRefine3 = generateFrameCoordinates(origin = (994.344, 989.821, 0),
-                                                            frameSize = (1764, 378, 279), rotation = np.pi/6)
+    xrefine3, yrefine3, zrefine3 = generateFrameCoordinates(origin=(994.344, 989.821, 0),
+                                                            frame_size=(1764, 378, 279), rotation=np.pi/6)
 
     # Offset turbine outer refinement frame
-    xRefine4, yRefine4, zRefine4 = generateFrameCoordinates(origin = (948.225, 817.702, 0),
-                                                            frameSize = (1890, 630, 405), rotation = np.pi/6)
+    xrefine4, yrefine4, zrefine4 = generateFrameCoordinates(origin=(948.225, 817.702, 0),
+                                                            frame_size=(1890, 630, 405), rotation=np.pi/6)
 
     """
     Probes
@@ -78,7 +77,7 @@ if case is 'both':
     # Probes for south turbine in parallel turbines
     # For each along wind location in wake, hub and apex height probed; for each along wind location in upstream, hub height probed
     # -3D, -1D, 1D, 2D, 4D
-    southTurbProbes = np.array(((916.725, 872.262, 90),
+    southturb_probes = np.array(((916.725, 872.262, 90),
                        (1134.964, 998.262, 90),
                        (1353.202, 1124.262, 90), (1353.202, 1124.262, 153),
                        (1462.321, 1187.262, 90), (1462.321, 1187.262, 153),
@@ -88,7 +87,7 @@ if case is 'both':
     # For each along wind location in wake, hub and apex height probed;
     # for each along wind location in upstream, hub height probed
     # -3D, -1D, 1D, 2D, 4D, 8D, 9D, 11D
-    offsetTurbsProbes = np.array(((788.857, 1089.422, 90),
+    offsetturbs_probes = np.array(((788.857, 1089.422, 90),
                          (1007.096, 1215.422, 90),
                          (1225.334, 1341.422, 90), (1225.334, 1341.422, 153),
                          (1334.453, 1404.422, 90), (1334.453, 1404.422, 153),
@@ -101,7 +100,7 @@ if case is 'both':
     # For each along wind location in wake, hub and apex height probed; for each along wind location in upstream,
     # hub height probed
     # -3D, -1D, 1D, 2D, 4D
-    northTurbProbes = np.array(((664.725, 1308.738, 90),
+    northturb_probes = np.array(((664.725, 1308.738, 90),
                        (882.964, 1434.738, 90),
                        (1101.202, 1560.738, 90), (1101.202, 1560.738, 153),
                        (1210.321, 1623.738, 90), (1210.321, 1623.738, 153),
@@ -109,31 +108,31 @@ if case is 'both':
 
     # fig = plt.figure()
     # ax = fig.add_subplot(111, projection = '3d')
-    # ax.scatter(southTurbProbes[:, 0], southTurbProbes[:, 1], southTurbProbes[:, 2])
-    # ax.scatter(offsetTurbsProbes[:, 0], offsetTurbsProbes[:, 1], offsetTurbsProbes[:, 2])
-    # ax.scatter(northTurbProbes[:, 0], northTurbProbes[:, 1], northTurbProbes[:, 2])
+    # ax.scatter(southturb_probes[:, 0], southturb_probes[:, 1], southturb_probes[:, 2])
+    # ax.scatter(offsetturbs_probes[:, 0], offsetturbs_probes[:, 1], offsetturbs_probes[:, 2])
+    # ax.scatter(northturb_probes[:, 0], northturb_probes[:, 1], northturb_probes[:, 2])
 
     """
     Plots
     """
-    listX2D, listY2D = (xRefine1, xRefine2, xRefine3, xRefine4), (yRefine1, yRefine2, yRefine3, yRefine4)
-    framePlot = BaseFigure3D(listX2D, listY2D, show = show, save = save, figDir = figDir, viewAngles = viewAngle, figWidth = figWidth, name = name, xLabel = xLabel, yLabel = yLabel, zLabel = zLabel)
+    list_x2d, list_y2d = (xrefine1, xrefine2, xrefine3, xrefine4), (yrefine1, yrefine2, yrefine3, yrefine4)
+    frameplot = BaseFigure3D(list_x2d, list_y2d, show=show, save=save, figdir=figdir, viewangle=viewangle, figwidth=figwidth, name=name, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel)
 
-    framePlot.initializeFigure()
+    frameplot.initializeFigure()
 
     # # Whole domain
-    # framePlot.axes[0].plot(xDomain, yDomain, zDomain, zorder = 10., linestyle = ':', color = framePlot.colors[2], alpha = alpha - 0.25)
+    # frameplot.axes[0].plot(xdomain, ydomain, zdomain, zorder = 10., linestyle = ':', color = frameplot.colors[2], alpha = alpha - 0.25)
 
-    framePlot.axes[0].scatter(southTurbProbes[:, 0], southTurbProbes[:, 1], southTurbProbes[:, 2], label = 'Probes ParTurb', c = framePlot.colors[0], linewidths = 0, zorder = 1.2, depthshade = scatterDepthShade, s = markerSize)
-    framePlot.axes[0].scatter(offsetTurbsProbes[:, 0], offsetTurbsProbes[:, 1], offsetTurbsProbes[:, 2], label = 'Probes SeqTurb', c = framePlot.colors[1], linewidths = 0, zorder = 2.2, depthshade = scatterDepthShade, s = markerSize)
-    framePlot.axes[0].scatter(northTurbProbes[:, 0], northTurbProbes[:, 1], northTurbProbes[:, 2], c = framePlot.colors[0], linewidths = 0, zorder = 1.3, depthshade = scatterDepthShade, s = markerSize)
+    frameplot.axes.scatter(southturb_probes[:, 0], southturb_probes[:, 1], southturb_probes[:, 2], label='Probes ParTurb', c=frameplot.colors[0], linewidths=0, zorder=1.2, depthshade=scatter_depthshade, s=markersize)
+    frameplot.axes.scatter(offsetturbs_probes[:, 0], offsetturbs_probes[:, 1], offsetturbs_probes[:, 2], label='Probes SeqTurb', c=frameplot.colors[1], linewidths=0, zorder=2.2, depthshade=scatter_depthshade, s=markersize)
+    frameplot.axes.scatter(northturb_probes[:, 0], northturb_probes[:, 1], northturb_probes[:, 2], c=frameplot.colors[0], linewidths=0, zorder=1.3, depthshade=scatter_depthshade, s=markersize)
 
-    framePlot.axes[0].plot(xRefine1, yRefine1, zRefine1, zorder = 1.1, label = 'Refine2 ParTurb', linestyle = '-', color = framePlot.colors[0], alpha = alpha)
-    framePlot.axes[0].plot(xRefine2, yRefine2, zRefine2, zorder = 1., label = 'Refine1 ParTurb', linestyle = ':', color = framePlot.colors[0], alpha = alpha)
-    framePlot.axes[0].plot(xRefine3, yRefine3, zRefine3, zorder = 2.1, label = 'Refine2 SeqTurb', linestyle = '-', color = framePlot.colors[1], alpha = alpha)
-    framePlot.plot = framePlot.axes[0].plot(xRefine4, yRefine4, zRefine4, zorder = 2., label = 'Refine1 SeqTurb', linestyle = ':', color = framePlot.colors[1], alpha = alpha)
+    frameplot.axes.plot(xrefine1, yrefine1, zrefine1, zorder=1.1, label='Refine2 ParTurb', linestyle='-', color=frameplot.colors[0], alpha=alpha)
+    frameplot.axes.plot(xrefine2, yrefine2, zrefine2, zorder=1., label='Refine1 ParTurb', linestyle=':', color=frameplot.colors[0], alpha=alpha)
+    frameplot.axes.plot(xrefine3, yrefine3, zrefine3, zorder=2.1, label='Refine2 SeqTurb', linestyle='-', color=frameplot.colors[1], alpha=alpha)
+    frameplot.plot = frameplot.axes.plot(xrefine4, yrefine4, zrefine4, zorder=2., label='Refine1 SeqTurb', linestyle=':', color=frameplot.colors[1], alpha=alpha)
 
-    framePlot.finalizeFigure(showCbar = False, tightLayout = True, legLoc = legLoc)
+    frameplot.finalizeFigure(show_cbar=False, tight_layout=False)
 
 
 

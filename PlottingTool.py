@@ -8,12 +8,13 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable, AxesGrid
 from mpl_toolkits.mplot3d import proj3d
 import numpy as np
 from warnings import warn
-from Utilities import timer
-from numba import njit, jit, prange
+from Utility import timer
 from scipy import ndimage
 from matplotlib.patches import Circle, PathPatch
-import mpl_toolkits.mplot3d.art3d as art3d
 from copy import copy
+import matplotlib.cm
+from mpl_toolkits.mplot3d import art3d
+
 
 class BaseFigure:
     def __init__(self, list_x, list_y, name='UntitledFigure', fontsize=8, xlabel='$x$', ylabel='$y$', figdir='./', 
@@ -63,7 +64,7 @@ class BaseFigure:
         return colors, gray
 
 
-    def _latexify(self, fig_width=None, fig_height=None, figspan='half', linewidth=1, fontsize=8, subplots=(1, 1), figheight_multiplier=1.,
+    def _latexify(self, fig_width=None, fig_height=None, figspan='half', linewidth=0.8, fontsize=8, subplots=(1, 1), figheight_multiplier=1.,
                   **kwargs):
         """Set up matplotlib's RC params for LaTeX plotting.
         Call this before plotting a figure.
@@ -191,7 +192,7 @@ class BaseFigure:
 
 
 class Plot2D_Image(BaseFigure):
-    def __init__(self, val, extent=None, val_label='$z$', cmap='plasma', val_lim=None, rotate_img=True, **kwargs):
+    def __init__(self, val, extent=None, val_label='$z$', cmap='plasma', val_lim=None, rotate_img=True, alpha=1., **kwargs):
         self.rotate_img = rotate_img
         if rotate_img:
             val = ndimage.rotate(val, 90) if len(val.shape) >= 3 else val.T
@@ -202,6 +203,7 @@ class Plot2D_Image(BaseFigure):
         self.val_lim = (None, None) if val_lim is None else val_lim  
         self.cmap = cmap
         self.extent = extent
+        self.alpha = alpha
         super().__init__(list_x=(None,), list_y=(None,), **kwargs)
         
         
@@ -220,7 +222,7 @@ class Plot2D_Image(BaseFigure):
         else:
             self.norm=None
             
-        self.plots = self.axes.imshow(self.val, origin=self.origin, aspect='equal', extent=self.extent, cmap=self.cmap, vmin=self.val_lim[0], vmax=self.val_lim[1], norm=self.norm)
+        self.plots = self.axes.imshow(self.val, origin=self.origin, aspect='equal', extent=self.extent, cmap=self.cmap, vmin=self.val_lim[0], vmax=self.val_lim[1], norm=self.norm, alpha=self.alpha)
 
 
     def finalizeFigure(self, cbar_orient='horizontal', showcb=True, cbticks=None, **kwargs):
@@ -238,7 +240,7 @@ class Plot2D(BaseFigure):
         self.val = val
         # Ensure there's an entry for both vmin and vmax
         self.val_lim = val_lim if val_lim is not None else (None, None)
-        self.lines, self.markers = ("-", "--", "-.", ":")*5, ('o', 'D', 's', 'x', 'v', '^', '<', '>', 's', '8', 'p')*3
+        self.lines, self.markers = ("-", "--", "-.", ":")*5, ('o', 'D', 's', 'v', '^', '<', '>', 's', '8', 'p')*3
         self.alpha, self.cmap = alpha, cmap
         self.val_label = val_label
         # Gradient background related variables
@@ -267,7 +269,8 @@ class Plot2D(BaseFigure):
         super(Plot2D, self).initializeFigure(**kwargs)
 
 
-    def plotFigure(self, linelabel=None, showmarker=False, contour_lvl=20, **kwargs):
+    def plotFigure(self, linelabel=None, showmarker=False, contour_lvl=20, markercolors=None, **kwargs):
+        self.markercolors = (markercolors,)*self.narr if isinstance(markercolors, np.ndarray) else markercolors
         self.showmarker, self.contour_lvl = showmarker, contour_lvl
         # Gradient background, only for line and scatter plots
         if self.grad_bg and self.plot_type[0] in ('line', 'scatter'):
@@ -277,19 +280,30 @@ class Plot2D(BaseFigure):
 
         super().plotFigure(**kwargs)
 
-        self.linelabel = np.arange(1, len(self.list_x) + 1) if linelabel is None else linelabel
+        self.linelabel = np.arange(1, len(self.list_x) + 1, dtype=str) if linelabel is None else linelabel
         self.plots = [None]*self.narr
         for i in range(self.narr):
             if self.plot_type[i] == 'line':
                 if not showmarker:
-                    self.plots[i] = self.axes.plot(self.list_x[i], self.list_y[i], ls=self.lines[i], label=str(self.linelabel[i]), color=self.colors[i], alpha=self.alpha)
+                    self.plots[i] = self.axes.plot(self.list_x[i], self.list_y[i], ls=self.lines[i],
+                                                   label=self.linelabel[i], color=self.colors[i],
+                                                   alpha=self.alpha)
+
                 else:
                     self.plots[i] = self.axes.plot(self.list_x[i], self.list_y[i], ls=self.lines[i],
-                                                   label=str(self.linelabel[i]), color=self.colors[i], alpha=self.alpha, 
+                                                   label=self.linelabel[i], color=self.colors[i],
+                                                   alpha=self.alpha,
                                                    marker=self.markers[i])
                     
             elif self.plot_type[i] == 'scatter':
-                self.plots[i] = self.axes.scatter(self.list_x[i], self.list_y[i], lw=0, label=str(self.linelabel[i]), alpha=self.alpha, color=self.colors[i], marker=self.markers[i])
+                if self.markercolors is None:
+                    self.plots[i] = self.axes.scatter(self.list_x[i], self.list_y[i], lw=0, s=10,
+                                                      label=self.linelabel[i], alpha=self.alpha, color=self.colors[i], marker=self.markers[i])
+                else:
+                    self.plots[i] = self.axes.scatter(self.list_x[i], self.list_y[i], lw=0, s=10,
+                                                      label=self.linelabel[i], alpha=self.alpha,
+                                                      c=self.markercolors[i], marker=self.markers[i])
+
             elif self.plot_type[i] == 'contourf':
                 self._ensureMeshGrid()
                 self.plots[i] = self.axes.contourf(self.list_x[i], self.list_y[i], self.val, levels=contour_lvl, cmap=self.cmap, extend='both', vmin=self.val_lim[0], vmax=self.val_lim[1])
@@ -301,9 +315,8 @@ class Plot2D(BaseFigure):
                 warn("\nUnrecognized plot plot_type! plot_type must be one/list of ('infer', 'line', 'scatter', 'contourf', 'contour').\n", stacklevel=2)
                 return
 
-
     def finalizeFigure(self, cbar_orient='horizontal', showcb=True, cbticks=None, **kwargs):
-        if self.plot_type[0] in ('contourf', 'contour'):
+        if self.plot_type[0] in ('contourf', 'contour') or (showcb and self.markercolors is not None):
             cb = plt.colorbar(self.plots[0], ax=self.axes, orientation=cbar_orient, extend='both', ticks=cbticks)
             cb.set_label(self.val_label)
             super().finalizeFigure(grid=False, **kwargs)
@@ -407,9 +420,7 @@ class Plot2D_MultiAxes(Plot2D):
         self.plot_type2 = (plot_type2,)*self.narr2 if isinstance(plot_type2, str) else plot_type2
             
         # Ensure ax2 labels are the same length of provided x2 and y2 lists
-        if isinstance(ax2label, str):
-            self.ax2label = (ax2label,)*self.narr2
-            
+        self.ax2label = (ax2label,)*self.narr2 if isinstance(ax2label, str) else ax2label
         self.x2lim = x2lim
         self.y2lim = y2lim
 
@@ -443,7 +454,7 @@ class Plot2D_MultiAxes(Plot2D):
                 self.axes2[i].xaxis.set_ticks_position("bottom")
                 self.axes2[i].xaxis.set_label_position("bottom")
                 # Offset the twin axis below the host
-                self.axes2[i].spines['bottom'].set_position(('axes', -0.1*(i + 1)))
+                self.axes2[i].spines['bottom'].set_position(('axes', -0.3*(i + 1)))
             # Else if new axes are y
             else:
                 self.axes2[i] = self.axes.twinx()
@@ -484,12 +495,12 @@ class Plot2D_MultiAxes(Plot2D):
                 self.plots2[i] = self.axes2[i].fill_between(self.list_x2[i], 0, self.list_y2[i], alpha=1, facecolor=(160/255., 160/255., 160/255.),
                                                      interpolate=False)
             elif self.plot_type2[i] == 'line':
-                # If show markers in line plots
+                # If don't show markers in line plots
                 if not self.showmarker:
                     self.plots2[i], = self.axes2[i].plot(self.list_x2[i], self.list_y2[i],
                                                         ls=self.lines[i + self.narr], label=str(self.linelabel2[i]),
                                                         color=self.colors[i + self.narr], alpha=self.alpha)
-                # Else if don't show markers in line plot
+                # Else if show markers in line plot
                 else:
                     self.plots2[i], = self.axes2[i].plot(self.list_x2[i], self.list_y2[i],
                                                         ls=self.lines[i + self.narr], label=str(self.linelabel2[i]),
@@ -497,8 +508,8 @@ class Plot2D_MultiAxes(Plot2D):
                                                         marker=self.markers[i + self.narr])
                     
                     
-    def finalizeFigure(self, **kwargs):
-        super(Plot2D_MultiAxes, self).finalizeFigure(tight_layout=True, **kwargs)
+    def finalizeFigure(self, tight_layout=True, **kwargs):
+        super(Plot2D_MultiAxes, self).finalizeFigure(tight_layout=tight_layout, **kwargs)
 
 
 class Plot3D(BaseFigure):
@@ -695,7 +706,7 @@ class BaseFigure3D(BaseFigure):
         super(BaseFigure3D, self).plotFigure()
         self._ensureMeshGrid()
 
-    def finalizeFigure(self, fraction=0.06, pad=0.08, show_cbar=True, reduce_nticks=True, grid=True, show_zlabel=True,
+    def finalizeFigure(self, fraction=0.06, pad=0.08, show_cbar=True, reduce_nticks=True, grid=True, show_zlabel=True, show_ticks=(True, True, True),
                        **kwargs):
         if show_zlabel: self.axes.set_zlabel(self.zlabel)
         if self.zlim is not None: self.axes.set_zlim(self.zlim)
@@ -719,20 +730,29 @@ class BaseFigure3D(BaseFigure):
                 ar_zx = abs((self.zlim[1] - self.zlim[0])/(self.xlim[1] - self.xlim[0]))
                 ar_yx = abs((self.ylim[1] - self.ylim[0])/(self.xlim[1] - self.xlim[0]))
 
-                # Constrain AR from getting too large
-                ar_yx, ar_zx = np.min((ar_yx, 2)), np.min((ar_zx, 2))
+                # # Constrain AR from getting too large
+                # ar_yx, ar_zx = np.min((ar_yx, 2)), np.min((ar_zx, 2))
                 # Axes aspect ratio doesn't really work properly
                 self.axes.pbaspect = (1, ar_yx, ar_zx)
                 # auto_scale_xyz is not preferable since it does it by setting a cubic box
                 # scaling = np.array([getattr(self.axes, 'get_{}lim'.format(dim))() for dim in 'xyz'])
                 # self.axes.auto_scale_xyz(*[[np.min(scaling), np.max(scaling)]]*3)
             except AttributeError:
-                warn('\nTo set custom aspect ratio of the 3D plot, you need modification of the source code axes3d.py. The aspect ratio might be incorrect for ' + self.name + '\n', stacklevel = 2)
+                warn('\nTo set custom aspect ratio of the 3D plot, you need modification of the source code axes3d.py. The aspect ratio might be incorrect for ' + self.name + '\n', stacklevel=2)
 
         if reduce_nticks:
             if self.xlim is not None: self.axes.set_xticks(np.linspace(self.xlim[0], self.xlim[1], 3))
             if self.ylim is not None: self.axes.set_yticks(np.linspace(self.ylim[0], self.ylim[1], 3))
             if self.zlim is not None: self.axes.set_zticks(np.linspace(self.zlim[0], self.zlim[1], 3))
+
+        for i, check in enumerate(show_ticks):
+            if not check:
+                if i == 0:
+                    self.axes.set_xticklabels([])
+                elif i == 1:
+                    self.axes.set_yticklabels([])
+                else:
+                    self.axes.set_zticklabels([])
 
         # # Strictly equal axis of all three axis
         # _, _, _, _, _, _ = self.get3D_AxesLimits(self.axes)
@@ -832,18 +852,16 @@ class PlotContourSlices3D(BaseFigure3D):
         #     self.zlim = (np.min(list_val), np.max(list_val))
         # _ = self._getSlicesLimits(list_x=self.list_x, list_y=self.list_y, list_z=self.list_val)
         # self.slicemin, self.slicemax = self.zlim
-        self.slicemin, self.slicemax = np.amin(list_val), np.amax(list_val)
+        self.slicemin = min([min(val.ravel()) for val in list_val])
+        self.slicemax = max([max(val.ravel()) for val in list_val])
         self.val_lim = (self.slicemin, self.slicemax) if val_lim is None else val_lim
         self.grad_bg = grad_bg
         # # Good initial view angle
         # self.viewangle = (20, -115) if zdir is 'val' else (15, -60)
         # self.cbar_orient = 'vertical' if zdir is 'val' else 'horizontal'
 
-    # def initializeFigure(self, figSize = (1, 1)):
-    #     # If zdir is 'val', then the figure height is twice width, else, figure width is twice height
-    #     # figSize = (2.75, 1) if self.zdir is 'val' else (1, 2)
-    #
-    #     super().initializeFigure(figSize = figSize)
+    def initializeFigure(self, constrained_layout=True, **kwargs):
+        super(PlotContourSlices3D, self).initializeFigure(constrained_layout=constrained_layout, **kwargs)
 
     def plotFigure(self, contour_lvl=20, **kwargs):
         super(PlotContourSlices3D, self).plotFigure()
@@ -871,12 +889,12 @@ class PlotContourSlices3D(BaseFigure3D):
             else:
                 x, y, z = self.list_x[i], self.list_y[i], slice
 
-            # # "levels" makes sure all slices are in same cmap range
-            # self.plot = self.axes.contourf(x, y, z, zdir=self.zdir,
-            #                                offset=next(self.slice_offsets), alpha=self.alpha, cmap=self.cmap, levels=np.linspace(self.val_lim[0], self.val_lim[1], contour_lvl))
-            self.plot = self.axes.plot_surface(np.ones_like(y)*(-i), y, z, rstride=1, cstride=1, facecolors=plt.cm.plasma(x), shade=False)
+            # "levels" makes sure all slices are in same cmap range
+            self.plot = self.axes.contourf(x, y, z, zdir=self.zdir,
+                                           offset=next(self.slice_offsets), alpha=self.alpha, cmap=self.cmap, levels=np.linspace(self.val_lim[0], self.val_lim[1], contour_lvl))
+            # self.plot = self.axes.plot_surface(np.ones_like(y)*(-i), y, z, rstride=1, cstride=1, facecolors=plt.cm.plasma(x), shade=False)
 
-    def finalizeFigure(self, **kwargs):
+    def finalizeFigure(self, tight_layout=False, show_ticks=(False, False, True), show_xylabel=(False, False), **kwargs):
         # Custom color bar location in the figure
         (fraction, pad) = (0.046, 0.04) if self.zdir is 'val' else (0.06, 0.08)
         # if self.zdir is 'val':
@@ -888,7 +906,7 @@ class PlotContourSlices3D(BaseFigure3D):
         # else:
         #     ar = abs((self.zlim[1] - self.zlim[0])/(self.xlim[1] - self.xlim[0]))
         #     pbaspect = (1, 1, ar)
-        super(PlotContourSlices3D, self).finalizeFigure(fraction=fraction, pad=pad, **kwargs)
+        super(PlotContourSlices3D, self).finalizeFigure(fraction=fraction, pad=pad, tight_layout=tight_layout, show_ticks=show_ticks, show_xylabel=show_xylabel, **kwargs)
 
 
 class PlotSurfaceSlices3D(BaseFigure3D):
@@ -911,7 +929,7 @@ class PlotSurfaceSlices3D(BaseFigure3D):
         self.plot = self.cmapval
 
     @timer
-    def plotFigure(self):
+    def plotFigure(self, **kwargs):
         for i, slice in enumerate(self.list_val):
             print('\nPlotting ' + self.name + ' slice ' + str(i) + '...')
             fcolor = self.cmapval.to_rgba(slice)
@@ -945,6 +963,9 @@ class PlotImageSlices3D(BaseFigure3D):
         # self.zlim = (np.min(list_z), np.max(list_z)) if self.zlim[0] is None else self.zlim
         _ = self._getSlicesLimits(list_x=self.list_x, list_y=self.list_y, list_z=self.list_z)
 
+    def initializeFigure(self, constrained_layout=False, **kwargs):
+        super(PlotImageSlices3D, self).initializeFigure(constrained_layout=constrained_layout, **kwargs)
+
     @timer
     def plotFigure(self):
         print('\nPlotting {}...'.format(self.name))
@@ -958,12 +979,101 @@ class PlotImageSlices3D(BaseFigure3D):
                 print(' {0}%... '.format(milestone))
                 milestone += 33
             
-    def finalizeFigure(self, **kwargs):
-        super(PlotImageSlices3D, self).finalizeFigure(show_cbar=False, **kwargs)
-            
+    def finalizeFigure(self, tight_layout=True, **kwargs):
+        super(PlotImageSlices3D, self).finalizeFigure(show_cbar=False, tight_layout=tight_layout, **kwargs)
+
+
+def rotation_matrix(d):
+    """
+    Calculates a rotation matrix given a vector d. The direction of d
+    corresponds to the rotation axis. The length of d corresponds to
+    the sin of the angle of rotation.
+
+    Variant of: http://mail.scipy.org/pipermail/numpy-discussion/2009-March/040806.html
+    """
+    sin_angle = np.linalg.norm(d)
+
+    if sin_angle == 0:
+        return np.identity(3)
+
+    d /= sin_angle
+
+    eye = np.eye(3)
+    ddt = np.outer(d, d)
+    skew = np.array([[    0,  d[2],  -d[1]],
+                     [-d[2],     0,  d[0]],
+                     [d[1], -d[0],    0]], dtype=np.float64)
+
+    M = ddt + np.sqrt(1 - sin_angle**2) * (eye - ddt) + sin_angle * skew
+    return M
+
+
+def pathpatch_2d_to_3d(pathpatch, z=0, normal='z'):
+    """
+    Transforms a 2D Patch to a 3D patch using the given normal vector.
+
+    The patch is projected into they XY plane, rotated about the origin
+    and finally translated by z.
+    """
+    if type(normal) is str: #Translate strings to normal vectors
+        index = "xyz".index(normal)
+        normal = np.roll((1.0,0,0), index)
+
+    normal /= np.linalg.norm(normal) #Make sure the vector is normalised
+
+    path = pathpatch.get_path() #Get the path and the associated transform
+    trans = pathpatch.get_patch_transform()
+
+    path = trans.transform_path(path) #Apply the transform
+
+    pathpatch.__class__ = art3d.PathPatch3D #Change the class
+    pathpatch._code3d = path.codes #Copy the codes
+    pathpatch._facecolor3d = pathpatch.get_facecolor #Get the face color
+
+    verts = path.vertices #Get the vertices in 2D
+
+    d = np.cross(normal, (0, 0, 1)) #Obtain the rotation vector
+    M = rotation_matrix(d) #Get the rotation matrix
+
+    pathpatch._segment3d = np.array([np.dot(M, (x, y, 0)) + (0, 0, z) for x, y in verts])
+
+
+def pathpatch_translate(pathpatch, delta):
+    """
+    Translates the 3D pathpatch by the amount delta.
+    """
+    pathpatch._segment3d += delta
+
     
-    
-        
+def plotTurbineLocations(plot_object, slice_orient='horizontal', horslice_offsets=None, turb_borders=None, turb_centers_frontview=None,
+                         turb_normal=(0.8660254037844, 0.5, 0.)):
+    if slice_orient == 'horizontal':
+        # Go through every horizontal slice
+        for i in range(len(horslice_offsets)):
+            # Go through every turbine from turb_borders
+            for j in range(len(turb_borders)):
+                plot_object.axes.plot([turb_borders[j][0], turb_borders[j][2]],
+                                          [turb_borders[j][1], turb_borders[j][3]],
+                                          zs=horslice_offsets[i], alpha=0.5, color=(0.25, 0.25, 0.25),
+                                          # Very important to set a super larger value
+                                          zorder=500 + i*500)
+
+    else:
+        patch = Circle((0., 0.), 63., alpha=0.5, fill=False, edgecolor=(0.25, 0.25, 0.25), zorder=100)
+        patches = []
+        for i in range(len(turb_centers_frontview)):
+            patches.append(copy(patch))
+
+        patches = iter(patches)
+        # Go through every vertical slice and every turbine
+        for i in range(len(turb_centers_frontview)):
+            p = next(patches)
+            plot_object.axes.add_patch(p)
+            pathpatch_2d_to_3d(p, z=0, normal=turb_normal)
+            pathpatch_translate(p, turb_centers_frontview[i])
+
+        del patch, patches
+
         
 
         
@@ -1025,27 +1135,43 @@ if __name__ == '__main__':
     # art3d.pathpatch_2d_to_3d(p2, z=5, zdir="z")
     # ax.plot_surface(x, y, z/2., rstride=1, cstride=1, facecolors=plt.cm.viridis(data), shade=False)
 
-    c1 = np.linspace(1000, 2000, 100)
-    c2 = np.linspace(1500, 1800, 100)
-    c1mesh, c2mesh = np.meshgrid(c1, c2)
-    val1mesh = np.random.rand(100, 100)
-    val2mesh = 3.*np.random.rand(100, 100)
-
-    # myplot = Plot3D_WindFarmSlices((c1mesh,)*2, (c2mesh,)*2, (val1mesh, val2mesh),
-    #                                case='OneTurb', offsets=(15, 105),
-    #                                offset_lim=(0, 200),
-    #                                turblocs=(1234, 1600), val_lim=None,
-    #                                slicenames=('hub', 'apex'),
-    #                                show=True, save=False,
-    #                                equalaxis=True)
+    # c1 = np.linspace(1000, 2000, 100)
+    # c2 = np.linspace(1500, 1800, 100)
+    # c1mesh, c2mesh = np.meshgrid(c1, c2)
+    # val1mesh = np.random.rand(100, 100)
+    # val2mesh = 3.*np.random.rand(100, 100)
+    #
+    # # myplot = Plot3D_WindFarmSlices((c1mesh,)*2, (c2mesh,)*2, (val1mesh, val2mesh),
+    # #                                case='OneTurb', offsets=(15, 105),
+    # #                                offset_lim=(0, 200),
+    # #                                turblocs=(1234, 1600), val_lim=None,
+    # #                                slicenames=('hub', 'apex'),
+    # #                                show=True, save=False,
+    # #                                equalaxis=True)
+    # # myplot.initializeFigure()
+    # # myplot.plotFigure()
+    # # myplot.finalizeFigure()
+    #
+    # myplot = PlotContourSlices3D((c1mesh,)*2, (c2mesh,)*2, (val1mesh, val2mesh), (0, 10), val_lim=(0.5, 1), zdir='x', show=True, save=False)
     # myplot.initializeFigure()
     # myplot.plotFigure()
     # myplot.finalizeFigure()
-    
-    myplot = PlotContourSlices3D((c1mesh,)*2, (c2mesh,)*2, (val1mesh, val2mesh), (0, 10), val_lim=(0.5, 1), zdir='x', show=True, save=False)
-    myplot.initializeFigure()
-    myplot.plotFigure()
-    myplot.finalizeFigure()
+
+    import matplotlib.pyplot as plt
+
+    fig = plt.figure('bla', constrained_layout=True)
+    ax = fig.add_subplot(111, projection='3d')
+    p = Circle((0, 0), 63)
+    ax.add_patch(p)
+    pathpatch_2d_to_3d(p, z=0, normal=(0.866, 0.5, 0))
+    pathpatch_translate(p, (1200, 1400, 90))
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel('z')
+    ax.set_xlim((1000, 2000))
+    ax.set_ylim((1200, 1800))
+    ax.set_zlim((0, 216))
+
 
 
 

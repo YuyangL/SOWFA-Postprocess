@@ -1,5 +1,5 @@
 import numpy as np
-from PostProcess_FieldData import FieldData
+from FieldData import FieldData
 import PostProcess_AnisotropyTensor as ppat
 import time as t
 import matplotlib.pyplot as plt

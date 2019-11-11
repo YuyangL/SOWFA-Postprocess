@@ -1,211 +1,392 @@
 import time as t
-from PlottingTool import PlotImageSlices3D, BaseFigure, Plot2D_InsetZoom, PlotContourSlices3D
-from PostProcess_SliceData import *
+import sys
+# See https://github.com/YuyangL/TurbulenceMachineLearning
+sys.path.append('/home/yluan/Documents/ML/TurbulenceMachineLearning')
+from PlottingTool import PlotImageSlices3D, BaseFigure, Plot2D_InsetZoom, PlotContourSlices3D, plotTurbineLocations, PlotSurfaceSlices3D
+from SliceData import *
+from Preprocess.Tensor import processReynoldsStress, getBarycentricMapData, expandSymmetricTensor, contractSymmetricTensor
 try:
     import PostProcess_AnisotropyTensor as PPAT
 except ImportError:
-    raise ImportError('\nNo module named PostProcess_AnisotropyTensor. Check setup.py and run'
-                      '\npython setup.py build_ext --inplace')
+    raise ImportError('\nNo module named PostProcess_AnisotropyTensor. Check SetupPython.py and run'
+                      '\n[python SetupPython.py build_ext --inplace]')
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 from scipy import ndimage
 import pickle
 import numpy as np
+from DataBase import *
+from copy import copy
 # import visvis as vv
+from Utility import interpolateGridData, rotateData
+from matplotlib.patches import Circle, PathPatch
+
 
 """
 User Inputs
 """
-time = 'latest'
-caseDir = 'J:'
-caseDir = '/media/yluan'
-caseName = 'ALM_N_H_OneTurb'
-propertyName = 'uuPrime2'
-# sliceNames = ('rotorPlane', 'oneDdownstreamTurbine', 'threeDdownstreamTurbine', 'sevenDdownstreamTurbine')
-sliceNames = ('groundHeight', 'hubHeight', 'turbineApex')
-# Subscript for the slice names
-sliceNamesSub = 'Slice'
-resultFolder = 'Result'
-# Confine the region of interest, list grows with number of slices
-# (800, 1800, 800, 1800, 0, 405) good for rotor plane slice
-# (600, 2000, 600, 2000, 0, 405) good for hubHeight slice
-# (800, 2200, 800, 2200, 0, 405) good for along wind slice
-# Overriden in Process User Inputs
-confineBox = ((800, 1800, 800, 1800, 0, 405),)  # (None,), ((xmin, xmax, ymin, ymax, zmin, zmax),)
-# Orientation of x-axis in x-y plane, in case of angled flow direction
-# Only used for values decomposition and confineBox
-# Angle in rad and counter-clockwise
-xOrientate = 6/np.pi
-# Turbine radius, only used for confineBox
-r = 63
-dumpResult = False
+# Specify case time, usually "latestTime"
+time = 'latestTime'  # str(float/int) or 'latestTime'
+# Top absolute dir of case
+# casedir = '/media/yluan'  # str
+casedir = '/media/yluan'  # str
+# Case name
+casename = 'ALM_N_H_ParTurb2'  # str
+# casename = 'RANS/N_H_OneTurb_Simple_ABL'  # str
+# Flow Reynolds stress property, usually named 'uuPrime2' for LES or 'Rij' for RANS
+property = 'uuPrime2'  # str
+# property = 'Rij'  # str
+# Slice names
+slicenames = ('oneDupstreamTurbines', 'rotorPlanes', 'oneDdownstreamTurbines')
+# slicenames = ('threeDdownstreamTurbines', 'fiveDdownstreamTurbines', 'sevenDdownstreamTurbines')
+# slicenames = ('hubHeight', 'quarterDaboveHub', 'turbineApexHeight')  # list(str)
+# Subscript for the slice names, usually 'Slice'
+slicenames_sub = 'Slice'  # str
+# Result folder name
+result_folder = 'Result'  # str
+# Counter-clockwise orientation of x-axis in x-y plane, in case of angled flow direction [rad or deg]
+rot_z = np.pi/6.  # float
+# Turbine radius [m]
+r = 63.  # float
+# Whether to save processed slice data
+save_data = False  # bool
+# Whether rotate data by rot_z to align with flow dir
+rotate_data = True  # bool
+# Height of the horizontal slices, only used for 3D horizontal slices plot
+horslice_offsets = (90., 121.5, 153.)
+horslice_offsets2 = ((90., 90.), (121.5, 121.5), (153., 153.))
 
 
 """
 Plot Settings
 """
 # Which type(s) of plot to make
-plotType = '3D'  # '2D', '3D', 'all'
-# Total number cells intended to plot via interpolation
-targetCells = 1e6
-# precisionX, precisionY, precisionZ = 3000, 3000, 1000
-interpMethod = 'cubic'
-showBaryExample = False
-c_offset, c_exp = 0.65, 5.
-baryMapExampleName = 'barycentric_colormap'
-ext = 'png'
-show, save = False, True
-dpi = 1000
+plot_type = '3D'  # '2D', '3D', 'all', '*'
+# What value to plot, anisotropy tensor bij, Reynolds stress Rij, barycentric map, or all
+plot_property = 'bijbary'  # 'bij', 'rij', 'bary', '*'
+# Total number cells intended to plot via interpolation, usually 1e5
+target_meshsize = 1e5  # int or float
+# Number of contours for horizontal slices plot
+contour_lvl = 200
+# Interpolation method, usually linear
+interp_method = 'linear'  # 'nearest', 'linear', 'cubic'
+# Whether plot barycentric map example
+show_baryexample = False  # bool
+# Barycentric map color offset and exponent, usually 0.65 and 5
+c_offset, c_exp = 0.65, 5.  # float, float
+# Barycentric map example figure name
+baryexample_name = 'barycentric_colormap'  # str
+# Save figure format
+ext = 'png'  # 'png', 'eps', 'jpg', 'pdf'
+# Whether show and/or save figure
+show, save = False, True  # bool, bool
+# DPI of figure
+dpi = 1000  # int
 
 
 """
 Process User Inputs
 """
-# For rotor plane slices
-if caseName == 'ALM_N_H_OneTurb':
-    if sliceNames[0] == 'rotorPlane':
-        confineBox = ((1023.583 + r/2, 1212.583 - r/2, 1115.821 + r/2,
-                       1443.179 - r/2,
-                       0,
-                       216 - r/2),
-                      (1132.702, 1321.702, 1178.821, 1506.179, 0, 216),
-                      (1350.94, 1539.94, 1304.821, 1632.179, 0, 216),
-                      (1569.179, 1758.179, 1430.821, 1758.179, 0, 216))
-        viewAngle = (20, -100)
-        equalAxis, figSize, figWidth = True, (1, 1), 'full'
-    elif sliceNames[0] == 'groundHeight':
-        # Confinement for z doesn't matter since the slices are horizontal
-        confineBox = ((600, 2000, 600, 2000, 0, 216),)*len(sliceNames)
-        viewAngle = (25, -75)
-        equalAxis, figSize, figWidth = False, (2, 1), 'half'
-else:
-    viewAngle = (20, -100)
-    equalAxis, figSize, figWidth = True, (1, 1), 'full'
+# Ensure slicenames is a tuple if only 1 slice
+slicenames = (slicenames,) if isinstance(slicenames, str) else slicenames
+# Confined region auto definition
+# If 1 turbine case, usually contains "OneTurb" in casename
+if 'OneTurb' in casename:
+    # For front view vertical slices, usually either "oneDupstream*" or "threeDdownstream*" is forefront slice
+    if 'oneDupstream' in slicenames[0] or 'threeDdownstream' in slicenames[0]:
+        # Read coor info from database
+        turb_borders, turb_centers_frontview, confinebox, confinebox2 = OneTurb('vert')
+        # If "threeDdownstream*" is 1st slice, then there're only 3 slices in total:
+        # "threeDdownstream*", "fiveDdownstream", "sevenDdownstream"
+        if 'threeDdownstream' in slicenames[0]:
+            confinebox = confinebox2
+            turb_centers_frontview = turb_centers_frontview[3:]
+        else:
+            turb_centers_frontview = turb_centers_frontview[:3]
+    # For horizontal slices, usually "hubHeight*" or "groundHeight*" is bottom slice
+    elif 'hubHeight' in slicenames[0] or 'groundHeight' in slicenames[0]:
+        turb_borders, turb_centers_frontview, confinebox, _ = OneTurb('hor')
 
-if plotType in ('2D', '2d'):
-    plotType = '2D'
-elif plotType in ('3D', '3d'):
-    plotType = '3D'
-elif plotType in ('all', 'All', '*'):
-    plotType = 'all'
+# Else if parallel turbines, usually contains "ParTurb" in casename
+elif 'ParTurb' in casename:
+    if slicenames == 'auto': slicenames = ('alongWindSouthernRotor', 'alongWindNorthernRotor',
+                                           'hubHeight', 'quarterDaboveHub', 'turbineApexHeight',
+                                           'oneDupstreamTurbines', 'rotorPlanes', 'oneDdownstreamTurbines',
+                                           'threeDdownstreamTurbines', 'fiveDdownstreamTurbines',
+                                           'sevenDdownstreamTurbines')
+    if 'oneDupstream' in slicenames[0] or 'threeDdownstream' in slicenames[0]:
+        # Read coor info from database
+        turb_borders, turb_centers_frontview, confinebox, confinebox2 = ParTurb('vert')
+        if 'threeDdownstream' in slicenames[0]:
+            confinebox = confinebox2
+            turb_centers_frontview = turb_centers_frontview[6:]
+        else:
+            turb_centers_frontview = turb_centers_frontview[:6]
+
+    elif 'hubHeight' in slicenames[0] or 'groundHeight' in slicenames[0]:
+        turb_borders, turb_centers_frontview, confinebox, _ = ParTurb('hor')
+
+# Automatic view angle and figure settings, only for 3D plots
+# For front view vertical plots
+if 'oneDupstream' in slicenames[0] or 'threeDdownstream' in slicenames[0]:
+    if 'OneTurb' in casename:
+        view_angle = (20, -80) if 'one' in slicenames[0] else (20, -95)
+        # Equal axis option and figure width
+        equalaxis, figwidth = True, 'half'
+    elif 'ParTurb' in casename:
+        view_angle = (20, -80) if 'one' in slicenames[0] else (20, -90)
+        # Equal axis option and figure width
+        equalaxis, figwidth = True, 'half'
+# For horizontal plots
+elif 'groundHeight' in slicenames[0] or 'hubHeight' in slicenames[0]:
+    view_angle = (25, -115)
+    equalaxis, figwidth = False, 'half'
+# Default settings for other cases
+else:
+    view_angle = (20, -100)
+    equalaxis, figwidth = True, 'full'
+
+# Unify plot_type user inputs
+if plot_type in ('2D', '2d'):
+    plot_type = '2D'
+elif plot_type in ('3D', '3d'):
+    plot_type = '3D'
+elif plot_type in ('all', 'All', '*'):
+    plot_type = '*'
+
+# Value limit for plotting
+# Usually (-1/2, 2/3) for anisotropy tensor bij
+bij_lim = (-0.5, 2/3.)
+# Usually None for Reynolds stress Rij
+rij_lim = None #(-1., 1.)
+# Value labels for bij and Rij
+# If Rij is called uuPrime2, it's from LES and is statistically averaged
+if 'uuPrime2' in property:
+    bij_label = (r'$\langle b_{11} \rangle$ [-]', r'$\langle b_{12} \rangle$ [-]', r'$\langle b_{13} \rangle$ [-]',
+                 r'$\langle b_{22} \rangle$ [-]', r'$\langle b_{23} \rangle$ [-]',
+                 r'$\langle b_{33} \rangle$ [-]')
+    rij_label = [r"$\langle u'u' \rangle$", r"$\langle u'v' \rangle$", r"$\langle u'w' \rangle$",
+                 r"$\langle v'v' \rangle$", r"$\langle v'w' \rangle$",
+                 r"$\langle w'w' \rangle$"]
+# Else if in RANS, Rij is not averaged
+else:
+    bij_label = ('$b_{11}$ [-]', '$b_{12}$ [-]', '$b_{13}$ [-]',
+                 '$b_{22}$ [-]', '$b_{23}$ [-]',
+                 '$b_{33}$ [-]')
+    rij_label = [r"$u'u'$", r"$u'v'$", r"$u'w'$",
+                 r"$v'v'$", r"$v'w'$",
+                 r"$w'w'$"]
+    
+# Add unit to Rij
+for i in range(6):
+    rij_label[i] += ' [m$^2$/s$^2$]'
+
+# Auto deg to rad unit conversion
+if rot_z > np.pi/2.: rot_z *= np.pi/180.
+make_anisotropic = False if property == 'bij' else True
 
 
 """
 Read Slice Data
 """
-case = SliceProperties(time = time, caseDir = caseDir, caseName = caseName, xOrientate = xOrientate, resultFolder =
-resultFolder)
-case.readSlices(propertyNames = propertyName, sliceNames = sliceNames, sliceNamesSub = sliceNamesSub)
-listX2D, listY2D, listZ2D, listRGB = [], [], [], []
+# Initialize case slice instance
+case = SliceProperties(time=time, casedir=casedir, casename=casename, rot_z=rot_z, result_folder=result_folder)
+# Read slices and store them in case.slice_* dict
+case.readSlices(properties=property, slicenames=slicenames, slicenames_sub=slicenames_sub)
+# Initialize lists to store multiple slices coor and value data
+list_x, list_y, list_z = [], [], []
+list_rgb, list_bij, list_rij = [], [], []
 # Go through specified slices
-for i, sliceName in enumerate(case.sliceNames):
+for i, slicename in enumerate(case.slicenames):
     """
     Process Uninterpolated Anisotropy Tensor
     """
-    vals2D = case.slicesVal[sliceName]
-    # x2D, y2D, z2D, vals3D = \
-    #     case.interpolateDecomposedSliceData_Fast(case.slicesCoor[sliceName][:, 0], case.slicesCoor[sliceName][:, 1], case.slicesCoor[sliceName][:, 2], case.slicesVal[sliceName], sliceOrientate = case.slicesOrientate[sliceName], xOrientate = case.xOrientate, precisionX = precisionX, precisionY = precisionY, precisionZ = precisionZ, interpMethod = interpMethod)
-
-    # Another implementation of processAnisotropyTensor() in Cython
-    t0 = t.time()
-    # vals3D, tensors, eigValsGrid = PostProcess_AnisotropyTensor.processAnisotropyTensor(vals3D)
-    # In each eigenvector 3 x 3 matrix, 1 col is a vector
-    vals2D, tensors, eigValsGrid, eigVecsGrid = PPAT.processAnisotropyTensor_Uninterpolated(vals2D, realizeIter = 0)
-    t1 = t.time()
-    print('\nFinished processAnisotropyTensor_Uninterpolated in {:.4f} s'.format(t1 - t0))
-
-    # valsDecomp, tensors, eigValsGrid = case.processAnisotropyTensor_Fast(valsDecomp)
-    # vals2D, tensors, eigValsGrid = case.processAnisotropyTensor_Uninterpolated(vals2D)
-
-    xBary, yBary, rgbVals = case.getBarycentricMapCoordinates(eigValsGrid, c_offset = c_offset, c_exp = c_exp)
+    # Retrieve Rij of this slice
+    rij = case.slices_val[slicename]
+    rij = expandSymmetricTensor(rij).reshape((-1, 3, 3))
+    # Rotate Rij if requested, rotateData only accept full matrix form
+    if rotate_data: rij = rotateData(rij, anglez=rot_z)
+    rij = contractSymmetricTensor(rij)
+    rij_tmp = rij.copy()
+    # Get bij from Rij and its corresponding eigenval and eigenvec
+    bij, eig_val, eig_vec = processReynoldsStress(rij_tmp, realization_iter=0, make_anisotropic=make_anisotropic, to_old_grid_shape=False)
+    # bij was (n_samples, 3, 3) contract it
+    bij = contractSymmetricTensor(bij)
+    # Get barycentric map coor and normalized RGB
+    xy_bary, rgb = getBarycentricMapData(eig_val, c_offset=c_offset, c_exp=c_exp)
 
 
     """
     Interpolation
     """
-    x2D, y2D, z2D, rgbVals = \
-        case.interpolateDecomposedSliceData_Fast(case.slicesCoor[sliceName][:, 0], case.slicesCoor[sliceName][:, 1], case.slicesCoor[sliceName][:, 2], rgbVals, sliceOrientate =
-                                                 case.slicesOrientate[sliceName], xOrientate = case.xOrientate,
-                                                 targetCells = targetCells,
-                                                 interpMethod = interpMethod,
-                                                 confineBox = confineBox[i])
+    # 1st coor is always x not matter vertical or horizontal slice
+    # 2nd coor is y if horizontal slice otherwise z, take appropriate confinebox limit
+    coor2_lim = confinebox[i][2:4] if case.slices_orient[slicename] == 'horizontal' else confinebox[i][4:]
+    # Selective interpolation upon request
+    if 'bary' in plot_property or '*' in plot_property:
+        x_mesh, y_mesh, z_mesh, rgb_mesh = case.interpolateDecomposedSliceData_Fast(case.slices_coor[slicename][:, 0], case.slices_coor[slicename][:, 1], case.slices_coor[slicename][:, 2], rgb,
+                                                                                    slice_orient=case.slices_orient[slicename], target_meshsize=target_meshsize,
+                                                                                    # No interpolation as it gives undefined colors in my barycentric map
+                                                                                    interp_method='nearest', confinebox=confinebox[i])
+        if plot_type in ('3D', '*'): list_rgb.append(rgb_mesh)
+        if save_data: pickle.dump(rgb_mesh, open(case.result_path + slicename + '_BaryRGB.p', 'wb'))
+        
+    if 'bij' in plot_property or '*' in plot_property:
+        x_mesh, y_mesh, z_mesh, bij_mesh = case.interpolateDecomposedSliceData_Fast(case.slices_coor[slicename][:, 0],
+                                                                                    case.slices_coor[slicename][:, 1],
+                                                                                    case.slices_coor[slicename][:, 2],
+                                                                                    bij,
+                                                                                    slice_orient=case.slices_orient[
+                                                                                        slicename],
+                                                                                    target_meshsize=target_meshsize,
+                                                                                    interp_method=interp_method,
+                                                                                    confinebox=confinebox[i])
+        if plot_type in ('3D', '*'): list_bij.append(bij_mesh)
+        if save_data: pickle.dump(bij_mesh, open(case.result_path + slicename + '_bij.p', 'wb'))
+        
+    if 'rij' in plot_property or '*' in plot_property:
+        x_mesh, y_mesh, z_mesh, rij_mesh = case.interpolateDecomposedSliceData_Fast(case.slices_coor[slicename][:, 0],
+                                                                                    case.slices_coor[slicename][:, 1],
+                                                                                    case.slices_coor[slicename][:, 2],
+                                                                                    rij,
+                                                                                    slice_orient=case.slices_orient[
+                                                                                        slicename],
+                                                                                    target_meshsize=target_meshsize,
+                                                                                    interp_method=interp_method,
+                                                                                    confinebox=confinebox[i])
+        if plot_type in ('3D', '*'): list_rij.append(rij_mesh)
+        if save_data: pickle.dump(rij_mesh, open(case.result_path + slicename + '_Rij.p', 'wb'))
+        
     # Append 2D mesh to a list for 3D plots
-    if plotType in ('3D', '3d', 'all', 'All'):
-        listX2D.append(x2D)
-        listY2D.append(y2D)
-        listZ2D.append(z2D)
-        listRGB.append(rgbVals)
+    if plot_type in ('3D', '*'):
+        list_x.append(x_mesh)
+        list_y.append(y_mesh)
+        list_z.append(z_mesh)
 
-    # Determine the unit along the vertical slice since it's angled and
-    if case.slicesOrientate[sliceName] == 'vertical':
-        # # If angle from x-axis is 45 deg or less
-        # if lx >= ly:
-        #     xOrientate = np.arctan(lx/ly)
-        if confineBox[0] is None:
-            lx = np.max(x2D) - np.min(x2D)
-            ly = np.max(y2D) - np.min(y2D)
-        else:
-            lx = confineBox[i][1] - confineBox[i][0]
-            ly = confineBox[i][3] - confineBox[i][2]
-
-        r2D = np.linspace(0, np.sqrt(lx**2 + ly**2), x2D.shape[0])
-
-    if dumpResult:
-        print('\nDumping values...')
-        pickle.dump(tensors, open(case.resultPath + sliceName + '_rgbVals.p', 'wb'))
-        pickle.dump(x2D, open(case.resultPath + sliceName + '_x2D.p', 'wb'))
-        pickle.dump(y2D, open(case.resultPath + sliceName + '_y2D.p', 'wb'))
-        pickle.dump(z2D, open(case.resultPath + sliceName + '_z2D.p', 'wb'))
+    if save_data:
+        pickle.dump(x_mesh, open(case.result_path + slicename + '_xmesh.p', 'wb'))
+        pickle.dump(y_mesh, open(case.result_path + slicename + '_ymesh.p', 'wb'))
+        pickle.dump(z_mesh, open(case.result_path + slicename + '_zmesh.p', 'wb'))
 
 
-    """
-    Plotting
-    """
-    xLabel, yLabel = (r'$r$ [m]', r'$z$ [m]') \
-        if case.slicesOrientate[sliceName] == 'vertical' else \
-    (r'$x$ [m]', r'$y$ [m]')
-    # Rotate the figure 90 deg clockwise, for 2D image plot
-    rgbValsRot = ndimage.rotate(rgbVals, 90)
-    figName = 'barycentric_' + sliceName
-    if plotType in ('2D', '2d', 'all', 'All'):
-        baryMapSlice = BaseFigure((None,), (None,), name=figName, xLabel=xLabel,
-                                  yLabel=yLabel, save=save, show=show,
-                                        figDir=case.resultPath)
-        baryMapSlice.initializeFigure()
-        # Real extent so that the axis have the correct AR
-        extent = (np.min(r2D), np.max(r2D),
-                  np.min(z2D),
-                  np.max(z2D)) \
-                  if case.slicesOrientate[sliceName] == 'vertical' else \
-            (np.min(x2D), np.max(x2D),
-                  np.min(y2D),
-                  np.max(y2D))
-        baryMapSlice.axes[0].imshow(rgbValsRot, origin='upper', aspect='equal', extent=extent)
-        baryMapSlice.axes[0].set_xlabel(baryMapSlice.xLabel)
-        baryMapSlice.axes[0].set_ylabel(baryMapSlice.yLabel)
-        plt.tight_layout()
-        plt.savefig(case.resultPath + figName + '.' + ext, dpi = dpi)
+"""
+Plotting
+"""
+if plot_type in ('3D', 'all'):
+    if case.slices_orient[slicename] == 'horizontal':
+        show_xylabel = (False, False)
+        show_zlabel = True
+        show_ticks = (False, False, True)
+    else:
+        show_xylabel = (True, True)
+        show_zlabel = False
+        show_ticks = (True, True, False)
 
-if plotType in ('3D', 'all'):
-    baryMapSlice3D = PlotImageSlices3D(listX2D = listX2D, listY2D = listY2D, listZ2D = listZ2D, listRGB = listRGB,
-                                       name = 'barycentric_' + str(
-            sliceNames),
-                                       xLabel = r'$x$ [m]',
-                              yLabel = r'$y$ [m]', zLabel = r'$z$ [m]', save = save, show = show,
-                                    figDir = case.resultPath, viewAngles = viewAngle, figWidth = figWidth, equalAxis =
-                                       equalAxis)
-    baryMapSlice3D.initializeFigure(figSize = figSize)
-    baryMapSlice3D.plotFigure()
-    baryMapSlice3D.finalizeFigure(tightLayout = True)
+    # Barycentric map
+    if 'bary' in plot_property or '*' in plot_property:
+        figheight_multiplier = 2 if case.slices_orient[slicename] == 'horizontal' else 0.75
+        print(min(rgb_mesh.ravel()))
+        barymap_slice3d = PlotImageSlices3D(list_x=list_x, list_y=list_y, list_z=list_z, list_rgb=list_rgb,
+                                           name='barycentric_' + str(
+                slicenames),
+                                           xlabel=r'$x$ [m]',
+                                  ylabel=r'$y$ [m]', zlabel = r'$z$ [m]', save=save, show=show,
+                                        figdir=case.result_path, viewangle=view_angle, figwidth=figwidth, figheight_multiplier=figheight_multiplier,
+                                            equalaxis=equalaxis)
+        barymap_slice3d.initializeFigure(constrained_layout=True)
+        barymap_slice3d.plotFigure()
+        plotTurbineLocations(barymap_slice3d, case.slices_orient[slicename], horslice_offsets, turb_borders, turb_centers_frontview)
+        barymap_slice3d.finalizeFigure(tight_layout=False, show_xylabel=(False,)*2, show_ticks=(False,)*3, show_zlabel=False)
+        print(min(rgb_mesh.ravel()))
 
-if save and plotType in ('2D', 'all'):
-    print('\n2D plot of {0} saved at {1}'.format(sliceNames, case.resultPath))
+
+    # bij
+    if 'bij' in plot_property or '*' in plot_property:
+        figheight_multiplier = 1.75 if case.slices_orient[slicename] == 'horizontal' else 1
+        ij = ['11', '12', '13', '22', '23', '33']
+        for i in range(6):
+            # Extract ij component from each slice's bij
+            list_bij_i = [bij_i[..., i] for _, bij_i in enumerate(list_bij)]
+            # If horizontal slices 3D plot
+            if case.slices_orient[slicename] == 'horizontal':
+                bij_slice3d = PlotContourSlices3D(list_x, list_y, list_bij_i, horslice_offsets,
+                                                    name='b' + ij[i] + '_' + str(
+                                                            slicenames),
+                                                    xlabel=r'$x$ [m]',
+                                                    ylabel=r'$y$ [m]', zlabel=r'$z$ [m]', val_label=bij_label[i],
+                                                  cbar_orient='vertical',
+                                                  save=save, show=show,
+                                                    figdir=case.result_path, viewangle=view_angle, figwidth=figwidth,
+                                                    figheight_multiplier=figheight_multiplier,
+                                                  val_lim=bij_lim, equalaxis=equalaxis)
+            # Else if vertical front view slices 3D plot
+            else:
+                bij_slice3d = PlotSurfaceSlices3D(list_x, list_y, list_z, list_bij_i,
+                                                  xlabel='$x$ [m]', ylabel='$y$ [m]', zlabel='$z$ [m]', val_label=bij_label[i],
+                                                  name='b' + ij[i] + '_' + str(
+                                                          slicenames),
+                                                  save=save, show=show,
+                                                  figdir=case.result_path, viewangle=view_angle, figwidth=figwidth,
+                                                  equalaxis=equalaxis, cbar_orient='horizontal', val_lim=bij_lim)
+
+            bij_slice3d.initializeFigure()
+            bij_slice3d.plotFigure(contour_lvl=contour_lvl)
+            plotTurbineLocations(bij_slice3d, case.slices_orient[slicename], horslice_offsets, turb_borders,
+                                 turb_centers_frontview)
+            bij_slice3d.finalizeFigure(show_xylabel=show_xylabel, show_zlabel=show_zlabel, show_ticks=show_ticks)
+
+    # Rij
+    if 'rij' in plot_property or '*' in plot_property:
+        figheight_multiplier = 1.75 if case.slices_orient[slicename] == 'horizontal' else 1
+        ij = ['11', '12', '13', '22', '23', '33']
+        for i in range(6):
+            # Extract ij component from each slice's bij
+            list_rij_i = [rij_i[..., i] for _, rij_i in enumerate(list_rij)]
+            if i in (0, 3, 5):
+                for j in range(len(list_rij_i)):
+                    list_rij_i[j][list_rij_i[j] < 0.] = 0.
+
+            else:
+                for j in range(len(list_rij_i)):
+                    list_rij_i[j][list_rij_i[j] < -1.] = -1.
+
+            # If horizontal slices 3D plot
+            if case.slices_orient[slicename] == 'horizontal':
+                rij_slice3d = PlotContourSlices3D(list_x, list_y, list_rij_i, horslice_offsets,
+                                                  name='R' + ij[i] + '_' + str(
+                                                          slicenames),
+                                                  xlabel=r'$x$ [m]',
+                                                  ylabel=r'$y$ [m]', zlabel=r'$z$ [m]', val_label=rij_label[i],
+                                                  cbar_orient='vertical',
+                                                  save=save, show=show,
+                                                  figdir=case.result_path, viewangle=view_angle, figwidth=figwidth,
+                                                  figheight_multiplier=figheight_multiplier, equalaxis=equalaxis,
+                                                  val_lim=rij_lim)
+            # Else if vertical front view slices 3D plot
+            else:
+                rij_slice3d = PlotSurfaceSlices3D(list_x, list_y, list_z, list_rij_i,
+                                                  xlabel='$x$ [m]', ylabel='$y$ [m]', zlabel='$z$ [m]',
+                                                  val_label=rij_label[i],
+                                                  name='R' + ij[i] + '_' + str(
+                                                          slicenames),
+                                                  save=save, show=show,
+                                                  figdir=case.result_path, viewangle=view_angle, figwidth=figwidth,
+                                                  equalaxis=equalaxis, cbar_orient='horizontal', val_lim=rij_lim)
+
+            rij_slice3d.initializeFigure()
+            rij_slice3d.plotFigure(contour_lvl=contour_lvl)
+            plotTurbineLocations(rij_slice3d, case.slices_orient[slicename], horslice_offsets, turb_borders,
+                                 turb_centers_frontview)
+            rij_slice3d.finalizeFigure(show_xylabel=show_xylabel, show_zlabel=show_zlabel, show_ticks=show_ticks)
+
+if save and plot_type in ('2D', '*'):
+    print('\n2D plot of {0} saved at {1}'.format(slicenames, case.result_path))
 
 
 """
 Plot Barycentric Color Map If Requested
 """
-if showBaryExample:
+if show_baryexample:
     xTriLim, yTriLim = (0, 1), (0, np.sqrt(3) / 2.)
     verts = (
         (xTriLim[0], yTriLim[0]), (xTriLim[1], yTriLim[0]), (np.mean(xTriLim), yTriLim[1]),
@@ -232,7 +413,7 @@ if showBaryExample:
     baryMap3D[np.isnan(baryMap3D)] = 1
     baryMap3D = ndimage.rotate(baryMap3D, 90)
 
-    baryMapExample = BaseFigure((None,), (None,), name = baryMapExampleName, figDir = case.resultPath,
+    baryMapExample = BaseFigure((None,), (None,), name = baryexample_name, figdir = case.result_path,
                                 show = show, save = save)
     baryMapExample.initializeFigure()
     baryMapExample.axes[0].imshow(baryMap3D, origin = 'upper', aspect = 'equal', extent = (xTriLim[0], xTriLim[1],
@@ -245,19 +426,19 @@ if showBaryExample:
     # baryMapExample.axes[0].set_axis_off()
     baryMapExample.axes[0].axis('off')
     plt.tight_layout()
-    plt.savefig(case.resultPath + baryMapExampleName + '.' + ext, dpi = dpi)
+    plt.savefig(case.result_path + baryexample_name + '.' + ext, dpi = dpi)
     if save:
-        print('\n{0} saved at {1}'.format(baryMapExampleName, case.resultPath))
+        print('\n{0} saved at {1}'.format(baryexample_name, case.result_path))
 
-    # baryPlot = PlotSurfaceSlices3D(x2D, y2D, z2D, (0,), show = True, name = 'bary', figDir = 'R:', save = True)
+    # baryPlot = PlotSurfaceSlices3D(x2D, y2D, z2D, (0,), show = True, name = 'bary', figdir = 'R:', save = True)
     # baryPlot.cmapLim = (0, 1)
-    # baryPlot.cmapNorm = rgbVals
-    # # baryPlot.cmapVals = plt.cm.ScalarMappable(norm = rgbVals, cmap = None)
-    # baryPlot.cmapVals = rgbVals
+    # baryPlot.cmapNorm = rgb
+    # # baryPlot.cmapVals = plt.cm.ScalarMappable(norm = rgb, cmap = None)
+    # baryPlot.cmapVals = rgb
     # # baryPlot.cmapVals.set_array([])
     # baryPlot.plot = baryPlot.cmapVals
     # baryPlot.initializeFigure()
-    # baryPlot.axes[0].plot_surface(x2D, y2D, z2D, cstride = 1, rstride = 1, facecolors = rgbVals, vmin = 0, vmax = 1, shade = False)
+    # baryPlot.axes[0].plot_surface(x2D, y2D, z2D, cstride = 1, rstride = 1, facecolors = rgb, vmin = 0, vmax = 1, shade = False)
     # baryPlot.finalizeFigure()
     #
     #
@@ -265,10 +446,10 @@ if showBaryExample:
     #
     #
     # print('\nDumping values...')
-    # pickle.dump(tensors, open(case.resultPath + sliceName + '_tensors.p', 'wb'))
-    # pickle.dump(case.slicesCoor[sliceName][:, 0], open(case.resultPath + sliceName + '_x.p', 'wb'))
-    # pickle.dump(case.slicesCoor[sliceName][:, 1], open(case.resultPath + sliceName + '_y.p', 'wb'))
-    # pickle.dump(case.slicesCoor[sliceName][:, 2], open(case.resultPath + sliceName + '_z.p', 'wb'))
+    # pickle.dump(tensors, open(case.result_path + slicename + '_tensors.p', 'wb'))
+    # pickle.dump(case.slicesCoor[slicename][:, 0], open(case.result_path + slicename + '_x.p', 'wb'))
+    # pickle.dump(case.slicesCoor[slicename][:, 1], open(case.result_path + slicename + '_y.p', 'wb'))
+    # pickle.dump(case.slicesCoor[slicename][:, 2], open(case.result_path + slicename + '_z.p', 'wb'))
     #
     # print('\nExecuting RGB_barycentric_colors_clean...')
     # import RBG_barycentric_colors_clean
