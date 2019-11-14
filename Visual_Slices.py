@@ -5,7 +5,7 @@ import numpy as np
 import os
 from Utility import timer
 from scipy.interpolate import griddata
-from PlottingTool import Plot2D, Plot2D_InsetZoom, PlotSurfaceSlices3D, PlotContourSlices3D, pathpatch_translate, pathpatch_2d_to_3d
+from PlottingTool import Plot2D, Plot2D_InsetZoom, PlotSurfaceSlices3D, PlotContourSlices3D, pathpatch_translate, pathpatch_2d_to_3d, PlotImageSlices3D
 try:
     import PostProcess_AnisotropyTensor as PPAT
 except ImportError:
@@ -27,20 +27,26 @@ from copy import copy
 """
 User Inputs
 """
-time = 'latestTime'  #'23243.2156219'
+time = '5000'  #'23243.2156219'
 casedir = '/media/yluan'
-# casename = 'RANS/N_H_OneTurb_LowZ_Rwall2'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URANS/N_H_OneTurb'  # 'ALM_N_H_ParTurb'
-casename = 'ALM_N_H_OneTurb'
+casename = 'RANS/N_H_OneTurb_LowZ_Rwall2'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URANS/N_H_OneTurb'  # 'ALM_N_H_ParTurb'
+# casename = 'ALM_N_L_ParTurb'
 # properties = ('kResolved', 'kSGSmean')
-properties = ('UAvg',)
+properties = ('divDevR', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
+properties = ('divDevR_blend', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
+# properties = ('GAvg', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
+# properties = ('G', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
+# properties = ('RGB', 'RGB_pred_TBDT', 'RGB_pred_TBRF', 'RGB_pred_TBAB', 'RGB_pred_TBGB')
+# properties = ('epsilon',)
 # slicenames = ('oneDupstreamTurbine', 'rotorPlane', 'oneDdownstreamTurbine')
 # slicenames = ('threeDdownstreamTurbine', 'fiveDdownstreamTurbine', 'sevenDdownstreamTurbine')
 slicenames = ('hubHeight', 'quarterDaboveHub', 'turbineApexHeight')
-# slicenames = ('groundHeight', 'hubHeight', 'turbineApex')
+# slicenames = ('groundHeight', 'hubHeight', 'oneDaboveHubHeight')
 # Subscript for the slice names
 slicenames_sub = 'Slice'
 # Height of the horizontal slices, only used for 3D horizontal slices plot
 horslice_offsets = (90., 121.5, 153.)
+# horslice_offsets = (0, 90, 216)
 horslice_offsets2 = ((90., 90.), (121.5, 121.5), (153., 153.))
 result_folder = 'Result'
 # Orientation of x-axis in x-y plane, in case of angled flow direction
@@ -105,6 +111,22 @@ elif 'ParTurb' in casename:
     elif 'hubHeight' in slicenames[0] or 'groundHeight' in slicenames[0]:
         turb_borders, turb_centers_frontview, confinebox, _ = ParTurb('hor')
 
+elif 'SeqTurb' in casename:
+    # For rotor plane vertical slices
+    # TODO: update for vertical slices
+    if 'oneDupstream' in slicenames[0] or 'threeDdownstream' in slicenames[0]:
+        turb_borders, turb_centers_frontview, confinebox, confinebox2 = SeqTurb('vert')
+        if 'three' in slicenames[0]:
+            confinebox = confinebox2
+            turb_centers_frontview = turb_centers_frontview[3:]
+        else:
+            turb_centers_frontview = turb_centers_frontview[:3]
+
+    # For horizontal slices
+    elif 'hubHeight' in slicenames[0] or 'groundHeight' in slicenames[0]:
+        # Confinement for z doesn't matter since the slices are horizontal
+        turb_borders, turb_centers_frontview, confinebox, _ = SeqTurb('hor')
+
 else:
     turb_borders = ((99999,)*4,)
     turb_centers_frontview = ((99999,)*3,)*6
@@ -133,11 +155,17 @@ elif plot_type in ('all', 'All', '*'):
     plot_type = 'all'
 
 if 'U' in properties[0]:
-    val_lim = (0, 12)
+    val_lim = (0, 12) if 'HiSpeed' not in casename else (0, 14)
     val_lim_z = (-2, 2)
-    val_label = [r'$\langle U_\mathrm{hor} \rangle$ [m/s]', r'$\langle w \rangle$ [m/s]']
+    if 'ALM' in casename:
+        val_label = [r'$\langle \tilde{U}_\mathrm{hor} \rangle$ [m/s]', r'$\langle \tilde{u}_z \rangle$ [m/s]']
+    elif 'ABL' in casename:
+        val_label = [r'$\tilde{U}_\mathrm{hor}$ [m/s]', r'$\tilde{u}_z$ [m/s]']
+    else:
+        val_label = [r'$\langle U_\mathrm{hor} \rangle$ [m/s]', r'$\langle u_z \rangle$ [m/s]']
+
 elif 'k' in properties[0]:
-    val_lim = (0, 2.5)
+    val_lim = (0, 2.5) if 'SGS' not in properties[0] else (0, 0.1)
     val_lim_z = None
     if 'Resolved' in properties[0]:
         val_label = (r'$\langle k_\mathrm{resolved} \rangle$ [m$^2$/s$^2$]',) if len(properties) == 1 else (r'$\langle k \rangle$ [m$^2$/s$^2$]',)
@@ -146,14 +174,14 @@ elif 'k' in properties[0]:
     else:
         val_label = (r'$\langle k \rangle$ [m$^2$/s$^2$]',)
 
-elif 'uuPrime2' in properties[0] or 'R' in properties[0]:
+elif 'uuPrime2' in properties[0] or 'R' in properties[0] and 'div' not in properties[0]:
     val_lim = (-0.5, 2/3.)
     val_lim_z = None
     val_label = (r"$\langle u'u' \rangle$ [-]", r"$\langle u'v' \rangle$ [-]", r"$\langle u'w' \rangle$ [-]",
                  r"$\langle v'v' \rangle$ [-]", r"$\langle v'w' \rangle$ [-]",
                                                 r"$\langle w'w' \rangle$ [-]")
 elif "epsilon" in properties[0]:
-    val_lim = None
+    val_lim = (0.0001, 0.011) if 'SGS' not in properties[0] else (0.0001, 0.011)
     val_lim_z = None
     if 'SGS' in properties[0]:
         val_label = (r'$\langle \epsilon_{\mathrm{SGS}} \rangle$ [m$^2$/s$^3$]',) if 'mean' in properties[0] else (r'$\epsilon_{\mathrm{SGS}}$ [m$^2$/s$^3$]',)
@@ -165,8 +193,11 @@ elif "epsilon" in properties[0]:
 elif 'G' in properties[0]:
     val_lim = (-0.05, 0.17)
     val_lim_z = None
-    val_label = (r'$\langle P_k \rangle$ [m$^2$/s$^3$]',)
-
+    val_label = (r'$\langle G \rangle$ [m$^2$/s$^3$]',)
+elif 'divDevR' in properties[0]:
+    val_lim = (0., 0.11)
+    val_lim_z = (-0.07, 0.07)
+    val_label = (r'$\langle \nabla \cdot R_{ij}^D \rangle_\mathrm{hor}$ [m/s$^2$]', r'$\langle \nabla \cdot R_{ij}^D \rangle_z$ [m/s$^2$]')
 else:
     val_lim = None
     val_lim_z = None
@@ -175,185 +206,197 @@ else:
 """
 Read Slice Data
 """
-# Initialize case
-case = PPSD.SliceProperties(time=time, casedir=casedir, casename=casename, rot_z=rot_z, result_folder=result_folder)
-# Read slices
-case.readSlices(properties=properties, slicenames=slicenames, slicenames_sub=slicenames_sub)
+for i0 in range(len(properties)):
+    # Initialize case
+    case = PPSD.SliceProperties(time=time, casedir=casedir, casename=casename, rot_z=rot_z, result_folder=result_folder)
+    # Read slices
+    case.readSlices(properties=properties[i0], slicenames=slicenames, slicenames_sub=slicenames_sub)
 
-list_x2d, list_y2d, list_z2d, list_val3d, list_val3d_z = [], [], [], [], []
-# Go through specified slices and flow properties
-for i in range(len(case.slicenames)):
-    # for i, slicename in enumerate(case.slicenames):
-    slicename = case.slicenames[i]
-    vals2d = case.slices_val[slicename]
-    # If kResolved and kSGSmean in properties, get total kMean
-    if 'kResolved' in properties and 'kSGSmean' in properties:
-        print(' Calculating total <k> for {}...'.format(slicenames[i]))
-        slicename2 = case.slicenames[i + len(slicenames)]
-        vals2d += case.slices_val[slicename2]
-    # # Else if epsilonSGSmean and nuSGSmean in properties then get total epsilonMean
-    # # By assuming isotropic homogeneous turbulence and
-    # # <epsilon> = <epsilonSGS>/(1 - 1/(1 + <nuSGS>/nu))
-    # elif 'epsilonSGSmean' in properties and 'nuSGSmean' in properties:
-    #     print(' Calculating total <epsilon> for {}...'.format(slicenames[i]))
-    #     slicename2 = case.slicenames[i + len(slicenames)]
-    #     vals2d_2 = case.slices_val[slicename2]
-    #     # Determine which vals2d is epsilonSGSmean or nuSGSmean
-    #     nusgs_mean, epsilonSGSmean = (vals2d, vals2d_2) if 'epsilonSGSmean' in slicename2 else (vals2d_2, vals2d)
-    #     # Calculate epsilonMean
-    #     vals2d = case.calcSliceMeanDissipationRate(epsilonSGSmean = epsilonSGSmean, nusgs_mean = nusgs_mean, nu = nu)
+    list_x2d, list_y2d, list_z2d, list_val3d, list_val3d_z = [], [], [], [], []
+    # Go through specified slices and flow properties
+    for i in range(len(case.slicenames)):
+        # for i, slicename in enumerate(case.slicenames):
+        slicename = case.slicenames[i]
+        vals2d = case.slices_val[slicename]
+        # If kResolved and kSGSmean in properties, get total kMean
+        if 'kResolved' in properties and 'kSGSmean' in properties:
+            print(' Calculating total <k> for {}...'.format(slicenames[i]))
+            slicename2 = case.slicenames[i + len(slicenames)]
+            vals2d += case.slices_val[slicename2]
+        # # Else if epsilonSGSmean and nuSGSmean in properties then get total epsilonMean
+        # # By assuming isotropic homogeneous turbulence and
+        # # <epsilon> = <epsilonSGS>/(1 - 1/(1 + <nuSGS>/nu))
+        # elif 'epsilonSGSmean' in properties and 'nuSGSmean' in properties:
+        #     print(' Calculating total <epsilon> for {}...'.format(slicenames[i]))
+        #     slicename2 = case.slicenames[i + len(slicenames)]
+        #     vals2d_2 = case.slices_val[slicename2]
+        #     # Determine which vals2d is epsilonSGSmean or nuSGSmean
+        #     nusgs_mean, epsilonSGSmean = (vals2d, vals2d_2) if 'epsilonSGSmean' in slicename2 else (vals2d_2, vals2d)
+        #     # Calculate epsilonMean
+        #     vals2d = case.calcSliceMeanDissipationRate(epsilonSGSmean = epsilonSGSmean, nusgs_mean = nusgs_mean, nu = nu)
 
-    # Interpolation
-    x2d, y2d, z2d, vals3d = case.interpolateDecomposedSliceData_Fast(case.slices_coor[slicename][:, 0], case.slices_coor[slicename][:, 1], case.slices_coor[slicename][:, 2], vals2d, 
-                                                                     slice_orient=case.slices_orient[slicename], rot_z=case.rot_z,
-                                                                     target_meshsize=target_meshsize,
-                                                                     interp_method=interp_method,
-                                                                     confinebox=confinebox[i])
+        # Interpolation
+        x2d, y2d, z2d, vals3d = case.interpolateDecomposedSliceData_Fast(case.slices_coor[slicename][:, 0], case.slices_coor[slicename][:, 1], case.slices_coor[slicename][:, 2], vals2d,
+                                                                         slice_orient=case.slices_orient[slicename], rot_z=case.rot_z,
+                                                                         target_meshsize=target_meshsize,
+                                                                         interp_method=interp_method,
+                                                                         confinebox=confinebox[i])
 
-    # Flatten if vals3d only have one component like a scalar field
-    if vals3d.shape[2] == 1:
-        vals3d = vals3d.reshape((vals3d.shape[0], vals3d.shape[1]))
+        # Flatten if vals3d only have one component like a scalar field
+        if vals3d.shape[2] == 1:
+            vals3d = vals3d.reshape((vals3d.shape[0], vals3d.shape[1]))
 
-    # Calculate magnitude if U
-    if 'U' in properties or 'UAvg' in properties:
-        vals3d_hor = np.sqrt(vals3d[:, :, 0]**2 + vals3d[:, :, 1]**2)
-        vals3d_z =  vals3d[:, :, 2]
-    else:
-        vals3d_hor = vals3d
-        vals3d_z = None
+        # Calculate magnitude if U
+        if 'U' in properties[0] or 'divDevR' in properties[0]:
+            vals3d_hor = np.sqrt(vals3d[:, :, 0]**2 + vals3d[:, :, 1]**2)
+            vals3d_z =  vals3d[:, :, 2]
+        else:
+            vals3d_hor = vals3d
+            vals3d_z = None
 
-    # Append 2D mesh to a list for 3D plots
+        # Append 2D mesh to a list for 3D plots
+        if plot_type in ('3D', 'all'):
+            list_x2d.append(x2d)
+            list_y2d.append(y2d)
+            list_z2d.append(z2d)
+            list_val3d.append(vals3d_hor)
+            list_val3d_z.append(vals3d_z)
+
+        # Determine the unit along the vertical slice since it's angled, only for 2D plots of vertical slices
+        if case.slices_orient[slicename] == 'vertical':
+            # # If angle from x-axis is 45 deg or less
+            # if lx >= ly:
+            #     rot_z = np.arctan(lx/ly)
+            if confinebox is None:
+                lx = np.max(x2d) - np.min(x2d)
+                ly = np.max(y2d) - np.min(y2d)
+            else:
+                lx = confinebox[i][1] - confinebox[i][0]
+                ly = confinebox[i][3] - confinebox[i][2]
+
+            r2d = np.linspace(0, np.sqrt(lx**2 + ly**2), x2d.shape[0])
+
+        # Break if i finishes all kResolved or kSGSmean
+        if 'kResolved' in properties and 'kSGSmean' in properties and i == (len(slicenames) - 1):
+            break
+        elif 'epsilonSGSmean' in properties and 'nuSGSmean' in properties and i == (len(slicenames) - 1):
+            break
+
+
+        """
+        Plotting
+        """
+        xlabel, ylabel = (r'$x$ [m]', r'$y$ [m]') \
+            if case.slices_orient[slicename] == 'vertical' else \
+            (r'$x$ [m]', r'$y$ [m]')
+        # Figure name
+        if 'kResolved' in properties and 'kSGSmean' in properties:
+            figname = 'kMean_' + slicenames[i] + slicenames_sub
+        elif 'epsilonSGSmean' in properties and 'nuSGSmean' in properties:
+            figname = 'epsilonMean_' + slicenames[i] + slicenames_sub
+        else:
+            figname = slicename
+
+        if plot_type in ('2D', 'all'):
+            slicePlot = Plot2D(x2d, y2d, vals3d, name=figname, xlabel=xlabel, ylabel=ylabel, val_label= val_label, save=save, show=show, figdir=case.result_path)
+            slicePlot.initializeFigure()
+            slicePlot.plotFigure(contour_lvl=contour_lvl)
+            slicePlot.finalizeFigure()
+
     if plot_type in ('3D', 'all'):
-        list_x2d.append(x2d)
-        list_y2d.append(y2d)
-        list_z2d.append(z2d)
-        list_val3d.append(vals3d_hor)
-        list_val3d_z.append(vals3d_z)
-
-    # Determine the unit along the vertical slice since it's angled, only for 2D plots of vertical slices
-    if case.slices_orient[slicename] == 'vertical':
-        # # If angle from x-axis is 45 deg or less
-        # if lx >= ly:
-        #     rot_z = np.arctan(lx/ly)
-        if confinebox is None:
-            lx = np.max(x2d) - np.min(x2d)
-            ly = np.max(y2d) - np.min(y2d)
+        zlabel = r'$z$ [m]'
+        # Figure name for 3D plots
+        if 'kResolved' in properties and 'kSGSmean' in properties:
+            figname_3d = 'kMean_' + str(slicenames)
+        elif 'epsilonSGSmean' in properties and 'nuSGSmean' in properties:
+            figname_3d = 'epsilonMean_' + str(slicenames)
         else:
-            lx = confinebox[i][1] - confinebox[i][0]
-            ly = confinebox[i][3] - confinebox[i][2]
+            # Use raw slice name as figure name but remove spaces
+            figname_3d = str(case.slicenames).replace(" ", '')
 
-        r2d = np.linspace(0, np.sqrt(lx**2 + ly**2), x2d.shape[0])
-
-    # Break if i finishes all kResolved or kSGSmean
-    if 'kResolved' in properties and 'kSGSmean' in properties and i == (len(slicenames) - 1):
-        break
-    elif 'epsilonSGSmean' in properties and 'nuSGSmean' in properties and i == (len(slicenames) - 1):
-        break
-
-
-    """
-    Plotting
-    """
-    xlabel, ylabel = (r'$x$ [m]', r'$y$ [m]') \
-        if case.slices_orient[slicename] == 'vertical' else \
-        (r'$x$ [m]', r'$y$ [m]')
-    # Figure name
-    if 'kResolved' in properties and 'kSGSmean' in properties:
-        figname = 'kMean_' + slicenames[i] + slicenames_sub
-    elif 'epsilonSGSmean' in properties and 'nuSGSmean' in properties:
-        figname = 'epsilonMean_' + slicenames[i] + slicenames_sub
-    else:
-        figname = slicename
-
-    if plot_type in ('2D', 'all'):
-        slicePlot = Plot2D(x2d, y2d, vals3d, name=figname, xlabel=xlabel, ylabel=ylabel, val_label= val_label, save=save, show=show, figdir=case.result_path)
-        slicePlot.initializeFigure()
-        slicePlot.plotFigure(contour_lvl=contour_lvl)
-        slicePlot.finalizeFigure()
-
-if plot_type in ('3D', 'all'):
-    zlabel = r'$z$ [m]'
-    # Figure name for 3D plots
-    if 'kResolved' in properties and 'kSGSmean' in properties:
-        figname_3d = 'kMean_' + str(slicenames)
-    elif 'epsilonSGSmean' in properties and 'nuSGSmean' in properties:
-        figname_3d = 'epsilonMean_' + str(slicenames)
-    else:
-        figname_3d = str(case.slicenames)
-
-    if case.slices_orient[slicename] == 'horizontal':
-        show_xylabel = (False, False)
-        show_zlabel = True
-        show_ticks = (False, False, True)
-        # Initialize plot object for horizontal contour slices
-        plot3d = PlotContourSlices3D(list_x2d, list_y2d, list_val3d, horslice_offsets, gradient_bg=False, name=figname_3d, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, val_label=val_label[0], save=save, show=show, figdir=case.result_path, viewangle=view_angle, figwidth=figwidth, equalaxis=equalaxis, cbar_orient='vertical',
-                                          figheight_multiplier=1.75,
-                                          val_lim=val_lim,
-                                     zlim=None)
-        # If there's a z component e.g. Uz, initialize it separately
-        if list_val3d_z[0] is not None:
-            plot3d_z = PlotContourSlices3D(list_x2d, list_y2d, list_val3d_z, horslice_offsets, gradient_bg=False,
-                                              name=figname_3d + '_z', xlabel=xlabel, ylabel=ylabel, zlabel=zlabel,
-                                              val_label=val_label[1], save=save, show=show, figdir=case.result_path,
-                                              viewangle=view_angle, figwidth=figwidth, equalaxis=equalaxis,
-                                              cbar_orient='vertical',
-                                              figheight_multiplier=1.75,
-                                              val_lim=val_lim_z,
-                                           zlim=None)
-    elif case.slices_orient[slicename] == 'vertical':
-        show_xylabel = (True, True)
-        show_zlabel = False
-        show_ticks = (True, True, False)
-        patch = Circle((0., 0.), 63., alpha=0.5, fill=False, edgecolor=(0.25, 0.25, 0.25), zorder=100)
-        patches = []
-        for i in range(10):
-            patches.append(copy(patch))
-
-        patches = iter(patches)
-        # Initialize vertical surface plot instance
-        plot3d = PlotSurfaceSlices3D(list_x2d, list_y2d, list_z2d, list_val3d, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, val_label=val_label[0], name=figname_3d, save=save, show=show, figdir=case.result_path, viewangle=view_angle, figwidth=figwidth, equalaxis=equalaxis, cbar_orient='horizontal',
-                                          val_lim=val_lim)
-        # Again separate instance for z component
-        if list_val3d_z[0] is not None:
-            plot3d_z = PlotSurfaceSlices3D(list_x2d, list_y2d, list_z2d, list_val3d_z, xlabel=xlabel, ylabel=ylabel,
-                                              zlabel=zlabel, val_label=val_label[1], name=figname_3d + '_z', save=save,
-                                              show=show, figdir=case.result_path, viewangle=view_angle,
-                                              figwidth=figwidth, equalaxis=equalaxis, cbar_orient='horizontal',
-                                              val_lim=val_lim_z)
-
-    plot3d.initializeFigure(constrained_layout=True)
-    plot3d.plotFigure(contour_lvl=contour_lvl)
-    if casename not in ('ABL_N_H', 'ABL_N_L'):
         if case.slices_orient[slicename] == 'horizontal':
-            for i in range(len(horslice_offsets)):
-                plot3d.axes.plot([turb_borders[0][0], turb_borders[0][2]], [turb_borders[0][1], turb_borders[0][3]], zs=horslice_offsets2[i], alpha=0.5, color=(0.25, 0.25, 0.25),
-                                 # Very important to set a super larger value
-                                 zorder=500 + i*500)
-        else:
-            for i in range(len(list_x2d)):
-                p = next(patches)
-                plot3d.axes.add_patch(p)
-                pathpatch_2d_to_3d(p, z=0, normal=(0.8660254037844, 0.5, 0.))
-                pathpatch_translate(p, turb_centers_frontview[i])
+            show_xylabel = (False, False)
+            show_zlabel = True
+            show_ticks = (False, False, True)
+            if 'RGB' not in properties[0]:
+                # Initialize plot object for horizontal contour slices
+                plot3d = PlotContourSlices3D(list_x2d, list_y2d, list_val3d, horslice_offsets, gradient_bg=False, name=figname_3d, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, val_label=val_label[0], save=save, show=show, figdir=case.result_path, viewangle=view_angle, figwidth=figwidth, equalaxis=equalaxis, cbar_orient='vertical',
+                                                  figheight_multiplier=1.75,
+                                                  val_lim=val_lim,
+                                             zlim=None)
+            else:
+                plot3d = PlotImageSlices3D(list_x2d, list_y2d, list_z2d, list_rgb=list_val3d,
+                                           name=figname_3d, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel,
+                                           save=save, show=show, figdir=case.result_path, viewangle=view_angle, figwidth=figwidth,
+                                           equalaxis=equalaxis, figheight_multiplier=2)
 
-    plot3d.finalizeFigure(tight_layout=False, show_ticks=show_ticks, show_xylabel=show_xylabel, show_zlabel=show_zlabel)
-    # For Uz or any other z component
-    if list_val3d_z[0] is not None:
-        plot3d_z.initializeFigure()
-        plot3d_z.plotFigure(contour_lvl=contour_lvl)
-        if casename not in ('ABL_N_H', 'ABL_N_L'):
+            # If there's a z component e.g. Uz, initialize it separately
+            if list_val3d_z[0] is not None:
+                plot3d_z = PlotContourSlices3D(list_x2d, list_y2d, list_val3d_z, horslice_offsets, gradient_bg=False,
+                                                  name=figname_3d + '_z', xlabel=xlabel, ylabel=ylabel, zlabel=zlabel,
+                                                  val_label=val_label[1], save=save, show=show, figdir=case.result_path,
+                                                  viewangle=view_angle, figwidth=figwidth, equalaxis=equalaxis,
+                                                  cbar_orient='vertical',
+                                                  figheight_multiplier=1.75,
+                                                  val_lim=val_lim_z,
+                                               zlim=None)
+
+        elif case.slices_orient[slicename] == 'vertical':
+            show_xylabel = (True, True)
+            show_zlabel = False
+            show_ticks = (True, True, False)
+            patch = Circle((0., 0.), 63., alpha=0.5, fill=False, edgecolor=(0.25, 0.25, 0.25), zorder=100)
+            patches = []
+            for i in range(100):
+                patches.append(copy(patch))
+
+            patches = iter(patches)
+            # Initialize vertical surface plot instance
+            plot3d = PlotSurfaceSlices3D(list_x2d, list_y2d, list_z2d, list_val3d, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, val_label=val_label[0], name=figname_3d, save=save, show=show, figdir=case.result_path, viewangle=view_angle, figwidth=figwidth, equalaxis=equalaxis, cbar_orient='horizontal',
+                                              val_lim=val_lim)
+            # Again separate instance for z component
+            if list_val3d_z[0] is not None:
+                plot3d_z = PlotSurfaceSlices3D(list_x2d, list_y2d, list_z2d, list_val3d_z, xlabel=xlabel, ylabel=ylabel,
+                                                  zlabel=zlabel, val_label=val_label[1], name=figname_3d + '_z', save=save,
+                                                  show=show, figdir=case.result_path, viewangle=view_angle,
+                                                  figwidth=figwidth, equalaxis=equalaxis, cbar_orient='horizontal',
+                                                  val_lim=val_lim_z)
+
+        plot3d.initializeFigure(constrained_layout=True)
+        plot3d.plotFigure(contour_lvl=contour_lvl)
+        if casename not in ('ABL_N_H', 'ABL_N_L', 'ABL_N_L2', 'ABL_N_H_HiSpeed'):
             if case.slices_orient[slicename] == 'horizontal':
                 for i in range(len(horslice_offsets)):
-                    plot3d_z.axes.plot([turb_borders[0][0], turb_borders[0][2]], [turb_borders[0][1], turb_borders[0][3]],
-                                     zs=horslice_offsets2[i], alpha=0.5, color=(0.25, 0.25, 0.25), zorder=500 + i*500)
+                    for j in range(len(turb_borders)):
+                        plot3d.axes.plot([turb_borders[j][0], turb_borders[j][2]], [turb_borders[j][1], turb_borders[j][3]], zs=horslice_offsets2[i], alpha=0.5, color=(0.25, 0.25, 0.25),
+                                         # Very important to set a super larger value
+                                         zorder=500 + i*500)
             else:
                 for i in range(len(list_x2d)):
                     p = next(patches)
-                    plot3d_z.axes.add_patch(p)
+                    plot3d.axes.add_patch(p)
                     pathpatch_2d_to_3d(p, z=0, normal=(0.8660254037844, 0.5, 0.))
                     pathpatch_translate(p, turb_centers_frontview[i])
 
-        plot3d_z.finalizeFigure(show_ticks=show_ticks, show_xylabel=show_xylabel, show_zlabel=show_zlabel)
+        plot3d.finalizeFigure(tight_layout=False, show_ticks=show_ticks, show_xylabel=show_xylabel, show_zlabel=show_zlabel)
+        # For Uz or any other z component
+        if list_val3d_z[0] is not None:
+            plot3d_z.initializeFigure()
+            plot3d_z.plotFigure(contour_lvl=contour_lvl)
+            if casename not in ('ABL_N_H', 'ABL_N_L', 'ABL_N_L2', 'ABL_N_H_HiSpeed'):
+                if case.slices_orient[slicename] == 'horizontal':
+                    for i in range(len(horslice_offsets)):
+                        for j in range(len(turb_borders)):
+                            plot3d_z.axes.plot([turb_borders[j][0], turb_borders[j][2]], [turb_borders[j][1], turb_borders[j][3]],
+                                             zs=horslice_offsets2[i], alpha=0.5, color=(0.25, 0.25, 0.25), zorder=500 + i*500)
+                else:
+                    for i in range(len(list_x2d)):
+                        p = next(patches)
+                        plot3d_z.axes.add_patch(p)
+                        pathpatch_2d_to_3d(p, z=0, normal=(0.8660254037844, 0.5, 0.))
+                        pathpatch_translate(p, turb_centers_frontview[i])
+
+            plot3d_z.finalizeFigure(show_ticks=show_ticks, show_xylabel=show_xylabel, show_zlabel=show_zlabel)
 
 
 

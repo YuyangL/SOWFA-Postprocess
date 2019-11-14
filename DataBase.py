@@ -148,7 +148,7 @@ def SeqTurb(slice_orient='vertical', r=63., pitch=5., zhub=90.):
                        (1443.179, 1884.179, 1212.583, 1976.417, 0., 216.),
                        (1661.417, 2102.417, 1338.583, 2102.417, 0., 216.))
     else:
-        confinebox = ((800., 2400., 800., 2400., 0., 216.),)*10
+        confinebox = ((900., 2500., 800., 2400., 0., 216.),)*10
         confinebox2 = confinebox
 
     return turb_borders, turb_centers_frontview, confinebox, confinebox2

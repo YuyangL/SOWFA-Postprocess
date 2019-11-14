@@ -190,7 +190,7 @@ class BaseProperties:
 
 
 class BoundaryLayerProfiles(BaseProperties):
-    def __init__(self, casename, height_filename='hLevelsCell', bl_folder='ABL', **kwargs):
+    def __init__(self, casename, height_filename='hLevelsCell', bl_folder='Inflows', **kwargs):
         self.height_filename = height_filename
         super(BoundaryLayerProfiles, self).__init__(casename=casename + '/' + bl_folder, timecols=0, excl_files=height_filename, **kwargs)
         # Copy height_filename to Ensemble in order to use it later

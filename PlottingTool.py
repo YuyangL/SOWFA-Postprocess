@@ -967,7 +967,7 @@ class PlotImageSlices3D(BaseFigure3D):
         super(PlotImageSlices3D, self).initializeFigure(constrained_layout=constrained_layout, **kwargs)
 
     @timer
-    def plotFigure(self):
+    def plotFigure(self, **kwargs):
         print('\nPlotting {}...'.format(self.name))
         # For gauging progress
         milestone = 33

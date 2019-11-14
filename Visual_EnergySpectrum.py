@@ -4,7 +4,6 @@ from PlottingTool import Plot2D
 import PostProcess_EnergySpectrum as PPES
 import time
 from Utilities import timer
-from numba import jit, prange
 import pickle
 from Utilities import readData
 
@@ -12,7 +11,7 @@ from Utilities import readData
 """
 User Inputs
 """
-case = 'ABL_N_H'  # 'Doekemeijer', 'ABL_N_L2'
+case = 'ABL_N_L2'  # 'Doekemeijer', 'ABL_N_L2'
 # caseDir = '/media/yluan/Toshiba External Drive/'
 caseDir = '/media/yluan/'
 # If slice time is 'auto', use the 1st time directory in slice folder
@@ -36,7 +35,7 @@ Lt = 250  # [CAUTION]
 Plot Settings
 """
 show, save = False, True
-xLim, yLim = (1e-3, 1), (1e-6, 1)
+xlim, ylim = (1e-3, 1), (1e-6, 1)
 xLabels = '$K_r$ [1/m]'
 # Alpha of fill-in of SFS region
 fillAlpha = 0.25
@@ -56,15 +55,16 @@ elif case in ('ABL_N_L', 'ABL_N_L2'):
 elif case == 'Doekemeijer':
     label, E12refName, E33refName = r'N, $U_{\mathrm{hub}} = 8$ m/s, $z_0 = 0.15$ m', 'E12_N_H', 'E33_N_H'
 else:
-    label, E12refName, E33refName = 'ABL', 'E12_N_H', 'E33_N_H'
+    label, E12refName, E33refName = 'ABL-N-H-HiSpeed', 'E12_N_H', 'E33_N_H'
 
 E12refName += refDataFormat
 E33refName += refDataFormat
 refDataDir = caseDir + '/' + refDataFolder
 # Read reference data, 1st column is x, 2nd column is y
-E12ref, E33ref = readData(E12refName, fileDir = refDataDir), readData(E33refName, fileDir = refDataDir)
-# In case data is not sorted from low x to high x
-E12ref, E33ref = E12ref[E12ref[:, 0].argsort()], E33ref[E33ref[:, 0].argsort()]
+if case != 'ABL_N_H_HiSpeed':
+    E12ref, E33ref = readData(E12refName, fileDir=refDataDir), readData(E33refName, fileDir=refDataDir)
+    # In case data is not sorted from low x to high x
+    E12ref, E33ref = E12ref[E12ref[:, 0].argsort()], E33ref[E33ref[:, 0].argsort()]
 
 
 """
@@ -73,8 +73,7 @@ Calculate Energy Spectrum
 @timer
 # jit(parallel = True) gives unknown error
 # prange has to be used with parallel = True
-@jit(parallel = False, fastmath = True)
-def getPlanarEnergySpectrum(u2D, v2D, w2D, L, cellSizes2D, horizontalEii = False):
+def getPlanarEnergySpectrum(u2D, v2D, w2D, L, cellSizes2D, horizontalEii=False):
     # Velocity fluctuations
     # The mean here is spatial average in slice plane
     # The Taylor hypothesis states that for fully developed turbulence,
@@ -114,7 +113,7 @@ def getPlanarEnergySpectrum(u2D, v2D, w2D, L, cellSizes2D, horizontalEii = False
     # The 6 components are 11, 12, 13,
     # 22, 23,
     # 33
-    for i in prange(6):
+    for i in range(6):
         # Perform the 2-point (cross-)correlation
         RijFft[:, :, i] = np.multiply(U1ResFft[i], np.conj(U2ResFft[i]))
 
@@ -139,7 +138,7 @@ def getPlanarEnergySpectrum(u2D, v2D, w2D, L, cellSizes2D, horizontalEii = False
     # Go through each proposed Kr
     # Integrate Rij where KrOld lies between Kr0*[(i + 1) - 0.5, (i + 1) + 0.5)
     # This is possible since RijFft and KrOld has matching 2D indices
-    for i in prange(len(Kr)):
+    for i in range(len(Kr)):
         occurrence[i] = len(KrOld[(KrOld >= Kr0*(i + 1 - 0.5)) & (KrOld < Kr0*(i + 1 + 0.5))])
         # For Eij, go through all 6 components
         for j in range(6):
@@ -159,13 +158,13 @@ def getPlanarEnergySpectrum(u2D, v2D, w2D, L, cellSizes2D, horizontalEii = False
 
 t0 = time.time()
 # Read 2D mesh and velocity
-x2D, y2D, z2D, U2D, u2D, v2D, w2D = PPES.readStructuredSliceData(sliceName = sliceName, case = case, caseDir = caseDir, time = sliceTime)
+x2D, y2D, z2D, U2D, u2D, v2D, w2D = PPES.readStructuredSliceData(sliceName=sliceName, case=case, caseDir=caseDir, time=sliceTime)
 t1 = time.time()
 print('\nFinished readSliceRawData in {:.4f} s'.format(t1 - t0))
 
 # Calculate 2-point (cross-)correlation and energy spectrum density and corresponding wave number
 t0 = time.time()
-RiiFft, Eii, RijFft, Eij, Kx, Ky, Kr, TKE = PPES.getPlanarEnergySpectrum(u2D, v2D, w2D, L = L, cellSizes2D = cellSizes2D, horizontalEii = horizontalEii)
+RiiFft, Eii, RijFft, Eij, Kx, Ky, Kr, TKE = PPES.getPlanarEnergySpectrum(u2D, v2D, w2D, L=L, cellSizes2D=cellSizes2D, horizontalEii=horizontalEii)
 Eii, Eij = abs(Eii), abs(Eij)
 t1 = time.time()
 print('\nFinished getPlanarEnergySpectrum in {:.4f} s'.format(t1 - t0))
@@ -202,26 +201,34 @@ E = (Eii, Eij[:, -1])
 # Figure order is Eii, E33
 figNames = (case + '_Eii_hor', case + '_E33')
 
-yLabels = (r'$E_{11}(K_r) + E_{22}(K_r)$ [m$^3$/s$^2$]', r'$E_{33}(K_r)$ [m$^3$/s$^2$]')
+yLabels = (r'$E_{11} + E_{22}$ [m$^3$/s$^2$]', r'$E_{33}$ [m$^3$/s$^2$]')
 
 # Go through Eii, E33 and plot each of them
 for i in range(len(E)):
     # If plotting horizontal Eii
     if i != len(E) - 1:
-        xList, yList = (Kr, E12ref[:, 0], Kr), (E[i], E12ref[:, 1], E_Kolmo)
-        plotsLabel = (label, 'Churchfield et al.', 'Kolmogorov model')
+        if case != 'ABL_N_H_HiSpeed':
+            xList, yList = (Kr, E12ref[:, 0], Kr), (E[i], E12ref[:, 1], E_Kolmo)
+            plot_label = (label, 'Churchfield et al.', 'Kolmogorov model')
+        else:
+            xList, yList = (Kr, Kr), (E[i], E_Kolmo)
+            plot_label = (label, 'Kolmogorov model')
+
     # Else if plotting E33
     else:
-        xList, yList = (Kr, E33ref[:, 0], Kr), (E[i], E33ref[:, 1], E_Kolmo)
-        plotsLabel = (label, 'Churchfield et al.', 'Kolmogorov model')
+        if case != 'ABL_N_H_HiSpeed':
+            xList, yList = (Kr, E33ref[:, 0], Kr), (E[i], E33ref[:, 1], E_Kolmo)
+            plot_label = (label, 'Churchfield et al.', 'Kolmogorov model')
+        else:
+            xList, yList = (Kr, Kr), (E[i], E_Kolmo)
+            plot_label = (label, 'Kolmogorov model')
 
     # Initialize figure
-    plot = Plot2D(xList, yList, xLabel = xLabels, yLabel = yLabels[i], name = figNames[i], save = save, show = show, xLim = xLim, yLim = yLim, figDir = resultPath)
+    plot = Plot2D(xList, yList, xlabel=xLabels, ylabel=yLabels[i], name=figNames[i], save=save, show=show, xlim=xlim, ylim=ylim, figdir=resultPath, figwidth='1/3')
     plot.initializeFigure()
-    plot.plotFigure(plotsLabel = plotsLabel)
-    plot.axes[0].fill_between((1./cellSizes2D[0], xLim[1]), yLim[0], yLim[1], alpha = fillAlpha, facecolor =
-    plot.gray, zorder = -1)
-    plot.finalizeFigure(xyScale = ('log', 'log'))
+    plot.plotFigure(linelabel=plot_label)
+    plot.axes.fill_between((1./cellSizes2D[0], xlim[1]), ylim[0], ylim[1], alpha=fillAlpha, facecolor=plot.gray, zorder=-1)
+    plot.finalizeFigure(xyscale=('log', 'log'))
 
 
 
@@ -270,7 +277,6 @@ Binning Operation
 
 
 @timer
-@jit(parallel = True, fastmath = True)
 def getSliceEnergySpectrum(u2D, v2D, w2D, cellSizes, type = 'decomposed'):
     # Velocity fluctuations
     # The mean here is spatial average in slice plane
@@ -323,7 +329,7 @@ def getSliceEnergySpectrum(u2D, v2D, w2D, cellSizes, type = 'decomposed'):
     Kr = np.empty(len(freqX)*len(freqY))
     Eii_r, E33_r = np.empty(len(freqX)*len(freqY)), np.empty(len(freqX)*len(freqY))
     i_r = 0
-    for iX in prange(len(freqX)):
+    for iX in range(len(freqX)):
         for iY in range(len(freqY)):
             Kr[i_r] = np.sqrt(freqX[iX]**2 + freqY[iY]**2)
             Eii_r[i_r], E33_r[i_r] = Eii[iY, iX], E33[iY, iX]
@@ -344,7 +350,7 @@ def getSliceEnergySpectrum(u2D, v2D, w2D, cellSizes, type = 'decomposed'):
         Eii_repeated, E33_repeated = EiiSorted[i], E33Sorted[i]
         match = 0.
         # Go through the rest of Kr other than Kr[i]
-        for j in prange(i + 1, len(KrSorted)):
+        for j in range(i + 1, len(KrSorted)):
             # If the other Kr[j] matches current Kr[i]
             if KrSorted[j] == KrSorted[i]:
                 Eii_repeated += EiiSorted[j]
