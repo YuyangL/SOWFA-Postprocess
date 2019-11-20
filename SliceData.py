@@ -4,6 +4,7 @@ from numba import njit
 from scipy.interpolate import griddata
 import os
 import PostProcess_AnisotropyTensor
+from copy import copy
 
 class SliceProperties:
     def __init__(self, time='latestTime', casedir='/media/yluan/Toshiba External Drive', casename='ALM_N_H_ParTurb', slice_folder='Slices', result_folder='Result', rot_z=0.):
@@ -70,6 +71,13 @@ class SliceProperties:
     @timer
     def interpolateDecomposedSliceData_Fast(x, y, z, vals, slice_orient='vertical', target_meshsize=1e4,
                                             rot_z=0, interp_method='nearest', confinebox=None):
+        # Rotate
+        if rot_z != 0:
+            print('\nRotating x and y...')
+            x_tmp, y_tmp = x.copy(), y.copy()
+            x = np.cos(rot_z)*x_tmp + np.sin(rot_z)*y_tmp
+            y = np.cos(rot_z)*y_tmp - np.sin(rot_z)*x_tmp
+
         # confinebox[4:6] will be ignored if slice is horizontal
         # Automatically determine best x, y, z precision
         # If no confine region specified
@@ -80,6 +88,15 @@ class SliceProperties:
             # If horizontal slice, z length should be about 0
             lz = np.max(z) - np.min(z) if slice_orient == 'vertical' else 0
         else:
+            # confinebox = list(confinebox)
+            # confinebox0 = confinebox.copy()
+            # x0, x1 = confinebox0[0], confinebox0[1]
+            # y0, y1 = confinebox0[2], confinebox0[3]
+            # confinebox[0] = np.cos(rot_z)*x0 + np.sin(rot_z)*y0
+            # confinebox[1] = np.cos(rot_z)*x1 + np.sin(rot_z)*y1
+            # confinebox[2] = np.cos(rot_z)*y0 - np.sin(rot_z)*x0
+            # confinebox[3] = np.cos(rot_z)*y1 - np.sin(rot_z)*x1
+            # print(confinebox)
             lx = confinebox[1] - confinebox[0]
             ly = confinebox[3] - confinebox[2] if slice_orient == 'horizontal' else 0
             lz = confinebox[5] - confinebox[4] if slice_orient == 'vertical' else 0
@@ -255,7 +272,7 @@ class SliceProperties:
         tensors = tensors.reshape((tensors.shape[0], tensors.shape[1], 3, 3))
 
         # Evaluate eigenvalues of symmetric tensor
-        eigValsGrid = np.zeros((1,3))
+        eigval_mesh = np.zeros((1,3))
         for i in range(tensors.shape[0]):
             for j in range(tensors.shape[1]):
                 # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
@@ -266,19 +283,19 @@ class SliceProperties:
                 eigVals[2] = tmpVal
                 eigVals2D = eigVals.reshape((1, 3))
                 # if i == 0 and j == 0:
-                #     eigValsGrid0 = np.zeros_like(eigVals2D)
-                #     eigValsGrid = np.vstack((eigValsGrid0, eigVals2D))
-                #     print(eigValsGrid.shape)
+                #     eigval_mesh0 = np.zeros_like(eigVals2D)
+                #     eigval_mesh = np.vstack((eigval_mesh0, eigVals2D))
+                #     print(eigval_mesh.shape)
                 # else:
                 # Each eigVals is a row, stack them vertically
-                eigValsGrid = np.vstack((eigValsGrid, eigVals2D))
+                eigval_mesh = np.vstack((eigval_mesh, eigVals2D))
 
         # Reshape eigVals to nRow x nCol x 3
         # so that each mesh grid location has 3 eigenvalues
         # Remove the first row since it was dummy
-        eigValsGrid = np.reshape(eigValsGrid[1:], (tensors.shape[0], tensors.shape[1], 3))
+        eigval_mesh = np.reshape(eigval_mesh[1:], (tensors.shape[0], tensors.shape[1], 3))
 
-        return vals3d, tensors, eigValsGrid
+        return vals3d, tensors, eigval_mesh
 
 
     # [DEPRECATED] Refer to PostProcess_AnisotropyTensor
@@ -307,7 +324,7 @@ class SliceProperties:
         # print(tensors[100, 0, :])
 
         # Evaluate eigenvalues of symmetric tensor
-        eigValsGrid = np.zeros((1, 3))
+        eigval_mesh = np.zeros((1, 3))
         for i in range(tensors.shape[0]):
             for j in range(tensors.shape[1]):
                 # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
@@ -318,19 +335,19 @@ class SliceProperties:
                 eigVals[2] = tmpVal
                 eigVals2D = eigVals.reshape((1, 3))
                 # if i == 0 and j == 0:
-                #     eigValsGrid0 = np.zeros_like(eigVals2D)
-                #     eigValsGrid = np.vstack((eigValsGrid0, eigVals2D))
-                #     print(eigValsGrid.shape)
+                #     eigval_mesh0 = np.zeros_like(eigVals2D)
+                #     eigval_mesh = np.vstack((eigval_mesh0, eigVals2D))
+                #     print(eigval_mesh.shape)
                 # else:
                 # Each eigVals is a row, stack them vertically
-                eigValsGrid = np.vstack((eigValsGrid, eigVals2D))
+                eigval_mesh = np.vstack((eigval_mesh, eigVals2D))
 
         # Reshape eigVals to nRow x nCol x 3
         # so that each mesh grid location has 3 eigenvalues
         # Remove the first row since it was dummy
-        eigValsGrid = np.reshape(eigValsGrid[1:], (tensors.shape[0], tensors.shape[1], 3))
+        eigval_mesh = np.reshape(eigval_mesh[1:], (tensors.shape[0], tensors.shape[1], 3))
 
-        return vals2D, tensors, eigValsGrid
+        return vals2D, tensors, eigval_mesh
 
 
     @staticmethod
@@ -353,33 +370,33 @@ class SliceProperties:
         tensors = tensors.reshape((tensors.shape[0], tensors.shape[1], 3, 3))
 
         # Evaluate eigenvalues of symmetric tensor
-        eigValsGrid = [0, 0, 0]
+        eigval_mesh = [0, 0, 0]
         for i in range(tensors.shape[0]):
             for j in range(tensors.shape[1]):
                 # eigVals is in ascending order, reverse it so that lambda1 >= lambda2 >= lambda3
                 eigVals = np.flipud(np.linalg.eigvalsh(tensors[i, j, :, :]))
                 # Each eigVals is a row, stack them vertically
-                eigValsGrid = np.vstack((eigValsGrid, eigVals))
+                eigval_mesh = np.vstack((eigval_mesh, eigVals))
 
         # Reshape eigVals to nRow x nCol x 3
         # so that each mesh grid location has 3 eigenvalues
         # Remove the first row since it was dummy
-        eigValsGrid = np.reshape(eigValsGrid[1:], (tensors.shape[0], tensors.shape[1], 3))
+        eigval_mesh = np.reshape(eigval_mesh[1:], (tensors.shape[0], tensors.shape[1], 3))
 
-        return valsDecomp, tensors, eigValsGrid
+        return valsDecomp, tensors, eigval_mesh
 
 
     @staticmethod
     @timer
-    def getBarycentricMapCoordinates(eigValsGrid, c_offset = 0.65, c_exp = 5.):
+    def getBarycentricMapCoordinates(eigval_mesh, c_offset=0.65, c_exp=5.):
         # Coordinates of the anisotropy tensor in the tensor basis {a1c, a2c, a3c}. From Banerjee (2007),
         # C1c = lambda1 - lambda2,
         # C2c = 2(lambda2 - lambda3),
         # C3c = 3lambda3 + 1
-        c1 = eigValsGrid[:, :, 0] - eigValsGrid[:, :, 1]
+        c1 = eigval_mesh[:, :, 0] - eigval_mesh[:, :, 1]
         # Not used for coordinates, only for color maps
-        c2 = 2*(eigValsGrid[:, :, 1] - eigValsGrid[:, :, 2])
-        c3 = 3*eigValsGrid[:, :, 2] + 1
+        c2 = 2*(eigval_mesh[:, :, 1] - eigval_mesh[:, :, 2])
+        c3 = 3*eigval_mesh[:, :, 2] + 1
         # Corners of the barycentric triangle
         # Can be random coordinates?
         x1c, x2c, x3c = 1., 0., 1/2.
@@ -793,21 +810,21 @@ if __name__ is '__main__':
 
         # Another implementation of processAnisotropyTensor() in Cython
         t0 = t.time()
-        # vals3d, tensors, eigValsGrid = PostProcess_AnisotropyTensor.processAnisotropyTensor(vals3d)
+        # vals3d, tensors, eigval_mesh = PostProcess_AnisotropyTensor.processAnisotropyTensor(vals3d)
         # In each eigenvector 3 x 3 matrix, 1 col is a vector
-        vals2D, tensors, eigValsGrid, eigVecsGrid = PostProcess_AnisotropyTensor.processAnisotropyTensor_Uninterpolated(vals2D, realizeIter = 0)
+        vals2D, tensors, eigval_mesh, eigVecsGrid = PostProcess_AnisotropyTensor.processAnisotropyTensor_Uninterpolated(vals2D, realizeIter = 0)
         t1 = t.time()
         ticToc = t1 - t0
 
-        # valsDecomp, tensors, eigValsGrid = case.processAnisotropyTensor_Fast(valsDecomp)
-        # vals2D, tensors, eigValsGrid = case.processAnisotropyTensor_Uninterpolated(vals2D)
+        # valsDecomp, tensors, eigval_mesh = case.processAnisotropyTensor_Fast(valsDecomp)
+        # vals2D, tensors, eigval_mesh = case.processAnisotropyTensor_Uninterpolated(vals2D)
 
 
         """
         Interpolation
         """
         if plot == 'bary':
-            xBary, yBary, rgbVals = case.getBarycentricMapCoordinates(eigValsGrid)
+            xBary, yBary, rgbVals = case.getBarycentricMapCoordinates(eigval_mesh)
 
             x2d, y2d, z2d, rgbVals = \
                 case.interpolateDecomposedSliceData_Fast(case.slices_coor[slicename][:, 0], case.slices_coor[slicename][:, 1], case.slices_coor[slicename][:, 2], rgbVals, slice_orient =

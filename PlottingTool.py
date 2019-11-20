@@ -339,13 +339,13 @@ class Plot2D_InsetZoom(Plot2D):
         # loc1, loc2 : {1, 2, 3, 4}
         rect = TransformedBbox(inset_axes.viewLim, parent_axes.transData)
 
-        pp = BboxPatch(rect, fill = False, **kwargs)
+        pp = BboxPatch(rect, fill=False, **kwargs)
         parent_axes.add_patch(pp)
 
-        p1 = BboxConnector(inset_axes.bbox, rect, loc1 = loc1a, loc2 = loc1b, **kwargs)
+        p1 = BboxConnector(inset_axes.bbox, rect, loc1=loc1a, loc2=loc1b, **kwargs)
         inset_axes.add_patch(p1)
         p1.set_clip_on(False)
-        p2 = BboxConnector(inset_axes.bbox, rect, loc1 = loc2a, loc2 = loc2b, **kwargs)
+        p2 = BboxConnector(inset_axes.bbox, rect, loc1=loc2a, loc2=loc2b, **kwargs)
         inset_axes.add_patch(p2)
         p2.set_clip_on(False)
 
@@ -443,6 +443,13 @@ class Plot2D_MultiAxes(Plot2D):
         self.linelabel2 = np.arange(1, self.narr2 + 1) if linelabel2 is None else linelabel2
 
         super(Plot2D_MultiAxes, self).plotFigure(**kwargs)
+        # Color the first axis with the first line color, be it x or y
+        if self.ax2loc == 'y':
+            self.axes.tick_params(axis='y', colors=self.colors[0])
+            self.axes.yaxis.label.set_color(self.colors[0])
+        else:
+            self.axes.tick_params(axis='x', colors=self.colors[0])
+            self.axes.xaxis.label.set_color(self.colors[0])
                 
         self.axes2, self.plots2 = ([None]*self.narr2,)*2
         for i in range(self.narr2):
@@ -473,13 +480,10 @@ class Plot2D_MultiAxes(Plot2D):
                 self.axes2[i].spines["right"].set_visible(True)
 
             if self.ax2loc == 'x':
-
                 self.axes2[i].set_xlabel(self.ax2label[i])
-
                 self.axes2[i].tick_params(axis='x', colors=color)
                 self.axes2[i].xaxis.label.set_color(color)
             else:
-
                 self.axes2[i].set_ylabel(self.ax2label[i])
                 self.axes2[i].tick_params(axis='y', colors=color)
                 self.axes2[i].yaxis.label.set_color(color)
@@ -973,7 +977,7 @@ class PlotImageSlices3D(BaseFigure3D):
         milestone = 33
         for i in range(len(self.list_rgb)):
             self.axes.plot_surface(self.list_x[i], self.list_y[i], self.list_z[i], cstride=1, rstride=1, 
-                                      facecolors=self.list_rgb[i], shade=False)
+                                      facecolors=self.list_rgb[i], shade=False, alpha=self.alpha)
             progress = (i + 1)/len(self.list_rgb)*100.
             if progress >= milestone:
                 print(' {0}%... '.format(milestone))

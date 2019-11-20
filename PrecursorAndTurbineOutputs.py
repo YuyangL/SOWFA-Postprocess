@@ -102,7 +102,7 @@ class BaseProperties:
                         # In case the last line wasn't written properly,
                         # which means the simulation was probably aborted, discard the last line
                         except ValueError:
-                            times[filenames[j]] = np.genfromtxt(self.case_fullpath + timedirs[i] + '/' + filenames[j], skip_footer = 1)[:, self.timecols[j]]
+                            times[filenames[j]] = np.genfromtxt(self.case_fullpath + timedirs[i] + '/' + filenames[j], skip_footer=1)[:, self.timecols[j]]
 
                         # Index at which trim should start for this file
                         itrim[filenames[j]] = np.searchsorted(times[filenames[j]], np.float_(timedirs[i + 1]))
@@ -149,7 +149,7 @@ class BaseProperties:
         # If stoptime larger than any time, istop = len(times_all)
         istop = min(istop, len(self.times_all) - 1)
         starttime_real, stoptime_real = self.times_all[istart], self.times_all[istop]
-        times_selected = self.times_all[istart:istop + 1]
+        times_selected = self.times_all[istart:istop]
 
         return times_selected, starttime_real, stoptime_real, istart, istop
 
@@ -167,11 +167,34 @@ class BaseProperties:
 
         print('\n' + str(self.filenames) + ' read')
 
-    def calculatePropertyMean(self, axis=1, starttime=None, stoptime=None):
+    def calculatePropertyMean(self, axis=1, starttime=None, stoptime=None, **kwargs):
         self.times_selected, _, _, istart, istop = self._selectTimes(starttime=starttime, stoptime=stoptime)
+        # print('\nistart and istop {} {}'.format(istart, istop))
+        # Go through each property
         for i in range(len(self.filenames)):
-            self.data[self.filenames[i] + '_mean'] = np.mean(self.data[self.filenames[i]][istart:istop], 
-                                                             axis=axis)
+            # self.data[self.filenames[i] + '_mean'] = np.mean(self.data[self.filenames[i]][istart:istop], 
+            #                                                  axis=axis)
+            
+            # Perform statistical averaging
+            data = self.data[self.filenames[i]][istart:istop]
+            times = self.times_selected
+            data_mean = data.ravel().copy()
+            # data_mean = np.empty(len(data))
+            # data_mean[0] = data[0]
+            val_dt_sum = 0.
+            dt_sum = 1e-9
+            # Assuming equi-distant time marching, go through each time
+            for j in range(1, len(data)):
+                dt = times[j] - times[j - 1]
+                # dt = 0.035
+                # Linear interpolation between each value point
+                val_mid = (data[j] + data[j - 1])/2.
+                val_dt_sum += val_mid*dt
+                dt_sum += dt
+                # if j == 1: print('\n dt {}, val_mid {}, val_dt_sum {}, dt_sum {}'.format(dt,val_mid, val_dt_sum, dt_sum))
+                data_mean[j] = val_dt_sum/dt_sum
+            
+            self.data[self.filenames[i] + '_mean'] = data_mean
         
         print('\nTemporal average calculated for {} from {:.4f} s - {:.4f} s'.format(self.filenames, self.times_selected[0], self.times_selected[-1]))
 
@@ -211,13 +234,9 @@ class BoundaryLayerProfiles(BaseProperties):
 
 
 class TurbineOutputs(BaseProperties):
-    def __init__(self, casename, datafolder='turbineOutput', global_quantities=('powerRotor', 'rotSpeed', 'thrust',
-                                                                      'torqueRotor',
-                                                       'torqueGen', 'azimuth', 'nacYaw', 'pitch'), **kwargs):
-        self.global_quantities = global_quantities
+    def __init__(self, casename, datafolder='turbineOutput', **kwargs):
         super(TurbineOutputs, self).__init__(casename + '/' + datafolder, **kwargs)
-
-        self.nTurb, self.nBlade = 0, 0
+        self.n_turbs, self.n_blades = 0, 0
 
     @timer
     def readPropertyData(self, filenames=('*',), skiprow=0, skipcol='infer', verbose=True, turbinfo=('infer',)):
@@ -238,20 +257,20 @@ class TurbineOutputs(BaseProperties):
             turbinfo = np.genfromtxt(self.ensemble_folderpath + self.filename_pre + 'Cl' + self.filename_sub)[skiprow:, :2]
 
         # Number of turbines and blades
-        (self.nTurb, self.nBlade) = (int(np.max(turbinfo[:, 0]) + 1), int(np.max(turbinfo[:, 1]) + 1))
+        (self.n_turbs, self.n_blades) = (int(np.max(turbinfo[:, 0]) + 1), int(np.max(turbinfo[:, 1]) + 1))
 
         fileNamesOld, self.filenames = self.filenames, list(self.filenames)
         for filename in fileNamesOld:
-            for i in range(self.nTurb):
+            for i in range(self.n_turbs):
                 if filename not in global_quantities:
-                    for j in range(self.nBlade):
+                    for j in range(self.n_blades):
                         newFileName = filename + '_Turb' + str(i) + '_Bld' + str(j)
-                        self.data[newFileName] = self.data[filename][(i*self.nBlade + j)::(self.nTurb*self.nBlade), :]
+                        self.data[newFileName] = self.data[filename][(i*self.n_blades + j)::(self.n_turbs*self.n_blades), :]
                         self.filenames.append(newFileName)
 
                 else:
                     newFileName = filename + '_Turb' + str(i)
-                    self.data[newFileName] = self.data[filename][i::self.nTurb]
+                    self.data[newFileName] = self.data[filename][i::self.n_turbs]
                     self.filenames.append(newFileName)
 
         if verbose:

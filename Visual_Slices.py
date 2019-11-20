@@ -7,9 +7,9 @@ from Utility import timer
 from scipy.interpolate import griddata
 from PlottingTool import Plot2D, Plot2D_InsetZoom, PlotSurfaceSlices3D, PlotContourSlices3D, pathpatch_translate, pathpatch_2d_to_3d, PlotImageSlices3D
 try:
-    import PostProcess_AnisotropyTensor as PPAT
+    import PostProcess_Tensor as PPT
 except ImportError:
-    raise ImportError('\nNo module named PostProcess_AnisotropyTensor. Check setup.py and run'
+    raise ImportError('\nNo module named PostProcess_Tensor. Check setup.py and run'
                       '\npython setup.py build_ext --inplace')
 
 try:
@@ -23,21 +23,24 @@ from matplotlib.patches import Circle, PathPatch
 import SliceData as PPSD
 from DataBase import *
 from copy import copy
+from Utility import fieldSpatialSmoothing
+from scipy.ndimage import gaussian_filter
 
 """
 User Inputs
 """
-time = '5000'  #'23243.2156219'
+time = '10000'  #'23243.2156219'
+# time = 'latestTime'  #'23243.2156219'
 casedir = '/media/yluan'
-casename = 'RANS/N_H_OneTurb_LowZ_Rwall2'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URANS/N_H_OneTurb'  # 'ALM_N_H_ParTurb'
-# casename = 'ALM_N_L_ParTurb'
+casename = 'RANS/N_H_ParTurb_LowZ_Rwall'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URANS/N_H_OneTurb'  # 'ALM_N_H_ParTurb'
+# casename = 'ALM_N_H_OneTurb'
 # properties = ('kResolved', 'kSGSmean')
-properties = ('divDevR', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
-properties = ('divDevR_blend', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
+# properties = ('divDevR', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
+# properties = ('divDevR_blend', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
 # properties = ('GAvg', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
 # properties = ('G', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
 # properties = ('RGB', 'RGB_pred_TBDT', 'RGB_pred_TBRF', 'RGB_pred_TBAB', 'RGB_pred_TBGB')
-# properties = ('epsilon',)
+properties = ('Rij',)
 # slicenames = ('oneDupstreamTurbine', 'rotorPlane', 'oneDdownstreamTurbine')
 # slicenames = ('threeDdownstreamTurbine', 'fiveDdownstreamTurbine', 'sevenDdownstreamTurbine')
 slicenames = ('hubHeight', 'quarterDaboveHub', 'turbineApexHeight')
@@ -57,6 +60,7 @@ rot_z = np.pi/6.
 r = 63
 # For calculating total <epsilon> only
 nu = 1e-5
+filtering = True
 
 
 """
@@ -65,7 +69,7 @@ Plot Settings
 # Which type(s) of plot to make
 plot_type = '3D'  # '2D', '3D', 'all'
 # Total number cells intended to plot via interpolation
-target_meshsize = 1e5
+target_meshsize = 2e5
 interp_method = 'linear'
 # Number of contours, only for 2D plots or 3D horizontal slice plots
 contour_lvl = 200
@@ -83,6 +87,7 @@ Process User Inputs
 slicenames = (slicenames,) if isinstance(slicenames, str) else slicenames
 # Confined region auto definition
 if 'OneTurb' in casename:
+    rotate_field = False
     # For rotor plane vertical slices
     if 'oneDupstream' in slicenames[0] or 'threeDdownstream' in slicenames[0]:
         turb_borders, turb_centers_frontview, confinebox, confinebox2 = OneTurb('vert')
@@ -96,9 +101,10 @@ if 'OneTurb' in casename:
     elif 'hubHeight' in slicenames[0] or 'groundHeight' in slicenames[0]:
         # Confinement for z doesn't matter since the slices are horizontal
         confinebox = ((800, 2400, 800, 2400, 0, 216),)*len(slicenames)
-        turb_borders, turb_centers_frontview, confinebox, _ = OneTurb('hor')
+        turb_borders, turb_centers_frontview, confinebox, _ = OneTurb('hor', rotate_field=rotate_field)
 
 elif 'ParTurb' in casename:
+    rotate_field = True
     if 'oneDupstream' in slicenames[0] or 'threeDdownstream' in slicenames[0]:
         # Read coor info from database
         turb_borders, turb_centers_frontview, confinebox, confinebox2 = ParTurb('vert')
@@ -109,9 +115,13 @@ elif 'ParTurb' in casename:
             turb_centers_frontview = turb_centers_frontview[:6]
 
     elif 'hubHeight' in slicenames[0] or 'groundHeight' in slicenames[0]:
-        turb_borders, turb_centers_frontview, confinebox, _ = ParTurb('hor')
+        if 'Yaw' in casename:
+            turb_borders, turb_centers_frontview, confinebox, _ = ParTurb_Yaw('hor', rotate_field=rotate_field)
+        else:
+            turb_borders, turb_centers_frontview, confinebox, _ = ParTurb('hor', rotate_field=rotate_field)
 
 elif 'SeqTurb' in casename:
+    rotate_field = False
     # For rotor plane vertical slices
     # TODO: update for vertical slices
     if 'oneDupstream' in slicenames[0] or 'threeDdownstream' in slicenames[0]:
@@ -125,7 +135,7 @@ elif 'SeqTurb' in casename:
     # For horizontal slices
     elif 'hubHeight' in slicenames[0] or 'groundHeight' in slicenames[0]:
         # Confinement for z doesn't matter since the slices are horizontal
-        turb_borders, turb_centers_frontview, confinebox, _ = SeqTurb('hor')
+        turb_borders, turb_centers_frontview, confinebox, _ = SeqTurb('hor', rotate_field=rotate_field)
 
 else:
     turb_borders = ((99999,)*4,)
@@ -165,7 +175,11 @@ if 'U' in properties[0]:
         val_label = [r'$\langle U_\mathrm{hor} \rangle$ [m/s]', r'$\langle u_z \rangle$ [m/s]']
 
 elif 'k' in properties[0]:
-    val_lim = (0, 2.5) if 'SGS' not in properties[0] else (0, 0.1)
+    if 'HiSpeed' not in casename:
+        val_lim = (0, 2.75) if 'SGS' not in properties[0] else (0, 0.1)
+    else:
+        val_lim = (0., 4.5) if 'SGS' not in properties[0] else (0., 0.2)
+
     val_lim_z = None
     if 'Resolved' in properties[0]:
         val_label = (r'$\langle k_\mathrm{resolved} \rangle$ [m$^2$/s$^2$]',) if len(properties) == 1 else (r'$\langle k \rangle$ [m$^2$/s$^2$]',)
@@ -181,7 +195,11 @@ elif 'uuPrime2' in properties[0] or 'R' in properties[0] and 'div' not in proper
                  r"$\langle v'v' \rangle$ [-]", r"$\langle v'w' \rangle$ [-]",
                                                 r"$\langle w'w' \rangle$ [-]")
 elif "epsilon" in properties[0]:
-    val_lim = (0.0001, 0.011) if 'SGS' not in properties[0] else (0.0001, 0.011)
+    if 'HiSpeed' not in casename:
+        val_lim = (0., 0.012) if 'SGS' not in properties[0] else (0., 0.012)
+    else:
+        val_lim = (0., 0.04)
+
     val_lim_z = None
     if 'SGS' in properties[0]:
         val_label = (r'$\langle \epsilon_{\mathrm{SGS}} \rangle$ [m$^2$/s$^3$]',) if 'mean' in properties[0] else (r'$\epsilon_{\mathrm{SGS}}$ [m$^2$/s$^3$]',)
@@ -190,13 +208,13 @@ elif "epsilon" in properties[0]:
     else:
         val_label = (r'$\langle \epsilon \rangle$ [m$^2$/s$^3$]',)
 
-elif 'G' in properties[0]:
-    val_lim = (-0.05, 0.17)
+elif 'G' in properties[0] and 'RGB' not in properties[0]:
+    val_lim = (-0.05, 0.18) if 'HiSpeed' not in casename else (-0.1, 0.36)
     val_lim_z = None
     val_label = (r'$\langle G \rangle$ [m$^2$/s$^3$]',)
 elif 'divDevR' in properties[0]:
-    val_lim = (0., 0.11)
-    val_lim_z = (-0.07, 0.07)
+    val_lim = (0., 0.12)
+    val_lim_z = (-0.08, 0.07) if 'HiSpeed' not in casename else (-0.11, 0.1)
     val_label = (r'$\langle \nabla \cdot R_{ij}^D \rangle_\mathrm{hor}$ [m/s$^2$]', r'$\langle \nabla \cdot R_{ij}^D \rangle_z$ [m/s$^2$]')
 else:
     val_lim = None
@@ -223,6 +241,21 @@ for i0 in range(len(properties)):
             print(' Calculating total <k> for {}...'.format(slicenames[i]))
             slicename2 = case.slicenames[i + len(slicenames)]
             vals2d += case.slices_val[slicename2]
+        elif 'Rij' in properties or 'uuPrime2' in properties:
+            print('Calculating Barycentric map...')
+            # k = .5*(vals2d[:, 0] + vals2d[:, 3] + vals2d[:, 5])
+            # for j in range(6):
+            #     vals2d[:, j] = vals2d[:, j]/(2.*k) - 1/3. if j in (0, 3, 5) else vals2d[:, j]/(2.*k)
+            #     bij =
+
+            _, eigval, _ = PPT.processReynoldsStress(vals2d, make_anisotropic=True)
+            # eigval = eigval.reshape((len(eigval), 1, 3))
+            _, vals2d = PPT.getBarycentricMapData(eigval)
+            # vals2d = vals2d.reshape((len(vals2d), 3))
+            vals2d[vals2d > 1.] = 1.
+
+
+
         # # Else if epsilonSGSmean and nuSGSmean in properties then get total epsilonMean
         # # By assuming isotropic homogeneous turbulence and
         # # <epsilon> = <epsilonSGS>/(1 - 1/(1 + <nuSGS>/nu))
@@ -235,16 +268,42 @@ for i0 in range(len(properties)):
         #     # Calculate epsilonMean
         #     vals2d = case.calcSliceMeanDissipationRate(epsilonSGSmean = epsilonSGSmean, nusgs_mean = nusgs_mean, nu = nu)
 
-        # Interpolation
-        x2d, y2d, z2d, vals3d = case.interpolateDecomposedSliceData_Fast(case.slices_coor[slicename][:, 0], case.slices_coor[slicename][:, 1], case.slices_coor[slicename][:, 2], vals2d,
-                                                                         slice_orient=case.slices_orient[slicename], rot_z=case.rot_z,
-                                                                         target_meshsize=target_meshsize,
-                                                                         interp_method=interp_method,
-                                                                         confinebox=confinebox[i])
+        # Interpolation an
+        if 'pred' in properties[i0] and filtering:
+            # x2d, y2d, z2d, vals3d = case.interpolateDecomposedSliceData_Fast(case.slices_coor[slicename][:, 0],
+            #                                                                  case.slices_coor[slicename][:, 1],
+            #                                                                  case.slices_coor[slicename][:, 2], vals2d,
+            #                                                                  slice_orient=case.slices_orient[slicename],
+            #                                                                  rot_z=rot_z,
+            #                                                                  target_meshsize=target_meshsize,
+            #                                                                  interp_method=interp_method,
+            #                                                                  confinebox=confinebox[i])
+            #
+            # vals3d = gaussian_filter(vals3d, sigma=5.)
+            if rotate_field:
+                print('\nRotating x and y...')
+                x_tmp, y_tmp = case.slices_coor[slicename][:, 0].copy(), case.slices_coor[slicename][:, 1].copy()
+                x = np.cos(rot_z)*x_tmp + np.sin(rot_z)*y_tmp
+                y = np.cos(rot_z)*y_tmp - np.sin(rot_z)*x_tmp
+                print('\nPerforming 2D Gaussian filtering for {}...'.format(properties[i0]))
+            else:
+                x, y = case.slices_coor[slicename][:, 0], case.slices_coor[slicename][:, 1]
 
-        # Flatten if vals3d only have one component like a scalar field
-        if vals3d.shape[2] == 1:
-            vals3d = vals3d.reshape((vals3d.shape[0], vals3d.shape[1]))
+            val_lim2 = (val_lim[0] - 2.*(val_lim[1] - val_lim[0]),
+                        val_lim[1] + 2.*(val_lim[1] - val_lim[0]))
+            x2d, y2d, _, vals3d = fieldSpatialSmoothing(vals2d, x, y, xlim=tuple(confinebox[i][:2]), ylim=tuple(confinebox[i][2:4]), mesh_target=target_meshsize, interp_method=interp_method, val_bnd=val_lim2)
+            z = case.slices_coor[slicename][:, 2]
+            _, z2d = np.mgrid[0:1:x2d.shape[0]*1j, z.min():z.max():x2d.shape[1]*1j]
+        else:
+            rot_z_tmp = 0 if not rotate_field else rot_z
+            x2d, y2d, z2d, vals3d = case.interpolateDecomposedSliceData_Fast(case.slices_coor[slicename][:, 0], case.slices_coor[slicename][:, 1], case.slices_coor[slicename][:, 2], vals2d,
+                                                                             slice_orient=case.slices_orient[slicename], rot_z=rot_z_tmp,
+                                                                             target_meshsize=target_meshsize,
+                                                                             interp_method=interp_method,
+                                                                             confinebox=confinebox[i])
+
+            # Flatten if vals3d only have one component like a scalar field
+            if vals3d.shape[2] == 1: vals3d = vals3d.reshape((vals3d.shape[0], vals3d.shape[1]))
 
         # Calculate magnitude if U
         if 'U' in properties[0] or 'divDevR' in properties[0]:
@@ -298,7 +357,7 @@ for i0 in range(len(properties)):
             figname = slicename
 
         if plot_type in ('2D', 'all'):
-            slicePlot = Plot2D(x2d, y2d, vals3d, name=figname, xlabel=xlabel, ylabel=ylabel, val_label= val_label, save=save, show=show, figdir=case.result_path)
+            slicePlot = Plot2D(x2d, y2d, vals3d, name=figname, xlabel=xlabel, ylabel=ylabel, val_label=val_label, save=save, show=show, figdir=case.result_path)
             slicePlot.initializeFigure()
             slicePlot.plotFigure(contour_lvl=contour_lvl)
             slicePlot.finalizeFigure()
@@ -318,17 +377,18 @@ for i0 in range(len(properties)):
             show_xylabel = (False, False)
             show_zlabel = True
             show_ticks = (False, False, True)
-            if 'RGB' not in properties[0]:
+            if 'RGB' not in properties[0] and 'Rij' not in properties[0] and 'uuPrime2' not in properties[0]:
+                multiplier = 1.75
                 # Initialize plot object for horizontal contour slices
                 plot3d = PlotContourSlices3D(list_x2d, list_y2d, list_val3d, horslice_offsets, gradient_bg=False, name=figname_3d, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, val_label=val_label[0], save=save, show=show, figdir=case.result_path, viewangle=view_angle, figwidth=figwidth, equalaxis=equalaxis, cbar_orient='vertical',
-                                                  figheight_multiplier=1.75,
-                                                  val_lim=val_lim,
-                                             zlim=None)
+                                                  figheight_multiplier=multiplier,
+                                                  val_lim=val_lim)
             else:
+                multiplier = 2
                 plot3d = PlotImageSlices3D(list_x2d, list_y2d, list_z2d, list_rgb=list_val3d,
                                            name=figname_3d, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel,
                                            save=save, show=show, figdir=case.result_path, viewangle=view_angle, figwidth=figwidth,
-                                           equalaxis=equalaxis, figheight_multiplier=2)
+                                           equalaxis=equalaxis, figheight_multiplier=multiplier)
 
             # If there's a z component e.g. Uz, initialize it separately
             if list_val3d_z[0] is not None:

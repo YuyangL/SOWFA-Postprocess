@@ -117,9 +117,9 @@ cpdef tuple processReynoldsStress(np.ndarray stress_tensor, bint make_anisotropi
 
             # Add each anisotropy tensor to each mesh grid location, in depth
             # bij is 3D with z being b11, b12, b13, b21, b22, b23...
-            bij = np.hstack((stress_tensor[:, 0], stress_tensor[:, 1], stress_tensor[:, 2],
+            bij = np.vstack((stress_tensor[:, 0], stress_tensor[:, 1], stress_tensor[:, 2],
                              stress_tensor[:, 1], stress_tensor[:, 3], stress_tensor[:, 4],
-                             stress_tensor[:, 2], stress_tensor[:, 4], stress_tensor[:, 5]))
+                             stress_tensor[:, 2], stress_tensor[:, 4], stress_tensor[:, 5])).T
         else:
             for i in range(9):
                 stress_tensor[:, i] = stress_tensor[:, i]/(2.*k) - 1/3. if i in (0, 4, 8) else stress_tensor[:, i]/(2.*k)
@@ -127,9 +127,9 @@ cpdef tuple processReynoldsStress(np.ndarray stress_tensor, bint make_anisotropi
     # Else if stress tensor is already anisotropic
     else:
         if stress_tensor.shape[1] == 6:
-            bij = np.hstack((stress_tensor[:, 0], stress_tensor[:, 1], stress_tensor[:, 2],
+            bij = np.vstack((stress_tensor[:, 0], stress_tensor[:, 1], stress_tensor[:, 2],
                              stress_tensor[:, 1], stress_tensor[:, 3], stress_tensor[:, 4],
-                             stress_tensor[:, 2], stress_tensor[:, 4], stress_tensor[:, 5]))
+                             stress_tensor[:, 2], stress_tensor[:, 4], stress_tensor[:, 5])).T
         else:
             bij = stress_tensor
 
