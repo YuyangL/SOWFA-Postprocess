@@ -64,7 +64,7 @@ class BaseFigure:
         return colors, gray
 
 
-    def _latexify(self, fig_width=None, fig_height=None, figspan='half', linewidth=0.8, fontsize=8, subplots=(1, 1), figheight_multiplier=1.,
+    def _latexify(self, fig_width=None, fig_height=None, figspan='half', linewidth=0.8, fontsize=10, subplots=(1, 1), figheight_multiplier=1.,
                   **kwargs):
         """Set up matplotlib's RC params for LaTeX plotting.
         Call this before plotting a figure.
@@ -104,12 +104,12 @@ class BaseFigure:
         mpl.rcParams.update({
             'backend':             'Qt5Agg',
             'text.latex.preamble': [r"\usepackage{gensymb,amsmath}"],
-            'axes.labelsize':      fontsize - 2.,  # fontsize for x and y labels (was 10)
-            'axes.titlesize':      fontsize,
-            'font.size':           fontsize - 2.,  # was 10
-            'legend.fontsize':     fontsize - 4.,  # was 10
-            'xtick.labelsize':     fontsize - 4.,
-            'ytick.labelsize':     fontsize - 4.,
+            'axes.labelsize':      fontsize - 1.,  # fontsize for x and y labels (was 10)
+            'axes.titlesize':      fontsize + 2.,
+            'font.size':           fontsize - 1.,  # was 10
+            'legend.fontsize':     fontsize - 2.,  # was 10
+            'xtick.labelsize':     fontsize - 2.,
+            'ytick.labelsize':     fontsize - 2.,
             'xtick.color':         self.gray,
             'ytick.color':         self.gray,
             'xtick.direction':     'out',
@@ -155,7 +155,7 @@ class BaseFigure:
 
     def finalizeFigure(self, xyscale=('linear', 'linear'), show_xylabel=(True, True), grid=True,
                        transparent_bg=False, legloc='best', showleg=True,
-                       tight_layout=False):
+                       tight_layout=False, dpi=500):
         if len(self.list_x) > 1 and showleg:
             ncol = 2 if len(self.list_x) > 3 else 1
             self.axes.legend(loc=legloc, shadow=False, fancybox=False, ncol=ncol)
@@ -183,7 +183,7 @@ class BaseFigure:
         print('\nFigure ' + self.name + ' finalized')
         if self.save:
             plt.savefig(self.figdir + '/' + self.name + '.png', transparent=transparent_bg,
-                        dpi=1000)
+                        dpi=dpi)
             print('\nFigure ' + self.name + '.png saved in ' + self.figdir)
 
         # Close current figure window

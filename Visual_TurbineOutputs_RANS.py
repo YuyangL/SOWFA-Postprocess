@@ -30,7 +30,7 @@ Calculate Power Ratio Between Downwind and Upwind Turbines
 User Inputs
 """
 casedir = '/media/yluan/RANS'
-casenames = ('N_H_ParTurb_LowZ_Rwall',)  # 'N_H_ParTurb_LowZ_Rwall', 'N_H_OneTurb_LowZ_Rwal2'
+casenames = ('N_H_OneTurb_LowZ_Rwall2',)  # 'N_H_ParTurb_LowZ_Rwall', 'N_H_OneTurb_LowZ_Rwal2'
 property_names = ('powerGenerator', 'thrust')
 # [CAUTION] Whether remerge all time directories into 1 ensemble even if a current ensemble exists
 force_remerge = False
@@ -46,7 +46,7 @@ property_colskip = 3  # Default 4
 Plot Settings
 """
 # Figure width is half of A4 page, height is multiplied to elongate it
-figwidth, figheight_multiplier = 'half', 1.
+figwidth, figheight_multiplier = '1/3', 1.
 show, save = False, True
 
 ylabel = 'Iteration [-]'

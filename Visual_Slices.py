@@ -36,11 +36,11 @@ casename = 'RANS/N_H_ParTurb_LowZ_Rwall'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URAN
 # casename = 'ALM_N_H_OneTurb'
 # properties = ('kResolved', 'kSGSmean')
 # properties = ('divDevR', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
-# properties = ('divDevR_blend', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
+properties = ('divDevR_blend', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
 # properties = ('GAvg', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
 # properties = ('G', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
 # properties = ('RGB', 'RGB_pred_TBDT', 'RGB_pred_TBRF', 'RGB_pred_TBAB', 'RGB_pred_TBGB')
-properties = ('Rij',)
+# properties = ('divDevR',)
 # slicenames = ('oneDupstreamTurbine', 'rotorPlane', 'oneDdownstreamTurbine')
 # slicenames = ('threeDdownstreamTurbine', 'fiveDdownstreamTurbine', 'sevenDdownstreamTurbine')
 slicenames = ('hubHeight', 'quarterDaboveHub', 'turbineApexHeight')
@@ -213,8 +213,9 @@ elif 'G' in properties[0] and 'RGB' not in properties[0]:
     val_lim_z = None
     val_label = (r'$\langle G \rangle$ [m$^2$/s$^3$]',)
 elif 'divDevR' in properties[0]:
-    val_lim = (0., 0.12)
-    val_lim_z = (-0.08, 0.07) if 'HiSpeed' not in casename else (-0.11, 0.1)
+    val_lim = (0., .1)
+    # val_lim_z = (-0.08, 0.07) if 'HiSpeed' not in casename else (-0.11, 0.1)
+    val_lim_z = (-0.05, 0.05) if 'HiSpeed' not in casename else (-0.05, 0.05)
     val_label = (r'$\langle \nabla \cdot R_{ij}^D \rangle_\mathrm{hor}$ [m/s$^2$]', r'$\langle \nabla \cdot R_{ij}^D \rangle_z$ [m/s$^2$]')
 else:
     val_lim = None
@@ -318,6 +319,11 @@ for i0 in range(len(properties)):
             list_x2d.append(x2d)
             list_y2d.append(y2d)
             list_z2d.append(z2d)
+            vals3d_hor[vals3d_hor > val_lim[1]] = val_lim[1]
+            vals3d_hor[vals3d_hor < val_lim[0]] = val_lim[0]
+            if vals3d_z is not None:
+                vals3d_z[vals3d_z > val_lim_z[1]] = val_lim_z[1]
+                vals3d_z[vals3d_z < val_lim_z[0]] = val_lim_z[0]
             list_val3d.append(vals3d_hor)
             list_val3d_z.append(vals3d_z)
 
