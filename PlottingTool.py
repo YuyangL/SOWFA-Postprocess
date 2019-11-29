@@ -711,12 +711,18 @@ class BaseFigure3D(BaseFigure):
         self._ensureMeshGrid()
 
     def finalizeFigure(self, fraction=0.06, pad=0.08, show_cbar=True, reduce_nticks=True, grid=True, show_zlabel=True, show_ticks=(True, True, True),
+                       z_ticklabel=(None,),
                        **kwargs):
         if show_zlabel: self.axes.set_zlabel(self.zlabel)
+        if z_ticklabel[0] is not None: self.axes.set_zticklabels(z_ticklabel)
         if self.zlim is not None: self.axes.set_zlim(self.zlim)
         # Color bar
         if show_cbar:
-            cb = plt.colorbar(self.plot, fraction=fraction, pad=pad, orientation=self.cbar_orient, extend='both', aspect=25, shrink=0.75)
+            def myfmt(x, pos):
+                return '{0:.2f}'.format(x)
+
+            cb = plt.colorbar(self.plot, fraction=fraction, pad=pad, orientation=self.cbar_orient, extend='both', aspect=25, shrink=0.75,
+                              format='%.3f')#ticker.FuncFormatter(myfmt))
             cb.set_label(self.val_label)
 
         # Turn off background on all three panes

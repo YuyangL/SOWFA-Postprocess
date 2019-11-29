@@ -36,11 +36,11 @@ casename = 'RANS/N_H_ParTurb_LowZ_Rwall'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URAN
 # casename = 'ALM_N_H_OneTurb'
 # properties = ('kResolved', 'kSGSmean')
 # properties = ('divDevR', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
-properties = ('divDevR_blend', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
-# properties = ('GAvg', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
+# properties = ('divDevR_blend', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
+properties = ('GAvg', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
 # properties = ('G', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
-# properties = ('RGB', 'RGB_pred_TBDT', 'RGB_pred_TBRF', 'RGB_pred_TBAB', 'RGB_pred_TBGB')
-# properties = ('divDevR',)
+properties = ('RGB_pred_TBDT', 'RGB_pred_TBRF', 'RGB_pred_TBAB', 'RGB_pred_TBGB')
+properties = ('RGB',)
 # slicenames = ('oneDupstreamTurbine', 'rotorPlane', 'oneDdownstreamTurbine')
 # slicenames = ('threeDdownstreamTurbine', 'fiveDdownstreamTurbine', 'sevenDdownstreamTurbine')
 slicenames = ('hubHeight', 'quarterDaboveHub', 'turbineApexHeight')
@@ -77,7 +77,7 @@ contour_lvl = 200
 val_label = 'Data'
 ext = 'png'
 show, save = False, True
-dpi = 1000
+dpi = 500
 
 
 """
@@ -165,22 +165,23 @@ elif plot_type in ('all', 'All', '*'):
     plot_type = 'all'
 
 if 'U' in properties[0]:
-    val_lim = (0, 12) if 'HiSpeed' not in casename else (0, 14)
+    val_lim = (0, 12) if 'HiSpeed' not in casename else (0, 12)
     val_lim_z = (-2, 2)
     if 'ALM' in casename:
-        val_label = [r'$\langle \tilde{U}_\mathrm{hor} \rangle$ [m/s]', r'$\langle \tilde{u}_z \rangle$ [m/s]']
+        val_label = [r'$\langle \tilde{U} \rangle_\mathrm{hor}$ [m/s]', r'$\langle \tilde{u}_z \rangle$ [m/s]']
     elif 'ABL' in casename:
         val_label = [r'$\tilde{U}_\mathrm{hor}$ [m/s]', r'$\tilde{u}_z$ [m/s]']
     else:
-        val_label = [r'$\langle U_\mathrm{hor} \rangle$ [m/s]', r'$\langle u_z \rangle$ [m/s]']
+        val_label = [r'$\langle U \rangle_\mathrm{hor}$ [m/s]', r'$\langle u_z \rangle$ [m/s]']
 
 elif 'k' in properties[0]:
     if 'HiSpeed' not in casename:
-        val_lim = (0, 2.75) if 'SGS' not in properties[0] else (0, 0.1)
+        val_lim = (0., 3.) if 'SGS' not in properties[0] else (0., 0.15)
     else:
-        val_lim = (0., 4.5) if 'SGS' not in properties[0] else (0., 0.2)
+        val_lim = (0., 3.) if 'SGS' not in properties[0] else (0., 0.15)
 
     val_lim_z = None
+
     if 'Resolved' in properties[0]:
         val_label = (r'$\langle k_\mathrm{resolved} \rangle$ [m$^2$/s$^2$]',) if len(properties) == 1 else (r'$\langle k \rangle$ [m$^2$/s$^2$]',)
     elif 'SGS' in properties[0]:
@@ -200,6 +201,8 @@ elif "epsilon" in properties[0]:
     else:
         val_lim = (0., 0.04)
 
+    val_lim = (0, 0.015)
+
     val_lim_z = None
     if 'SGS' in properties[0]:
         val_label = (r'$\langle \epsilon_{\mathrm{SGS}} \rangle$ [m$^2$/s$^3$]',) if 'mean' in properties[0] else (r'$\epsilon_{\mathrm{SGS}}$ [m$^2$/s$^3$]',)
@@ -209,7 +212,7 @@ elif "epsilon" in properties[0]:
         val_label = (r'$\langle \epsilon \rangle$ [m$^2$/s$^3$]',)
 
 elif 'G' in properties[0] and 'RGB' not in properties[0]:
-    val_lim = (-0.05, 0.18) if 'HiSpeed' not in casename else (-0.1, 0.36)
+    val_lim = (0., .15) if 'LowZ' not in casename else (0., .15)
     val_lim_z = None
     val_label = (r'$\langle G \rangle$ [m$^2$/s$^3$]',)
 elif 'divDevR' in properties[0]:
@@ -319,11 +322,15 @@ for i0 in range(len(properties)):
             list_x2d.append(x2d)
             list_y2d.append(y2d)
             list_z2d.append(z2d)
-            vals3d_hor[vals3d_hor > val_lim[1]] = val_lim[1]
-            vals3d_hor[vals3d_hor < val_lim[0]] = val_lim[0]
-            if vals3d_z is not None:
-                vals3d_z[vals3d_z > val_lim_z[1]] = val_lim_z[1]
-                vals3d_z[vals3d_z < val_lim_z[0]] = val_lim_z[0]
+            if 'RGB' not in properties[0] and 'Rij' not in properties and 'uuPrime2' not in properties:
+                vals3d_hor = np.nan_to_num(vals3d_hor)
+                vals3d_hor[vals3d_hor > val_lim[1]] = val_lim[1]
+                vals3d_hor[vals3d_hor < val_lim[0]] = val_lim[0]
+                if vals3d_z is not None:
+                    vals3d_z = np.nan_to_num(vals3d_z)
+                    vals3d_z[vals3d_z > val_lim_z[1]] = val_lim_z[1]
+                    vals3d_z[vals3d_z < val_lim_z[0]] = val_lim_z[0]
+
             list_val3d.append(vals3d_hor)
             list_val3d_z.append(vals3d_z)
 
@@ -390,7 +397,7 @@ for i0 in range(len(properties)):
                                                   figheight_multiplier=multiplier,
                                                   val_lim=val_lim)
             else:
-                multiplier = 2
+                multiplier = 2.25
                 plot3d = PlotImageSlices3D(list_x2d, list_y2d, list_z2d, list_rgb=list_val3d,
                                            name=figname_3d, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel,
                                            save=save, show=show, figdir=case.result_path, viewangle=view_angle, figwidth=figwidth,
@@ -444,7 +451,9 @@ for i0 in range(len(properties)):
                     pathpatch_2d_to_3d(p, z=0, normal=(0.8660254037844, 0.5, 0.))
                     pathpatch_translate(p, turb_centers_frontview[i])
 
-        plot3d.finalizeFigure(tight_layout=False, show_ticks=show_ticks, show_xylabel=show_xylabel, show_zlabel=show_zlabel)
+        plot3d.finalizeFigure(tight_layout=False, show_ticks=show_ticks, show_xylabel=show_xylabel,
+                              show_zlabel=False, z_ticklabel=(r'$z_\mathrm{hub}$', r'$z_\mathrm{mid}$', r'$z_\mathrm{apex}$'),
+                              dpi=dpi)
         # For Uz or any other z component
         if list_val3d_z[0] is not None:
             plot3d_z.initializeFigure()
@@ -462,7 +471,9 @@ for i0 in range(len(properties)):
                         pathpatch_2d_to_3d(p, z=0, normal=(0.8660254037844, 0.5, 0.))
                         pathpatch_translate(p, turb_centers_frontview[i])
 
-            plot3d_z.finalizeFigure(show_ticks=show_ticks, show_xylabel=show_xylabel, show_zlabel=show_zlabel)
+            plot3d_z.finalizeFigure(show_ticks=show_ticks, show_xylabel=show_xylabel,
+                                    show_zlabel=False, z_ticklabel=(r'$z_\mathrm{hub}$', r'$z_\mathrm{mid}$', r'$z_\mathrm{apex}$'),
+                                    dpi=dpi)
 
 
 

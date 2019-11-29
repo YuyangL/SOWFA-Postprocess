@@ -31,12 +31,12 @@ Calculate Power Ratio Between Downwind and Upwind Turbines
 User Inputs
 """
 casedir = '/media/yluan/'
-casenames = ('ALM_N_H_ParTurb_HiSpeed',) # 'ALM_N_H_ParTurb')
+casenames = ('ALM_N_L_SeqTurb',) # 'ALM_N_H_ParTurb')
 property_names = ('powerGenerator', 'thrust')
 # [CAUTION] Whether remerge all time directories into 1 ensemble even if a current ensemble exists
 force_remerge = False
-xlabel = {property_names[0]: 'Time-averaged power [KW]',
-          property_names[1]: 'Time-averaged thrust [KN]'}
+xlabel = {property_names[0]: 'Mean power [KW]',
+          property_names[1]: 'Mean thrust [KN]'}
 # Turbines are 9.1552 rpm => 6.554 s/r. Time step is 0.036 s/step => 182.046 steps/r
 frameskip = 1 #  182  # steps/r
 # First 4 columns are not property data; next 6 columns are 0 for Cl and Cd

@@ -44,6 +44,7 @@ class BaseProperties:
         return times_all
 
     def _mergeTimeDirectories(self, trim_overlaptime=True, time_kw='ime', force_remerge=False, excl_files=None):
+        # FIXME: not working in some cases such as ALM_N_L_SeqTurb
         def __numberStringToFloat(str):
             return float(str)
 
