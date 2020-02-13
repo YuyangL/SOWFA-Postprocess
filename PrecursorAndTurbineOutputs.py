@@ -173,30 +173,32 @@ class BaseProperties:
         # print('\nistart and istop {} {}'.format(istart, istop))
         # Go through each property
         for i in range(len(self.filenames)):
-            # self.data[self.filenames[i] + '_mean'] = np.mean(self.data[self.filenames[i]][istart:istop], 
-            #                                                  axis=axis)
-            
-            # Perform statistical averaging
-            data = self.data[self.filenames[i]][istart:istop]
-            times = self.times_selected
-            data_mean = data.ravel().copy()
-            # data_mean = np.empty(len(data))
-            # data_mean[0] = data[0]
-            val_dt_sum = 0.
-            dt_sum = 1e-9
-            # Assuming equi-distant time marching, go through each time
-            for j in range(1, len(data)):
-                dt = times[j] - times[j - 1]
-                # dt = 0.035
-                # Linear interpolation between each value point
-                val_mid = (data[j] + data[j - 1])/2.
-                val_dt_sum += val_mid*dt
-                dt_sum += dt
-                # if j == 1: print('\n dt {}, val_mid {}, val_dt_sum {}, dt_sum {}'.format(dt,val_mid, val_dt_sum, dt_sum))
-                data_mean[j] = val_dt_sum/dt_sum
-            
-            self.data[self.filenames[i] + '_mean'] = data_mean
-        
+            if axis == 0:
+                self.data[self.filenames[i] + '_mean'] = np.mean(self.data[self.filenames[i]][istart:istop],
+                                                                 axis=axis)
+            else:
+                # Perform statistical averaging
+                data = self.data[self.filenames[i]][istart:istop]
+                times = self.times_selected
+                data_mean = data.ravel().copy()
+                # data_mean = np.empty(len(data))
+                # data_mean[0] = data[0]
+                val_dt_sum = 0.
+                dt_sum = 1e-9
+                # Assuming equi-distant time marching, go through each time
+                for j in range(1, len(data)):
+                    dt = times[j] - times[j - 1]
+                    # dt = 0.035
+                    # Linear interpolation between each value point
+                    val_mid = (data[j] + data[j - 1])/2.
+                    val_dt_sum += val_mid*dt
+                    dt_sum += dt
+                    # if j == 1: print('\n dt {}, val_mid {}, val_dt_sum {}, dt_sum {}'.format(dt,val_mid, val_dt_sum, dt_sum))
+
+                    data_mean[j] = val_dt_sum/dt_sum
+
+                self.data[self.filenames[i] + '_mean'] = data_mean
+
         print('\nTemporal average calculated for {} from {:.4f} s - {:.4f} s'.format(self.filenames, self.times_selected[0], self.times_selected[-1]))
 
     def trimInvalidCharacters(self, filenames, invalid_chars):
@@ -231,7 +233,7 @@ class BoundaryLayerProfiles(BaseProperties):
 
     def calculatePropertyMean(self, starttime=None, stoptime=None, **kwargs):
         # Override axis to suit inflow property files
-        super(BoundaryLayerProfiles, self).calculatePropertyMean(axis = 0, starttime = starttime, stoptime = stoptime, **kwargs)
+        super(BoundaryLayerProfiles, self).calculatePropertyMean(axis=0, starttime=starttime, stoptime=stoptime, **kwargs)
 
 
 class TurbineOutputs(BaseProperties):

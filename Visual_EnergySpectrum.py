@@ -11,7 +11,7 @@ from Utilities import readData
 """
 User Inputs
 """
-case = 'ABL_N_L2'  # 'Doekemeijer', 'ABL_N_L2'
+case = 'ABL_N_H'  # 'Doekemeijer', 'ABL_N_L2'
 # caseDir = '/media/yluan/Toshiba External Drive/'
 caseDir = '/media/yluan/'
 # If slice time is 'auto', use the 1st time directory in slice folder

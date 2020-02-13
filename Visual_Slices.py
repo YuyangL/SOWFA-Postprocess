@@ -29,10 +29,10 @@ from scipy.ndimage import gaussian_filter
 """
 User Inputs
 """
-time = '10000'  #'23243.2156219'
-# time = 'latestTime'  #'23243.2156219'
+# time = '10000'  #'23243.2156219'
+time = 'latestTime'  #'23243.2156219'
 casedir = '/media/yluan'
-casename = 'RANS/N_H_ParTurb_LowZ_Rwall'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URANS/N_H_OneTurb'  # 'ALM_N_H_ParTurb'
+casename = 'RANS/N_H_OneTurb_LowZ_Rwall3'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URANS/N_H_OneTurb'  # 'ALM_N_H_ParTurb'
 # casename = 'ALM_N_H_OneTurb'
 # properties = ('kResolved', 'kSGSmean')
 # properties = ('divDevR', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
@@ -40,7 +40,7 @@ casename = 'RANS/N_H_ParTurb_LowZ_Rwall'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URAN
 properties = ('GAvg', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
 # properties = ('G', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
 properties = ('RGB_pred_TBDT', 'RGB_pred_TBRF', 'RGB_pred_TBAB', 'RGB_pred_TBGB')
-properties = ('RGB',)
+properties = ('epsilon',)
 # slicenames = ('oneDupstreamTurbine', 'rotorPlane', 'oneDdownstreamTurbine')
 # slicenames = ('threeDdownstreamTurbine', 'fiveDdownstreamTurbine', 'sevenDdownstreamTurbine')
 slicenames = ('hubHeight', 'quarterDaboveHub', 'turbineApexHeight')

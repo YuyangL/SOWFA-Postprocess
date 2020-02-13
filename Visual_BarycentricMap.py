@@ -392,7 +392,7 @@ case.readSlices(properties=property, slicenames=slicenames, slicenames_sub=slice
 Plot Barycentric Color Map If Requested
 """
 if show_baryexample:
-    xTriLim, yTriLim = (0, 1), (0, np.sqrt(3) / 2.)
+    xTriLim, yTriLim = (0, 1), (0, np.sqrt(3)/2.)
     verts = (
         (xTriLim[0], yTriLim[0]), (xTriLim[1], yTriLim[0]), (np.mean(xTriLim), yTriLim[1]),
         (xTriLim[0], yTriLim[0]))
@@ -414,26 +414,38 @@ if show_baryexample:
     # Each 2nd dim is an RGB array of the 2D grid
     rgbValsNew_example = (rgbVals_example + c_offset) ** c_exp
 
+    # for i in range(len(rgbValsNew_example)):
+    #     if rgbValsNew_example[i, 0] < .2 and rgbValsNew_example[i, 1] < .2 and rgbValsNew_example[i, 2] < .2:
+    #         rgbValsNew_example[i] = [1., 1., 1.]
+
     baryMap3D = griddata(xyTri, rgbValsNew_example, (xTri, yTri))
     baryMap3D[np.isnan(baryMap3D)] = 1.
     baryMap3D = ndimage.rotate(baryMap3D, 90)
 
-
-    baryMap3D[baryMap3D[..., 0] <= 0.99] = [.3, .3, .3]
+    # Only show red color and mask other part of the map with grey
+    # baryMap3D[baryMap3D[..., 0] <= 0.99] = [.3, .3, .3]
+    # Remove annoying grey artifact line... -.-
+    for i in range(1000):
+        for j in range(1000):
+            if baryMap3D[i, j, 0] < .3 and baryMap3D[i, j, 1] < .3 and baryMap3D[i, j, 2] < .3:
+                baryMap3D[i, j] = [1., 1., 1.]
 
     baryMapExample = BaseFigure((None,), (None,), name=baryexample_name, figdir=case.result_path,
                                 show=show, save=save)
-    baryMapExample.initializeFigure()
+    baryMapExample.initializeFigure(constrained_layout=True)
     baryMapExample.axes.imshow(baryMap3D, origin='upper', aspect='equal', extent=(xTriLim[0], xTriLim[1],
                                                                                            yTriLim[0], yTriLim[1]))
     baryMapExample.axes.annotate(r'$\textbf{x}_{2c}$', (xTriLim[0], yTriLim[0]), (xTriLim[0] - 0.1, yTriLim[0]))
     baryMapExample.axes.annotate(r'$\textbf{x}_{3c}$', (np.mean(xTriLim), yTriLim[1]))
     baryMapExample.axes.annotate(r'$\textbf{x}_{1c}$', (xTriLim[1], yTriLim[0]))
-    # baryMapExample.axes[0].get_yaxis().set_visible(False)
-    # baryMapExample.axes[0].get_xaxis().set_visible(False)
-    # baryMapExample.axes[0].set_axis_off()
-    baryMapExample.axes.axis('off')
-    plt.savefig(case.result_path + baryexample_name + '.' + ext, transparent=True, dpi=dpi)
+    plt.axis('off')
+    baryMapExample.axes.get_yaxis().set_visible(False)
+    baryMapExample.axes.get_xaxis().set_visible(False)
+    # baryMapExample.axes.set_axis_off()
+    # baryMapExample.axes.axis('off')
+    # baryMapExample.axes.spines['left'].set_color('white')
+    # baryMapExample.axes.tick_params(axis='y', color='white')
+    plt.savefig(case.result_path + baryexample_name + '.' + ext, transparent=True, dpi=dpi)#, bbox_inches='tight', pad_inches=0)
     if save:
         print('\n{0} saved at {1}'.format(baryexample_name, case.result_path))
 

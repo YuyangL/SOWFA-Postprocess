@@ -7,7 +7,7 @@ from numba import prange
 User Inputs
 """
 casedir = '/media/yluan'
-casename = 'ALM_N_H_ParTurb_HiSpeed'
+casename = 'ALM_N_L_SeqTurb'
 filenames = 'uuPrime2'  # 'uuPrime2', 'UAvg', 'Rmean'
 # Which column is time
 timeCol = 0  # 'infer'
@@ -109,11 +109,14 @@ def decomposeHorizontalAndPlot(step, subscript, startcol, filename):
 
     # list_y = np.array(list_y)
     if casename == 'ALM_N_H_OneTurb':
+        # 3: +1D turb apex, 5: +2D turb apex, 7: +4D turb apex
         list_y = [list_y[3], list_y[5], list_y[7]]
     elif 'ParTurb' in casename:
+        # 5: southern +1D, 7:northern +1D, 13: southern +4D, 15: northern +4D
         list_y = [list_y[5], list_y[7], list_y[13], list_y[15]]
     # For SeqTurb
     else:
+        # 3: upwind +1D, 7: upwind +4D, 9: downwind +1D, 13: downwind + 4D
         list_y = [list_y[3], list_y[7], list_y[9], list_y[13]]
 
     nplot = 1

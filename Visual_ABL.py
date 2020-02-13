@@ -10,10 +10,10 @@ from numba import prange
 User Inputs
 """
 # casedir, casename = 'J:', 'Doekemeijer/neutral_3kmx3kmx1km_lowTI_225deg_11mps'
-casedir, casename = '/media/yluan', 'ABL_N_H'
+casedir, casename = '/media/yluan', 'ABL_N_L2'
 # Profile of interest
 profile = 'U'  # 'U', 'T', 'heatFlux', 'TI'
-starttime, stoptime = 18000, 22000
+starttime, stoptime = 18000, 23000
 # Hub height velocity, hub height, rotor D
 Uhub, zHub, D = 8., 90., 126.
 # Inversion layer height, inversion layer width
@@ -117,14 +117,14 @@ if profile == 'U':
         # Thus sort the 2nd column
         refData = refData[refData[:, 1].argsort()]
         # Add both normalized simulation and reference data to lists to plot
-        xList, yList = [uvwMean/Uhub, refData[:, 0]], [bl.hLvls/zi, refData[:, 1]]
-        linelabel = (caseName2, 'Churchfield et al.')
+        xList, yList = [uvwMean/Uhub, wMean/Uhub, refData[:, 0]], [bl.hLvls/zi, bl.hLvls/zi, refData[:, 1]]
+        linelabel = (caseName2, caseName2 + ' vertical', 'Churchfield et al.')
     else:
-        xList, yList = uvwMean/Uhub, bl.hLvls/zi
-        linelabel = None
+        xList, yList = [uvwMean/Uhub, wMean/Uhub], [bl.hLvls/zi, bl.hLvls/zi]
+        linelabel = (caseName2, caseName2 + ' vertical')
 
     # X, Y limit to be inline with Churchfield's data
-    xlim, ylim = (0, 2), (0, 1)
+    xlim, ylim = (-.1, 2), (0, 1)
     # Initialize figure object
     plot = Plot2D(xList, yList, xlabel=r'$\langle \tilde{U}\rangle /U_0$', ylabel=r'$z/z_i$', figdir=figdir, name=profile, save=save, show=show, xlim=xlim, ylim=ylim, figwidth='1/3')
     plot.initializeFigure()
@@ -134,7 +134,7 @@ if profile == 'U':
     #                           facecolor = plot.colors[3], zorder = -2)
     # Plot figure
     plot.plotFigure(linelabel=linelabel)
-    plot.finalizeFigure()
+    plot.finalizeFigure(legloc='upper left')
 
     xList2 = [uvMean/Uhub, wMean/Uhub]
     yList2 = [bl.hLvls/zi, bl.hLvls/zi]
@@ -152,7 +152,7 @@ elif profile == 'T':
     """
     x = bl.data['T_mean_mean']
     xlim = (x.min()*0.99, x.max()*1.01)
-    plot = Plot2D(x, bl.hLvls/zi, xlabel=r'$\langle \tilde{\Theta}\rangle$ [K]', ylabel=r'$z/z_i$ [-]',
+    plot = Plot2D(x, bl.hLvls/zi, xlabel=r'$\langle \tilde{\theta}\rangle$ [K]', ylabel=r'$z/z_i$ [-]',
                   figdir=figdir, name=profile, save=save, show=show, xlim=xlim, figwidth='1/3')
     plot.initializeFigure()
     plot.plotFigure()
@@ -193,7 +193,7 @@ elif profile == 'TI':
     ti = np.sqrt((bl.data['uu_mean_mean'] + bl.data['vv_mean_mean'] + bl.data['ww_mean_mean'])/3.)/Uhub*100.
     xList, yList = ((ti, refData[:, 0]), (bl.hLvls/zi, refData[:, 1]/zi)) if refData is not None else (ti, bl.hLvls/zi)
     xlim = (ti.min()*0.9, ti.max()*1.1)
-    plot = Plot2D(xList, yList, xlabel=r'$\langle \tilde{I}\rangle$ [\%]',
+    plot = Plot2D(xList, yList, xlabel=r'$\langle I\rangle$ [\%]',
                   ylabel=r'$z/z_i$ [-]',
                   figdir=figdir, name=profile, save=save, show=show, xlim=xlim, plot_type=('line', 'scatter'), figwidth='1/3')
     plot.initializeFigure()

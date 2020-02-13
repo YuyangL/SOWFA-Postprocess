@@ -92,7 +92,7 @@ class BaseFigure:
         if fig_height is None:
             golden_mean = (np.sqrt(5) - 1.0)/2.0  # Aesthetic ratio
             # In case subplots option is not applicable e.g. normal Plot2D and you still want elongated height
-            fig_height = fig_width*golden_mean*figheight_multiplier  # height in inches
+            fig_height = fig_width*golden_mean*figheight_multiplier if figspan != '1/3' else 3.3*golden_mean # height in inches
             fig_height *= subplots[0]
 
         MAX_HEIGHT_INCHES = 8.0
@@ -118,7 +118,7 @@ class BaseFigure:
             'figure.figsize':      (fig_width, fig_height),
             'font.family':         'serif',
             # 'font.serif':          self.font,
-            "legend.framealpha":   0.75,
+            "legend.framealpha":   0.8,
             'legend.edgecolor':    'none', #'none'
             'lines.linewidth':     linewidth,
             'lines.markersize':    2,
@@ -155,9 +155,9 @@ class BaseFigure:
 
     def finalizeFigure(self, xyscale=('linear', 'linear'), show_xylabel=(True, True), grid=True,
                        transparent_bg=False, legloc='best', showleg=True,
-                       tight_layout=False, dpi=500):
+                       tight_layout=False, dpi=500, format='pdf'):
         if len(self.list_x) > 1 and showleg:
-            ncol = 2 if len(self.list_x) > 3 else 1
+            ncol = 2 if len(self.list_x) > 5 else 1
             self.axes.legend(loc=legloc, shadow=False, fancybox=False, ncol=ncol)
 
         if grid: self.axes.grid(which='major', alpha=0.25)
@@ -182,9 +182,9 @@ class BaseFigure:
 
         print('\nFigure ' + self.name + ' finalized')
         if self.save:
-            plt.savefig(self.figdir + '/' + self.name + '.png', transparent=transparent_bg,
+            plt.savefig(self.figdir + '/' + self.name + '.' + format, transparent=transparent_bg,
                         dpi=dpi)
-            print('\nFigure ' + self.name + '.png saved in ' + self.figdir)
+            print('\nFigure ' + self.name + '.' + format + ' saved in ' + self.figdir)
 
         # Close current figure window
         # so that the next figure will be based on a new figure window even if the same name 
@@ -235,7 +235,7 @@ class Plot2D_Image(BaseFigure):
 
 class Plot2D(BaseFigure):
     def __init__(self, list_x, list_y, val=None, val_lim=None, 
-                 plot_type='infer', alpha=0.75, val_label='$z$', cmap='plasma',
+                 plot_type='infer', alpha=0.8, val_label='$z$', cmap='plasma',
                  grad_bg=False, grad_bg_range=None, grad_bg_dir='x', **kwargs):
         self.val = val
         # Ensure there's an entry for both vmin and vmax
@@ -430,8 +430,8 @@ class Plot2D_MultiAxes(Plot2D):
         super(Plot2D_MultiAxes, self).initializeFigure(constrained_layout=False, **kwargs)
 
         # Empirical relation to scale margin with number of provided extra x2 and/or y2
-        self.ymargin = 0.75**self.narr2 if ymargin == 'auto' else ymargin
-        self.xmargin = 0.25 + (self.narr2 - 2)*0.1 if xmargin == 'auto' else xmargin
+        self.ymargin = .75**self.narr2 if ymargin == 'auto' else ymargin
+        self.xmargin = .25 + (self.narr2 - 2)*.1 if xmargin == 'auto' else xmargin
 
         self.fig.subplots_adjust(right=self.ymargin) if self.ax2loc == 'y' else self.fig.subplots_adjust(bottom=self.xmargin)
         # Set host patch to transparent so that 2nd axis plot won't be hindered by the white background.
@@ -445,15 +445,15 @@ class Plot2D_MultiAxes(Plot2D):
         super(Plot2D_MultiAxes, self).plotFigure(**kwargs)
         # Color the first axis with the first line color, be it x or y
         if self.ax2loc == 'y':
-            self.axes.tick_params(axis='y', colors=self.colors[0])
-            self.axes.yaxis.label.set_color(self.colors[0])
+            self.axes.tick_params(axis='y')#, colors=self.colors[0])
+            # self.axes.yaxis.label.set_color(self.colors[0])
         else:
             self.axes.tick_params(axis='x', colors=self.colors[0])
             self.axes.xaxis.label.set_color(self.colors[0])
                 
         self.axes2, self.plots2 = ([None]*self.narr2,)*2
         for i in range(self.narr2):
-            color = self.colors[i + self.narr] if self.plot_type2[i] != 'shade' else (160/255., 160/255., 160/255.)
+            color = self.colors[i + self.narr] if self.plot_type2[i] != 'shade' else (150./255., 150./255., 150./255.)
             # If new axes are x
             if self.ax2loc == 'x':
                 self.axes2[i] = self.axes.twiny()
@@ -496,7 +496,7 @@ class Plot2D_MultiAxes(Plot2D):
             # Set the 2nd axis plots layer in the back. The higher zorder, the more front the plot is
             self.axes.set_zorder(self.axes2[i].get_zorder() + 1)
             if self.plot_type2[i] == 'shade':
-                self.plots2[i] = self.axes2[i].fill_between(self.list_x2[i], 0, self.list_y2[i], alpha=1, facecolor=(160/255., 160/255., 160/255.),
+                self.plots2[i] = self.axes2[i].fill_between(self.list_x2[i], 0, self.list_y2[i], alpha=1, facecolor=(178./255., 178/255., 178/255.),
                                                      interpolate=False)
             elif self.plot_type2[i] == 'line':
                 # If don't show markers in line plots
@@ -721,7 +721,7 @@ class BaseFigure3D(BaseFigure):
             def myfmt(x, pos):
                 return '{0:.2f}'.format(x)
 
-            cb = plt.colorbar(self.plot, fraction=fraction, pad=pad, orientation=self.cbar_orient, extend='both', aspect=25, shrink=0.75,
+            cb = plt.colorbar(self.plot, fraction=fraction, pad=pad, orientation=self.cbar_orient, extend='both', aspect=25, shrink=.75,
                               format='%.3f')#ticker.FuncFormatter(myfmt))
             cb.set_label(self.val_label)
 
