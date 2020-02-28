@@ -9,7 +9,18 @@ class SetProperties(object):
         self.result_path = self.set_path + resultfolder + '/'
         os.makedirs(self.result_path, exist_ok=True)
         # If time is 'latestTime', take the last time while excl. result folder
-        self.time = os.listdir(self.set_path)[-2] if 'latest' in time else str(time)
+        if 'latest' in time:
+            times = os.listdir(self.set_path)
+            times.remove(resultfolder)
+            # Map all strings to floats
+            times = list(map(float, times))
+            # If times were integers, convert floats to integers
+            times = [int(times[i]) if times[i] == int(times[i]) else times[i] for i in range(len(times))]
+            # Find latestTime
+            self.time = str(max(times))
+        else:
+            self.time = str(time)
+
         self.time_path = self.set_path + self.time + '/'
         self.result_path += self.time + '/'
         os.makedirs(self.result_path, exist_ok=True)

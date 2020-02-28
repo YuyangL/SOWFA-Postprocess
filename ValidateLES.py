@@ -351,7 +351,7 @@ for i in range(len(list_y)):
 # Go through every figure
 for i0 in range(len(fignames)):
     list_x = [np.array(unorm[set_locs[i]]).T[::5] for i in range(len(set_locs))]
-    uxy_plot = Plot2D(list_x=list_x, list_y=list_y, name=fignames[i0], xlabel=r"$|\Delta \langle \tilde{U} \rangle_\mathrm{hor} /U_\mathrm{hub}|$", ylabel=r'$d/D$',
+    uxy_plot = Plot2D(list_x=list_x, list_y=list_y, name=fignames[i0], xlabel=r"$|\Delta \langle \tilde{U} \rangle_\mathrm{hor}|/0.5U_\mathrm{hub} + d/D$", ylabel=r'$d/D$',
                       save=save_fig, show=show,
                       figdir=case_les.result_path,
                       # ylim to be consistent with Churchfield et al. (2012)
@@ -382,8 +382,8 @@ for i0 in range(len(fignames)):
     uxy_plot.axes.plot((8, 8), (min(list_y[0]), max(list_y[0])), color=uxy_plot.gray, alpha=.8, ls=':')
     uxy_plot.axes.plot((10, 10), (min(list_y[0]), max(list_y[0])), color=uxy_plot.gray, alpha=.8, ls=':')
     # uxy_plot.axes.legend(loc='lower left', shadow=False, fancybox=False, ncol=3)
-    plt.xticks(np.arange(-1, 12), ('0', '', '1', '', '', '', '', '', '', '', '', ''))
-    plt.xticks((-1, 1, 3, 5, 6, 8, 10), ('0', '1', '', '', '', '', '', '', '', '', ''))
+    plt.xticks(np.arange(-1, 12), ('-1', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'))
+    # plt.xticks((-1, 1, 3, 5, 6, 8, 10), ('0', '1', '', '', '', '', '', '', '', '', ''))
     uxy_plot.axes.grid(which='major', alpha=.25)
     uxy_plot.axes.set_xlabel(uxy_plot.xlabel)
     uxy_plot.axes.set_ylabel(uxy_plot.ylabel)

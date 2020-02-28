@@ -30,11 +30,11 @@ Calculate Power Ratio Between Downwind and Upwind Turbines
 User Inputs
 """
 casedir = '/media/yluan/RANS'
-casenames = ('N_H_ParTurb_LowZ_Rwall3',)  # 'N_H_ParTurb_LowZ_Rwall', 'N_H_OneTurb_LowZ_Rwal2'
+casenames = ('N_L_SeqTurb_600m',)  # 'N_H_ParTurb_LowZ_Rwall', 'N_H_OneTurb_LowZ_Rwal2'
 property_names = ('powerGenerator', 'thrust')
 # [CAUTION] Whether remerge all time directories into 1 ensemble even if a current ensemble exists
 force_remerge = False
-times = (0, 20000)
+times = (0, 11000)
 # times = (0, 12000)
 xlabel = {property_names[0]: 'Power [KW]',
           property_names[1]: 'Thrust [KN]'}
@@ -52,9 +52,11 @@ show, save = False, True
 
 ylabel = 'Iteration [-]'
 grad_bg = True
-xlim = ((2000, 2500), (350, 400)) if 'HiSpeed' not in casenames[0] else ((0, 4700), (0, 600))
+xlim = ((0, 2500), (0, 400)) if 'HiSpeed' not in casenames[0] else ((0, 4700), (0, 600))
 target_thrust = 365.96 if 'ParTurb' in casenames[0] else 371.4
 target_pwr = 2222.64 if 'ParTurb' in casenames[0] else 2275.85
+if 'SeqTurb' in casenames[0]: target_pwr, target_thrust = 1550., 295.
+
 
 """
 Read Property Data and Plot

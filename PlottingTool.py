@@ -17,7 +17,7 @@ from mpl_toolkits.mplot3d import art3d
 
 
 class BaseFigure:
-    def __init__(self, list_x, list_y, name='UntitledFigure', fontsize=8, xlabel='$x$', ylabel='$y$', figdir='./', 
+    def __init__(self, list_x, list_y, name='UntitledFigure', fontsize=10, xlabel='$x$', ylabel='$y$', figdir='./',
                  show=True, save=True, equalaxis=False, xlim=None, ylim=None,
                  figwidth='half', figheight_multiplier=1., colors='tableau10', font='Utopia', **kwargs):
         # Ensure tuple of arrays
@@ -64,7 +64,7 @@ class BaseFigure:
         return colors, gray
 
 
-    def _latexify(self, fig_width=None, fig_height=None, figspan='half', linewidth=0.8, fontsize=10, subplots=(1, 1), figheight_multiplier=1.,
+    def _latexify(self, fig_width=None, fig_height=None, figspan='half', linewidth=0.8, fontsize=14, subplots=(1, 1), figheight_multiplier=1.,
                   **kwargs):
         """Set up matplotlib's RC params for LaTeX plotting.
         Call this before plotting a figure.
@@ -90,7 +90,7 @@ class BaseFigure:
                 fig_width = 6.9  # inches
 
         if fig_height is None:
-            golden_mean = (np.sqrt(5) - 1.0)/2.0  # Aesthetic ratio
+            golden_mean = (np.sqrt(5) - 1.)/2.  # Aesthetic ratio
             # In case subplots option is not applicable e.g. normal Plot2D and you still want elongated height
             fig_height = fig_width*golden_mean*figheight_multiplier if figspan != '1/3' else 3.3*golden_mean # height in inches
             fig_height *= subplots[0]
@@ -98,7 +98,7 @@ class BaseFigure:
         MAX_HEIGHT_INCHES = 8.0
         if fig_height > MAX_HEIGHT_INCHES:
             warn("\nfig_height too large:" + str(fig_height) +
-                  ". Will reduce to " + str(MAX_HEIGHT_INCHES) + " inches", stacklevel = 2)
+                  ". Will reduce to " + str(MAX_HEIGHT_INCHES) + " inches", stacklevel=2)
             fig_height = MAX_HEIGHT_INCHES
 
         mpl.rcParams.update({

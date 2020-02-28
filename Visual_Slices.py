@@ -29,10 +29,10 @@ from scipy.ndimage import gaussian_filter
 """
 User Inputs
 """
-# time = '10000'  #'23243.2156219'
-time = 'latestTime'  #'23243.2156219'
+time = '0'  #'23243.2156219'
+# time = 'latestTime'  #'23243.2156219'
 casedir = '/media/yluan'
-casename = 'RANS/N_H_OneTurb_LowZ_Rwall3'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URANS/N_H_OneTurb'  # 'ALM_N_H_ParTurb'
+casename = 'RANS/N_L_SeqTurb_600m'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URANS/N_H_OneTurb'  # 'ALM_N_H_ParTurb'
 # casename = 'ALM_N_H_OneTurb'
 # properties = ('kResolved', 'kSGSmean')
 # properties = ('divDevR', 'divDevR_pred_TBDT', 'divDevR_pred_TBRF', 'divDevR_pred_TBAB', 'divDevR_pred_TBGB')
@@ -40,7 +40,7 @@ casename = 'RANS/N_H_OneTurb_LowZ_Rwall3'  #'RANS/N_H_OneTurb_Simple_ABL'  #'URA
 properties = ('GAvg', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
 # properties = ('G', 'G_pred_TBDT', 'G_pred_TBRF', 'G_pred_TBAB', 'G_pred_TBGB')
 properties = ('RGB_pred_TBDT', 'RGB_pred_TBRF', 'RGB_pred_TBAB', 'RGB_pred_TBGB')
-properties = ('epsilon',)
+properties = ('bij',)
 # slicenames = ('oneDupstreamTurbine', 'rotorPlane', 'oneDdownstreamTurbine')
 # slicenames = ('threeDdownstreamTurbine', 'fiveDdownstreamTurbine', 'sevenDdownstreamTurbine')
 slicenames = ('hubHeight', 'quarterDaboveHub', 'turbineApexHeight')
@@ -322,7 +322,7 @@ for i0 in range(len(properties)):
             list_x2d.append(x2d)
             list_y2d.append(y2d)
             list_z2d.append(z2d)
-            if 'RGB' not in properties[0] and 'Rij' not in properties and 'uuPrime2' not in properties:
+            if 'RGB' not in properties[0] and 'Rij' not in properties and 'uuPrime2' not in properties and 'bij' not in properties:
                 vals3d_hor = np.nan_to_num(vals3d_hor)
                 vals3d_hor[vals3d_hor > val_lim[1]] = val_lim[1]
                 vals3d_hor[vals3d_hor < val_lim[0]] = val_lim[0]
@@ -373,7 +373,7 @@ for i0 in range(len(properties)):
             slicePlot = Plot2D(x2d, y2d, vals3d, name=figname, xlabel=xlabel, ylabel=ylabel, val_label=val_label, save=save, show=show, figdir=case.result_path)
             slicePlot.initializeFigure()
             slicePlot.plotFigure(contour_lvl=contour_lvl)
-            slicePlot.finalizeFigure()
+            slicePlot.finalizeFigure(format=ext)
 
     if plot_type in ('3D', 'all'):
         zlabel = r'$z$ [m]'
@@ -390,7 +390,7 @@ for i0 in range(len(properties)):
             show_xylabel = (False, False)
             show_zlabel = True
             show_ticks = (False, False, True)
-            if 'RGB' not in properties[0] and 'Rij' not in properties[0] and 'uuPrime2' not in properties[0]:
+            if 'RGB' not in properties[0] and 'Rij' not in properties[0] and 'uuPrime2' not in properties[0] and 'bij' not in properties:
                 multiplier = 1.75
                 # Initialize plot object for horizontal contour slices
                 plot3d = PlotContourSlices3D(list_x2d, list_y2d, list_val3d, horslice_offsets, gradient_bg=False, name=figname_3d, xlabel=xlabel, ylabel=ylabel, zlabel=zlabel, val_label=val_label[0], save=save, show=show, figdir=case.result_path, viewangle=view_angle, figwidth=figwidth, equalaxis=equalaxis, cbar_orient='vertical',
@@ -453,7 +453,8 @@ for i0 in range(len(properties)):
 
         plot3d.finalizeFigure(tight_layout=False, show_ticks=show_ticks, show_xylabel=show_xylabel,
                               show_zlabel=False, z_ticklabel=(r'$z_\mathrm{hub}$', r'$z_\mathrm{mid}$', r'$z_\mathrm{apex}$'),
-                              dpi=dpi)
+                              dpi=dpi,
+                              format=ext)
         # For Uz or any other z component
         if list_val3d_z[0] is not None:
             plot3d_z.initializeFigure()
@@ -473,7 +474,8 @@ for i0 in range(len(properties)):
 
             plot3d_z.finalizeFigure(show_ticks=show_ticks, show_xylabel=show_xylabel,
                                     show_zlabel=False, z_ticklabel=(r'$z_\mathrm{hub}$', r'$z_\mathrm{mid}$', r'$z_\mathrm{apex}$'),
-                                    dpi=dpi)
+                                    dpi=dpi,
+                                    format=ext)
 
 
 

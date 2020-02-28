@@ -594,13 +594,13 @@ class InflowBoundaryField(BaseProperties):
         print("\nDon't forget to copy 'points' to {patch}/ folder too!")
 
 if __name__ == '__main__':
-    casename = 'ABL_N_H'
+    casename = 'ABL_N_L2'
     casedir = '/media/yluan'
-    boundarydata_folder = 'boundaryData_epsilon'  # 'boundaryData', 'boundaryData_epsilonTotal'
+    boundarydata_folder = 'boundaryData'  # 'boundaryData', 'boundaryData_epsilon'
     filenames = "*"
     smooth_k = False
     n_timesample = 1000
-    starttime, stoptime = 20000, 25000
+    starttime, stoptime = 18000, 23000
     case = InflowBoundaryField(casename=casename, casedir=casedir, boundarydata_folder=boundarydata_folder, debug=True)
     case._readPoints()
     case.readPropertyData(filenames=filenames, n_timesample=n_timesample)
@@ -693,7 +693,7 @@ if __name__ == '__main__':
     epslim = (min(epsilon) - 0.1*min(epsilon),
             max(epsilon) + 0.1*max(epsilon))
     myplot = Plot2D(u, points_sorted, plot_type='infer',
-                    show=False, save=True, name='U_atmBC', xlabel='U [m/s]', ylabel="z/zi [-]",  # r'$\frac{z}{z_i}$ [-]',
+                    show=False, save=True, name='U_atmBC', xlabel=r'$U$ [m/s]', ylabel=r'$\frac{z}{z_i}$ [-]',
                     figdir=case.avg_folder_path, figwidth='1/3', xlim=ulim)
     myplot.initializeFigure()
     myplot.plotFigure()  # linelabel=('South', 'West'))
@@ -701,7 +701,7 @@ if __name__ == '__main__':
     myplot.finalizeFigure()
 
     myplot = Plot2D(epsilon, points_sorted, plot_type='infer',
-                    show=False, save=True, name='epsilon_atmBC', xlabel='\epsilon [m2/s3]', ylabel=r'$\frac{z}{z_i}$ [-]',
+                    show=False, save=True, name='epsilon_atmBC', xlabel=r'$\epsilon$ [m$^2$/s$^3$]', ylabel=r'$\frac{z}{z_i}$ [-]',
                     figdir=case.avg_folder_path, figwidth='1/3', xlim=epslim)
     myplot.initializeFigure()
     myplot.plotFigure()
